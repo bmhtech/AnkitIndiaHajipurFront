@@ -80,7 +80,8 @@ export class WeightmentKata1BillPrintComponent implements OnInit {
       this.cin_no = compdetails.tin_no
       this.netweight = Number(data12.net_weight).toFixed(3);
       
-      this.weighmentno = data12.wgment_no;
+      //this.weighmentno = data12.wgment_no;
+      this.weighmentno = data12["wgment_no_alt"];
       this.tarebags = data12.tarebags;
       this.adviceno = wgmntDtls[0].advice_no;
       this.trucknumber = data12.vehicle_no;
@@ -183,7 +184,8 @@ export class WeightmentKata1BillPrintComponent implements OnInit {
                     this.partyifsc=accountsdetails.ifsc;
                   }); */
                 this.weighmentfor = true;
-                this.rawmaterial = unloadtable.item_subtypename;
+                //this.rawmaterial = unloadtable.item_subtypename;
+                this.rawmaterial = "WHEAT";
               });
 
             }
@@ -250,7 +252,8 @@ export class WeightmentKata1BillPrintComponent implements OnInit {
 
                 if (data12["wgment_for"] == "Sales Return") {
                   this.weighmentfor = true;
-                  this.rawmaterial = unloadtable.item_subtypename;
+                  //this.rawmaterial = unloadtable.item_subtypename;
+                  this.rawmaterial = "WHEAT";
                 }
                 else {
                   forkJoin(
@@ -266,7 +269,8 @@ export class WeightmentKata1BillPrintComponent implements OnInit {
                     this.partyaccountname = accountsdetails.acc_no;
                     this.partyifsc = accountsdetails.ifsc;
                   });
-                  this.rawmaterial = unloadtable.item_subtypename;
+                  //this.rawmaterial = unloadtable.item_subtypename;
+                  this.rawmaterial = "WHEAT";
                 }
 
               });
@@ -339,10 +343,12 @@ export class WeightmentKata1BillPrintComponent implements OnInit {
                 this.partyifsc = accountsdetails.ifsc;
 
                 if (saleorderdteials["inv_type"] == 'INV00003') {
-                  this.invoicetype = "JOB WORK";
+                  //this.invoicetype = "JOB WORK";
+                  this.invoicetype = "JOB WORK WHEAT";
                 }
                 else {
-                  this.invoicetype = "FINISHED";
+                  //this.invoicetype = "FINISHED";
+                  this.invoicetype = "WHEAT";
                 }
               });
             });
@@ -395,7 +401,8 @@ export class WeightmentKata1BillPrintComponent implements OnInit {
                   this.invoicetype = "PACKING MATERIAL SALE";
                 }
                 else {
-                  this.invoicetype = "FINISHED";
+                  //this.invoicetype = "FINISHED";
+                  this.invoicetype = "WHEAT";
                 }
               });
             });

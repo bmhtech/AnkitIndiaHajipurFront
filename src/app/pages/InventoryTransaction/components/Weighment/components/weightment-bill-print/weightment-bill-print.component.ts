@@ -97,7 +97,8 @@ export class WeightmentBillPrintComponent implements OnInit {
       this.grossweight = Number(data12.gross_weight).toFixed(3);
       this.grossdate = this.datecalculator(data12.gw_date);
       this.grosstime = data12.gw_time;
-      this.weighmentno = data12.wgment_no;
+      //this.weighmentno = data12.wgment_no;
+      this.weighmentno = data12["wgment_no_alt"];
 
       this.adviceno = wgmntDtls[0].advice_no;
 
@@ -203,7 +204,8 @@ export class WeightmentBillPrintComponent implements OnInit {
                     this.partyifsc=accountsdetails.ifsc;
                   }); */
                 this.weighmentfor = true;
-                this.rawmaterial = unloadtable.item_subtypename;
+                //this.rawmaterial = unloadtable.item_subtypename;
+                this.rawmaterial = "WHEAT";
               });
 
             }
@@ -269,7 +271,8 @@ export class WeightmentBillPrintComponent implements OnInit {
 
                 if (data12["wgment_for"] == "Sales Return") {
                   this.weighmentfor = true;
-                  this.rawmaterial = unloadtable.item_subtypename;
+                  //this.rawmaterial = unloadtable.item_subtypename;
+                  this.rawmaterial = "WHEAT";
                 }
                 else {
                   forkJoin(
@@ -285,7 +288,8 @@ export class WeightmentBillPrintComponent implements OnInit {
                     this.partyaccountname = accountsdetails.acc_no;
                     this.partyifsc = accountsdetails.ifsc;
                   });
-                  this.rawmaterial = unloadtable.item_subtypename;
+                  //this.rawmaterial = unloadtable.item_subtypename;
+                  this.rawmaterial = "WHEAT";
                 }
 
               });
@@ -352,10 +356,12 @@ export class WeightmentBillPrintComponent implements OnInit {
                 this.partyifsc = accountsdetails.ifsc;
 
                 if (saleorderdteials["inv_type"] == 'INV00003') {
-                  this.invoicetype = "JOB WORK";
+                  //this.invoicetype = "JOB WORK";
+                  this.invoicetype = "JOB WORK WHEAT";
                 }
                 else {
-                  this.invoicetype = "FINISHED";
+                  //this.invoicetype = "FINISHED";
+                  this.invoicetype = "WHEAT";
                 }
               });
             });
@@ -408,7 +414,8 @@ export class WeightmentBillPrintComponent implements OnInit {
                   this.invoicetype = "PACKING MATERIAL SALE";
                 }
                 else {
-                  this.invoicetype = "FINISHED";
+                  //this.invoicetype = "FINISHED";
+                  this.invoicetype = "WHEAT";
                 }
               });
             });
