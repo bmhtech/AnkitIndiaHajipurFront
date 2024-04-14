@@ -1,0 +1,204 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+   </div>
+</section>
+<!-- <div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> -->
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Peripheral Quality Check</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>PQC No.</mat-label>
+                <input type="text" class="form-control" [(ngModel)]="model.pqcno" formControlName="pqcno">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>PQC Date</mat-label>
+                <input type="date" class="form-control" [(ngModel)]="model.pqc_date" formControlName="pqc_date">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Supplier Name</mat-label>
+                <mat-select type="text" formControlName="supplier_name" [(ngModel)]="model.supplier_name" class="form-control">
+                  <mat-option value="0">-Select Supplier Name-</mat-option>
+                  <mat-option *ngFor="let supplierName of supplierNames" [value]="supplierName.bp_Id">{{supplierName.bp_name}}</mat-option>  
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Weighment Details</mat-label>
+                <input type="button" class="form-control">
+              </div>
+            </div> 
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Service / Item Type</mat-label>
+                <mat-select type="text" formControlName="item_type" [(ngModel)]="model.item_type" class="form-control">
+                  <mat-option value="0">-Select Service / Item Type-</mat-option>
+                  <mat-option *ngFor="let itemType of itemNames" [value]="itemType.item_id">{{itemType.item_name}}</mat-option>  
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Service / Item Sub Type</mat-label>
+                <mat-select type="text" formControlName="item_sub_type" [(ngModel)]="model.item_sub_type" class="form-control">
+                  <mat-option value="0">-Select Service / Item Sub Type-</mat-option>
+                  <mat-option *ngFor="let itemSubType of itemtypes" [value]="itemSubType.item_id">{{itemSubType.item_name}}</mat-option>  
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label for="Referance Type">Referance Type</mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.ref_type" formControlName="ref_type"><mat-option value="0">Open GRN</mat-option></mat-select>
+              </div>
+            </div>
+  
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>PQC Parameter</mat-label>
+                <mat-select class="form-control" formControlName="pqc_parameter" [(ngModel)]="model.pqc_parameter">
+                  <mat-option value="0">-Select QC Parameter-</mat-option>
+                  <mat-option *ngFor="let pqc_parameter of pqcParam" [value]="pqc_parameter">{{pqc_parameter}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Received By</mat-label>
+                <mat-select type="text" formControlName="recieved_by" [(ngModel)]="model.recieved_by" class="form-control">
+                  <mat-option value="0">-Select Received By-</mat-option>
+                  <mat-option *ngFor="let recievedBy of employeeNames" [value]="recievedBy.emp_code">{{recievedBy.emp_name}}</mat-option>  
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Weighment No</mat-label>
+                <input type="text" class="form-control" [(ngModel)]="model.wghmnt_no" formControlName="wghmnt_no">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Weighment Details</mat-label><br>
+                <button type="button" class="btn btn-success">Show Weighment</button>
+              </div>
+            </div>                       
+          </fieldset>
+        </div>
+           <!-- dynamic start  -->
+        <div class="col-lg-12">
+          <div class="dyn_table_conent" style="border: none;">
+            <mat-tab-group animationDuration="1000ms">
+              <mat-tab label="Service / Item Details">
+                <div class="dyn_table_conent" >
+                  <div  class="dyn_table_header">
+                    <label class="label_col"><h3>Action</h3></label>
+                    <label class="label_col"><h3>Srl No</h3></label>
+                    <label class="label_col"><h3>Item Code</h3></label>
+                    <label class="label_col"><h3>Item Name</h3></label>
+                    <label class="label_col"><h3>Packing</h3></label>
+                    <label class="label_col"><h3>Quantity</h3></label>
+                    <label class="label_col"><h3>UoM</h3></label> 
+                    <label class="label_col"><h3>Bags</h3></label>
+                    <label class="label_col"><h3>Wearhouse</h3></label>
+                    <label class="label_col"><h3>Stack / Rack</h3></label>
+                    <label class="label_col"><h3>Sample Size</h3></label>
+                    <label class="label_col"><h3>PQC</h3></label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="Peri_Quality_Check_Details">
+                    <div class="dyn_table"  *ngFor="let item of Peri_Quality_Check_Details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action"  (click)="delete(pointIndex)"></i></div>
+                      <div class="label_col"><input class="form-control" min="0" type="number" formControlName="sl_no" /></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="item_code" /></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="item_name" /></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="packing" /></div>
+                      <div class="label_col"><input class="form-control" min="0" type="number" formControlName="quantity" /></div>
+                      <div class="label_col"> <select formControlName="uom" class="form-control" value={{master_stock_keeping_unit}}><option>-Select UOM-</option><option *ngFor="let uoms of customUOMDyns" [value]="uoms.customuom_id">{{uoms.description}}</option></select> </div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="bags" /></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="warehouse" /></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="stack" /></div>
+                      <div class="label_col"><input class="form-control" min="0" type="number" formControlName="sample_size" /></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="pqc" /></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="btm_btn_content">
+                  <button type="button" class="btn btn-success" (click)="add()">Add Row </button>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="peripheralqualitychecksave">Submit</button>
+          </div>
+        </div>
+           <!--  dynamic End-->
+      </div>
+    </div>
+  </section>
+</form>
+  
+  
+  
+  
+<div class="master_container_box" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Peripheral Quality Check List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>PQC No.</th>
+                  <th>PQC Date</th>
+                  <th>Supplier Name</th>              
+                  <th>Weighment Details</th>
+                  <th>Service / Item Type</th>
+                </tr>  
+              </thead>
+              <tbody>
+                <tr *ngFor="let QualityCheck of listPeriQualityCheck">
+                  <td>{{QualityCheck.pqcno}}</td>
+                  <td>{{QualityCheck.pqc_date}}</td>
+                  <td>{{QualityCheck.supplier_name}}</td>
+                  <td>{{QualityCheck.wments_dtls}}</td>
+                  <td>{{QualityCheck.item_type}}</td>    
+                </tr>      
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  
+  

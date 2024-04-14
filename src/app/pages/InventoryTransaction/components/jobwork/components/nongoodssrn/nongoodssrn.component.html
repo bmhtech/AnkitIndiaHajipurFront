@@ -1,0 +1,314 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader"> 
+    <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Service Received Note</legend>   
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >SRN No</mat-label>
+                <input type="text" [(ngModel)]="Srnno" class="form-control" formControlName="srnno" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Order Type<span class="red">*</span></mat-label>
+                <mat-select formControlName="ordertype" [(ngModel)]="ordertype" class="form-control" (selectionChange)="getServiceOrderList()">
+                  <mat-option value = "One Time">One Time</mat-option>
+                  <mat-option value = "Regular">Regular</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Bussiness Unit<span class="red">*</span></mat-label>
+                <mat-select formControlName="b_unit" [(ngModel)]="b_unit_new" class="form-control" (selectionChange)="onChangeBuUnit($event.value)" >
+                  <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Party Name<span class="red">*</span></mat-label>
+                <mat-select formControlName="party" [(ngModel)]="party" class="form-control" (selectionChange)="onChangeParty($event.value)">
+                  <mat-option *ngFor="let party of partylist" [value]="party.bp_Id" >{{party.bp_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+              <mat-label>SRN Date<span class="red">*</span></mat-label>
+              <input type="date" [(ngModel)]="currentDate" class="form-control" formControlName="srndate" (change)="getServiceOrderList()">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >NonGoods Pur Order List<span class="red">*</span></mat-label>
+                <mat-select formControlName="orderid" class="form-control" (selectionChange)="onChangeServiceNo($event.value)">
+                  <mat-option *ngFor="let list of nongoodsorderlist" [value]="list.nongoodsserviceid" >{{list.serviceno}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+           
+            <div class="col-lg-12">
+              <div class="dyn_table_conent" style="border: none;">
+                <mat-tab-group animationDuration="1000ms">
+                  <mat-tab label="Service / Item Details">
+                    <div class="col-lg-12">
+                      <div class="dyn_table_conent">
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3>Action</h3></label>
+                          <label class="label_col"><h3 class="srln">Srl No</h3></label>
+                          <label class="label_col"><h3>Service Type</h3></label>
+                          <label class="label_col"><h3 class="i_nam">Services<span class="red">*</span></h3></label>
+                          <label class="label_col"><h3>Service Accounting Code</h3></label>
+                          <label class="label_col"><h3>Details</h3></label>
+                          <label class="label_col"><h3>Amount</h3></label>
+                          <label class="label_col"><h3>Taxable Amt</h3></label>
+                          <label class="label_col"><h3>Disocunt</h3></label>
+                          <label class="label_col"><h3>Discount based on</h3></label>
+                          <label class="label_col"><h3>Disocunt Amount</h3></label>
+                          <label class="label_col"><h3>Net Amount</h3></label>      
+                          <label class="label_col"><h3>Tax Code</h3></label>
+                          <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                          <label class="label_col"><h3>Tax Amount</h3></label>
+                          <label class="label_col"><h3>Total Amount</h3></label>
+                        </div>
+                          <div class="dyn_table_data_cont" formArrayName="nongoodssrn_item_details">
+                            <div class="dyn_table" *ngFor="let item of nongoodssrn_item_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                              <div class="label_col"><i class="fa fa-trash form-control action" (click)="itemdelete(pointIndex)"></i></div>
+                              <div class="label_col"><input class="form-control srln" type="number" min="0" formControlName="slno" readonly/></div>
+                          
+                                <div class="label_col"> 
+                                  <mat-select-autocomplete class="form-control"  
+                                    [options]="servicesublist"
+                                    [display]="'typename'"
+                                    [value]="'typeserviceno'"
+                                    [multiple]='false'
+                                    [selectedOptions]="selectedItemName[pointIndex]"
+                                    (selectionChange)="onChangeServiceName(pointIndex, $event)"
+                                    ngDefaultControl
+                                    [formControlName]= "'service_types'">
+                                  
+                                  </mat-select-autocomplete>
+                                  </div>
+                      
+                                <div class="label_col"><mat-select class="form-control i_nam" formControlName="services" (selectionChange)="onChangeDescription(pointIndex, $event.value)"><mat-option *ngFor="let list of servicelist[pointIndex]" [value]="list.service_no">{{list.description}}</mat-option></mat-select></div>
+
+                              <div class="label_col"><input class="form-control" type="text" formControlName="account_code" /></div>
+                              <div class="label_col"><button type="button" class="btn btn-success" (click)="detailsPopUp(pointIndex)" style="margin-right: 5px;width: 110px!important;">Show</button></div>
+                              
+                              <div class="label_col"><input class="form-control" type="number" formControlName="amount" /></div>
+                              <div class="label_col"><input class="form-control" type="number" formControlName="taxable_amount" /></div>
+                              <div class="label_col"><input class="form-control" type="number" formControlName="discount" /></div>  
+                              <div class="label_col"><select class="form-control" formControlName="discount_basedon">
+                                <option value="0">-Select-</option>
+                                <option value="Uom">Uom</option>
+                                <option value="%">%</option>
+                                <option value="Manual">Manual</option>
+                              </select></div>
+                              <div class="label_col"><input class="form-control" type="number" formControlName="discount_amount" /></div>
+                              <div class="label_col"><input class="form-control" type="number" formControlName="net_amount" /></div>
+                              <div class="label_col"><input class="form-control" type="text" formControlName="tax_code" /></div>
+                              <div class="label_col"><input class="form-control" type="number" formControlName="tax_rate" /></div>
+                              <div class="label_col"><input class="form-control" type="number" formControlName="tax_amount" /></div>
+                              <div class="label_col"><input class="form-control" type="number" formControlName="total_amount" /></div>
+                            </div>
+                          </div>
+                          <div class="btm_btn_content">
+                            <button type="button" class="btn btn-success" (click)="add(pointIndex)">Add</button>
+                          </div>
+                      </div>
+                    </div>
+                  </mat-tab>
+
+                  <mat-tab label="Tax Information">
+                    <fieldset>
+                      <legend>Tax Information
+                        <div class="form-group" style="width: 150px; margin: 0;">
+                        </div>
+                      </legend>
+        
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12"> 
+                        <div class="form-group">
+                          <mat-label for="PAN No.">PAN No.</mat-label>
+                          <input type="text" class="form-control" [(ngModel)]="model.pan_no" formControlName="pan_no">
+                        </div>
+                      </div>
+        
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label for="GST No.">GST No.</mat-label>
+                          <input type="text" class="form-control" [(ngModel)]="model.gst_no" formControlName="gst_no">
+                        </div>
+                      </div>
+        
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label for="CIN No.">CIN No.</mat-label>
+                          <input type="text" class="form-control" [(ngModel)]="model.cin_no" formControlName="cin_no">
+                        </div>
+                      </div>
+        
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label for="TAN No">TAN No</mat-label>
+                          <input type="text" class="form-control" [(ngModel)]="model.tan_no" formControlName="tan_no">
+                        </div>
+                      </div>
+                    </fieldset>
+                  </mat-tab>
+
+                  <mat-tab label="Term of Services">
+                    <div class="col-lg-12">
+                      <div class="dyn_table_conent">
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3>Action</h3></label>
+                          <label class="label_col"><h3 class="srln">Srl No</h3></label>
+                          <label class="label_col"><h3 class="i_nam">Description</h3></label>
+                        </div>
+        
+                        <div class="dyn_table_data_cont" formArrayName="nongoodssrn_time_service">
+                          <div class="dyn_table" *ngFor="let item of nongoodssrn_time_service.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <div class="label_col"><i class="fa fa-trash form-control action" (click)="timedelete(pointIndex)"></i></div>
+                            <!-- <div class="label_col" style="width: 55px; align-items: center;">
+                              <mat-checkbox formControlName="term_check" [value] ="true"></mat-checkbox>
+                            </div> -->
+                            <div class="label_col"><input class="form-control srln" type="number" min="0" formControlName="slno" readonly/></div>
+                            <div class="label_col"><mat-select class="form-control i_nam" formControlName="description"><mat-option *ngFor="let list of timeList" [value]="list.termasservicename">{{list.termasservicename}}</mat-option></mat-select></div>
+                          </div>
+                        </div>
+
+                        <!-- <div class="btm_btn_content">
+                          <button type="button" class="btn btn-success" (click)="addTime(pointIndex)">Add</button>
+                        </div> -->
+
+                    </div>
+                  </div>
+                  </mat-tab>
+
+                  <mat-tab label="Document Attachment">
+                    <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+                      <div class="dyn_table_conent" style="float: left;">
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3>Action</h3></label>
+                          <label class="label_col"><h3>Document Name</h3></label>
+                          <label class="label_col"><h3 class="wdt_220">Document Upload</h3></label>
+                        </div>
+                        <div class="dyn_table_data_cont" formArrayName="nongoodssrn_docs">
+                          <div class="dyn_table" *ngFor="let item of nongoodssrn_docs.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteDocument(pointIndex)"></i></div>
+                            <div class="label_col"><input formControlName="doc_name" class="form-control" type="text" /></div>
+                            <!-- <div class="label_col"><input class="form-control wdt_220_s" type="file" /></div> -->
+                            <div class="label_col"><input  class="form-control  wdt_220_s"   (change)="onFileSelected($event,pointIndex,pur_Order_docs.controls)" #myFileInput   type="file" /></div>
+                          </div>
+                        </div>
+                      </div>
+        
+                      <div class="btm_btn_content" *ngIf="action == 'update'">
+                        <button type="button" class="btn btn-success" (click)="addDocument(pointIndex)">Add </button>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                      <fieldset>
+                        <legend>Document List</legend>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                          <div class="form-group">
+                            <textarea class="form-control" rows="1"></textarea>
+                          </div>
+                        </div>
+                      </fieldset>
+                    </div>
+                  </mat-tab>
+
+                  <mat-tab label="Remarks">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div class="form-group">
+                        <mat-label>Remarks</mat-label>
+                        <textarea [(ngModel)]="model.remarks" formControlName="remarks" class="form-control" rows="1"></textarea>
+                      </div>
+                    </div>
+                  </mat-tab>
+
+                </mat-tab-group>
+              </div>
+            </div>
+
+            <div class="col-lg-12">
+              <div class="form-group">
+                <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="srnsave">Submit</button>
+              </div>
+            </div>
+
+          </fieldset>
+          </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+<div class="master_container_box" *ngIf="isHidden==false">
+    
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Non-Goods SRN List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Bussiness Unit</th>
+                  <th>Order Type</th>
+                  <th>Party Name</th>
+                  <th>SRN Date</th>
+                  <th colspan="4">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let srn of listSRN">
+                  <td>{{srn.b_unitname}}</td>
+                  <td>{{srn.ordertype}}</td>
+                  <td>{{srn.party_name}}</td>
+                  <td>{{srn.srndate}}</td>
+                 
+                  <td><button class="btn btn-success" (click)="onUpdate(srn.id, srn.srnid,srn.b_unit,'view')">View</button></td>
+                  <td><button class="btn btn-info" (click)="onUpdate(srn.id, srn.srnid,srn.b_unit,'update')">Update</button></td>  
+                  <td><button class="btn btn-danger" (click)="onDelete(srn.id)">Delete</button></td>
+                  <!-- <td><button class="btn btn-success" (click)="onclickprint(PurchaseGRN.id, PurchaseGRN.grn_id)" *ngIf="grnprint">Print</button></td> -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>

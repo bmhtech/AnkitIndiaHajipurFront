@@ -1,0 +1,167 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i
+                  class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i
+                  class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader"> <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner></div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Job work Grn Tagging</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Grn No<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats" [options]="grnlist" [display]="'grn_no'"
+                  [value]="'grn_id'" [multiple]='false' (selectionChange)="onChangeGRN($event)" ngDefaultControl
+                  [formControl]="userForm.controls['grn_id']" [disabled]="grnenable">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Grn Date</mat-label>
+                <input type="text" formControlName="grn_date" class="form-control" readonly />
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Supplier Name</mat-label>
+                <input type="text" formControlName="supplier_name" class="form-control" readonly />
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Grn Total qty</mat-label>
+                <input type="text" formControlName="totalqty" class="form-control" readonly />
+              </div>
+            </div>
+
+            <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+              <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col">
+                    <h3>Action</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="srln">Srl No</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Customer Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Wheat Grn Qty</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Allocation Qty</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Tag</h3>
+                  </label>
+
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="jw_grn_partytag_details">
+                  <div class="dyn_table" *ngFor="let item of jw_grn_partytag_details.controls; let pointIndex=index"
+                    [formGroupName]="pointIndex">
+
+                    <div class="label_col" *ngIf="deleteblock[pointIndex]; else elseBlock"><i
+                        class="fa fa-trash form-control action"></i> </div>
+                    <ng-template #elseBlock>
+                      <div class="label_col"><i class="fa fa-trash form-control action"
+                          (click)="deletedetails(pointIndex)"></i> </div>
+                    </ng-template>
+
+                    <div class="label_col"><input class="form-control srln" type="number" formControlName="slno"
+                        readonly /></div>
+                    <div class="label_col">
+                      <mat-select-autocomplete class="form-control ats i_nam" [options]="partyList"
+                        [display]="'cp_name'" [value]="'cp_Id'" [multiple]='false'
+                        [selectedOptions]="selectedPartyName[pointIndex]"
+                        (selectionChange)="onChangePartyName(pointIndex, $event)" ngDefaultControl
+                        [formControlName]="'party'">
+                      </mat-select-autocomplete>
+                    </div>
+                    <div class="label_col"><input formControlName="qty" class="form-control" type="text"
+                        (keyup)="convertqty(pointIndex, $event.target.value)" /></div>
+                    <div class="label_col"><input formControlName="allocated_qty" class="form-control" type="text"
+                        readonly />
+                    </div>
+                    <div class="label_col"><input formControlName="partyitem_qty" class="form-control" type="text"
+                        readonly />
+                    </div>
+                    <div class="label_col"><button type="button" class="btn btn-success"
+                        (click)="detailsPopUp(pointIndex)" style="margin-right: 5px;width: 110px!important;">Tag
+                        Item</button></div>
+                  </div>
+                </div>
+              </div>
+              <div class="btm_btn_content">
+                <button type="button" (click)="addDetails()" class="btn btn-success">Add </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="grnitemtagsave">Submit</button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+<div class="container-fluid" *ngIf="isHidden==false">
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Job work Grn Tagging List</legend>
+        <div class="table_content">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>JOBWork ID</th>
+                <th>GRN No</th>
+                <th>GRn Date</th>
+                <th>Supplier Name</th>
+                <th colspan="3">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let grntag of grntaglist">
+                <td>{{grntag.jw_grn_tag}}</td>
+                <td>{{grntag.grn_no}}</td>
+                <td>{{grntag.grn_date}}</td>
+                <td>{{grntag.supplier_name}}</td>
+                <td><button class="btn btn-success" (click)="onUpdate(grntag.id,grntag.jw_grn_tag,'view')">View</button>
+                </td>
+                <td><button class="btn btn-info"
+                    (click)="onUpdate(grntag.id,grntag.jw_grn_tag,'update')">Update</button></td>
+                <td><button class="btn btn-danger" (click)="onDelete(grntag.id,grntag.jw_grn_tag)">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,547 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader"> <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner></div>
+</div>
+
+<form [formGroup]="userForm" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Stock Transfer Challan Information</legend>
+           
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Sending Business Unit<span class="red">*</span></mat-label>
+                <mat-select formControlName="business_unit" [(ngModel)]="model.business_unit" class="form-control" (selectionChange)="onChangeBusinessUnit($event.value)" >
+                  <mat-option *ngFor="let business_unit of businesslists" [value]="business_unit.businessunit_id">{{business_unit.businessunit_name}}</mat-option>  
+                </mat-select>
+              </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Stock Transfer Challan Date</mat-label>
+                <input type="date" class="form-control" [(ngModel)]="currentDate" (change)="onChangeStkChallanDate($event)" formControlName="stk_challan_date" >
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Stock Transfer Challan No</mat-label>
+                <input type="text" class="form-control" [(ngModel)]="challanNo" formControlName="stk_challan_no" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Reference Type<span class="red">*</span></mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.ref_type" formControlName="ref_type" (selectionChange)="onChangerefType($event.value)">
+                  <mat-option value="Open Stock Transfer Challan">Open Stock Transfer Challan</mat-option>
+                  <mat-option value="Goods Stock Transfer">Goods Stock Transfer</mat-option>
+                  <mat-option value="Loading Advice">Loading Advice</mat-option>
+                </mat-select>
+              </div>
+            </div>
+           
+          
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <!-- <mat-label> Customer Ref. Document No.<span class="red">*</span></mat-label> -->
+                <mat-label>Ref. Document No.</mat-label>
+                <input type="text" class="form-control" [(ngModel)]="model.cust_ref_doc_no" formControlName="cust_ref_doc_no">
+              </div>
+            </div>
+
+          
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Order Point<span class="red">*</span></mat-label>
+                <mat-select formControlName="order_point" [(ngModel)]="model.order_point" class="form-control" (selectionChange)="onChangeorderpoint($event.value)" [disabled]="checkRefType==false">
+                  <mat-option value="Inter">Inter</mat-option>
+                  <mat-option value="Intra">Intra</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12"  *ngIf="checkRefType"> -->
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Receiving Business Unit<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="delbusinesslists"
+                [display]="'businessunit_name'"
+                [value]="'businessunit_id'"
+                [multiple]='false'
+                [disabled]='receiving_bu_status'
+                ngDefaultControl
+                [formControl]="userForm.controls['delivery_business_unit']"
+                >
+              </mat-select-autocomplete>
+                
+              <!-- [selectedOptions]="selecteddelivery_business_unit[pointIndex]" -->
+                
+                <!-- <mat-select formControlName="delivery_business_unit" [(ngModel)]="model.delivery_business_unit" class="form-control" [disabled]="model.order_point == 'Intra'">
+                  <mat-option *ngFor="let business_unit1 of delbusinesslists" [value]="business_unit1.businessunit_id">{{business_unit1.businessunit_name}}</mat-option>  
+                </mat-select> -->
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Billing Required<span class="red">*</span></mat-label>
+                <mat-select formControlName="billing_req" [(ngModel)]="model.billing_req" class="form-control" [disabled]="checkRefType==false">
+                  <mat-option value="Yes">Yes</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Passing Weight<span class="red">*</span></mat-label>
+                <mat-select formControlName="passing_wt" [(ngModel)]="model.passing_wt" class="form-control" [disabled]="checkRefType==false">
+                  <mat-option value="Supplied WT">Supplied WT</mat-option>
+                  <mat-option value="Receiving WT">Receiving WT</mat-option>
+                  <mat-option value="Lower of Both">Lower of Both</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Date</mat-label>
+                <input type="date" class="form-control" [(ngModel)]="model.stk_challan_date2" formControlName="stk_challan_date2">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="model.ref_type == 'Loading Advice' || model.ref_type == 'Goods Stock Transfer'">
+              <div class="form-group" style="height: 54px;">
+                <label>&nbsp;</label>
+                <button class="btn btn-info" (click)=" onClickShow()">Show </button>
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+      <!--  Dynamic Start-->
+    <div class="weigh_n">
+      <div class="dyn_table_conent" style="border: none;">
+        <mat-tab-group animationDuration="1000ms">
+          <mat-tab label="Item Details">
+            <div class="dyn_table_conent" style="border: none;">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3 class="act">Action</h3></label>
+                <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                <label class="label_col"><h3 class="i_nam">Item Name<span class="red">*</span></h3></label>
+                <label class="label_col"><h3 class="i_nam">Packing Item<span class="red">*</span></h3></label>
+                <label class="label_col"><h3>Packing Qty.<span class="red">*</span></h3></label>
+                <label class="label_col"><h3>Packing Uom</h3></label>
+                <label class="label_col"><h3>Item Qty.<span class="red">*</span></h3></label>
+                <label class="label_col"><h3>Item Uom</h3></label>
+                <label class="label_col"><h3>Mat.Wt</h3></label>
+                <label class="label_col"><h3>Price<span class="red">*</span></h3></label>
+                <label class="label_col"><h3>Price Based On<span class="red">*</span></h3></label>
+                <label class="label_col"><h3>Amount</h3></label>
+                <label class="label_col"><h3>Tax Code</h3></label>
+                <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                <label class="label_col"><h3>Tax Amt.</h3></label>
+                <label class="label_col"><h3>Total Amt.</h3></label>
+                <label class="label_col"><h3>Quality<br> Norms</h3></label>
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="stk_Transfer_Challan_Item_Dtls">
+                <div class="dyn_table" *ngFor="let item of stk_Transfer_Challan_Item_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <div class="label_col" *ngIf = "model.ref_type !='Sales Order' || model.ref_type !='Loading Advice'"><i class="fa fa-trash form-control action" (click)="deleteItem(pointIndex)"></i></div>
+                  <div class="label_col"><input class="form-control srln" formControlName="slno" type="number" /></div>
+                  <div class="label_col"><select formControlName="item_code" class="form-control i_nam" (change)="onChangeItemName(pointIndex,$event)"><option value="0">-Select-</option><option *ngFor="let item_name of item_codes" [value]="item_name.item_id">{{item_name.item_name}}</option></select></div>
+                  <div class="label_col"><select formControlName="packing" type="text" class="form-control i_nam" (change)="onChangePackingItem(pointIndex,$event)"><option value="0">-Select-</option><option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">{{packingitm.item_name}}</option></select></div>
+                  <div class="label_col"><input class="form-control" formControlName="squantity" type="number" (keyup)="calItemQty($event, pointIndex)"/></div>
+                  <div class="label_col"><input type="text" class="form-control" formControlName="suom"></div>
+                  <div class="label_col"><input class="form-control" formControlName="quantity" type="number" readonly/></div>
+                  <div class="label_col"><input type="text" class="form-control" formControlName="uom"></div>
+                  <div class="label_col"><input class="form-control" formControlName="mat_wt" type="number" readonly/></div>
+                  <div class="label_col"><input class="form-control" formControlName="price" type="number" /></div>
+                  <div class="label_col"><select class="form-control" formControlName="price_based_on" (change)="onChangePriceBasedOn($event, pointIndex)"><option value="Packing">Packing</option><option value="Item">Item</option></select></div>
+                  <div class="label_col"><input class="form-control" formControlName="amount" type="number" /></div>
+                  <!-- <div class="label_col"><input class="form-control" formControlName="tax_code" type="text" /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp(pointIndex)" aria-hidden="true" ></i></div> -->
+                 
+                  <div class="label_col" *ngIf="model.ref_type == 'Loading Advice';else elseBlock"><input class="form-control" formControlName="tax_code" type="text" readonly/></div>
+                  <ng-template #elseBlock>
+                    <div class="label_col"><input class="form-control" formControlName="tax_code" type="text" /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp(pointIndex)" aria-hidden="true" ></i></div>
+                  </ng-template>
+                  
+                  <div class="label_col"><input class="form-control" formControlName="tax_rate" type="text" readonly/></div>
+                  <div class="label_col"><input class="form-control" formControlName="tax_amt" type="number" readonly/></div>
+                  <div class="label_col"><input class="form-control" formControlName="total_amt" type="number" readonly/></div>
+                  <div class="label_col"><input class="form-control" formControlName="acc_norms" type="text" /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp2(pointIndex)" aria-hidden="true"></i></div>
+                  <div class="label_col" style="display: none;"><input class="form-control" formControlName="cgst_amt" type="number"/></div>
+                  <div class="label_col" style="display: none;"><input class="form-control" formControlName="sgst_amt" type="number"/></div>
+                  <div class="label_col" style="display: none;"><input class="form-control" formControlName="igst_amt" type="number"/></div>
+                </div>
+              </div>
+            </div>
+            <div class="btm_btn_content" *ngIf = "model.ref_type !='Sales Order' && model.ref_type != 'Loading Advice'">
+              <button type="button" class="btn btn-success"  (click)="addItem()">Add Row </button>
+            </div>
+            <div class="clr"></div>
+            <fieldset>
+              
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Grand Total</mat-label>
+                <input type="text" class="form-control" [(ngModel)]="model.grand_total" formControlName="grand_total" />
+              </div>
+            </div>
+
+            </fieldset>
+          </mat-tab>
+
+          <mat-tab label="Business Unit Details">
+            <div class="dyn_table_conent" style="border: none;">
+              <div class="dyn_table_header">
+                <label class="label_col" ><h3 class="act">Action</h3></label>
+                <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                <label class="label_col"><h3 class="i_nam">Business Unit Name</h3></label>
+                <label class="label_col"><h3 class="i_nam">Contact Person Name</h3></label>
+                <label class="label_col"><h3>Contact Number</h3></label>
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="stk_Transfer_Challan_BusinessUnit_Dtls">
+                <div class="dyn_table" *ngFor="let item of stk_Transfer_Challan_BusinessUnit_Dtls.controls; let pointIndex=index"  [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteBusinessUnit(pointIndex)"></i></div>
+                  <div class="label_col"><input formControlName="sl_no" class="form-control srln" type="number" /></div>
+                  <div class="label_col"><mat-select formControlName="business_unit" class="form-control i_nam" (selectionChange)="onChangeBusinessUnitDtls($event.value, index)"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let business_unit of businesslists" [value]="business_unit.businessunit_id">{{business_unit.businessunit_name}}</mat-option></mat-select></div>         
+                  <div class="label_col"> <input formControlName="cp_name" class="form-control i_nam" /> </div>
+                  <div class="label_col"><input formControlName="cp_contact" class="form-control wdt_115_s" type="text" /></div>
+                </div>
+              </div>
+            </div>
+            <!-- <div class="btm_btn_content" *ngIf = "model.ref_type !='Sales Order' || model.ref_type !='Loading Advice'">
+              <button type="button" class="btn btn-success"  (click)="addParty()">Add</button>
+            </div> -->
+            <div class="clr"></div>
+          </mat-tab>
+
+          <mat-tab label="Shipment Details">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+              <fieldset>
+                <legend>Ship To</legend>
+                <div formGroupName="stk_Transfer_Challan_Shipment_Dtls">
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <mat-label>Address Id</mat-label>
+                      <mat-select class="form-control" formControlName="ship_addr" type="text" (selectionChange)="onChangeShipToAddId($event.value)"><mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                    </mat-select>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <textarea class="form-control" formControlName="ship_details" type="text" style="height: 65px;"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div> 
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+              <fieldset>
+                <legend>Pay To</legend>
+                <div formGroupName="stk_Transfer_Challan_Shipment_Dtls">
+
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                    <mat-label>Address Id</mat-label>
+                     <mat-select class="form-control" formControlName="pay_addr" (selectionChange)="onChangePayToAddId($event.value)" type="text">
+                      <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <textarea class="form-control" formControlName="pay_details" type="text" style="height: 65px;"></textarea>
+                    </div>
+                  </div>
+                </div>  
+              </fieldset>
+              
+            </div>     
+          </mat-tab> 
+
+          <mat-tab label="Weighment Details">
+            <div formGroupName="stk_Transfer_Challan_Weight_Dtl">
+            <fieldset>
+              <legend>Own Weighment</legend>
+              <!-- <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>UOM</mat-label>
+                  <mat-select formControlName="own_uom" class="form-control"><mat-option>select</mat-option><mat-option>Ton</mat-option><mat-option>Quintal</mat-option><mat-option>Kg</mat-option></mat-select>
+                </div>
+              </div> -->
+
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>UOM</mat-label>
+                  <mat-select type="text" formControlName="own_uom" class="form-control" >
+                    <mat-option value = "0">-Select UOM-</mat-option>
+                    <mat-option *ngFor="let sales_uom of customUOMs" [value]="sales_uom.customuom_id">{{sales_uom.description}}</mat-option>  
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Gross</mat-label>
+                  <input type="number" formControlName="own_gross" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Tare</mat-label>
+                  <input type="number" formControlName="own_tare" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Net</mat-label>
+                  <input type="number" formControlName="own_net" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group" style="height: auto;">
+                  <mat-label>EWAY BILL NO</mat-label>
+                  <input type="text" formControlName="eway_bill_no" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group" style="height: auto;">
+                  <mat-label>Slip No.</mat-label>
+                  <input type="text" formControlName="own_slip_no" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group" style="height: auto;">
+                  <mat-label>Date</mat-label>
+                  <input type="date" formControlName="own_date" class="form-control">
+                </div>
+              </div>
+            </fieldset>        
+            </div>
+          </mat-tab>
+          <mat-tab label="Transport Information">
+            <div formGroupName="stk_Transfer_Challan_Trans_Info">
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Transport Borne By</mat-label>
+                <input type="text" class="form-control" value={{transBorneBy}} formControlName="trans_borne_by" readonly/>
+             </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Mode Of Transport</mat-label>
+                <mat-select class="form-control" formControlName="mode_of_trans">
+                  <mat-option value="By Road">By Road</mat-option>
+                  <mat-option value="By Rail">By Rail</mat-option>
+                  <mat-option value="By Air">By Air</mat-option>
+                  <mat-option value="By Water">By Water</mat-option>
+                  <mat-option value="By Other">By Other</mat-option>
+                </mat-select>
+             </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Transporter Name</mat-label>
+                <mat-select class="form-control" (selectionChange)="onChangeTransporterName($event.value)" formControlName="trans_code">
+                  <mat-option value="0">Select</mat-option>
+                  <mat-option *ngFor="let trans_code of trans_codes" [value]="trans_code.bp_Id">{{trans_code.bp_name}}</mat-option>
+                </mat-select>
+            </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Vehicle No.<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="vehicle_no">
+                  <mat-option value="0" >-Select-</mat-option>
+                   <mat-option *ngFor="let veh_no of veh_nos" [value]="veh_no.vehicle_id">{{veh_no.vehicle_no}}</mat-option>  
+                </mat-select>
+             </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Charge Code</mat-label>
+                <div style="position: relative; display: table;">
+                  <input class="form-control with-primary-addon" type="text" formControlName="charge_code">
+                  <span class="input-group-addon input-group-addon-primary addon-left"><i class="fa fa-external-link tax_insert_icon"  aria-hidden="true"></i></span>
+              </div>
+             </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Freight Amount</mat-label>
+                <input type="number" class="form-control" formControlName="freight_amt">
+             </div>
+            </div>
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Advance Paid</mat-label>
+                <input type="number" class="form-control" formControlName="adv_paid">
+             </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Payment Terms</mat-label>
+                <mat-select class="form-control" formControlName="payment_term">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let list of payTerms" [value]="list.payterm_id">{{list.payterm_desc}}
+                    </mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </div>
+          </mat-tab>
+        
+          <mat-tab label="Remarks">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="form-group">
+                <mat-label>Remarks</mat-label>
+                <textarea [(ngModel)]="model.remark" formControlName="remark" class="form-control"></textarea>
+              </div>
+            </div>     
+          </mat-tab> 
+          <mat-tab label="Document Attachment">
+            <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+              <div class="dyn_table_conent" style="float:left;">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Action</h3></label>
+                  <label class="label_col"><h3>Document Name</h3></label>
+                  <label class="label_col"><h3 class="wdt_220">Document Upload</h3></label>
+                </div>           
+                <div class="dyn_table_data_cont" formArrayName="stk_Transfer_Challan_Docs">
+                  <div class="dyn_table"  *ngFor="let item of stk_Transfer_Challan_Docs.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteDocument(pointIndex)"></i></div>      
+                    <div class="label_col"><input  class="form-control" type="text" formControlName="doc_name" /></div>
+                    <div class="label_col"><input class="form-control wdt_215" type="file" /></div>
+                  </div>
+                </div>
+              </div>
+                            
+              <div class="btm_btn_content">
+                <button type="button" class="btn btn-success"  (click)="addDocument()">Add </button>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <fieldset style="padding-bottom: 0px;">
+                <legend>Document List</legend>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                  <div class="form-group" style="height: auto;">
+                    <textarea class="form-control" rows="1" style="height: 100px;"></textarea>
+                  </div>
+                </div>
+              </fieldset>
+            </div>     
+        </mat-tab>
+        <mat-tab label="Approval">
+          <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Confirmed By<span class="red">*</span></mat-label>
+              <mat-select class="form-control" [(ngModel)]="model.confirmed_by" formControlName="confirmed_by">
+                <mat-option value="0">-Select-</mat-option>
+                <mat-option *ngFor="let confirmedBy of employeeNames" [value]="confirmedBy.emp_id"> {{confirmedBy.emp_name}}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Approved<span class="red">*</span></mat-label>
+              <mat-select class="form-control" [(ngModel)]="model.approval" formControlName="approval">
+                <mat-option value="Yes">Yes</mat-option>
+                  <mat-option value="No">No</mat-option>
+              </mat-select>
+            </div>
+          </div>   
+          <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Reason<span class="red">*</span></mat-label>
+              <mat-select formControlName="reason" [(ngModel)]="model.reason" class="form-control">
+                <mat-option value="0">-Select-</mat-option>
+                <mat-option *ngFor="let list of reasonIdList" [value]="list.reason_id">{{list.reason}}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+      </mat-tab>
+    </mat-tab-group>
+  </div>
+</div>
+
+      <div class="col-lg-12">
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="stocktransferchallansave">Submit</button>
+        </div>
+      </div>
+      <!--  Dynamic End-->
+    </div>
+  </section>
+</form>
+
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Stock Transfer Challan List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Challan No.</th>
+                  <th>Challan Date</th>
+                  <th>Business Unit</th>
+                  <th>Order Point</th>
+                  <th>Billing Required</th>
+                  <th>Passing Weight</th>
+                  <th colspan="4">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let StockTransferChallan of listStockTransferChallan">
+                  <td>{{StockTransferChallan.stk_challan_no}}</td>
+                  <td>{{StockTransferChallan.stk_challan_date}}</td>
+                  <td>{{StockTransferChallan.business_unit}}</td>
+                  <td>{{StockTransferChallan.order_point}}</td>
+                  <td>{{StockTransferChallan.billing_req}}</td>
+                  <td>{{StockTransferChallan.passing_wt}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(StockTransferChallan.id, StockTransferChallan.stk_challan_id,'view')" *ngIf="stocktransferchallanview">View</button></td>  
+                  <td><button class="btn btn-info" (click)="onUpdate(StockTransferChallan.id, StockTransferChallan.stk_challan_id,'update')" *ngIf="stocktransferchallanupdate">Update</button></td>  
+                  <td><button class="btn btn-danger" (click)="onDelete(StockTransferChallan.id)" *ngIf="stocktransferchallandelete">Delete</button></td> 
+                  <td><button class="btn btn-info" (click)="onPrint(StockTransferChallan.id, StockTransferChallan.stk_challan_id)" *ngIf="stocktransferchallanprint">Print</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

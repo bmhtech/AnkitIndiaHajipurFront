@@ -1,0 +1,132 @@
+
+<mat-dialog-content>
+  <button class="close_btn" mat-button mat-dialog-close ><i class="fa fa-close icon"></i></button>
+<div class="container-fluid" >
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Granulation Report</legend>
+        <div class="table_content">
+          <table border="1" style="padding:10px; width:100%" >
+            <thead>
+              <tr>
+                <td colspan="16"><b>{{company_name}}</b></td>
+             </tr>
+              <tr>
+                <td colspan="16"><b>Granulation Report</b></td>
+             </tr>
+
+              <tr>
+                 <td colspan="2"><b> Date:</b> {{ date}}</td>
+                 <td colspan="3"><b> Bussiness Unit Name:</b> {{ business_unitname}}</td>
+                 <td colspan="3"><b> Shift:</b> {{ shift}}</td>
+                 <td colspan="3"><b> Item Name:</b> {{ item_name}}</td>
+                 <td colspan="3"><b> Approved By:</b> {{ approvedby_name}}</td>
+              </tr>
+              
+              <tr>
+                <td>Srl No</td>
+                <td>Seives Name</td>
+                <td>8</td>
+                <td>9</td>
+                <td>10</td>
+                <td>11</td>
+                <td>12</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let granulation of granulationlist">
+                    <td>{{granulation.slno}}</td>
+                    <td>{{granulation.seivesid}}</td>
+                    <td>{{granulation.eight}}</td>
+                    <td>{{granulation.nine}}</td>
+                    <td>{{granulation.ten}}</td>
+                    <td>{{granulation.eleven}}</td>
+                    <td>{{granulation.twelve}}</td>
+                    <td>{{granulation.one}}</td>
+                    <td>{{granulation.two}}</td>
+                    <td>{{granulation.three}}</td>
+                    <td>{{granulation.four}}</td>
+                    <td>{{granulation.five}}</td>
+                    <td>{{granulation.six}}</td>
+                    <td>{{granulation.seven}}</td>
+                  </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div  id="print-section" class="print " hidden>
+    <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+    <h5 class="uc"  style="text-align: center;">Granulation Report</h5>
+    <div>
+        <table class="table table-bordered" >
+            <thead>
+              
+
+              <tr>
+                <td colspan="2"><b> Date:</b> {{ date}}</td>
+                 <td colspan="3"><b> Bussiness Unit Name:</b> {{ business_unitname}}</td>
+                 <td colspan="3"><b> Shift:</b> {{ shift}}</td>
+                 <td colspan="3"><b> Item Name:</b> {{ item_name}}</td>
+                 <td colspan="3"><b> Approved By:</b> {{ approvedby_name}}</td>
+              </tr>
+             
+              <tr>
+                <td>Srl No</td>
+                <td>Seives Name</td>
+                <td>8</td>
+                <td>9</td>
+                <td>10</td>
+                <td>11</td>
+                <td>12</td>
+                <td>1</td>
+                <td>2</td>
+                <td>3</td>
+                <td>4</td>
+                <td>5</td>
+                <td>6</td>
+                <td>7</td>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let granulation of granulationlist">
+                    <td>{{granulation.slno}}</td>
+                    <td>{{granulation.seivesid}}</td>
+                    <td>{{granulation.eight}}</td>
+                    <td>{{granulation.nine}}</td>
+                    <td>{{granulation.ten}}</td>
+                    <td>{{granulation.eleven}}</td>
+                    <td>{{granulation.twelve}}</td>
+                    <td>{{granulation.one}}</td>
+                    <td>{{granulation.two}}</td>
+                    <td>{{granulation.three}}</td>
+                    <td>{{granulation.four}}</td>
+                    <td>{{granulation.five}}</td>
+                    <td>{{granulation.six}}</td>
+                    <td>{{granulation.seven}}</td>
+                  </tr>
+            </tbody>
+        </table>
+    </div> 
+</div>
+
+<div  class="col-lg-12">
+  <div class="form-group">
+      <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+   </div>
+</div>
+
+</div>
+</mat-dialog-content>

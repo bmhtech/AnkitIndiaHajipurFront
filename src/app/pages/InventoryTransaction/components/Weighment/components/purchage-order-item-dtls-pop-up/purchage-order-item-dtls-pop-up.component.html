@@ -1,0 +1,69 @@
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box">
+  <form>
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Document List</legend>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="table_content">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Sl No.</th>
+                      <th>Item Name</th>
+                      <th>packing</th> 
+                      <th>Item Qty</th>
+                      <th>Item Uom</th>
+                      <th>packing Qty</th> 
+                      <th>packing Uom</th> 
+                      <th>Mat-Wt</th>
+                      <th>Qc Norms</th>
+                      <th>Warehouse</th> 
+                      <th>Rack</th>   
+                      <th>Base Qty</th>         
+                    </tr>  
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let i of list; let poinIndex = index">
+                      <td>{{poinIndex+1}}</td>
+                      <td>{{i.item_name}}</td>
+                      <div hidden><td>{{i.item_code}}</td> </div>
+                      <div hidden><td>{{i.packing}}</td> </div>
+                      <td>{{i.packing_name}}</td>
+                      <td>{{i.quantity}}</td>
+                      <td>{{i.uom}}</td> 
+                      <td>{{i.s_qty}}</td>
+                      <td>{{i.s_uom}}</td> 
+                      <td>{{i.mat_wt}}</td>
+                      <td>{{i.qc_norms}}</td> 
+                     <div hidden> <td>{{i.wearhouse}}</td></div>
+                     <td>{{i.wearhouse_name}}</td>
+                      <td>{{i.rack_name}}</td> 
+                      <div hidden><td>{{i.rack}}</td> </div>
+                      <td>{{i.base_qty}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>           
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <mat-dialog-actions align="end">
+          <button class="btn btn-info" mat-button [mat-dialog-close]="true" cdkFocusInitial>Close</button>
+        </mat-dialog-actions>
+  </form>
+</div>
+  
+  
+  
+  

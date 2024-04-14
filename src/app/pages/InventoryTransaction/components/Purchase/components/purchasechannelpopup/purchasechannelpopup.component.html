@@ -1,0 +1,76 @@
+<div class="container-fluid modal_box">  
+  <div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div> 
+  <form [formGroup]="userForm">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset style="padding: 0 15px;">
+            <legend>Customer List</legend>
+            <div style="margin-bottom: 20px;">
+              <label style="font-weight: normal; padding-right: 15px; display: inline-block; width: 176px;"><strong>Channel Supp Master</strong></label>  
+              <mat-select style=" display: inline-block; width: 150px;" class="form-control" formControlName="channel_desc" [(ngModel)]="model.channel_desc" (selectionChange)="onChangeChannelDesc($event.value)">
+                <mat-option *ngFor="let channel of channelDesc" [value]="channel.channel_custid">{{channel.channel_desc}}</mat-option>
+              </mat-select>
+          </div>
+          <div style="margin-bottom: 20px;">
+            <label style="font-weight: normal; padding-right: 15px; display: inline-block; width: 176px;"><strong>Supplier Group</strong></label>  
+            <mat-select style=" display: inline-block; width: 150px;" class="form-control" formControlName="cust_group" [(ngModel)]="model.cust_group" (selectionChange)="onChangeCustomerGroup($event.value)">
+              <mat-option *ngFor="let cust_group of customer_group" [value]="cust_group.bp_group_id">{{cust_group.bp_grp_name}}</mat-option>
+            </mat-select>
+        </div>
+     
+        <div class="clr"></div>
+         
+            <div class="col-lg-7 col-md-7 col-sm-12 col-12" style="float: right;">
+              <div class="form-group">
+                <input class="form-control" placeholder="Search Customer ..." type="text" (keydown)="searchCustomer2($event)">
+              </div>
+            </div>
+            <div class="clr"></div>
+          <div class="table_content table_head_fixed">
+            <table class="table table-bordered fixed_head">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">&nbsp;</th>
+                  <th style="width: 50px;">Sl No.</th>
+                  <th style="width: 180px;">Supplier Code</th>
+                  <th>Supplier Name</th>            
+                </tr>  
+              </thead>
+            </table>
+          </div>
+            <div class="table_content table_pop">
+              <table class="table table-bordered">
+                <thead style="height: 3px;">
+                  <tr>
+                    <th style="width: 50px;">&nbsp;</th>
+                    <th style="width: 50px;">&nbsp;</th>
+                    <th style="width: 180px;">&nbsp;</th>
+                    <th>&nbsp;</th>            
+                  </tr> 
+                </thead>
+                <tbody>
+                  <tr *ngFor="let i of customerNameList; let poinIndex = index">
+                    <td style="width: 50px;"><mat-radio-button (change)="check1(i)"></mat-radio-button></td>
+                    <td style="width: 59px;">{{poinIndex+1}}</td>
+                    <td style="width: 180px;">{{i.bp_code}}</td>
+                    <td>{{i.bp_name}}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+    <mat-dialog-actions  align="end">
+      <!-- <button class="btn btn-info" mat-button [mat-dialog-close]="true" (click)="SendDataToDifferentComponenet()" cdkFocusInitial>Submit</button> -->
+      <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" >Submit</button>
+    </mat-dialog-actions>
+  </form>
+</div>

@@ -1,0 +1,87 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="progress_loader_box" *ngIf="status == false">
+      <div class="progress-loader"> 
+        <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+      </div>
+    </div>
+
+    <form autocomplete="off" [formGroup]="userForm">  
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Payment Status</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Item Code">From Date</label>
+                <input formControlName="from_date" [(ngModel)]="model.from_date" type="date" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Item Name">To Date</label>
+                <input  formControlName="to_date" [(ngModel)]="model.to_date" type="date" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label style="display: block;">&nbsp;</label>
+                <button (click)="send()" type="submit" class="btn btn-primary">Submit</button>
+              </div>
+              
+            </div>
+          </fieldset>
+        </div>
+      </div>
+  
+    </form> 
+  </div>
+</section>
+  
+
+  <!-- list -->
+
+  <div class="master_container_box">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset class="table_container">
+            <legend>Payment Status List</legend>
+            <div class="table_content">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Purchase Bill No</th>
+                    <th>Bill Date</th>
+                    <!-- <th>Service/Material</th>
+                    <th>ItemType</th> -->
+                    <th>Supplier</th>
+                    <th>Vehcle No</th> 
+                    <th>Total Amount</th>             
+                    <th colspan="2">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let PaymentApproval of listPaymentApproval">
+                    <td>{{PaymentApproval.pur_bill_no}}</td>
+                    <td>{{PaymentApproval.bill_date}}</td>
+                    <!-- <td>{{PurchaseBill.ser_item_type}}</td>
+                    <td>{{PurchaseBill.ser_item_subtype_name}}</td> -->
+                    <td>{{PaymentApproval.supplier}}</td>
+                    <td>{{PaymentApproval.vehicleno}}</td>
+                    <td>{{PaymentApproval.net_payable_party}}.00</td>
+                    <td><button class="btn btn-success" (click)="onUpdate(PaymentApproval.id, PaymentApproval.pur_bill_id)">View</button></td>
+                    <td><button (click)="approval(PaymentApproval.id)" class="btn btn-success">Approval</button></td>
+                   
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div> 
+  
+  

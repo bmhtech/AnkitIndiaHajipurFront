@@ -1,0 +1,176 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true" (keydown.enter)="$event.preventDefault()">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Channel Customer Master</legend>
+           
+            <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Description<span class="red">*</span></mat-label>
+                <textarea class="form-control" style="height:50px;" formControlName="channel_desc" [(ngModel)]="model.channel_desc"></textarea>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Channel Type</mat-label>
+                <mat-select formControlName="channeltype" [(ngModel)]="model.channeltype" class="form-control" (selectionChange)="Channeltypechange($event.value)">
+                 
+                  <mat-option value="Purchase">Purchase</mat-option>
+                  <mat-option value="Sale">Sale</mat-option>                   
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="showpurchase">
+              <div class="form-group">
+                <mat-label>Group<span class="red">*</span></mat-label>
+                  <mat-select  class="form-control"  formControlName="group_type" (selectionChange)="onChangeGroup($event.value)">
+                    <mat-option *ngFor="let group_type of suppGroups" [value]="group_type.bp_group_id">{{group_type.bp_grp_name}}</mat-option>
+                  </mat-select>
+              </div>
+            </div>
+      
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="showsale">
+                <div class="form-group">
+                  <mat-label>Group<span class="red">*</span></mat-label>
+                  <mat-select class="form-control" formControlName="group_type" (selectionChange)="onChangeGroup($event.value)">
+                    <mat-option *ngFor="let grouptype of customerNames" [value]="grouptype.cp_code"> {{grouptype.grp_name}}</mat-option>
+                  </mat-select>
+                </div>
+            </div>
+
+              <div class="col-lg-8 col-md-8 col-sm-6 col-12" >
+                <div class="form-group">
+                <textarea type="text" class="form-control"  formControlName="custid" [(ngModel)]="model.custid" readonly></textarea>
+              </div>
+            </div>
+          </fieldset>
+          <fieldset class="table_container">
+           
+              <div class="table_content" style="height:200px;" *ngIf="showpurchase" >
+
+                <div class="col-lg-7 col-md-7 col-sm-12 col-12" style="float: right;">
+                  <div class="form-group">
+                    <input class="form-control" placeholder="Search Supplier ..." type="text" (keydown)="searchSupp($event)">
+                  </div>
+                </div>
+
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Select</th>
+                      <th>Supplier Id</th>
+                      <th>Supplier Name</th> 
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr *ngFor="let sup_bussiness_partner of listsup_bussiness_partner; let pointIndex = index">  -->
+                      <tr *ngFor="let sup_bussiness_partner of sortedSuppData; let pointIndex = index">
+                      <td><mat-checkbox [checked]="(is_select_unit[pointIndex])" (change)="check($event, pointIndex)" [disabled]="stopcheck[pointIndex]"></mat-checkbox></td>
+                      <td>{{sup_bussiness_partner.bp_Id}}</td>
+                      <td>{{sup_bussiness_partner.bp_name}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div class="table_content" style="height:200px;" *ngIf="showsale" >
+                <div class="col-lg-7 col-md-7 col-sm-12 col-12" style="float: right;">
+                  <div class="form-group">
+                    <input class="form-control" placeholder="Search Customer ..." type="text" (keydown)="searchCust($event)">
+                  </div>
+                </div>
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Select</th>
+                      <th>Customer Id</th>
+                      <th>Customer Name</th> 
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <!-- <tr *ngFor="let cust_bussiness_partner of listcust_bussiness_partner; let pointIndex = index"> -->
+                      <tr *ngFor="let cust_bussiness_partner of sortedData; let pointIndex = index">
+                      <td><mat-checkbox [checked]="(is_select_unit[pointIndex])" (change)="check($event, pointIndex)" [disabled]="stopcheck[pointIndex]"></mat-checkbox></td>
+                      <td>{{cust_bussiness_partner.cp_Id}}</td>
+                      <td>{{cust_bussiness_partner.cp_name}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+
+            </fieldset>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <div class="btn-toolbar">
+              <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="channelcustmastersave" >Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid"> 
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+        <legend>Channel Customer Master List</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" style="float: right;">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="searchCust($event)">
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Channel Id</th>
+                  <th>Description</th> 
+                  <th colspan="4">Action</th> 
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let list of channel_master_list; let pointIndex = index">
+                  <td>{{list.channel_custid}}</td>
+                  <td>{{list.channel_desc}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(list.id,'view')" *ngIf="channelcustmasterview">View</button></td>
+                  <td><button class="btn btn-info" (click)="onUpdate(list.id,'update')" *ngIf="channelcustmasterupdate">Update</button></td>                 
+                  <td><button class="btn btn-danger" (click)="onDelete(list.id,list.channel_custid)" *ngIf="channelcustmasterdelete">Delete</button></td>                 
+                  <td><button class="btn btn-info" (click)="terminate(list.id)" >Terminate</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div> 

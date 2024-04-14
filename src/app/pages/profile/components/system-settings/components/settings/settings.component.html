@@ -1,0 +1,90 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid"> 
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Settings</legend>
+
+            <div class="col-lg-5 col-md-5 col-sm-6 col-12">
+              <div class="form-group">
+                <label style="padding-right: 20px;font-weight: bold;">Auto Code Generator : </label>
+                <span style="padding-right: 20px;"> <input formControlName="code_generator" [(ngModel)]="model.code_generator" type="radio" value="true"> Yes </span> <input type="radio" formControlName="code_generator" [(ngModel)]="model.code_generator"  value="false"> No
+              </div>
+            </div>
+
+            <div class="col-lg-5 col-md-5 col-sm-6 col-12">
+              <div class="form-group">
+                <label style="padding-right: 20px;font-weight: bold;">Vehicle Documents: </label>
+                <span style="padding-right: 20px;"> <input formControlName="vehicle_doc" [(ngModel)]="model.vehicle_doc" type="radio" value="true"> Yes </span> <input type="radio" formControlName="vehicle_doc" [(ngModel)]="model.vehicle_doc"  value="false"> No
+              </div>
+            </div> 
+          </fieldset>
+         </div> 
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="form-group">
+              <button type="submit" class="btn btn-primary"  (click)="send()">Submit</button>
+            </div>
+          </div>
+        </div>
+       </div>
+      </section>
+     </form>   
+
+     <div class="master_containerr" *ngIf="isHidden==false">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <fieldset class="table_container">
+              <legend>Settings List</legend>
+                <div class="table_content">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th>Id</th>
+                        <th>Company</th>
+                        <th>Auto Code Generator</th>
+                        <th>Vehicle Documents</th>
+                        <th>Action</th>
+                      </tr>
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let Settings of listSettings">
+                        <td>{{Settings.id}}</td>
+                        <td>{{Settings.company_name}} </td>
+                        <td>{{Settings.generator_status}} </td>
+                        <td>{{Settings.vehicle_status}}</td>
+                        <td><button class="btn btn-info" (click)="onUpdate(Settings.id)">Update</button></td>                    
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+      

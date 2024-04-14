@@ -1,0 +1,40 @@
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm1">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <fieldset>
+          <legend>Tax List</legend>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="table_content">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;"></th>
+                    <th>Sl No.</th>
+                    <th>Order Number</th>
+                    <th>Date</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                   
+                  <tr *ngFor="let i of saleorderlist; let poinIndex = index">
+                     <td><mat-radio-button (change)="check1(i)"></mat-radio-button></td>
+                    <td>{{poinIndex+1}}</td>
+                    <td>{{i.order_no}}</td>
+                    <td>{{i.order_date}}</td> 
+                    
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+        </fieldset>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+    <mat-dialog-actions>
+        <button class="btn btn-info" mat-button [mat-dialog-close]="true" (click)="send()">Submit</button>
+      </mat-dialog-actions>
+  </form>
+</div>

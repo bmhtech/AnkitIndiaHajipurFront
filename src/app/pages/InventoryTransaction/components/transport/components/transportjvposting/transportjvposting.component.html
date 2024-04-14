@@ -1,0 +1,153 @@
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <div class="modal_main_content">
+        <div id="print-section1" class="print ">
+        <div class="container-fluid">
+          <div class="main_content inv">
+            <div class="section1">
+              
+              <div class="box_table">
+                <div class="bxx-top">
+                  <!-- <table class="table table_top table-bordered">
+                    <tbody>
+                      <tr>
+                       
+                          <td style="width: 50%;" class="comp_adrs">
+                      
+                          <table style="width: 100%;" class="uc">
+                          
+                          </table>
+
+                        </td>
+                     </tr>
+                     
+                    </tbody>
+                  </table> -->
+                  <br/>
+                  <div class="bxx">
+                    <table class="table table-bordered" style="padding: 5px;"  >
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 10px">SL.</th>
+                          <th scope="col" style="width: 400px">Particular</th>
+                          <th scope="col" style="width: 50px">Debit Amount</th>
+                          <th scope="col" style="width: 50px;" >Credit Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                       
+                        <tr>
+                          <td></td>
+                          <td>Transportation Cost</td>
+                          <td style="text-align: right!important;">{{jvTotal}}</td>
+                          <td  style="text-align: right!important;"></td>
+                        </tr>
+
+                        <!-- <tr *ngIf="sortage_acstatus">
+                          <td></td>
+                          <td>Sortage</td>
+                          <td style="text-align: right!important;"></td>
+                          <td style="text-align: right!important;">{{Sortageamount}}</td>
+                        </tr> -->
+
+                        <tr *ngIf="roundoff_acstatus">
+                            <td></td>
+                            <td>Round Off</td>
+                            <td  style="text-align: right!important;">{{roundoff_amount_dr| number:'1.2-2'}}</td>
+                            <td  style="text-align: right!important;">{{roundoff_amount_cr| number:'1.2-2'}}</td>
+                        </tr>                                                                                                      
+
+                        
+
+                         <!-- <tr *ngFor="let chargedata of charge_matrix_list; let poinIndex = index">
+                        
+                          <td>{{chargedata.p_id}}</td>
+                          <td>{{chargedata.charges_name}}</td>
+                          <td  style="text-align: right!important;" *ngIf="chargedata.add_less==='add';else addblockelse">{{chargedata.amount | number:'1.2-2'}} </td>
+                            <ng-template #addblockelse>
+                              <td  style="text-align: right!important;"></td>
+                            </ng-template>
+                            <td   style="text-align: right!important;"  *ngIf="chargedata.add_less==='less';else lessblockelse">{{chargedata.amount | number:'1.2-2'}} </td>
+                            <ng-template #lessblockelse>
+                              <td  style="text-align: right!important;"></td>
+                            </ng-template>
+                        </tr>  -->
+                        <tr>
+                          <td></td>
+                          <td>Trasportation Cost(Deduct/Addjust)</td>
+                          <td  style="text-align: right!important;">{{chgs_debit| number:'1.2-2'}}</td>
+                          <td  style="text-align: right!important;">{{chgs_credit| number:'1.2-2'}}</td>
+                        </tr> 
+
+                        <tr *ngIf="tds_acstatus">
+                          <td></td>
+                          <td>TDS</td>
+                          <td  style="text-align: right!important;">{{tds_amount_dr| number:'1.2-2'}}</td>
+                          <td  style="text-align: right!important;">{{tds_amount_cr| number:'1.2-2'}}</td>
+                      </tr>
+
+                      
+
+                      <tr>
+                        <td></td>
+                        <td>{{transportname}}</td>
+                        <td style="text-align: right!important;">{{price_dr | number:'1.2-2'}}</td>
+                        <td style="text-align: right!important;">{{price_cr | number:'1.2-2'}}</td>
+                      </tr>
+
+                        <tr style="font-weight:bold">
+                          <td></td>
+                          <td>Total</td>
+                          <td style="text-align: right!important;">{{totalamount_dr| number:'1.2-2'}}</td>
+                          <td style="text-align: right!important;">{{totalamount_cr| number:'1.2-2'}}</td>
+                        </tr>
+
+                        <!-- <tr *ngIf="roundoff_gl_acstatus">
+                          <td>{{roundoffsl_no}}</td>
+                          <td>{{roundoff}}</td>
+                          
+                          <td  style="text-align: right!important;">{{roundoff_amount_dr| number:'1.2-2'}}</td>
+                          <td  style="text-align: right!important;">{{roundoff_amount_cr| number:'1.2-2'}}</td>
+                        </tr> -->
+
+                      </tbody>
+                    </table>
+                    <br/><br/><br/>
+                    <div class="bxx-toppest"> <b style="float: right;">Authorised Signatory</b></div>
+                  </div>
+
+
+                  <br/>
+                  <br/><br/>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+   
+    <mat-dialog-actions align="end">
+  
+      <button style='margin-right: 20px;'  (click)="accountposting('Posting')" mat-button mat-dialog-close class="btn btn-warning" *ngIf="posting; else elseBlock">Posting</button>
+      <ng-template #elseBlock>
+        <button style='margin-right: 20px;'  (click)="accountposting('Undo')" mat-button mat-dialog-close class="btn btn-primary" >Undo</button>
+      </ng-template>
+     
+
+      <button [useExistingCss]="true" printSectionId="print-section1" mat-button ngxPrint class="btn btn-info">Print</button>
+    </mat-dialog-actions>
+
+  </div>
+</div>
+
+
+
+
+
+
+

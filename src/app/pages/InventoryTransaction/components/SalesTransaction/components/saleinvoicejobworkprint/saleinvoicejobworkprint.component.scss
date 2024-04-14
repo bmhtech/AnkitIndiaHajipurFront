@@ -1,0 +1,26 @@
+.table, .table th, .table td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  .table1, .table1 th, .table1 td {
+    border-left: 0px solid black;
+    border-right: 0px solid black;
+    border-top: 0px solid black;
+    border-bottom: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  .table2, .table2 th, .table2 td {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 0px solid black;
+    border-bottom: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  .top_dp{ text-align: right; width: 100%; max-width: 730px; margin: 0 auto; display: block;
+    padding: 0 3px; font-size: 13px;}
+    .ar{ text-align: right !important; }
+
+    .page-break{display:block; page-break-before: always;}

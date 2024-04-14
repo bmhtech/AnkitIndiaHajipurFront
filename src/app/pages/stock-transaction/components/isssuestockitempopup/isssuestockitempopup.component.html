@@ -1,0 +1,49 @@
+<button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+<form [formGroup]="userForm">
+
+ 
+      <div class="dyn_table_conent" style="border: none;"  >
+        <div class="dyn_table_header">
+          <label class="label_col"><h3> Opening Packing Qty.<span class="red">*</span></h3></label>
+          <label class="label_col"><h3>Packing Uom</h3></label>
+          <label class="label_col"><h3>Opening Item Qty.<span class="red">*</span></h3></label>
+          <label class="label_col"><h3>Item Uom</h3></label>
+        
+          <label class="label_col"><h3>Requisition Packing Qty.<span class="red">*</span></h3></label>
+          <label class="label_col"><h3>Requisition Item Qty.<span class="red">*</span></h3></label>
+
+          <label class="label_col"><h3>Issued Packing Qty.<span class="red">*</span></h3></label>
+          <label class="label_col"><h3>Issued Item Qty.<span class="red">*</span></h3></label>
+
+          <label class="label_col"><h3>Issue Packing Qty.<span class="red">*</span></h3></label>
+          <label class="label_col"><h3>Issue Item Qty.<span class="red">*</span></h3></label>
+         
+        </div>
+        <div class="dyn_table_data_cont" formArrayName="issuepopup_Item_Dtls">
+          <div class="dyn_table" *ngFor="let item of issuepopup_Item_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+            
+           
+            <div class="label_col"><input type="text" class="form-control" formControlName="openingpackingqty" readonly/></div>
+            <div class="label_col"><input type="text" class="form-control" formControlName="packinguom" readonly></div>
+            <div class="label_col"><input type="text" class="form-control" formControlName="openingitemqty" readonly/></div>
+            <div class="label_col"><input type="text" class="form-control" formControlName="itemuom" readonly></div>
+
+            <div class="label_col"><input type="text" class="form-control" formControlName="requisitionpackingqty" readonly/></div>
+            <div class="label_col"><input type="text" class="form-control" formControlName="requisitionitemqty" readonly></div>
+            <div class="label_col"><input type="text" class="form-control" formControlName="issuedpackingqty" readonly/></div>
+            <div class="label_col"><input type="text" class="form-control" formControlName="issueditemqty" readonly></div>
+          
+            <div class="label_col"><input type="text" class="form-control" formControlName="issuepackingqty" (focusout)="getPackingQty($event, pointIndex)"/></div>
+            <div class="label_col"><input type="text" class="form-control" formControlName="issueitemqty" (focusout)="getItemQty($event, pointIndex)" ></div>
+          
+          </div>
+        </div>
+      </div>
+
+  <div class="col-lg-12" >
+    <div class="form-group">
+      <button type="submit" (click)="send()" class="btn btn-primary" >Submit</button>
+    </div>
+  </div>
+
+</form>

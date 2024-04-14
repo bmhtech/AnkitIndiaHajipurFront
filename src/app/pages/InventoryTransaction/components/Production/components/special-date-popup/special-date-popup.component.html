@@ -1,0 +1,51 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm1">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Date List</legend>
+            <div class="dyn_table_conent" style="padding: 0 10px;">
+                <div class="dyn_table_header">
+                <label class="label_col"><h3>Select</h3></label>
+                <label class="label_col" style="display: none;"><h3>Sl No.</h3></label>
+                <label class="label_col"><h3>Select Date</h3></label>
+               
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="special_date_details">
+                  <div class="dyn_table" *ngFor="let item of special_date_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><mat-checkbox formControlName="checkbox" class="form-control"></mat-checkbox></div>
+                    <div class="label_col" style="display: none;"> <input class="form-control" type="number" formControlName="sl_no" readonly/></div>
+                    <div class="label_col" > <input class="form-control" type="text" formControlName="fromdate" readonly/></div>
+            
+                    <!-- <div class="label_col"><input class="form-control" type="text" /></div>
+                    <div class="label_col"><input class="form-control" type="text"/></div>  
+                    <div class="label_col"><input class="form-control" type="text"/></div> 
+                    <div class="label_col" style="display: none;"><input class="form-control" type="text" formControlName="item_group" readonly/></div>  -->
+                    <!-- <div class="label_col"><input class="form-control" type="text" formControlName="hsn_code" /></div>   
+                    <div class="label_col"><input class="form-control" type="text" formControlName="item_category" /></div>  
+                    <div class="label_col"><input class="form-control" type="text" formControlName="mstock_unit" /></div>    -->
+                   
+                  </div>
+                </div>  
+              </div>
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <mat-dialog-actions align="end">
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+        </mat-dialog-actions>
+  </form>
+</div>
+  
+  
+  
+  

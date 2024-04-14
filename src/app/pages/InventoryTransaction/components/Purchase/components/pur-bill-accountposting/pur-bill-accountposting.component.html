@@ -1,0 +1,515 @@
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <div class="modal_main_content">
+        <div id="print-section" class="print ">
+        <div class="container-fluid">
+          <div class="main_content inv">
+            <div class="section1">
+              <div class="main_header">
+              <div class="top_div">
+                   
+                </div>
+
+
+                
+                <h1 class="uc">{{company_name1}} </h1>
+                <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock ">(FRN : {{cin_no}})<br>
+                  (GST No : {{gst_no}})
+                  <!-- 14A, 5th floor, FMC FORTUNA<br>
+                  234/3A A.J.C Bose Road, Kolkata 700020</div> -->
+                  {{work_address}}<br>
+                  {{state_name}},{{city_name}},{{pin_no}}</div>
+                  <ng-template #elseBlock>
+                  <div class="top_h4">(CIN : {{cin_no}})<br>
+                    (GST No : {{gst_no}})
+                    <!-- 14A, 5th floor, FMC FORTUNA<br>
+                    234/3A A.J.C Bose Road, Kolkata 700020</div> -->
+                    {{work_address}}<br>
+                    {{state_name}},{{city_name}},{{pin_no}}</div>
+                  </ng-template>
+                <h1 class="uc">CREDIT PURCHASE VOUCHER</h1>
+                <!-- <div class="top_h4">Bill No :{{billno}}  Bill Date :{{billdate}} Vehicle No:{{vehicleno}}</div> -->
+              </div>
+              <div class="box_table">
+                <div class="bxx-top">
+                  <table class="table table_top table-bordered">
+                    <tbody>
+                      <tr>
+                        <!--<td style="width: 50%; vertical-align: top;" class="brdr_right">-->
+                          <td style="width: 50%;" class="comp_adrs">
+                          <!--<div class="form-control" style="min-height: 110px; border: 1px solid #ccc; border-radius: 4px;">
+  
+                            <input type="image" [src]="imageURL12" class="imageContainer" style="height:106px;width: 175px;" >  
+                          </div>-->
+                          <table style="width: 100%;" class="uc">
+                            <tr>
+                              <td>PARTY NAME: </td>
+                              <td>{{partyname | uppercase}}</td>
+                            </tr>
+                            <tr>
+                              <td>ADDRESS: </td>
+                              <td>{{address | uppercase}}</td>
+                            </tr>
+                            <tr>
+                              <td>GSTN : </td>
+                              <td >{{gstn | uppercase}}</td> 
+                            </tr>
+                            <tr>
+                              <td>TRUCK NO : </td>
+                              <td >{{vechileno | uppercase}}</td> 
+                            </tr>
+                            <!-- <tr>
+                              <td>Purchase Order: </td>
+                              <td><b>{{purNo}}</b></td>
+                              <td>Date:</td>
+                              <td>{{orddate}}</td>
+                            </tr> -->
+                          </table>
+
+                        </td>
+
+                        <td style="width: 50%;" class="comp_adrs">
+                          <table style="width: 100%;" class="uc">
+                            <tr>
+                              
+                              <td>PURCHASE ORDER NO:</td>
+                              <td>{{purorderno | uppercase}}</td>
+                            </tr>
+                            <tr>
+                              
+                              <td>PURCHASE ORDER DATE:</td>
+                              <td>{{purorderdate | date:'dd-MM-yyyy'}}</td>
+                            </tr>
+                            <tr>
+                              <td> PURCHASE BILL NO</td>
+                              <td>{{purbillno | uppercase}}</td>
+                              
+                            </tr>
+                            <tr>
+                              <td> PURCHASE BILL DATE</td>
+                              <td>{{ purbilldate | date:'dd-MM-yyyy'}}</td>
+                              
+                            </tr>
+                           
+                          </table>
+                        </td>
+
+                        <!-- <td style="width: 50%;" class="comp_adrs">
+                          <table style="width: 100%;" class="uc">
+                            <tr>
+                              <td>PARTY NAME: </td>
+                              <td>{{}}</td>
+                            </tr>
+                            <tr>
+                              <td>Address: </td>
+                              <td>{{}}</td>
+                            </tr>
+                            <tr>
+                              <td>GST No: </td>
+                              <td colspan="3">{{}}</td> 
+                            </tr>
+                          </table>
+                        </td> -->
+                     </tr>
+                     
+                    </tbody>
+                  </table>
+                  <br/>
+                  <div class="bxx" *ngIf="showcharge_matrix==true;else elseBlock1">
+                    <table class="table table-bordered" style="padding: 5px;"   *ngIf="statename =='BIHAR';else elseBlockstate">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 10px">SL.</th>
+                          <th scope="col" style="width: 400px">Particular</th>
+                          <th scope="col" style="width: 50px">Debit Amount</th>
+                          <th scope="col" style="width: 50px;" >Credit Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
+                       
+                        <tr *ngFor="let Itemdata of itemList">
+                          <td>{{Itemdata.slno}}</td>
+                          <td>{{Itemdata.adv_item_name}}</td>
+                          <td style="text-align: right!important;">{{Itemdata.net_amount | number:'1.2-2'}}</td>
+                          <td></td>
+                          
+                        </tr> 
+                        
+
+                        <tr *ngIf="roundoff_gl_acstatus">
+                          <td>{{roundoffsl_no}}</td>
+                          <td>{{roundoff}}</td>
+                          
+                          <td  style="text-align: right!important;">{{roundoff_amount_dr| number:'1.2-2'}}</td>
+                          <td  style="text-align: right!important;">{{roundoff_amount_cr| number:'1.2-2'}}</td>
+                        </tr>
+
+                        <tr>
+                          <td>{{supplier_slno}}</td>
+                          <td>{{supplier_name}}</td>
+                          <td></td>
+                          <td  style="text-align: right!important;">{{supplier_amount}}</td>
+                        </tr>
+                        <tr *ngFor="let chargedata of charge_matrix_list; let poinIndex = index">
+                        
+                          <td>{{chargedata.p_id}}</td>
+                          <td>{{chargedata.charges_name}}</td>
+                          <td  style="text-align: right!important;" *ngIf="chargedata.add_less==='add';else addblockelse">{{chargedata.amount | number:'1.2-2'}} </td>
+                            <ng-template #addblockelse>
+                              <td  style="text-align: right!important;"></td>
+                            </ng-template>
+                            <td   style="text-align: right!important;"  *ngIf="chargedata.add_less==='less';else lessblockelse">{{chargedata.amount | number:'1.2-2'}} </td>
+                            <ng-template #lessblockelse>
+                              <td  style="text-align: right!important;"></td>
+                            </ng-template>
+                          </tr>
+                        <tr *ngIf="addplus">
+                          <td>{{this.addplus_slno}}</td>
+                          <td>{{addplusac}}</td>
+                          <td  style="text-align: right!important;">{{addplusamount| number:'1.2-2'}}</td>
+                          <td></td>
+                          
+                        </tr>
+                        <tr *ngIf="addminus">
+                          <td>{{addminus_slno}}</td>
+                          <td>{{addminusac}}</td>
+                          <td></td>
+                          <td  style="text-align: right!important;">{{addminusamount| number:'1.2-2'}}</td>
+                        </tr>
+
+                        <tr *ngFor="let taxledger of TaxSummAllData" >
+
+                          <td  *ngIf="taxledger.cgst>0">{{taxledger.fin_year}}</td>
+                          <td  *ngIf="taxledger.cgst>0">{{taxledger.cgstledgerid}}</td>
+                          <td style="text-align: right!important;"  *ngIf="taxledger.cgst>0">{{taxledger.cgst}}</td>
+                          <td  *ngIf="taxledger.cgst>0" ></td>
+                        
+                        </tr>
+                        <tr *ngFor="let taxledger of TaxSummAllData">
+                          <td *ngIf="taxledger.sgst>0">{{taxledger.inserted_by}}</td>
+                          <td *ngIf="taxledger.sgst>0">{{taxledger.sgstledgerid}}</td>
+                          <td style="text-align: right!important;" *ngIf="taxledger.sgst>0">{{taxledger.sgst}}</td>
+                          <td *ngIf="taxledger.sgst>0"></td>
+                         
+                        </tr>
+
+                          
+                        <!-- <tr *ngFor="let discount of itemList">
+                          <td *ngIf="discount.discount_amount>0">{{discount.squantity}}</td>
+                          <td *ngIf="discount.discount_amount>0">{{discount.discount_basedon}}</td>
+                         
+                          <td *ngIf="discount.discount_amount>0"></td>
+                          <td style="text-align: right!important;" *ngIf="discount.discount_amount>0">{{discount.discount_amount | number:'1.2-2'}}</td>
+                         
+                        </tr>  -->
+                        <tr>
+                          <td></td>
+                          <td><b>Total Amount</b></td>
+                          <td  style="text-align: right!important;"><b>{{totalglobalamount_dr| number:'1.2-2'}}</b></td>
+                          <td  style="text-align: right!important;"><b>{{totalglobalamount_cr| number:'1.2-2'}}</b></td>
+                        </tr>
+                        
+                      </tbody>
+                    </table>
+                    <ng-template #elseBlockstate>
+                      <table class="table table-bordered" style="padding: 5px;">
+                        <thead>
+                          <tr>
+                            <th scope="col" style="width: 10px">SL.</th>
+                            <th scope="col" style="width: 400px">Particular</th>
+                            <th scope="col" style="width: 50px">Debit Amount</th>
+                            <th scope="col" style="width: 50px;" >Credit Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                         
+                          <tr *ngFor="let Itemdata of itemList">
+                            <td>{{Itemdata.slno}}</td>
+                            <td>{{Itemdata.adv_item_name | uppercase}}<br/><b style="font-size:10px;color:red">(Bags: {{Itemdata.passed_packing_qty}}, Gross wt:{{Itemdata.passed_item_qty}}, Mat wt:{{Itemdata.passed_mat_weight}} , Rate:{{Itemdata.unit_rate}})</b></td>
+                            <td style="text-align: right!important;">{{Itemdata.net_amount | number:'1.2-2'}}</td>
+                            <td></td>
+                            
+                          </tr> 
+                          
+                          <tr *ngIf="roundoff_gl_acstatus">
+                            <td>{{roundoffsl_no}}</td>
+                            <td>{{roundoff}}</td>
+                            
+                            <td  style="text-align: right!important;">{{roundoff_amount_dr| number:'1.2-2'}}</td>
+                            <td  style="text-align: right!important;">{{roundoff_amount_cr| number:'1.2-2'}}</td>
+                          </tr>
+                          <tr>
+                            <td>{{supplier_slno}}</td>
+                            <td>{{supplier_name | uppercase}}</td>
+                            <td></td>
+                            <td  style="text-align: right!important;">{{supplier_amount}}</td>
+                          </tr>
+                          <tr *ngFor="let chargedata of charge_matrix_list; let poinIndex = index">
+                          
+                            <td>{{chargedata.p_id}}</td>
+                            <td>{{chargedata.charges_name | uppercase}}</td>
+                            <td  style="text-align: right!important;" *ngIf="chargedata.add_less==='add';else addblockelse">{{chargedata.amount | number:'1.2-2'}} </td>
+                            <ng-template #addblockelse>
+                              <td  style="text-align: right!important;"></td>
+                            </ng-template>
+                            <td   style="text-align: right!important;"  *ngIf="chargedata.add_less==='less';else lessblockelse">{{chargedata.amount | number:'1.2-2'}} </td>
+                            <ng-template #lessblockelse>
+                              <td  style="text-align: right!important;"></td>
+                            </ng-template>
+
+                          </tr>
+                          <tr *ngIf="addplus">
+                            <td>{{this.addplus_slno}}</td>
+                            <td>{{addplusac}}</td>
+                            <td  style="text-align: right!important;">{{addplusamount| number:'1.2-2'}}</td>
+                            <td></td>
+                            
+                          </tr>
+                          <tr *ngIf="addminus">
+                            <td>{{addminus_slno}}</td>
+                            <td>{{addminusac}}</td>
+                            <td></td>
+                            <td  style="text-align: right!important;">{{addminusamount| number:'1.2-2'}}</td>
+                          </tr>
+  
+                          <tr *ngFor="let taxledger of TaxSummAllData" >
+  
+                            <td  *ngIf="taxledger.igst>0">{{taxledger.username}}</td>
+                            <td  *ngIf="taxledger.igst>0">{{taxledger.igstledgerid}}</td>
+                            <td style="text-align: right!important;"  *ngIf="taxledger.igst>0">{{taxledger.igst}}</td>
+                            <td  *ngIf="taxledger.igst>0" ></td>
+                          
+                          </tr>
+                       
+  
+                            
+                          <!-- <tr *ngFor="let discount of itemList">
+                            <td *ngIf="discount.discount_amount>0">{{discount.squantity}}</td>
+                            <td *ngIf="discount.discount_amount>0">{{discount.discount_basedon}}</td>
+                           
+                            <td *ngIf="discount.discount_amount>0"></td>
+                            <td style="text-align: right!important;" *ngIf="discount.discount_amount>0">{{discount.discount_amount | number:'1.2-2'}}</td>
+                           
+                          </tr>  -->
+                          <tr>
+                            <td></td>
+                            <td><b>TOTAL AMOUNT</b></td>
+                            <td  style="text-align: right!important;"><b>{{totalglobalamount_dr| number:'1.2-2'}}</b></td>
+                            <td  style="text-align: right!important;"><b>{{totalglobalamount_cr| number:'1.2-2'}}</b></td>
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+
+
+                    </ng-template><br/><br/><br/>
+                    <div class="bxx-toppest">
+                    
+                      <!--<b style="float: left;">Received By</b>
+                      <b>Godown Incharge</b>-->
+                      <b style="float: right;">Authorised Signatory</b>
+
+                  </div>
+                  </div>
+                  <ng-template #elseBlock1>
+                  <div class="bxx" >
+                    <table class="table table-bordered" style="padding: 5px;"  *ngIf="statename =='BIHAR';else elseBlockstate1">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 10px">SL.</th>
+                          <th scope="col" style="width: 400px">Particular</th>
+                          <th scope="col" style="width: 50px">Debit Amount</th>
+                          <th scope="col" style="width: 50px;" >Credit Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        
+                       
+                        <tr *ngFor="let Itemdata of itemList">
+                          <td>{{Itemdata.slno}}</td>
+                          <td>{{Itemdata.adv_item_name}} </td>
+                          <td>{{Itemdata.adv_item_name}}<br/><b style="font-size:10px;color:red">(Bags: {{Itemdata.passed_packing_qty}}, Pass wt:{{Itemdata.passed_mat_weight}} , Gross wt:{{Itemdata.passed_item_qty}}, Rate:{{Itemdata.unit_rate}})</b></td>
+                          <td style="text-align: right!important;">{{Itemdata.net_amount | number:'1.2-2'}}</td>
+                          <td></td>
+                          
+                        </tr> 
+                        
+                        <tr *ngIf="roundoff_gl_acstatus">
+                          <td>{{roundoffsl_no}}</td>
+                          <td>{{roundoff}}</td>
+                          
+                          <td  style="text-align: right!important;">{{roundoff_amount_dr| number:'1.2-2'}}</td>
+                          <td  style="text-align: right!important;">{{roundoff_amount_cr| number:'1.2-2'}}</td>
+                        </tr>
+                        <tr>
+                          <td>{{supplier_slno}}</td>
+                          <td>{{supplier_name}}</td>
+                          <td></td>
+                          <td  style="text-align: right!important;">{{supplier_amount}}</td>
+                        </tr>
+                     
+                        <tr *ngIf="addplus">
+                          <td>{{this.addplus_slno}}</td>
+                          <td>{{addplusac}}</td>
+                          
+                          <td  style="text-align: right!important;">{{addplusamount| number:'1.2-2'}}</td>
+                          <td></td>
+                        </tr>
+                        <tr *ngIf="addminus">
+                          <td>{{addminus_slno}}</td>
+                          <td>{{addminusac}}</td>
+                          <td></td>
+                          <td  style="text-align: right!important;">{{addminusamount| number:'1.2-2'}}</td>
+                        </tr>
+                        <tr *ngFor="let taxledger of TaxSummAllData" >
+
+                          <td  *ngIf="taxledger.cgst>0">{{taxledger.fin_year}}</td>
+                          <td  *ngIf="taxledger.cgst>0">{{taxledger.cgstledgerid}}</td>
+                          <td style="text-align: right!important;"  *ngIf="taxledger.cgst>0">{{taxledger.cgst}}</td>
+                          <td  *ngIf="taxledger.cgst>0" ></td>
+                        
+                        </tr>
+                        <tr *ngFor="let taxledger of TaxSummAllData">
+                          <td *ngIf="taxledger.sgst>0">{{taxledger.inserted_by}}</td>
+                          <td *ngIf="taxledger.sgst>0">{{taxledger.sgstledgerid}}</td>
+                          <td style="text-align: right!important;" *ngIf="taxledger.sgst>0">{{taxledger.sgst}}</td>
+                          <td *ngIf="taxledger.sgst>0"></td>
+                         
+                        </tr>
+
+                          
+                        <!-- <tr *ngFor="let discount of itemList">
+                          <td *ngIf="discount.discount_amount>0">{{discount.squantity}}</td>
+                          <td *ngIf="discount.discount_amount>0">{{discount.discount_basedon}}</td>
+                         
+                          <td *ngIf="discount.discount_amount>0"></td>
+                          <td style="text-align: right!important;" *ngIf="discount.discount_amount>0">{{discount.discount_amount | number:'1.2-2'}}</td>
+                         
+                        </tr> -->
+
+                        <tr>
+                          <td></td>
+                          <td><b>Total Amount</b></td>
+                          <td  style="text-align: right!important;"><b>{{totalglobalamount_dr| number:'1.2-2'}}</b></td>
+                          <td  style="text-align: right!important;"><b>{{totalglobalamount_cr| number:'1.2-2'}}</b></td>
+                        </tr>
+                        
+                      </tbody>
+                    </table>
+                    <ng-template #elseBlockstate1>
+
+                      <table class="table table-bordered" style="padding: 5px;"  >
+                        <thead>
+                          <tr>
+                            <th scope="col" style="width: 10px">SL.</th>
+                            <th scope="col" style="width: 400px">Particular</th>
+                            <th scope="col" style="width: 50px">Debit Amount</th>
+                            <th scope="col" style="width: 50px;" >Credit Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                         
+                          <tr *ngFor="let Itemdata of itemList">
+                            <td>{{Itemdata.slno}}</td>
+                            <td>{{Itemdata.adv_item_name}}</td>
+                            <td>{{Itemdata.adv_item_name}}<br/><b style="font-size:10px;color:red">(Bags: {{Itemdata.passed_packing_qty}}, Pass wt:{{Itemdata.passed_mat_weight}} , Gross wt:{{Itemdata.passed_item_qty}}, Rate:{{Itemdata.unit_rate}})</b></td>
+                            <td style="text-align: right!important;">{{Itemdata.net_amount | number:'1.2-2'}}</td>
+                            <td></td>
+                            
+                          </tr> 
+                          <tr *ngIf="roundoff_gl_acstatus">
+                            <td>{{roundoffsl_no}}</td>
+                            <td>{{roundoff}}</td>
+                            
+                            <td  style="text-align: right!important;">{{roundoff_amount_dr| number:'1.2-2'}}</td>
+                            <td  style="text-align: right!important;">{{roundoff_amount_cr| number:'1.2-2'}}</td>
+                          </tr>
+                          <tr>
+                            <td>{{supplier_slno}}</td>
+                            <td>{{supplier_name}}</td>
+                            <td></td>
+                            <td  style="text-align: right!important;">{{supplier_amount}}</td>
+                          </tr>
+                       
+                          <tr *ngIf="addplus">
+                            <td>{{this.addplus_slno}}</td>
+                            <td>{{addplusac}}</td>
+                            
+                            <td  style="text-align: right!important;">{{addplusamount| number:'1.2-2'}}</td>
+                            <td></td>
+                          </tr>
+                          <tr *ngIf="addminus">
+                            <td>{{addminus_slno}}</td>
+                            <td>{{addminusac}}</td>
+                            <td></td>
+                            <td  style="text-align: right!important;">{{addminusamount| number:'1.2-2'}}</td>
+                          </tr>
+                          <tr *ngFor="let taxledger of TaxSummAllData" >
+  
+                            <td  *ngIf="taxledger.igst>0">{{taxledger.username}}</td>
+                            <td  *ngIf="taxledger.igst>0">{{taxledger.igstledgerid}}</td>
+                            <td style="text-align: right!important;"  *ngIf="taxledger.igst>0">{{taxledger.igst}}</td>
+                            <td  *ngIf="taxledger.igst>0" ></td>
+                          
+                          </tr>
+                         
+                          <!-- <tr *ngFor="let discount of itemList">
+                            <td *ngIf="discount.discount_amount>0">{{discount.squantity}}</td>
+                            <td *ngIf="discount.discount_amount>0">{{discount.discount_basedon}}</td>
+                           
+                            <td *ngIf="discount.discount_amount>0"></td>
+                            <td style="text-align: right!important;" *ngIf="discount.discount_amount>0">{{discount.discount_amount | number:'1.2-2'}}</td>
+                           
+                          </tr> -->
+  
+                          <tr>
+                            <td></td>
+                            <td><b>Total Amount</b></td>
+                            <td  style="text-align: right!important;"><b>{{totalglobalamount_dr| number:'1.2-2'}}</b></td>
+                            <td  style="text-align: right!important;"><b>{{totalglobalamount_cr| number:'1.2-2'}}</b></td>
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+                    </ng-template>
+                  </div>
+                  </ng-template>
+
+                  <br/>
+                  <br/><br/>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+   
+    <mat-dialog-actions align="end">
+      <!-- <button style='margin-right: 20px;'  (click)="accountpostingFinal('Posting')" mat-button mat-dialog-close class="btn btn-warning" *ngIf="billPosting">Posting</button> -->
+      <div *ngIf="show">
+          <button style='margin-right: 20px;' (click)="accountpostingFinal('Posting')" mat-button mat-dialog-close class="btn btn-warning" *ngIf="postingAction; else elseBlock">Posting</button>
+        <ng-template #elseBlock>
+          <button style='margin-right: 20px;' (click)="accountpostingFinal('Undo')" mat-button mat-dialog-close class="btn" style="background:darkcyan;" >Undo</button>
+        </ng-template>
+      </div>
+
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+    </mat-dialog-actions>
+
+  </div>
+</div>
+
+
+
+
+
+
+

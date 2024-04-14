@@ -1,0 +1,114 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+    <form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+        <section class="master_container">
+            <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Other Party Group</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label for="Other Partner Type">Other Partner Type<span class="red">*</span></mat-label>
+                <mat-select formControlName="op_type" [(ngModel)]="model.op_type"  class="form-control">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option value="Borrower">BORROWER</mat-option>
+                  <mat-option value="Lender">LENDER</mat-option>
+                  <mat-option value="Transporter">TRANSPORTER</mat-option>               
+                  <mat-option value="Venture Capitalist">VENTURE CAPITALIST</mat-option>                
+                </mat-select>
+              </div>
+            </div>
+                    
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Group Code">Group Code</label>
+                <input formControlName="op_code" [(ngModel)]="model.op_code" type="text" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Group Name">Group Name<span class="red">*</span></label>
+                <input formControlName="op_grp_name" [(ngModel)]="model.op_grp_name"  type="text" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label for="Control Account">Control Account</mat-label>
+                <mat-select type="text" formControlName="control_acc" [(ngModel)]="model.control_acc" class="form-control">
+                  <mat-option value="0">-Select Control Account-</mat-option>
+                  <mat-option *ngFor="let control_acc of subGroupNames" [value]="control_acc.ledgerid">{{control_acc.ledgername}}</mat-option>  
+                </mat-select>
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-checkbox  formControlName="op_active" [(ngModel)]="model.op_active">Active</mat-checkbox> 
+              </div>
+            </div>
+            
+          </fieldset>
+        </div>
+      </div>
+            
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="otherpartnersave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+    </form>     
+
+      
+      
+      <!--List-->
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Other Partner Group List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Group Name</th>
+                  <th>Control Account</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Otherpartner_group of listOtherpartner_group">
+                  <td>{{Otherpartner_group.op_grp_name}}</td>
+                  <td>{{Otherpartner_group.control_acc}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>         
+</div>

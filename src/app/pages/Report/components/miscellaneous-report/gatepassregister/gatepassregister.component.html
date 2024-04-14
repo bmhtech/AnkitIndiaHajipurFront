@@ -1,0 +1,266 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          <fieldset>
+            <legend>GatePass Register</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Gatepass Sl No.</mat-label>
+                <input  formControlName="gp_slno" type="number" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Out Date</mat-label>
+                <input  formControlName="gp_date" [(ngModel)]="currentDate" type="date" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Name<span class="red">*</span></mat-label>
+                <input  formControlName="name" type="text" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Vehicle No</mat-label>
+                <input  formControlName="vehicle" type="text" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Paid/Non Paid</mat-label>
+                <input  formControlName="paidnonpaid" type="text" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Particulars</mat-label>
+                <input  formControlName="particulars" type="text" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Rate</mat-label>
+                <input  formControlName="rate" type="text" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Amount</mat-label>
+                <input  formControlName="amount" type="text" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Approved By<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="approvedby">
+                  <mat-option *ngFor="let emplist of employeelist" [value]="emplist.emp_id">{{emplist.emp_name}}</mat-option>
+                </mat-select>
+            </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>In Date</mat-label>
+                <input  formControlName="indate" type="date" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Remarks</mat-label>
+                <input  formControlName="remarks" type="text" class="form-control">
+              </div>
+            </div>
+                <div class="col-lg-12" >
+                  <div class="form-group">
+                    <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="gatepassregistersave">Submit</button>
+                  </div>
+                </div>
+                
+          </fieldset>
+        </div>
+       </div>
+    </div>
+  </section>
+</form>
+
+
+<div class="container-fluid" *ngIf="isHidden==false">
+      
+  <form [formGroup]="userForm1">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="todate">
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()"  >Search</button>
+      </div>
+    </div>
+  </form> 
+
+ <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>GatePass Register List</legend>
+        <div class="table_content">
+          <table class="table table-bordered" >
+            <thead>
+              <tr>
+                <th>Gate Pass Sl No</th>
+                <th>Out Date</th>
+                <th>Name</th>
+                <th>Vehicle No</th>
+                <th>Paid/Non Paid</th>
+                <th>Particulars</th>
+                <th>Rate</th>
+                <th>Amount</th>
+                <th>Approved By</th>
+                <th>In Date</th>
+                <th>Remarks</th>
+                
+                <th colspan="3">Action</th>       
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let gatepassregister of gatepassregisterlist">
+                    <td>{{gatepassregister.gp_slno}}</td>
+                    <td>{{gatepassregister.gp_date}}</td>
+                    <td>{{gatepassregister.name}}</td>
+                    <td>{{gatepassregister.vehicle}}</td>
+                    <td>{{gatepassregister.paidnonpaid}}</td>
+                    <td>{{gatepassregister.particulars}}</td>
+                    <td>{{gatepassregister.rate}}</td>
+                    <td>{{gatepassregister.amount}}</td>
+                    <td>{{gatepassregister.approvedby}}</td>
+                    <td>{{gatepassregister.indate}}</td>
+                    <td>{{gatepassregister.remarks}}</td>
+                    <td><button class="btn btn-success" (click)="onUpdate(gatepassregister.id, 'view')" >View</button></td>
+                    <td><button class="btn btn-info" (click)="onUpdate(gatepassregister.id, 'update')" >Update</button></td>  
+                    <td><button class="btn btn-danger" (click)="onDelete(gatepassregister.id)" >Delete</button></td>
+                  
+                  </tr>
+            </tbody>
+          </table>
+          <table class="table table-bordered" id="dynamictable" hidden>
+            <thead>
+              <tr>
+               
+                <th>Gate Pass Sl No</th>
+                <th>Out Date</th>
+                <th>Name</th>
+                <th>Vehicle No</th>
+                <th>Paid/Non Paid</th>
+                <th>Particulars</th>
+                <th>Rate</th>
+                <th>Amount</th>
+                <th>Approved By</th>
+                <th>In Date</th>
+                <th>Remarks</th>
+               
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let gatepassregister of gatepassregisterlist">
+
+                <td>{{gatepassregister.gp_slno}}</td>
+                <td>{{gatepassregister.gp_date}}</td>
+                <td>{{gatepassregister.name}}</td>
+                <td>{{gatepassregister.vehicle}}</td>
+                <td>{{gatepassregister.paidnonpaid}}</td>
+                <td>{{gatepassregister.particulars}}</td>
+                <td>{{gatepassregister.rate}}</td>
+                <td>{{gatepassregister.amount}}</td>
+                <td>{{gatepassregister.approvedby}}</td>
+                <td>{{gatepassregister.indate}}</td>
+                <td>{{gatepassregister.remarks}}</td>
+                   
+                  </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+    </div>
+
+    <div  id="print-section" class="print " hidden>
+      <h3 class="uc" style="text-align: center;">{{company}}</h3>
+      <h5 class="uc"  style="text-align: center;">GatePass Register Report</h5>
+      <div>
+          <table class="table table-bordered" >
+              <thead>
+                  <tr>
+                    <th>Gate Pass Sl No</th>
+                    <th>Out Date</th>
+                    <th>Name</th>
+                    <th>Vehicle No</th>
+                    <th>Paid/Non Paid</th>
+                    <th>Particulars</th>
+                    <th>Rate</th>
+                    <th>Amount</th>
+                    <th>Approved By</th>
+                    <th>In Date</th>
+                    <th>Remarks</th>
+                  
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr *ngFor="let gatepassregister of gatepassregisterlist">
+
+                    <td>{{gatepassregister.gp_slno}}</td>
+                    <td>{{gatepassregister.gp_date}}</td>
+                    <td>{{gatepassregister.name}}</td>
+                    <td>{{gatepassregister.vehicle}}</td>
+                    <td>{{gatepassregister.paidnonpaid}}</td>
+                    <td>{{gatepassregister.particulars}}</td>
+                    <td>{{gatepassregister.rate}}</td>
+                    <td>{{gatepassregister.amount}}</td>
+                    <td>{{gatepassregister.approvedby}}</td>
+                    <td>{{gatepassregister.indate}}</td>
+                    <td>{{gatepassregister.remarks}}</td>
+                      </tr>
+              </tbody>
+          </table>
+      </div> 
+  </div>
+    
+  </div> 
+  <div  class="col-lg-12">
+      <div class="form-group">
+          <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+          <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+       </div>
+   </div>
+</div>

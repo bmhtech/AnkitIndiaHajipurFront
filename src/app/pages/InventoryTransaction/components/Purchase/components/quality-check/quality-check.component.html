@@ -1,0 +1,341 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i
+                  class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i
+                  class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader">
+    <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Quality Check</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>QC No.</mat-label>
+                <input type="text" class="form-control" value={{seq_no}} [(ngModel)]="model.qcno"
+                  formControlName="qcno">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>QC Date</mat-label>
+                <input type="date" class="form-control" value={{currentDate}} [(ngModel)]="model.qc_date"
+                  formControlName="qc_date">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Referance Type</mat-label>
+                <mat-select formControlName="ref_type" [(ngModel)]="model.ref_type"
+                  (selectionChange)="openbuttonstatus($event.value)" class="form-control">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let list of referenceTypeList" [value]="list.value">{{list.name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <!-- <mat-label>Supplier Name</mat-label>
+                <mat-select type="text" formControlName="supplier_name" [(ngModel)]="model.supplier_name" class="form-control">
+                  <mat-option value="0">-Select Supplier Name-</mat-option>
+                  <mat-option *ngFor="let supplierName of supplierNames" [value]="supplierName.bp_Id">{{supplierName.bp_name}}</mat-option>  
+                </mat-select> -->
+                <mat-label>Supplier Name<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats" [options]="supplierNames" [display]="'bp_name'"
+                  [value]="'bp_Id'" [multiple]='false' ngDefaultControl
+                  [formControl]="userForm.controls['supplier_name']">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Service / Item Type</mat-label>
+                <mat-select formControlName="item_type" [(ngModel)]="model.item_type" class="form-control">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option value="Item">Item</mat-option>
+                  <mat-option value="Service">Service</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Service / Item Sub Type</mat-label>
+                <mat-select type="text" formControlName="item_sub_type" [(ngModel)]="model.item_sub_type"
+                  class="form-control">
+                  <mat-option value="0">-Select Service / Item Sub Type-</mat-option>
+                  <mat-option *ngFor="let itemSubType of itemtypes"
+                    [value]="itemSubType.item_id">{{itemSubType.item_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>QC By</mat-label>
+                <mat-select type="text" formControlName="qc_by" [(ngModel)]="model.qc_by" class="form-control">
+                  <mat-option value="0">-Select Received By-</mat-option>
+                  <mat-option *ngFor="let QcBy of employeeNames" [value]="QcBy.emp_id">{{QcBy.emp_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Approved By</mat-label>
+                <mat-select class="form-control" formControlName="approved_by" [(ngModel)]="model.approved_by"
+                  type="text">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let QcBy of employeeNames" [value]="QcBy.emp_id"> {{QcBy.emp_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit</mat-label>
+                <div class="clr"></div>
+                <mat-select type="text" formControlName="business_unit" [(ngModel)]="model.business_unit"
+                  class="form-control" (selectionChange)="onChangeBusinessUnit($event.value)">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let list of bussiness_unit_list"
+                    [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Vehicle No.<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats" [options]="veh_nos" [display]="'vehicle_no'"
+                  [value]="'vehicle_id'" [multiple]='false' ngDefaultControl
+                  [formControl]="userForm.controls['vehicle_id']">
+                  <!-- [disabled]="vehicleno_nochange"> -->
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Peripheral Observation of QC<span class="red">*</span></mat-label>
+                <mat-select formControlName="per_obs_status" class="form-control">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option value="Done">Done</mat-option>
+                  <mat-option value="Not Done">Not Done</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="refNo">
+              <div class="form-group">
+                <label style="width:100%;">&nbsp;</label>
+                <button class="btn btn-info" (click)=" onClickShow()">Show </button>
+              </div>
+            </div>
+
+
+          </fieldset>
+        </div>
+        <!-- dynamic start  -->
+        <div class="col-lg-12">
+          <div class="dyn_table_conent" style="border: none;">
+            <mat-tab-group animationDuration="1000ms">
+              <mat-tab label="Service / Item Details">
+                <div class="dyn_table_conent">
+                  <div class="dyn_table_header">
+                    <label class="label_col">
+                      <h3>Action</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="srln">Srl No</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="i_nam">Item Name</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="i_nam">Packing Item</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Packing Quantity</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Packing Uom</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Item Quantity</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Item Uom</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Wearhouse</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Stack / Rack</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>QC</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>QC Status</h3>
+                    </label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="pur_Quality_Check_Details">
+                    <div class="dyn_table" *ngFor="let item of pur_Quality_Check_Details.controls; let pointIndex=index"
+                      [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action"
+                          (click)="delete(pointIndex)"></i></div>
+                      <div class="label_col"><input class="form-control srln" min="0" type="number"
+                          formControlName="sl_no" readonly /></div>
+                      <div class="label_col"><select formControlName="item_code" class="form-control i_nam"
+                          (change)="onchangeItemName(pointIndex,$event)">
+                          <option value="0">-Select-</option>
+                          <option *ngFor="let item_code of item_codes" [value]="item_code.item_id">
+                            {{item_code.item_name}}</option>
+                        </select></div>
+                      <div class="label_col"><select formControlName="packing" type="text" class="form-control i_nam"
+                          (change)="onchangePackingItem(pointIndex,$event)">
+                          <option value="0">-Select-</option>
+                          <option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">
+                            {{packingitm.item_name}}</option>
+                        </select></div>
+                      <div class="label_col"><input formControlName="s_qty" class="form-control" type="number"
+                          (keyup)="calItemQty($event, pointIndex)" /></div>
+                      <div class="label_col"><input formControlName="s_uom" class="form-control" type="text"></div>
+                      <div class="label_col"><input formControlName="quantity" class="form-control" type="number" />
+                      </div>
+                      <div class="label_col"><input formControlName="uom" class="form-control" type="text"></div>
+                      <!-- <div class="label_col"><input class="form-control" type="text" formControlName="warehouse" /></div> -->
+                      <div class="label_col"><mat-select class="form-control" formControlName="warehouse"
+                          (selectionChange)="onChangeWarehouse($event.value, pointIndex)"><mat-option
+                            value="0">select</mat-option><mat-option *ngFor="let warehouse of warehouses"
+                            [value]="warehouse.warehouse_code">{{warehouse.warehouse_name}}</mat-option></mat-select>
+                      </div>
+                      <!-- <div class="label_col"><input class="form-control" type="text" formControlName="stack" /></div> -->
+                      <div class="label_col"><select type="text" formControlName="stack" class="form-control">
+                          <option value="0">-Select-</option>
+                          <option *ngFor="let stack of stackList[pointIndex]" [value]="stack.stack_no">
+                            {{stack.stack_no}}</option>
+                        </select></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="qc" /><i
+                          class="fa fa-external-link tax_insert_icon" (click)="showPopUp2(pointIndex)"
+                          aria-hidden="true"></i></div>
+                      <div class="label_col"><select formControlName="qc_status" type="text" class="form-control">
+                          <option value="0">-Select-</option>
+                          <option value="Accepted">Accepted</option>
+                          <option value="Rejected">Rejected</option>
+                          <option value="Reject Deduction">Reject Deduction</option>
+                        </select></div>
+                      <!-- <div class="label_col" ><input formControlName="qc_id" class="form-control" type="text"></div> -->
+                    </div>
+                  </div>
+                </div>
+                <div class="btm_btn_content">
+                  <button type="button" class="btn btn-success" (click)="add()">Add Row </button>
+                </div>
+              </mat-tab>
+            </mat-tab-group>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="qualitychecksave">Submit</button>
+          </div>
+        </div>
+        <!--  dynamic End-->
+      </div>
+    </div>
+  </section>
+</form>
+
+<div class="master_container_box" *ngIf="isHidden==false">
+
+  <form [formGroup]="userForm1">
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>From Date<span class="red">*</span></mat-label>
+      <input type="date" class="form-control" formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>To Date<span class="red">*</span></mat-label>
+      <input type="date" class="form-control" formControlName="todate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Vehicle No.</mat-label>
+        <mat-select-autocomplete class="form-control ats" [options]="veh_nos" [display]="'vehicle_no'"
+          [value]="'vehicle_id'" [multiple]='false' ngDefaultControl [formControl]="userForm1.controls['vehicle_id1']">
+        </mat-select-autocomplete>
+      </div>
+    </div>
+
+    <div class="col-lg-12">
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()">Search</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Purchase Quality Check List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>QC No.</th>
+                  <th>QC Date</th>
+                  <th>Unadvice No.</th>
+                  <th>Supplier Name</th>
+                  <th>Service / Item Type</th>
+                  <th>Vehicle No.</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let QualityCheck of listQualityCheck">
+                  <td>{{QualityCheck.qcno}}</td>
+                  <td>{{QualityCheck.qc_date}}</td>
+                  <td>{{QualityCheck.unadviceno}}</td>
+                  <td>{{QualityCheck.supplier}}</td>
+                  <td>{{QualityCheck.item_type}}</td>
+                  <td>{{QualityCheck.vehicle_name}}</td>
+                  <td><button class="btn btn-success"
+                      (click)="onUpdate(QualityCheck.id, QualityCheck.quality_check_id,'view')">View</button></td>
+                  <td><button class="btn btn-info"
+                      (click)="onUpdate(QualityCheck.id, QualityCheck.quality_check_id,'update')">Update</button></td>
+                  <td><button class="btn btn-danger"
+                      (click)="onDelete(QualityCheck.id, QualityCheck.quality_check_id,QualityCheck.referenceid)">Delete</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

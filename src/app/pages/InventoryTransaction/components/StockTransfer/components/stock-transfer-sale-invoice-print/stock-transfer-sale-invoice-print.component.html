@@ -1,0 +1,539 @@
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <fieldset>
+        <legend>Tax Invoice</legend>
+        <div class="modal_main_content">
+          <div id="print-section" class="print ">
+         
+         
+            <div *ngFor="let item of PrintMode">
+            <!-- <div>{{item}}</div> -->
+
+           
+              <section id="component1" class="page-break">
+                <div class="top_dp ar">{{item}}</div>
+                <div class="main_content inv" >
+                  <div class="main_header bdr_bottom">TAX INVOICE 
+                    <div class="rule_act">U/S 31 of CGST Act r/w rule 48</div>
+                  </div>
+
+                  <div class="bdr_bottom font_12 ac">
+                    <div class="left_div">
+                      <h6><span>IRN No</span> : xxx</h6>
+                      <h6><span>ACK No</span> : xxx</h6>
+                      <h6><span>ACK Date</span> : xxx</h6>
+                      <h6><span>Status:</span> : xxx</h6>
+                    </div>
+                    <div class="right_div">
+                      <div class="right_qr_code"></div>
+                    </div>
+                    <div class="clr"></div>
+                  </div>
+                  
+                  <div class="" style="display: flex;">
+                    <div class="col_left">
+                      <div class="bx" style="display: block;">
+                        <div class="bx_left">
+                          <div class="comp_name">
+                            <div class="compaly_logo">
+                              <!-- <img src="../assets/images/avatar.jpg" alt="">  -->
+                              Ankit India Limited
+                            </div>
+                            <div class="company_dtl">
+                              <h6><strong>GSTIN.:</strong> 19AADCA2518H1ZV </h6>
+                              <h6><strong>CIN NO.:</strong> L15500WB1981PLC033900 </h6>
+                              <h6><strong>Email:</strong> ankit_flour@yahoo.com </h6>
+                              <h6><strong>Website:</strong> www.ankitagro.com</h6>
+                              <h6 style="line-height: 13px;"><strong>Reg Off.:</strong>14A, 5th Floor, FMC FORTUNA, 
+                                234/3A A.J.C. Bose Road,West Bengal Kolkata 700020</h6>
+  
+                            </div>
+                          </div>
+                        </div>
+                        <div class="bx_right">
+                          <div class="captcha_box" style="border-bottom: none;width: 100%;display: block;float: none;">
+                            <div class="qr_code_img"><img alt="" src="assets/images/AIL_QR.jpg"></div>
+                            <!-- <div class="bhim_id">
+                              <p>You can also make payment by debit card Powered by Rupay</p>
+                            </div> -->
+  
+                          </div>
+                          <!-- <div style="width:100%;display: block;font-size: 11px;float: left; padding: 0 5px">
+                            <p style=" padding: 0; margin: 0;line-height: 11px;">Our Bhim upi id:</p>
+                            <p>ankitindialtd.98740610@hdfcbank</p>
+                          </div> -->
+                        </div>
+                        <div class="clr"></div>
+                        <div class="mid_div border-top" style="border-top: 1px solid #000;">
+                          <div class="bhim_id"><p>You can also make payment by debit card Powered by Rupay</p></div>
+                          <div style="font-size: 11px;float: left; padding: 0 5px">
+                            <strong>Our Bhim upi id:</strong> ankitindialtd.98740610@hdfcbank
+                          </div>
+                        </div>
+  
+  
+                      </div>
+                      <!-- <div class="captcha_box" style="border-bottom: none; border-top:1px solid #000; display: flex; align-items: center;">
+                        <div class="qr_code_img"><img src="../assets/images/AIL_QR.jpg" alt=""></div>
+                        <div class="bhim_id">
+                          <p>Our Bhim upi id: ankitindialtd.98740610@hdfcbank</p>
+                          <p>You can also make payment by debit card</p>
+                        </div>
+                      </div> -->
+  
+                      
+                    </div>
+                    <div class="col_right">
+                      <div class="row1">
+                        <div class="col_right_left"><p>Invoice no:{{ _invoice_no }}<br> e-Way Bill No: {{ _ewaybillno }}</p></div>
+                        <div class="col_right_right"><p>Dated: {{ _invoice_date }}</p></div>
+                        <div class="clr"></div>
+                      </div>
+                      <div class="row1">
+                        <div class="col_right_left"><p>CHALLAN Ref.: {{ _refchallanno }}<br> Date: {{ _refchallandate }}</p></div>
+                        <div class="col_right_right">
+                          <p>Delevery Note.: </p>
+                          <p>Delevery Note Date: </p>
+                        </div>
+                        <div class="clr"></div>
+                      </div>
+                      <!-- <div class="row1">
+                        <div class="col_right_left"><p>Delevery Note.: xxxxx</p></div>
+                        <div class="col_right_right"><p>&nbsp;</p></div>
+                        <div class="clr"></div>
+                      </div> -->
+                      <div class="row1">
+                        <div class="col_right_left"><p>Buyer's Order no.:<br> <strong>{{ _salesorderno }}</strong></p></div>
+                        <div class="col_right_right"><p>Orders Date:<br> <strong></strong></p></div>
+                        <div class="clr"></div>
+                      </div>
+                      <!-- <div class="row1">
+                        <div class="col_right_left"><p>Dispatch Document No:<br> <strong></strong></p></div>
+                        <div class="col_right_right"><p>Dispatched Through:<br> <strong></strong></p></div>
+                        <div class="clr"></div>
+                      </div> -->
+                      <div class="row1">
+                        <div class="col_right_left"><p>Dated: {{ _invoice_date }}</p> </div>
+                        <div class="col_right_right"><p>Motor Vehicle no: <strong>{{ _vehicleno }}</strong></p></div>
+                        <div class="clr"></div>
+                      </div>
+                      <div class="row1" style="border-bottom: none; display: flex;">
+                        <div class="col_right_left"><p>Bill of Lading / LR RR No:<br> <strong>{{_e_invoice_no}}</strong></p></div>
+                        <div class="col_right_right" style="padding-left:5px;"><p>Destination: <br> <strong>Domjur, Howrah</strong></p></div>
+                        <div class="clr"></div>
+                      </div>
+                      <!-- <div class="row1">
+                        <div class="col_right_left"><p>Motor Vehicle no: <br> <strong>WB 19 J4889</strong></p></div>
+                        <div class="col_right_right"><p>&nbsp;</p></div>
+                        <div class="clr"></div>
+                      </div> -->
+                      <!-- <div class="row1" style="border-bottom: none;">
+                        <p>Date & Time issue of invoice: 3 Feb, 2021 at 13:53 Hrs</p>
+                        <p>Date & Time of Removal: 3 Feb, 2021 at 14:20 Hrs</p>
+                        <div class="clr"></div>
+                      </div> -->
+  
+                      <div class="clr"></div>
+                    </div>
+                    <div class="clr"></div>
+                  </div>
+                  <div class="consignee_sec bdr_top">
+                    <!-- <h4 class="consin"> Consignee</h4> -->
+                    <div class="consignee_row">
+                    <div class="bx_adr">
+                      <h4>Bill to:</h4>
+                      <!-- <h5>Ankit India Limited</h5> -->
+                      <p> <strong>{{ _party }}</strong> <br> {{ _paytodtls }}<br> GSTIN: {{ _gstno }}
+                      </p>
+                    </div>
+                    <div class="bx_adr" style="position: relative; border-left: 1px solid #000;">
+                      <h4>Ship to:</h4>
+                      <!-- <h5>Ankit India Limited</h5> -->
+                      <p> <strong> {{ _shipaddr }} </strong> <br> {{_shipdtls}}</p>
+                      <p style="position: relative; bottom: 0; left:0px;"> GSTIN: {{ _gstno }} </p>
+                    </div>
+                  </div>
+                  </div>
+  
+  
+  
+                  <div class="rows hdr bdr_top grey_bg bold">
+                    <div class="col3">SL.NO</div>
+                    <div class="col2">Description of Goods</div>
+                    <div class="col5">HSN/SAC</div>
+                    <div class="col7">Bags</div>
+                    <div class="col4">Quantity</div>
+                    <div class="col7 bdr_right">UOM</div>
+                    <div class="col5">Rate</div>
+                    <div class="col8 ar">Amount</div>
+                    <div class="col8 ar">Dis Amnt</div>
+                    <div class="col9 ar">Taxable Amnt</div>
+                    <div class="clr"></div>
+                  </div>
+                  <div class="rows bdr_top" *ngFor="let Item of ItemAllData">
+                    
+                    <div class="col3">{{Item.slno}}</div>
+                    <div class="col2">{{Item.item_name}}</div>
+                    <div class="col5">{{Item.hsn_code}}</div>
+                    <div class="col7">{{Item.squantity}}</div>
+                    <div  class="col4">{{Item.quantity | number:'1.3-3'}}</div>
+                    
+                    
+                    <div class="col7 bdr_right" *ngIf="Item.price_based_on !='Packing';else elseBlock1 ">{{Item.uom}}</div>
+                    <ng-template #elseBlock1><div class="col7 bdr_right"> {{Item.suom}} </div></ng-template>
+  
+                    <div class="col5">{{ Item.price | number:'1.2-2'}}</div>
+                    <div class="col8 ar">{{ Item.amount | number:'1.2-2'}}</div>
+                    <div class="col8 ar">{{ Item.discount_amt | number:'1.2-2'}}</div>
+                    <div class="col9 ar">{{ Item.amount - Item.discount_amt | number:'1.2-2'}}</div>
+                    <div class="clr"></div>
+                    </div>                  
+                  
+                  <div class="rows bdr_top">
+                    <div class="col3">&nbsp;</div>
+                    <div class="col2 ar"><strong>Sub Total</strong></div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col7">&nbsp;</div>
+                    <div class="col4">&nbsp;</div>
+                    <div class="col7 bdr_right">&nbsp;</div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col9 ar"><strong>{{ SubTotal | number:'1.2-2'}}</strong></div>
+                    <div class="clr"></div>
+                  </div>
+                  
+                  <div *ngIf="StateName =='No'">
+                  <div class="rows bdr_top">
+                    <div class="col3">&nbsp;</div>
+                    <div class="col2 ar"><strong>CGST</strong></div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col7">&nbsp;</div>
+                    <div class="col4">&nbsp;</div>
+                    <div class="col7 bdr_right">&nbsp;</div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col9 ar"><strong> {{ Cgst }} </strong></div>
+                    <div class="clr"></div>
+                  </div>
+                  </div>
+  
+                <div *ngIf="StateName =='No'">
+                  <div class="rows bdr_top">
+                    <div class="col3">&nbsp;</div>
+                    <div class="col2 ar"><strong>SGST</strong></div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col7">&nbsp;</div>
+                    <div class="col4">&nbsp;</div>
+                    <div class="col7 bdr_right">&nbsp;</div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col9 ar"><strong> {{ Sgst }} </strong></div>
+                    <div class="clr"></div>
+                  </div>
+                </div>
+  
+                <div *ngIf="StateName !='No'">
+                  <div class="rows bdr_top">
+                    <div class="col3">&nbsp;</div>
+                    <div class="col2 ar"><strong>IGST</strong></div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col7">&nbsp;</div>
+                    <div class="col4">&nbsp;</div>
+                    <div class="col7 bdr_right">&nbsp;</div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col9 ar"><strong> {{ _tax_total }} </strong></div>
+                    <div class="clr"></div>
+                  </div>
+                </div>
+  
+                  <div class="rows bdr_top">
+                    <div class="col3">&nbsp;</div>
+                    <div class="col2 ar"><strong>Round Off</strong></div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col7">&nbsp;</div>
+                    <div class="col4">&nbsp;</div>
+                    <div class="col7 bdr_right">&nbsp;</div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col9 ar"><strong> {{ _roundoff_amt | number:'1.2-2'}} </strong></div>
+                    <div class="clr"></div>
+                  </div>
+                  <div class="rows bdr_top">
+                    <div class="col3">&nbsp;</div>
+                    <div class="col2 ar"><strong>Net Amount</strong></div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col7">&nbsp;</div>
+                    <div class="col4">&nbsp;</div>
+                    <div class="col7 bdr_right">&nbsp;</div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col9 ar"><strong> {{ netAmount }} </strong></div>
+                    <div class="clr"></div>
+                  </div>
+                  <div class="rows bdr_top">
+                    <div class="col3">&nbsp;</div>
+                    <div class="col2 ar"><strong>TCS Payable U/S 206</strong></div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col7">&nbsp;</div>
+                    <div class="col4">&nbsp;</div>
+                    <div class="col7 bdr_right">&nbsp;</div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col9 ar"><strong> {{ _tcsamt }} </strong></div>
+                    <div class="clr"></div>
+                  </div>
+                  <div class="rows bdr_top">
+                    <div class="col3">&nbsp;</div>
+                    <div class="col2 ar"><strong>Payable Amount</strong></div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col7">&nbsp;</div>
+                    <div class="col4">&nbsp;</div>
+                    <div class="col7 bdr_right">&nbsp;</div>
+                    <div class="col5">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col8">&nbsp;</div>
+                    <div class="col9 ar"><strong> {{ _payable_amt }} </strong></div>
+                    <div class="clr"></div>
+                  </div>
+                  
+                  <div class="ant_row bdr_top">
+                    <div class="ant_left bdr_right_none"><strong>{{ _totalamt }}</strong></div>
+                    <div class="ant_right"></div>
+                    <div class="clr"></div>
+                  </div>
+  
+                  
+                  <div class="rows bdr_top tax_div grey_bg bold">
+                    <div class="col2 bdr_left_none" style="padding:0;">HSN/SAC Summary
+                      <div class="hsn_col bdr_top">
+                        <div class="hsn_col1 bdr_right">HSN Code</div>
+                        <div class="hsn_col2">Amount</div>
+                      </div>
+                    </div>
+
+                    <div class="col5">Taxable <br> value</div>
+                    
+                    <div *ngIf="StateName =='No'">
+                    <div class="col6" style="padding: 0;">Central Tax<br>
+                      <div class="tax_cols">
+                        <div class="tax_col1" style="border-right:1px solid #000">Rate</div>
+                        <div class="tax_col2">Amount</div>
+                      </div>
+                    </div>
+                    <div class="col6" style="padding: 0;">State Tax
+                      <div class="tax_cols">
+                        <div class="tax_col1" style="border-right:1px solid #000">Rate</div>
+                        <div class="tax_col2">Amount</div>
+                      </div>
+                    </div>
+                  </div>
+
+                    <div *ngIf="StateName !='No'">
+                    <div class="igst" style="padding: 0;">IGST<br>
+                      <div class="tax_cols">
+                        <div class="tax_col1" style="border-right:1px solid #000">Rate</div>
+                        <div class="tax_col2">Amount</div>
+                      </div>
+                    </div>
+                  </div>
+
+                    <div class="col7">Total <br> Tax amount</div>
+  
+                    <div class="clr"></div>
+                  </div>
+
+
+
+               
+  
+
+                  <!-- Hsn code -->
+                  <div class="rows tax_div" style="display: flex;">
+                    <div class="col2 bdr_left_none bdr_top" style="padding:0;">
+
+                      <div *ngFor="let Item of HsnAllData" style="width: 100%;">
+                        <div class="hsn_col bdr_bottom" >
+                          <div class="hsn_col1 bdr_right">{{Item.hsn_code}}</div>
+                          <div class="hsn_col2">{{Item.amount | number:'1.2-2'}}</div>
+                        </div>
+                      </div>
+
+                       
+                    
+                    </div>
+                    <div class="bdr_bottom" style="float: left; width:368px;">
+                      <div *ngFor="let Item of TaxSummAllData" class="bdr_top">
+                        <div class="col5">{{ Item.taxable_amt | number:'1.2-2'}}</div>
+                        
+                        <div *ngIf="StateName !='No'">
+                        <div class="igst" style="padding: 0;">
+                          <div class="tax_cols bdr_top_none" >
+                            <div class="tax_col1" style="border-right:1px solid #000">{{ Item.tax_rate | number:'1.2-2'}}</div>
+                            <div class="tax_col2">{{Item.igst | number:'1.2-2'}}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div *ngIf="StateName =='No'" class="state_name">
+                        <div class="col6" style="padding: 0;">
+                          <div class="tax_cols">
+                            <div class="tax_col1" style="border-right:1px solid #000">{{ Item.tax_rate/2 | number:'1.2-2'}}</div>
+                            <div class="tax_col2">{{ Item.cgst | number:'1.2-2'}}</div>
+                          </div>
+                        </div>
+                        <div class="col6" style="padding: 0;">
+                          <div class="tax_cols">
+                            <div class="tax_col1" style="border-right:1px solid #000">{{ Item.tax_rate/2 | number:'1.2-2'}}</div>
+                            <div class="tax_col2">{{ Item.sgst | number:'1.2-2'}}</div>
+                          </div>
+                        </div>
+                      </div>
+
+                        <div *ngIf="StateName !='No'"><div class="col7">{{ Item.igst | number:'1.2-2'}}</div></div>
+                        <div *ngIf="StateName =='No'"><div class="col7">{{Item.cgst+Item.sgst | number:'1.2-2'}}</div></div>
+                        <div class="clr"></div>
+                    </div>
+                   
+                  </div>
+                    <div class="clr"></div>
+               
+                    
+                    <div class="clr"></div>
+                  </div>
+
+
+
+                  <div class="rows tax_div">
+                    <div class="col2 ar bdr_left_none"><strong>Total</strong></div>
+                    <div class="col5"><strong>{{TaxableAmt | number:'1.2-2'}}</strong></div>
+                   
+                    <div *ngIf="StateName =='No'">
+                    <div class="col6">
+                      <div class="tax_cols" style="border-top:none">
+                        <div class="tax_col1" style="border-right:1px solid #000">&nbsp;</div>
+                        <div class="tax_col2"><strong>{{NewTotalCgst | number:'1.2-2'}}</strong></div>
+                      </div>
+                    </div>
+                    <div class="col6">
+                      <div class="tax_cols" style="border-top:none">
+                        <div class="tax_col1" style="border-right:1px solid #000">&nbsp;</div>
+                        <div class="tax_col2"><strong>{{NewSgst | number:'1.2-2'}}</strong></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div *ngIf="StateName !='No'">
+                    <div class="igst" style="padding: 0;">
+                      <div class="tax_cols bdr_top_none">
+                        <div class="tax_col1" style="border-right:1px solid #000"></div>
+                        <div class="tax_col2"><strong>{{TotalIgst | number:'1.2-2'}}</strong></div>
+                      </div>
+                    </div>
+                  </div>
+                 
+                  <div *ngIf="StateName =='No'"> <div class="col7"><strong>{{Grandtotaltax | number:'1.2-2'}}</strong></div></div>
+                  <div *ngIf="StateName !='No'"> <div class="col7"><strong>{{TotalIgst | number:'1.2-2'}}</strong></div></div>
+                  <div class="clr"></div>
+                  </div>
+  
+                  <div class="ant_row bdr_top">
+                    <div><strong>Total in words: {{_payable_amt_words}} Only</strong></div>
+                    <!-- <div class="ant_right"><strong>{{_payable_amt_words}} Only</strong></div>
+                    <div class="ant_left bdr_right_none"></div> -->
+                   
+                    <div class="clr"></div>
+                  </div>
+  
+  
+  
+  
+                  <div class="tax_row bdr_top">
+                    <div class="col_left" style="border-right: none;">
+                      <div>
+                        <div class="col_left_left">Company's PAN :</div>
+                        <div class="col_left_right">AAGAM0792A</div>
+                        <div class="clr"></div>
+                      </div>
+                      <div>
+                        <div class="col_left_left">Declaration :</div>
+                        <div class="col_left_right"></div>
+                        <div class="clr"></div>
+                      </div>
+                      <div style="padding: 0 3px;">
+                        <p>We Declare that this invoice shows the actual price of the goods dexribed and that all
+                          perticulars are
+                          true and correct</p>
+                          <div class="bdr_top" style="padding: 5 3px 0; margin-top: 5px;">
+                            <h5 style="padding: 0; margin: 0; line-height: 12px;"><strong>Business Unit Address:</strong></h5>
+                            <p>{{ Buunit }}</p>
+                          </div>
+                      </div>
+                    </div>
+                    <div class="col_right bank_div" style="border-left:1px solid #000;">
+                      <div class="bank_left">
+                        <div style="padding: 0 3px;"><div>Company's bank details :</div></div>
+                        <div class="tx_ro">
+                          <div class="col_left_left">Bank name:</div>
+                          <div class="col_left_right">State Bank of India</div>
+                          <div class="clr"></div>
+                        </div>
+                        <div class="tx_ro">
+                          <div class="col_left_left">Account no:</div>
+                          <div class="col_left_right">40125140369</div>
+                          <div class="clr"></div>
+                        </div>
+                        <div class="tx_ro">
+                          <div class="col_left_left">IFSC Code:</div>
+                          <div class="col_left_right">SBIN0001936</div>
+                          <div class="clr"></div>
+                        </div>
+                        <div class="tx_ro">
+                          <div class="col_left_left">Branch:</div>
+                          <div class="col_left_right">Industrial Finance Branch,Kolkata</div>
+                          <div class="clr"></div>
+                        </div>
+                      </div>
+                      <div class="bank_right">
+                        <div class="bank_right_cont">All subject to Kolkata Jurisdiction
+                          <p>Customer's seal & signature</p>
+                        </div>
+                      </div>
+                      <div class="clr"></div>
+                      
+                      
+                      <div class="for">
+                        <p><strong>for Ankit India Limited</strong></p>
+                        <p class="sign">Authorised Signatory</p>
+                      </div>
+                    </div>
+                    <div class="clr"></div>
+                    
+                  </div>
+              </div>
+              </section>
+  
+            </div>
+
+
+            
+          </div>
+         
+        </div>
+
+      </fieldset>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    <mat-dialog-actions align="end">
+      <button [useExistingCss]="true" printSectionId="print-section" ngxPrint>print</button> 
+    </mat-dialog-actions>
+  </div>
+</div>

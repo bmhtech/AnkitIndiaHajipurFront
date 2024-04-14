@@ -1,0 +1,131 @@
+
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <fieldset>
+            <legend>Sales Invoice Dynamic Sort</legend>
+               
+            <div class="col-lg-6 col-md-4 col-sm-6 col-12">            
+              <div class="form-group">
+                <mat-label>Report Type</mat-label>             
+                    <mat-select class="form-control" [(ngModel)]="reporttype" formControlName="reporttype" (selectionChange)="onChangeGroupReportType($event.value)">
+                     
+                          <mat-option value="salesreport">Sales Report</mat-option>
+                          <mat-option value="purchasereport">Purchase Report</mat-option>     
+                          
+                    </mat-select>
+              </div>
+            </div>
+            
+            <div class="col-lg-6 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Report Name</mat-label>
+             
+                <mat-select class="form-control" [(ngModel)]="model.reportname" formControlName="reportname" (selectionChange)="onChangeGroup($event.value)">
+                <mat-option *ngFor="let list of reportnamelist" [value]="list.id">{{list.reportname}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+<!-- --------------------------
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Dynamic Sort</mat-label>
+                <mat-select multiple class="form-control" [(ngModel)]="model.concat_multi" formControlName="concat_multi" >
+                  <mat-option *ngFor="let list of dynamicList" [value]="list.backend">{{list.dynamic}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            ------------------------------ -->
+            
+            <div class="col-lg-6 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Dynamic Sort</mat-label>
+               
+                    <ng-multiselect-dropdown
+                    class="container" 
+                        name="concat_multi"
+                        formControlName="concat_multi"
+                        [data]="dynamicList"
+                        [(ngModel)]="concat_multi"
+                      
+                        [disabled]="disabled"
+                        [settings]="dropdownSettings"
+                        (onSelect)="onItemSelect($event)">
+                    </ng-multiselect-dropdown>
+
+
+              </div>
+            </div>
+
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+              <div class="form-group">
+               
+                <input type="hidden" formControlName="sortNumber" [(ngModel)]="model.sortNumber" class="form-control" required />
+              </div>
+            </div>
+  
+
+            <div class="col-lg-12">
+              <div class="form-group">
+                <button type="submit" (click)="send()" class="btn btn-info">Submit</button>
+              </div>
+            </div>
+
+          </fieldset>     
+         
+        </div>
+      </div> 
+    </div>
+  </section> 
+</form>
+
+ <!-- -------------------------- testing start------------------------------ -->
+ <div class="master_container_box" >
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Sales Registration List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  
+                  <th>Report Name</th>
+                  <th>Report Fields</th>
+               
+                  
+                  
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let Sales2Report of reportnamelist">
+                    
+                    <td>{{Sales2Report.reportname}}</td>
+                    <td>{{Sales2Report.static_report}}</td>
+                    
+                    
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- -------------------------- testing ends------------------------------ -->
+
+      

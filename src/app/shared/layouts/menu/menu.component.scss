@@ -1,0 +1,86 @@
+@import '../../theme/conf';
+.menu-wrap {  padding: 0; width: 250px; height: auto;}
+.menu-item { margin: 0; list-style: none; width: 100%; height: auto; overflow: hidden;
+    .menu-link { display: flex; flex-direction: row; flex-wrap: nowrap; justify-content: space-around;
+        width: 100%; height: 50px; outline: none; background: transparent; border-left: 3px solid transparent;
+        color: $sidebar-fonts-color; text-decoration: none; overflow: hidden; cursor: pointer;
+        &:hover { color: $primary; background: $border-color; }
+        .placeholder, .text, .direction { display: block; height: 50px; line-height: 50px; font-size: $sm-text+1;}
+        .placeholder { width: 47px; text-align: center; margin-right: 10px;}
+        .text { flex: 1; }
+        .direction { width: 50px; @include transition(transform .2s); @include transform(rotate(0deg)); }
+    }
+    .menu-link.active { border-left: 3px solid $primary; color: $primary;}
+}
+
+.item-toggle-on {
+    >.menu-link { .direction { @include transform(rotate(90deg));}}
+}
+
+
+//Start Ankit India Menu Color
+
+.menu-item .menu-link .placeholder{width: 28px;}
+.item-children {.menu-wrap {background:#0e4220;}}
+.menu-item.item-toggle-on{ background:#093317}
+.menu-item .menu-link:hover, .menu-item .menu-link.active{ background: #093317;}
+ul ul.menu-wrap .menu-item .menu-link:hover, ul ul.menu-wrap .menu-item .menu-link.active{ background: #175c2e;}
+ul ul.menu-wrap .menu-item .menu-link .placeholder{width: 20px; margin-right: 0px; margin-left: 28px;}
+ul ul a span{padding-left: 0px;}
+ul ul ul li{padding-left: 28px;}
+
+//End Ankit India Menu Color
+
+//Start BD Corporates Menu Color
+
+// .menu-item .menu-link .placeholder{width: 28px;}
+// .item-children {.menu-wrap { background:#946237}}
+// .menu-item.item-toggle-on{ background:#6a4524}
+// .menu-item .menu-link:hover, .menu-item .menu-link.active{ background: #6a4524;}
+// ul ul.menu-wrap .menu-item .menu-link:hover, ul ul.menu-wrap .menu-item .menu-link.active{ background: #ac7443;}
+// ul ul.menu-wrap .menu-item .menu-link .placeholder{width: 20px; margin-right: 0px; margin-left: 28px;}
+// ul ul a span{padding-left: 0px;}
+// ul ul ul li{padding-left: 28px;}
+
+//End BD Corporates Menu Color
+
+//Start Indian Spices Menu Color
+
+// .menu-item .menu-link .placeholder{width: 28px;}
+// .item-children {.menu-wrap { background:#605417; }}
+// .menu-item.item-toggle-on{ background:#41380b}
+// .menu-item .menu-link:hover, .menu-item .menu-link.active{ background: #473e12;}
+// ul ul.menu-wrap .menu-item .menu-link:hover, ul ul.menu-wrap .menu-item .menu-link.active{ background: #524817;}
+// ul ul.menu-wrap .menu-item .menu-link .placeholder{width: 20px; margin-right: 0px; margin-left: 28px;}
+// ul ul a span{padding-left: 0px;}
+// ul ul ul li{padding-left: 28px;}
+
+//End Indian Spices Menu Color
+
+// start for Meghna Biri
+
+// .menu-item .menu-link .placeholder{width: 28px;}
+// .item-children { .menu-wrap { background:#2f3869; }}
+// .menu-item.item-toggle-on{ background:#222a54}
+// .menu-item .menu-link:hover, .menu-item .menu-link.active{ background: #2f3869;}
+// ul ul.menu-wrap .menu-item .menu-link:hover, ul ul.menu-wrap .menu-item .menu-link.active{ background: #2f3869;}
+// ul ul.menu-wrap .menu-item .menu-link .placeholder{width: 20px; margin-right: 0px; margin-left: 28px;}
+// ul ul a span{padding-left: 0px;}
+// ul ul ul li{padding-left: 28px;}
+
+// End of Meghna Biri
+
+
+// start for Panmasala
+
+// .menu-item .menu-link .placeholder{width: 28px;}
+// .item-children { .menu-wrap { background:#4f0e10; }}
+// .menu-item.item-toggle-on{ background:#400b0d}
+// .menu-item .menu-link:hover, .menu-item .menu-link.active{ background: #4f0e10;}
+// ul ul.menu-wrap .menu-item .menu-link:hover, ul ul.menu-wrap .menu-item .menu-link.active{ background: #6B1F20;}
+// ul ul.menu-wrap .menu-item .menu-link .placeholder{width: 20px; margin-right: 0px; margin-left: 28px;}
+// ul ul a span{padding-left: 0px;}
+// ul ul ul li{padding-left: 28px;}
+// .menu-item .menu-link:hover{color: #ffc5c7;}
+
+// End of Panmasala

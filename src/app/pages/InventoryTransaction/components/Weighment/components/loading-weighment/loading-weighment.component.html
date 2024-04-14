@@ -1,0 +1,311 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Weighment Details</legend>
+            <div class="md_content">
+              <fieldset style="padding: 15px;">
+                <div class="col-12 md_hd">
+                  <div class="form-group">
+                    <input type="radio" formControlName="weight" [(ngModel)]="model.weight" value="Weight 1">Weight 1 &nbsp;  &nbsp;
+                    <input type="radio" formControlName="weight" [(ngModel)]="model.weight" value="Weight 2">Weight 2
+                  </div>
+                </div>
+                <div class="clr"></div>
+                <div class="row">
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Weighment No</mat-label>
+                      <input type="text" [(ngModel)]="seq_no" formControlName="wgment_no" class="form-control" readonly/>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Date</mat-label>
+                      <input type="text" [(ngModel)]="currentDate" formControlName="wgment_date"  class="form-control" readonly/>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Weighment For</mat-label>
+                      <mat-select [(ngModel)]="model.wgment_for" formControlName="wgment_for" class="form-control">
+                        <mat-option value="0">-Select-</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Ref. Doc. No.</mat-label>
+                      <input [(ngModel)]="model.ref_doc_no" formControlName="ref_doc_no" type="number" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Ref. Doc. Date</mat-label>
+                      <input [(ngModel)]="model.ref_doc_date" formControlName="ref_doc_date" type="date" class="form-control">
+                    </div>
+                  </div>
+                </div>
+
+                <div class="ht_20"></div>
+                <div class="row">
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Vehicle No.</mat-label>
+                      <mat-select [(ngModel)]="model.veh_no" formControlName="veh_no" class="form-control">
+                        <mat-option value="0">-Select-</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Vehicle Type</mat-label>
+                      <mat-select [(ngModel)]="model.veh_type" formControlName="veh_type" class="form-control"> 
+                        <mat-option value="0">-Select-</mat-option> 
+                        <mat-option *ngFor="let list of vehicleTypeList" [value]="list.vehtype_code">{{list.vehtype_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Customer</mat-label>
+                      <input [(ngModel)]="model.customer" formControlName="customer" type="text" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>&nbsp;</mat-label>
+                      <div class="clr"></div>
+                      <button mat-button  class="btn btn-info">Populate</button>
+                    </div>
+                  </div>
+
+                </div>
+                <div class="row">
+                  <div class="col-lg-12 weigh">
+                    <div class="dyn_table_conent">
+                    <div class="dyn_table_header">
+                      <label class="label_col"> <h3 class="srl_no">Srl No</h3> </label>
+                      <label class="label_col"><h3>Customer</h3></label>
+                      <label class="label_col"><h3>Advice</h3></label>
+                      <label class="label_col"><h3>Date</h3></label>
+                      <label class="label_col"><h3 class="act">Action</h3></label>
+                    </div>
+                    <div  class="dyn_table_data_cont" formArrayName="wm_loading_wgmnt_dtls">
+                      <div class="dyn_table" style="border-bottom: 1px solid #ccc;" *ngFor="let item of wm_loading_wgmnt_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <div class="label_col"><input formControlName="sl_no" class="form-control srl_no" type="text" /></div>
+                        <div class="label_col"><input formControlName="customer" class="form-control" type="text" /></div>
+                        <div class="label_col"><input formControlName="advice" class="form-control" type="text" /></div>
+                        <div class="label_col"><input formControlName="wgment_date" class="form-control" type="date" /></div>
+                        <div class="label_col"><div class="form-control act" style="background: none; border:none; width: 102px;"><button mat-button class="btn btn-info">Details</button></div></div>
+                      </div>
+                    </div>
+              
+                  </div>
+                  </div>
+                </div>
+                <div class="ht_20"></div>
+                <div class="row">
+                  <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Gross Weight</mat-label>
+                      <div class="clr"></div>
+                      <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12 col_mb">
+                          <input [(ngModel)]="model.gross_weight" formControlName="gross_weight" type="number" class="form-control">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12"> 
+                          <mat-select [(ngModel)]="model.gw_unit" formControlName="gw_unit" class="form-control">
+                            <mat-option value="0">-Select-</mat-option>
+                            <mat-option *ngFor="let list of customList" [value]="list.customuom_id">{{list.description}}</mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Date</mat-label>
+                      <input type="date" [(ngModel)]="model.gw_date" formControlName="gw_date" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Time</mat-label>
+                      <input type="time" [(ngModel)]="model.gw_time" formControlName="gw_time" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Remarks</mat-label>
+                      <input type="text" [(ngModel)]="model.gw_remarks" formControlName="gw_remarks" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="ht_20"></div>
+                <div class="row">
+                  <div class="col-lg-4 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Tare Weight</mat-label>
+                      <div class="clr"></div>
+                      <div class="row">
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12 col_mb"><input [(ngModel)]="model.tare_weight" formControlName="tare_weight" type="number" class="form-control">
+                        </div>
+                        <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                          <mat-select [(ngModel)]="model.tw_unit" formControlName="tw_unit" class="form-control">
+                            <mat-option value="0">-Select-</mat-option>
+                            <mat-option *ngFor="let list of customList" [value]="list.customuom_id">{{list.description}}</mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Date</mat-label>
+                      <input [(ngModel)]="model.tw_date" formControlName="tw_date" type="date" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Time</mat-label>
+                      <input [(ngModel)]="model.tw_time" formControlName="tw_time" type="time" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Remarks</mat-label>
+                      <input [(ngModel)]="model.tw_remarks" formControlName="tw_remarks" type="text" class="form-control">
+                    </div>
+                  </div>
+                </div>
+                <div class="ht_20"></div>
+                <div class="row">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="form-group">
+                          <mat-label>Net Weight</mat-label>
+                          <div class="clr"></div>
+                          <div class="row">
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12"> <div class="form-group"><input type="number" [(ngModel)]="model.net_weight" formControlName="net_weight" class="form-control"></div></div>
+                            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                              <div class="form-group"><mat-select [(ngModel)]="model.nw_unit" formControlName="nw_unit" class="form-control">
+                                <mat-option value="0">-Select-</mat-option>
+                                <mat-option *ngFor="let list of customList" [value]="list.customuom_id">{{list.description}}</mat-option>
+                              </mat-select></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
+                          <mat-label>Weighment Charge</mat-label>
+                          <input type="number" [(ngModel)]="model.wgment_charge" formControlName="wgment_charge" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                        <div class="form-group">
+                          <mat-label>Weighment Rs.</mat-label>
+                          <input type="number" [(ngModel)]="model.wgment_rs" formControlName="wgment_rs" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-4 col-md-4 col-sm-6 col-12 digi_wt">
+                    <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-12 col_mb_digi">
+                        <div class="form-group">
+                          <mat-label>Digital Weight</mat-label>
+                          <input type="number" [(ngModel)]="model.digital_weight" formControlName="digital_weight" class="form-control" style="height: 60px;">
+                        </div>
+                      </div>
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="form-group">
+                          <input type="file"  class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      
+    </div>
+  </section>
+</form>
+
+<div class="master_container_box" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Load Weighment List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Weightment No</th>
+                  <th>Date</th>
+                  <th>Weight</th>
+                  <th>Vehicle Number</th>
+                  <th>Gross Weight</th>
+                  <th>Tare Weight</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let list of listLoadingWeightment">
+                  <td>{{list.wgment_no}}</td>
+                  <td>{{list.wgment_date}}</td>
+                  <td>{{list.weight}}</td>
+                  <td>{{list.veh_no}}</td>
+                  <td>{{list.gross_weight}}</td>   
+                  <td>{{list.tare_weight}}</td>             
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

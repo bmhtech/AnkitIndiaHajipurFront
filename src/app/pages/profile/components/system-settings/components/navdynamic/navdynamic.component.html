@@ -1,0 +1,124 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<!-- <form [formGroup]="UserForm" class="navDynamic_form"> -->
+
+<form [formGroup]="form" class="navDynamic_form">
+  <div class="row">
+    <div class="col-lg-12 col-12">
+      <form [formGroup]="UserForm" class="navDynamic_form" style="margin-bottom: 25px;">
+      <!-- <div class="col-lg-2 col-12">
+        <div class="form-group">
+        <label>User</label>
+        <mat-select formControlName="user_id" [(ngModel)]="model1.user_id"  (selectionChange)="onChangeRole($event.value)" class="form-control child1_bg2">
+          <mat-option value="0">-Select-</mat-option>
+          <mat-option *ngFor="let User of UserList" [value]="User.username">{{User.name}}
+          </mat-option>
+        </mat-select> 
+      </div>
+      </div> -->
+
+
+      <div class="col-lg-3 col-md-3 col-12">
+        <div class="form-group"> 
+          <mat-label>User Role</mat-label>
+          <input type="text" formControlName="role_id" [(ngModel)]="model1.role_id" class="form-control child1_bg2">
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-3 col-12">
+        <div class="form-group"> 
+        <mat-label>Parent Role</mat-label>
+        <mat-select formControlName="parent_role_id" [(ngModel)]="Parent_Role_ID" class="form-control child1_bg2" >
+          <mat-option *ngFor="let Roles of RoleList" [value]="Roles.role_id">{{Roles.name}}
+          </mat-option>
+        </mat-select> 
+      </div>
+      </div>
+      <div class="col-lg-3 col-md-3 col-12">
+        <mat-label style="width: 100%; display:block">&nbsp;</mat-label>
+      <input type ="button" class="danger btn btn-primary" (click)="Refresh()" value="Refresh"/>
+      </div>
+      <div class="clr"></div>
+      </form>
+    </div>
+
+  </div>
+  <div class="row">
+    <div class="col-lg-6 col-12">
+      <div class="dd_main"  formArrayName="MENU_ITEM">
+        <div class="dyn_table" style="border-top:1px solid #ccc;" *ngFor="let item of MENU_ITEM.controls; let pointIndex=index" [formGroupName]="pointIndex">
+
+          <div class="label_col"> <mat-checkbox (change)="DelParentNavItem($event.value, pointIndex)" [checked]="activeIsChecked"></mat-checkbox></div>
+          <!-- <div class="label_col"><input class="form-control" type="text" formControlName="path" /></div> -->
+          <!-- <div class="label_col">{{pointIndex}}</div> -->
+          <div class="label_col"><input class="form-control" type="text" formControlName="title" /></div>
+          <!-- <div class="label_col"><input class="form-control" type="text" formControlName="icon" /></div> -->
+          <div class="dd_children1"  formArrayName="children">
+            <div class="dyn_table" *ngFor="let item1 of item.controls.children.controls; let pointIndex1=index" [formGroupName]="pointIndex1">
+             <p>{{item1.title}}</p>
+
+              
+              <div class="label_col"> <mat-checkbox (change)="DelChild($event.value, pointIndex,pointIndex1)" [checked]="activeIsChecked1"></mat-checkbox></div>
+              <!-- <div class="label_col">{{pointIndex1}}</div> -->
+                  <!--  *ngIf="(item.controls.children.controls !=null )"  <div class="label_col"><input class="form-control" type="text" formControlName="path" /></div> -->
+              <div class="label_col" ><input class="form-control" type="text" formControlName="title" /></div>
+                      
+              <div class="dd_children2" formArrayName="children">
+                <div class="dyn_table" *ngFor="let item2 of item1.controls.children.controls; let pointIndex12=index" [formGroupName]="pointIndex12">
+                  <div class="label_col"> <mat-checkbox value="true" (change)="DelChild1($event.value, pointIndex,pointIndex1,pointIndex12)" [checked]="activeIsChecked2"></mat-checkbox></div>
+                  <!-- <div class="label_col">{{pointIndex12}}</div> -->
+                          <!-- <div class="label_col"><input class="form-control" type="text" formControlName="path" /></div> -->
+                  <div class="label_col"><input class="form-control" type="text" formControlName="title" /></div>           
+                </div>
+              <!-- </div> -->
+            </div>
+          </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    
+  </div>
+  
+  <div class="row">
+    <div class="col-lg-5" style="padding: 10px; text-align: center;">
+      <div class="form-group">
+        <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+
+</form>
+
+
+<div class="master_containerr" style="margin-top:10px;">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Role List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Role</th>
+                  <th>Parent Role</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Role of listRole">
+                  <td>{{Role.name}}</td>
+                  <td>{{Role.parent_role}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

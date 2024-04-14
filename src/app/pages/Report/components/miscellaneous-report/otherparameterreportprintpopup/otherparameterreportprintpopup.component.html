@@ -1,0 +1,93 @@
+
+<mat-dialog-content>
+  <button class="close_btn" mat-button mat-dialog-close ><i class="fa fa-close icon"></i></button>
+<div class="container-fluid" >
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Other Parameter Report List</legend>
+        <div class="table_content">
+          <table border="1" style="padding:10px; width:100%" >
+            <thead>
+              <tr>
+                <td colspan="4"><b>{{company_name}}</b></td>
+             </tr>
+              <tr>
+                <td colspan="4"><b>Other Parameter Report</b></td>
+             </tr>
+              <tr>
+               
+                 <td colspan="1"><b>Shift:</b>{{shift}}</td>
+                 <td colspan="2"><b>Approved By Name:</b>{{approvedby_name}}</td>
+                 <td colspan="1"></td>
+              </tr>
+              <tr>
+                <td><b>Item Name</b></td>
+                <td><b>ASH %</b></td>
+                <td><b>AIA %</b></td>
+                <td><b>Alcoholia Acidity %</b></td>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let list of dynamiclist">
+                    <td>{{list.item_name}}</td>
+                    <td>{{list.ash}}</td>
+                    <td>{{list.aia}}</td>
+                    <td>{{list.alcohol}}</td>
+                   
+                </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div  id="print-section" class="print " hidden>
+    <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+    <h5 class="uc"  style="text-align: center;">Other Parameter Report</h5>
+    <div>
+      <table border="1" style="padding:10px; width:100%" >
+        <thead>
+          <tr>
+            <td colspan="4"><b>{{company_name}}</b></td>
+         </tr>
+          <tr>
+            <td colspan="4"><b>Other Parameter Report</b></td>
+         </tr>
+          <tr>
+           
+             <td colspan="1"><b>Shift:</b>{{shift}}</td>
+             <td colspan="2"><b>Approved By Name:</b>{{approvedby_name}}</td>
+             <td colspan="1"></td>
+          </tr>
+          <tr>
+            <td>Item Name</td>
+            <td>ASH %</td>
+            <td>AIA %</td>
+            <td>Alcoholia Acidity %</td>
+          </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let list of dynamiclist">
+                <td>{{list.item_name}}</td>
+                <td>{{list.ash}}</td>
+                <td>{{list.aia}}</td>
+                <td>{{list.alcohol}}</td>
+               
+            </tr>
+        </tbody>
+      </table>
+    </div> 
+</div>
+
+<div  class="col-lg-12">
+  <div class="form-group">
+      <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+   </div>
+</div>
+
+</div>
+</mat-dialog-content>

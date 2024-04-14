@@ -1,0 +1,139 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">    
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Vehicle Type Information</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Vehtype_code">Vehicle Type Code</label>
+                <input type="text" [(ngModel)]="seq_no" formControlName="vehtype_code" class="form-control" readonly/>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Vehtype_name">Vehicle Type Name<span class="red">*</span></label>
+                <input type="text" [(ngModel)]="vehicleType.vehtype_name" formControlName="vehtype_name" class="form-control" id="vehtype_name">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Vehtype_NoOfWheels">Number Of Wheels<span class="red">*</span></label>
+                <input type="number" [(ngModel)]="vehicleType.noofwheels" formControlName="noofwheels" class="form-control" min="0">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Vehtype_remarks">Remarks</label>
+                <input type="text" [(ngModel)]="vehicleType.vehtype_remarks" formControlName="vehtype_remarks" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Bussiness Unit<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="bUnitCodes"
+                [display]="'businessunit_name'"
+                [value]="'businessunit_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['businessunit_code']">
+              </mat-select-autocomplete>
+              </div>
+          </div> 
+
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Businessunit_Name">Businessunit Name</label>
+                <input type="text" [(ngModel)]="vehicleType.businessunit_name" formControlName="businessunit_name" class="form-control">
+              </div>
+            </div> -->
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox [(ngModel)]="vehicleType.vehtype_active" formControlName="vehtype_active">Vehicle Active</mat-checkbox> 
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+  
+     
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="vehicletypemastersave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+ 
+
+  <!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Vehicle Type Master List</legend>
+          <div class="table_content">
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Vehicle Type Code</th>
+                  <th>Vehicle Type Name</th>
+                  <th>Number Of Wheels </th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let vehicleType of listvehicleType">
+                  <td>{{vehicleType.vehtype_code}}</td>
+                  <td>{{vehicleType.vehtype_name}}</td>
+                  <td>{{vehicleType.noofwheels}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(vehicleType.id,'view')" *ngIf="vehicletypemasterview">View</button></td>         
+                  <td><button class="btn btn-info" (click)="onUpdate(vehicleType.id,'update')" *ngIf="vehicletypemasterupdate">Update</button></td>         
+                  <td><button class="btn btn-danger" (click)="onDelete(vehicleType.id,vehicleType.vehtype_code)" *ngIf="vehicletypemasterdelete">Delete</button></td>                 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+   </div>
+</div>

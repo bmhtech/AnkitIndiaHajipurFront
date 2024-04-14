@@ -1,0 +1,74 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<div class="finance login-card">
+  <fieldset>
+    <legend>Welcome</legend>
+   
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="form-group">
+          <label for="Bin code">Company Name </label>
+          <mat-select class="form-control" [(ngModel)]="company_name">
+            <mat-option value="null">-select-</mat-option>
+            <mat-option *ngFor="let list of listCompany" [value]="list.company_id">{{list.company_name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+      <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="form-group">
+          <label for="Financial Year">Financial Year </label>
+          <mat-select class="form-control" [(ngModel)]="financial_year" *ngIf="finyearlock;else elseBlockfinyear" >
+            <mat-option value="null">-Select-</mat-option>
+            <mat-option value="2019-2020">2019-2020</mat-option>
+            <mat-option value="2020-2021">2020-2021</mat-option>
+            <mat-option value="2021-2022">2021-2022</mat-option>
+            <mat-option value="2022-2023">2022-2023</mat-option>
+            <mat-option value="2023-2024">2023-2024</mat-option>
+          </mat-select>
+          <ng-template #elseBlockfinyear>
+            <mat-select class="form-control" [(ngModel)]="financial_year" >
+              <mat-option value="null">-Select-</mat-option>
+              <mat-option value="2023-2024">2023-2024</mat-option>
+          </mat-select>
+          </ng-template>
+        </div>
+      </div> -->
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="form-group">
+          <label for="Financial Year">Financial Year </label>
+          <mat-select class="form-control"  [(ngModel)]="financial_year">
+            <mat-option value="0">-select-</mat-option>
+            <mat-option *ngFor="let Finyear of FinyearList" [value]="Finyear.finyear">{{Finyear.finyear}}
+            </mat-option>
+          </mat-select>
+
+        </div>
+      </div>
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <div class="form-group">
+          <label for="Bin code">User Role</label>
+          <mat-select class="form-control" (selectionChange)="OnchangeRole($event.value)" [(ngModel)]="User_Role">
+            <mat-option value="0">-select-</mat-option>
+            <mat-option *ngFor="let User of RoleList" [value]="User.role_id">{{User.name}}
+            </mat-option>
+          </mat-select>
+        </div>
+      </div>
+
+      <div class="er_msg"  *ngIf="financial_year == '' || company_name == '' || User_Role==''"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> both fields are mandatory!...</div> 
+      <div class="col-lg-12" [hidden]="financial_year == '' || company_name == '' || company_name == 'null' || financial_year == 'null' || User_Role=='null' || User_Role==''">
+        <div class="form-group">
+          <button type="submit" class="btn btn-lg btn-success" (click)="submit()">Submit</button>
+        </div>
+      </div>
+   
+  </fieldset>
+</div>
+
+    
+    

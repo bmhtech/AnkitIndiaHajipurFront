@@ -1,0 +1,1884 @@
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader">
+        <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+    </div>
+</div>
+
+<form [formGroup]="userForm">
+    <section class="master_container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <fieldset>
+                        <legend>Dynamic Report</legend>
+
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <mat-label>Report Name</mat-label>
+                                <mat-select class="form-control" [(ngModel)]="model.reportname"
+                                    formControlName="reportname">
+                                    <mat-option *ngFor="let list of reportnamelists"
+                                        [value]="list.reportname">{{list.reportname}}</mat-option>
+                                </mat-select>
+
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <mat-label>From Date</mat-label>
+                                <input type="date" [(ngModel)]="model.fromdate" formControlName="fromdate"
+                                    class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                            <div class="form-group">
+                                <mat-label>To Date</mat-label>
+                                <input type="date" [(ngModel)]="model.todate" formControlName="todate"
+                                    class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-12">
+                            <div class="form-group">
+                                <button type="submit" (click)="send()" class="btn btn-info">Search</button>
+                            </div>
+                        </div>
+
+                    </fieldset>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+
+
+
+<div class="master_container_box">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <fieldset class="table_container">
+                    <legend> Report List</legend>
+                    <div class="table_content">
+                        <table class="table table-bordered" id="dynamictable">
+                            <thead>
+                                <tr>
+
+                                    <th *ngFor="let flist of columnslist">
+                                        {{flist}}
+                                    </th>
+
+
+
+                                </tr>
+                            </thead>
+                            <tbody>
+
+                                <tr *ngFor="let dlist of datalist">
+                                    <td *ngFor="let list of columnslist;index as i">
+                                        {{dlist[i]}}
+                                    </td>
+
+                                <tr>
+                                    <td></td>
+
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <button mat-raised-button (click)="exportAsXLSX()" color="primary">Export To Excel</button>
+                        </div>
+                    </div>
+
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <form [formGroup]="userForm1">
+        <fieldset>
+            <legend>Purchase Report</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="purfromdate">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="purtodate">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>Purchase Type</mat-label>
+                    <mat-select-autocomplete class="form-control ats" [options]="itemtypes" [display]="'item_name'"
+                        [value]="'item_id'" [multiple]='false' ngDefaultControl
+                        [formControl]="userForm1.controls['ser_item_subtype']">
+                    </mat-select-autocomplete>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>Supplier Name</mat-label>
+                    <mat-select-autocomplete class="form-control ats" [options]="supplierNames" [display]="'bp_name'"
+                        [value]="'bp_Id'" [multiple]='false' ngDefaultControl
+                        [formControl]="userForm1.controls['supplier_name']">
+                    </mat-select-autocomplete>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="search()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX1()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable3">
+                        <thead>
+                            <tr>
+                                <th style="width:70px">Bill Date</th>
+                                <th>Purchae Type Name</th>
+                                <th>Bill No</th>
+                                <th>Advice No</th>
+                                <th>State</th>
+                                <th>Supplier Name</th>
+                                <th>GST No</th>
+                                <th>PAN No</th>
+                                <th>Vehicle No</th>
+                                <th>Supplier Ref Doc No</th>
+                                <th>Supplier Ref Doc Date</th>
+                                <th>Item Total Amt</th>
+                                <th>Discount</th>
+                                <th>Net Amt</th>
+                                <th>Qc Deduction</th>
+                                <th>Amt After Deduction</th>
+                                <th>Add Tax</th>
+                                <th>Post tax Amt</th>
+                                <th>Other Charges</th>
+                                <th>Add Plus</th>
+                                <th>Add Minus</th>
+                                <th>Round Off Amt</th>
+                                <th>Party payable</th>
+                                <th>Already Paid</th>
+                                <th>Net Payable Party</th>
+                                <th>Remarks</th>
+                                <th>Adv Item Name</th>
+                                <th>HSN Code</th>
+                                <th>Add Packing Item Name</th>
+                                <th>Passed Packing Qty</th>
+                                <th>Passed Item Qty</th>
+                                <th>passed Mat Weight</th>
+                                <th>Unit Rate</th>
+                                <th>Price Based On</th>
+                                <th>Amount</th>
+                                <th>Item Discount Amt</th>
+                                <th>Item Net Amt</th>
+                                <th>Net Amt After Qc</th>
+                                <th>Tax Rate</th>
+                                <th>IGST</th>
+                                <th>CGST</th>
+                                <th>SGST</th>
+                                <th>Tax Amt</th>
+                                <th>Gross Amt</th>
+                                <th>Broker Name</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let purchase of purchaselist; let pointIndex=index">
+                                <td>{{purchase.bill_date}}</td>
+                                <td>{{purchase.purchase_typename}}</td>
+                                <td>{{purchase.pur_bill_no}}</td>
+                                <td>{{purchase.adviceno}}</td>
+                                <td>{{purchase.state}}</td>
+                                <td>{{purchase.supplier}}</td>
+                                <td>{{purchase.gst}}</td>
+                                <td>{{purchase.panno}}</td>
+                                <td>{{purchase.vehicleno}}</td>
+                                <td>{{purchase.supp_ref_docno}}</td>
+                                <td>{{purchase.supp_ref_doc_date}}</td>
+                                <td>{{purchase.item_total}}</td>
+                                <td>{{purchase.discount}}</td>
+                                <td>{{purchase.net_amt}}</td>
+                                <td>{{purchase.qc_deduction}}</td>
+                                <td>{{purchase.amt_after_deduction}}</td>
+                                <td>{{purchase.add_tax}}</td>
+                                <td>{{purchase.post_tax_amt}}</td>
+                                <td>{{purchase.other_charges}}</td>
+                                <td>{{purchase.add1}}</td>
+                                <td>{{purchase.add2}}</td>
+                                <td>{{purchase.roundoff_amt}}</td>
+                                <td>{{purchase.payable_party}}</td>
+                                <td>{{purchase.already_paid}}</td>
+                                <td>{{purchase.net_payable_party}}</td>
+                                <td>{{purchase.remarks}}</td>
+                                <td>{{purchase.adv_item_name}}</td>
+                                <td>{{purchase.hsn_code}}</td>
+                                <td>{{purchase.adv_packing_item_name}}</td>
+                                <td>{{purchase.passed_packing_qty}}</td>
+                                <td>{{purchase.passed_item_qty}}</td>
+                                <td>{{purchase.passed_mat_weight}}</td>
+                                <td>{{purchase.unit_rate}}</td>
+                                <td>{{purchase.price_based_on}}</td>
+                                <td>{{purchase.amount}}</td>
+                                <td>{{purchase.discount_amount}}</td>
+                                <td>{{purchase.net_amount}}</td>
+                                <td>{{purchase.net_amt_after_qc}}</td>
+                                <td>{{purchase.tax_rate}}</td>
+                                <td>{{purchase.Igst}}</td>
+                                <td>{{purchase.Cgst}}</td>
+                                <td>{{purchase.Sgst}}</td>
+                                <td>{{purchase.tax_amt}}</td>
+                                <td>{{purchase.gross_amt}}</td>
+                                <td>{{purchase.broker_name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+
+<div>
+    <form [formGroup]="userForm2">
+        <fieldset>
+            <legend>Purchase Report Balance Check</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="purbillfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="purbilltodate">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>Supplier Name</mat-label>
+                    <mat-select-autocomplete class="form-control ats" [options]="supplierNames" [display]="'bp_name'"
+                        [value]="'bp_Id'" [multiple]='false' ngDefaultControl
+                        [formControl]="userForm2.controls['supplier_name']">
+                    </mat-select-autocomplete>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>Purchase Type</mat-label>
+                    <mat-select-autocomplete class="form-control ats" [options]="itemtypes" [display]="'item_name'"
+                        [value]="'item_id'" [multiple]='false' ngDefaultControl
+                        [formControl]="userForm2.controls['ser_item_subtype']">
+                    </mat-select-autocomplete>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchbal()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX2()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable4">
+                        <thead>
+                            <tr>
+
+                                <th>Bill No</th>
+                                <th>Bill Date</th>
+                                <th>Supplier Name</th>
+                                <th>Vehicle No.</th>
+                                <th>Supplier Ref. Document No.</th>
+                                <th>Supplier Ref. Date</th>
+                                <th>Remarks</th>
+                                <th>Item Total Amt</th>
+                                <th>Party payable</th>
+                                <th>Round Off Amt</th>
+                                <th>Net Payable Party</th>
+                                <th>Passed Item Qty</th>
+                                <th>Passed Packing Qty</th>
+                                <th>Passed Mat Weight</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let purchase of purchasebalancelist; let pointIndex=index">
+                                <td>{{purchase.pur_bill_no}}</td>
+                                <td>{{purchase.bill_date}}</td>
+                                <td>{{purchase.supplier}}</td>
+                                <td>{{purchase.vehicleno}}</td>
+                                <td>{{purchase.supp_ref_docno}}</td>
+                                <td>{{purchase.supp_ref_doc_date}}</td>
+                                <td>{{purchase.remarks}}</td>
+                                <td>{{purchase.item_total}}</td>
+                                <td>{{purchase.payable_amt}}</td>
+                                <td>{{purchase.roundoff_amt}}</td>
+                                <td>{{purchase.net_payable_party}}</td>
+                                <td>{{purchase.itemqty}}</td>
+                                <td>{{purchase.packingqty}}</td>
+                                <td>{{purchase.mtwt}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+
+<div>
+    <form [formGroup]="userForm3">
+        <fieldset>
+            <legend>Unload Advice Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="unadvicefromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="unadvicetodate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>Supplier Name</mat-label>
+                    <mat-select-autocomplete class="form-control ats" [options]="supplierNames" [display]="'bp_name'"
+                        [value]="'bp_Id'" [multiple]='false' ngDefaultControl
+                        [formControl]="userForm3.controls['supplier_name']">
+                    </mat-select-autocomplete>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="unadviceSearch()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX3()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable5">
+                        <thead>
+                            <tr>
+                                <th style="width:70px">Advice Date</th>
+                                <th>Advice No</th>
+                                <th>Referance Type</th>
+                                <th>Bussiness Partner</th>
+                                <th>Item Type</th>
+                                <th>Item Sub Type</th>
+                                <th>Supplier Ref Doc Type</th>
+                                <th>Supplier Ref Doc No</th>
+                                <th>Supplier Ref Doc Date</th>
+                                <th>Remarks</th>
+                                <th>Vehicle No</th>
+                                <th>UOM</th>
+                                <th>Item Name</th>
+                                <th>Packing Name</th>
+                                <th>Packing Qty</th>
+                                <th>Item Qty</th>
+                                <th>Mat Wt</th>
+                                <th>Gross Wt</th>
+                                <th>Gross UOM</th>
+                                <th>Tare Wt</th>
+                                <th>Tare UOM</th>
+                                <th>Net Wt</th>
+                                <th>Net UOM</th>
+                                <th>Slip No</th>
+                                <th>Date</th>
+
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let unloadadvice of unloadadvicelist; let pointIndex=index">
+                                <td>{{unloadadvice.ula_date}}</td>
+                                <td>{{unloadadvice.unadviceno}}</td>
+                                <td>{{unloadadvice.ref_type}}</td>
+                                <td>{{unloadadvice.supp_name}}</td>
+                                <td>{{unloadadvice.item_type}}</td>
+                                <td>{{unloadadvice.item_subtypename}}</td>
+                                <td>{{unloadadvice.supp_ref_doc}}</td>
+                                <td>{{unloadadvice.supp_ref_docno}}</td>
+                                <td>{{unloadadvice.supp_ref_doc_date}}</td>
+                                <td>{{unloadadvice.remarks}}</td>
+                                <td>{{unloadadvice.vehicle_no}}</td>
+                                <td>{{unloadadvice.uom}}</td>
+                                <td>{{unloadadvice.item_name}}</td>
+                                <td>{{unloadadvice.packing_name}}</td>
+                                <td>{{unloadadvice.s_qty}}</td>
+                                <td>{{unloadadvice.quantity}}</td>
+                                <td>{{unloadadvice.mat_wt}}</td>
+                                <td>{{unloadadvice.gross_wt}}</td>
+                                <td>{{unloadadvice.uom1}}</td>
+                                <td>{{unloadadvice.tare_wt}}</td>
+                                <td>{{unloadadvice.uom2}}</td>
+                                <td>{{unloadadvice.net_wt}}</td>
+                                <td>{{unloadadvice.uom3}}</td>
+                                <td>{{unloadadvice.slip_no}}</td>
+                                <td>{{unloadadvice.pw_date}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+<div>
+    <form [formGroup]="userForm4">
+        <fieldset>
+            <legend>Pending Loading Advice with Challan</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="loadingfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="loadingtodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchadvice()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX4()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable2">
+                        <thead>
+                            <tr>
+
+                                <th>Advice Date</th>
+                                <th>Advice No.</th>
+                                <th>Party Name</th>
+                                <th>Vehicle No.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let advice of loadingadvicelist">
+                                <td>{{advice.advice_date}}</td>
+                                <td>{{advice.advice_no}}</td>
+                                <td>{{advice.customer_name}}</td>
+                                <td>{{advice.vehicle_no}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<!-- <div>
+  <form [formGroup]="userForm5">
+      <fieldset>
+          <legend>Sales Invoice Report</legend>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                      <mat-label>From Date</mat-label>
+                      <input type="date"  class="form-control"  formControlName="salesfromdate">
+                  </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                      <mat-label>To Date</mat-label>
+                      <input type="date"  class="form-control"  formControlName="salestodate">
+                  </div>
+              </div>
+              
+              <div class="col-lg-12" >
+                  <div class="form-group">
+                      <button type="submit" class="btn btn-primary" (click)="searchsalesinvoice()">Search</button>
+                  </div>
+              </div>
+              <fieldset class="table_container">
+                  
+                  <div class="col-lg-12" style="float: right;">
+                      <div  class="form-group">
+                          <button mat-raised-button (click)="exportAsXLSX4()" color="primary" >Export To Excel</button>
+                      </div>
+
+                  </div>
+
+                  <div class="table_content">
+              <table class="table table-bordered" id="dynamictable2">
+                  <thead>
+                      <tr>
+                         
+                          <th>Advice Date</th>
+                          <th>Advice No.</th>
+                          <th>Party Name</th>
+                          <th>Vehicle No.</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let advice of loadingadvicelist">
+                          <td>{{advice.advice_date}}</td>
+                          <td>{{advice.advice_no}}</td>
+                          <td>{{advice.customer_name}}</td>
+                          <td>{{advice.vehicle_no}}</td>
+                          </tr>
+                  </tbody>
+              </table>
+              
+          </div>
+          
+          </fieldset>
+      </fieldset>
+  </form>
+</div> -->
+
+<div>
+    <form [formGroup]="userForm6">
+        <fieldset>
+            <legend>Grn Bill Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="grnfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="grntodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchgrn()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX6()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable6">
+                        <thead>
+                            <tr>
+                                <th>Grn No</th>
+                                <th>Grn Date</th>
+                                <th>Purchase Subtype</th>
+                                <th>Reference Type</th>
+                                <th>Reciept Criteria</th>
+                                <th>Supplier Name</th>
+                                <th>Vehicle No.</th>
+                                <th>Supplier Ref No.</th>
+                                <th>Supplier Ref Date</th>
+                                <th>Pur Bill No.</th>
+                                <th>Bill Date</th>
+                                <th>Remarks</th>
+                                <th>Advice Item Name</th>
+                                <th>Advice Packing Name</th>
+                                <th>Advice Item Qty</th>
+                                <th>Advice packing Qty</th>
+                                <th>Advice Mat Wt.</th>
+                                <th>Receiving Item Qty</th>
+                                <th>Receiving packing Qty</th>
+                                <th>Receiving Mat Wt.</th>
+                                <th>Passed Item Qty</th>
+                                <th>Passed packing Qty</th>
+                                <th>Passed Mat Wt.</th>
+                                <th>Price</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let grn of GrnList">
+                                <td>{{grn.grnno}}</td>
+                                <td>{{grn.grndate}}</td>
+                                <td>{{grn.purchase_subtype}}</td>
+                                <td>{{grn.referance_type}}</td>
+                                <td>{{grn.receipt_criteria}}</td>
+                                <td>{{grn.supplier}}</td>
+                                <td>{{grn.vehicleno}}</td>
+                                <td>{{grn.supp_ref_docno}}</td>
+                                <td>{{grn.supp_ref_doc_date}}</td>
+                                <td>{{grn.purbillno}}</td>
+                                <td>{{grn.billdate}}</td>
+                                <td>{{grn.remarks}}</td>
+                                <td>{{grn.adv_item_name}}</td>
+                                <td>{{grn.adv_packing_name}}</td>
+                                <td>{{grn.adviceitemqty}}</td>
+                                <td>{{grn.adv_pack_qty}}</td>
+                                <td>{{grn.adv_mat_wt}}</td>
+                                <td>{{grn.rcv_item_qty}}</td>
+                                <td>{{grn.rcv_pack_qty}}</td>
+                                <td>{{grn.rcv_mat_wt}}</td>
+                                <td>{{grn.pssd_item_qty}}</td>
+                                <td>{{grn.pssd_pack_qty}}</td>
+                                <td>{{grn.pssd_mat_wt}}</td>
+                                <td>{{grn.unit_rate}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm7">
+        <fieldset>
+            <legend>Challan tagwith Invoice Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="challanfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="challantodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchchallan()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX7()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable7">
+                        <thead>
+                            <tr>
+                                <th>Challan No</th>
+                                <th>Challan Date</th>
+                                <th>Invoice No</th>
+                                <th>Invoice Date</th>
+                                <th>Challan Status</th>
+                                <th>Invoice Type</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let challan of deliverychallanlist">
+                                <td>{{challan.challanno}}</td>
+                                <td>{{challan.challan_date}}</td>
+                                <td>{{challan.invoiceno}}</td>
+                                <td>{{challan.invoice_date}}</td>
+                                <td>{{challan.challan_status}}</td>
+                                <td>{{challan.inv_type_name}}</td>
+
+                            </tr>
+                        </tbody>
+                    </table>
+
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm13">
+        <fieldset>
+            <legend>Pending Sales Souda Report</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="salesfromdate">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="salestodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchsalesorder()">Search</button>
+                </div>
+            </div>
+
+            <fieldset class="table_container">
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX13()" color="primary">Export To Excel</button>
+                    </div>
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable13">
+                        <thead>
+                            <tr>
+                                <th style="width:70px">Order Date</th>
+                                <th>Sales Order No.</th>
+                                <th>Ref. Type</th>
+                                <th>Party Name</th>
+                                <th>Broker Name</th>
+                                <th>Item Name</th>
+                                <th>SO Qty</th>
+                                <th>Bag</th>
+                                <th>SO Rate</th>
+                                <th>Price Based on</th>
+                                <th>Dispatch Qty</th>
+                                <th>Dispatch Bag</th>
+                                <th>Pending Qty</th>
+                                <th>Pending Bag</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let salesOrder of salesOrderList">
+                                <td>{{salesOrder.order_date}}</td>
+                                <td>{{salesOrder.order_no}}</td>
+                                <td>{{salesOrder.ref_type}}</td>
+                                <td>{{salesOrder.partyname}}</td>
+                                <td>{{salesOrder.broker_name}}</td>
+                                <td>{{salesOrder.item_name}}</td>
+                                <td>{{salesOrder.mat_wt}}</td>
+                                <td>{{salesOrder.bag}}</td>
+                                <td>{{salesOrder.price}}</td>
+                                <td>{{salesOrder.price_based_on}}</td>
+                                <td>{{salesOrder.dispatched_quantity}}</td>
+                                <td>{{salesOrder.dispatched_bag}}</td>
+                                <td>{{salesOrder.pending_quantity}}</td>
+                                <td>{{salesOrder.pending_bag}}</td>
+                            </tr>
+                            <!-- <tr>
+                        <td colspan="5"><b>Total</b></td>
+                        <td><b>{{totaltruck}}</b></td>
+                        <td><b>{{totalpending}}</b></td>
+                      </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm8">
+        <fieldset>
+            <legend>Pending Souda Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="pendingfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="pendingtodate">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group ht_59">
+                    <mat-label>Catagory<span class="red">*</span></mat-label>
+                    <mat-select formControlName="pendingcatagory" class="form-control"
+                        (selectionChange)="onChangeCategory($event.value)">
+                        <mat-option value="truck">Per Truck</mat-option>
+                        <mat-option value="quantity">Per Quantity</mat-option>
+                    </mat-select>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchpending()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX8()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable8" *ngIf="pertruck;else perqty">
+                        <thead>
+                            <tr>
+                                <th style="width:70px">Order Date</th>
+                                <th>Purchae Order No.</th>
+                                <th>Broker Name</th>
+                                <th>Party Name</th>
+                                <th>Rate</th>
+                                <th>Truck</th>
+                                <th>Pending</th>
+                                <th>PO Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pending of pendingSoudaList; let pointIndex=index">
+                                <td>{{pending.orderdate}}</td>
+                                <td>{{pending.pur_order_no}}</td>
+                                <td>{{pending.brokername}}</td>
+                                <td>{{pending.partyname}}</td>
+                                <td>{{pending.rate}}</td>
+                                <td>{{pending.truck}}</td>
+                                <td>{{pending.pending}}</td>
+                                <td>{{pending.po_status}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5"><b>Total</b></td>
+                                <td><b>{{totaltruck}}</b></td>
+                                <td><b>{{totalpending}}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <ng-template #perqty>
+
+                        <table class="table table-bordered" id="dynamictable8">
+                            <thead>
+                                <tr>
+                                    <th style="width:70px">Order Date</th>
+                                    <th>Purchae Order No.</th>
+                                    <th>Broker Name</th>
+                                    <th>Party Name</th>
+                                    <th>Rate</th>
+                                    <th>Po Wt</th>
+                                    <th>Advice Wt</th>
+                                    <th>Pending Wt</th>
+                                    <th>PO Status</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let pending of pendingSoudaList; let pointIndex=index">
+                                    <td>{{pending.orddate}}</td>
+                                    <td>{{pending.pur_order_no}}</td>
+                                    <td>{{pending.Broker}}</td>
+                                    <td>{{pending.supplier}}</td>
+                                    <td>{{pending.price}}</td>
+                                    <td>{{pending.total_qty}}</td>
+                                    <td>{{pending.adv_mat_wt}}</td>
+                                    <td>{{pending.pending}}</td>
+                                    <td>{{pending.po_status}}</td>
+                                </tr>
+                                <tr>
+                                    <td colspan="5"><b>Total</b></td>
+                                    <td><b>{{totalqty | number:'1.3-3'}}</b></td>
+                                    <td><b>{{advwt | number:'1.3-3'}}</b></td>
+                                    <td><b>{{pendingwt | number:'1.3-3'}}</b></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </ng-template>
+
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm9">
+        <fieldset>
+            <legend>Purchase Bill Anuj Sir Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="billfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="billtodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchPurBill()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX9()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable9">
+                        <thead>
+                            <tr>
+                                <th style="width:70px">Date</th>
+                                <th>Advice No.</th>
+                                <th>Purchase Bill No.</th>
+                                <th>Supplier Name</th>
+                                <th>Vehicle No.</th>
+                                <th>Item Name</th>
+                                <th>Packing Name</th>
+                                <th>Item Qty</th>
+                                <th>Item UOM</th>
+                                <th>Packing Qty</th>
+                                <th>Packing UOM</th>
+                                <th>Mat Wt</th>
+                                <th>Rate</th>
+                                <th>Price Based On</th>
+                                <th>Amount</th>
+                                <th>Discount</th>
+                                <th>Discount Based On</th>
+                                <th>Discount Amount</th>
+                                <th>Net Amount</th>
+                                <th>QC Deduction</th>
+                                <th>Net Amt after QC</th>
+                                <th>Tax Code</th>
+                                <th>Tax Rate</th>
+                                <th>Tax Amt</th>
+                                <th>Gross Amt</th>
+                                <th>Warehouse</th>
+                                <th>Stack</th>
+                                <th>Item Total</th>
+                                <th>Discount</th>
+                                <th>Net Amt</th>
+                                <th>QC Deduction</th>
+                                <th>Claim & Deduction</th>
+                                <th>Amt after Deduction</th>
+                                <th>Add Tax</th>
+                                <th>Post Tax Amt</th>
+                                <th>Payable Amt</th>
+                                <th>Add (+)</th>
+                                <th>Add (-)</th>
+                                <th>Roundoff Amt</th>
+                                <th>Payable Party</th>
+                                <th>Already Paid</th>
+                                <th>Net Payable Party</th>
+                                <th>Post Tax Amt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let bill of purchaseBillList; let pointIndex=index">
+                                <td>{{bill.billdate}}</td>
+                                <td>{{bill.Adviceno}}</td>
+                                <td>{{bill.PurchaseBillno}}</td>
+                                <td>{{bill.SupplierName}}</td>
+                                <td>{{bill.Vehicleno}}</td>
+                                <td>{{bill.itemname}}</td>
+                                <td>{{bill.packingname}}</td>
+                                <td>{{bill.itemqty}}</td>
+                                <td>{{bill.itemuom}}</td>
+                                <td>{{bill.packingqty}}</td>
+                                <td>{{bill.packinguom}}</td>
+                                <td>{{bill.matwt}}</td>
+                                <td>{{bill.rate}}</td>
+                                <td>{{bill.price_based_on}}</td>
+                                <td>{{bill.amount}}</td>
+                                <td>{{bill.discount}}</td>
+                                <td>{{bill.discount_basedon}}</td>
+                                <td>{{bill.discount_amount}}</td>
+                                <td>{{bill.net_amount}}</td>
+                                <td>{{bill.qc_deduction}}</td>
+                                <td>{{bill.net_amt_after_qc}}</td>
+                                <td>{{bill.tax_code}}</td>
+                                <td>{{bill.tax_rate}}</td>
+                                <td>{{bill.tax_amt}}</td>
+                                <td>{{bill.gross_amt}}</td>
+                                <td>{{bill.warehouse}}</td>
+                                <td>{{bill.stack}}</td>
+                                <td>{{bill.item_total}}</td>
+                                <td>{{bill.billdiscount}}</td>
+                                <td>{{bill.net_amt}}</td>
+                                <td>{{bill.billqc_deduction}}</td>
+                                <td>{{bill.claimanddeduction}}</td>
+                                <td>{{bill.amt_after_deduction}}</td>
+                                <td>{{bill.add_tax}}</td>
+                                <td>{{bill.post_tax_amt}}</td>
+                                <td>{{bill.payable_amt}}</td>
+                                <td>{{bill.addplus}}</td>
+                                <td>{{bill.addminus}}</td>
+                                <td>{{bill.roundoff_amt}}</td>
+                                <td>{{bill.payable_party}}</td>
+                                <td>{{bill.already_paid}}</td>
+                                <td>{{bill.net_payable_party}}</td>
+                                <td>{{bill.post_tax_amt}}</td>
+                            </tr>
+                            <!-- <tr>
+                            <td colspan="5"><b>Total</b></td>
+                            <td><b>{{truck}}</b></td>
+                            <td><b>{{pending}}</b></td>
+                        </tr> -->
+                        </tbody>
+                    </table>
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm10">
+        <fieldset>
+            <legend>Purchase Order Anuj Sir Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="orderfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="ordertodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchPurOrder()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX10()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable10">
+                        <thead>
+
+                            <tr>
+                                <th>Pur Bill No</th>
+                                <th>Pur Order No</th>
+                                <th>Advice Number</th>
+                                <th>Party Name</th>
+                                <th>Vehicle No</th>
+                                <th>Gross Weight</th>
+                                <th>Net Weight</th>
+                                <th>Digital Weight</th>
+                                <th>Digital Weight1</th>
+                                <th>Weighment Date</th>
+                                <th>Adv Item Name</th>
+                                <th>Adv Packing Item Name</th>
+                                <th>Passed Packing Qty</th>
+                                <th>Passed Item Qty</th>
+                                <th>Unit Rate</th>
+                                <th>Price Based On</th>
+                                <th>Gross Amt</th>
+                                <th>Discount</th>
+                                <th>QC Deduction</th>
+                                <th>Dala Charges Driver</th>
+                                <th>UP Front Brokerage</th>
+                                <th>WB Truck Charges Driver</th>
+                                <th>Deduction From Supplier</th>
+                                <th>FREIGHT ADV</th>
+                                <th>MOISTURE</th>
+                                <th>DALA CHARGES</th>
+                                <th>UP BROKERAGE</th>
+                                <th>QUALITY CLAIM</th>
+                                <th>WB CHARGES</th>
+                                <th>OFFICE EXP</th>
+                                <th>HDPE BAG</th>
+                                <th>TDS 194Q</th>
+                                <th>FREIGHT ADVANCE</th>
+                                <th>Add Tax</th>
+                                <th>Add (+)</th>
+                                <th>Add (-)</th>
+                                <th>RoundOff Amt</th>
+                                <th>Payable Party</th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of pur_order_list">
+                                <td>{{item.pur_bill_no}}</td>
+                                <td>{{item.pur_order_no}}</td>
+                                <td>{{item.advicenumber}}</td>
+                                <td>{{item.partyname}}</td>
+                                <td>{{item.vehicleno}}</td>
+                                <td>{{item.grossweight}}</td>
+                                <td>{{item.netweight}}</td>
+                                <td>{{item.digital_weight}}</td>
+                                <td>{{item.digital_weight1}}</td>
+                                <td>{{item.weighmentdate}}</td>
+                                <td>{{item.adv_item_name}}</td>
+                                <td>{{item.adv_packing_item_name}}</td>
+                                <td>{{item.passed_packing_qty}}</td>
+                                <td>{{item.passed_item_qty}}</td>
+                                <td>{{item.unit_rate}}</td>
+                                <td>{{item.price_based_on}}</td>
+                                <td>{{item.gross_amt}}</td>
+                                <td>{{item.discount}}</td>
+                                <td>{{item.qc_deduction}}</td>
+                                <td>{{item.Dala_Charges_Driver}}</td>
+                                <td>{{item.UP_Front_Brokerage}}</td>
+                                <td>{{item.WB_Truck_Charges_Driver}}</td>
+                                <td>{{item.Deduction_From_Supplier}}</td>
+                                <td>{{item.FREIGHT_ADV}}</td>
+                                <td>{{item.MOISTURE}}</td>
+                                <td>{{item.DALA_CHARGES}}</td>
+                                <td>{{item.UP_BROKERAGE}}</td>
+                                <td>{{item.QUALITY_CLAIM}}</td>
+                                <td>{{item.WB_CHARGES}}</td>
+                                <td>{{item.OFFICE_EXP}}</td>
+                                <td>{{item.HDPE_BAG}}</td>
+                                <td>{{item.TDS_194Q}}</td>
+                                <td>{{item.FREIGHT_ADVANCE}}</td>
+                                <td>{{item.add_tax}}</td>
+                                <td>{{item.addplus}}</td>
+                                <td>{{item.addminus}}</td>
+                                <td>{{item.roundoff_amt}}</td>
+                                <td>{{item.payable_party}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm11">
+        <fieldset>
+            <legend>JobWork Sales Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date<span class="red">*</span></mat-label>
+                    <input type="date" class="form-control" formControlName="jobworkfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date<span class="red">*</span></mat-label>
+                    <input type="date" class="form-control" formControlName="jobworktodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchJobWorkSales()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX11()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable11">
+                        <thead>
+                            <tr>
+                                <th>Invoice Date</th>
+                                <th>Invoice No</th>
+                                <th>Party Name</th>
+                                <th>Cust Ref. Doc Date</th>
+                                <th>Cust Ref Doc No</th>
+                                <th>Pur Cust Ref Doc No</th>
+                                <th>Cust Ref ASN No</th>
+                                <th>Vehicle No</th>
+                                <th>Job Item Name</th>
+                                <th>Job Packing Name</th>
+                                <th>Pack Qty</th>
+                                <th>Item Qty</th>
+                                <th>Item UOM</th>
+                                <th>Rate</th>
+                                <th>Item Service Name</th>
+                                <th>Sales Ledger</th>
+                                <th>Sac Code</th>
+                                <th>Tax Value</th>
+                                <th>Tax Name</th>
+                                <th>CGST Tax</th>
+                                <th>CGST Amt</th>
+                                <th>SGST Tax</th>
+                                <th>SGST Amt</th>
+                                <th>IGST Tax</th>
+                                <th>IGST Amt</th>
+                                <th>Total Amount</th>
+                                <th>Broker Name</th>
+                                <th>Sales Order Date</th>
+                                <th>Sales Order No</th>
+                                <th>Own Gross Wt.</th>
+                                <th>Own Tare Wt.</th>
+                                <th>Own Net Wt.</th>
+                                <th>GST No</th>
+                                <th>E-invoice No.</th>
+                                <th>E-waybill No.</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let jobwork of jobwork_sales_list">
+                                <td>{{jobwork.invoice_date}}</td>
+                                <td>{{jobwork.invoice_no}}</td>
+                                <td>{{jobwork.partyname}}</td>
+                                <td>{{jobwork.cust_ref_doc_date}}</td>
+                                <td>{{jobwork.cust_refdocno}}</td>
+                                <td>{{jobwork.pur_cust_refdocno}}</td>
+                                <td>{{jobwork.asn}}</td>
+                                <td>{{jobwork.vehicleno}}</td>
+                                <td>{{jobwork.job_item_name}}</td>
+                                <td>{{jobwork.job_packing_name}}</td>
+                                <td>{{jobwork.pack_qty}}</td>
+                                <td>{{jobwork.item_qty}}</td>
+                                <td>{{jobwork.item_uom}}</td>
+                                <td>{{jobwork.rate}}</td>
+                                <td>{{jobwork.item_service_name}}</td>
+                                <td>{{jobwork.sal_ledger}}</td>
+                                <td>{{jobwork.sac_code}}</td>
+                                <td>{{jobwork.tax_value}}</td>
+                                <td>{{jobwork.taxname}}</td>
+                                <td>{{jobwork.cgst_tax}}</td>
+                                <td>{{jobwork.cgst_amt}}</td>
+                                <td>{{jobwork.sgst_tax}}</td>
+                                <td>{{jobwork.sgst_amt}}</td>
+                                <td>{{jobwork.igst_tax}}</td>
+                                <td>{{jobwork.igst_amt}}</td>
+                                <td>{{jobwork.tot_amount}}</td>
+                                <td>{{jobwork.broker_name}}</td>
+                                <td>{{jobwork.salesorderdate}}</td>
+                                <td>{{jobwork.salesorderno}}</td>
+                                <td>{{jobwork.own_gross}}</td>
+                                <td>{{jobwork.own_tare}}</td>
+                                <td>{{jobwork.own_net}}</td>
+                                <td>{{jobwork.gstno}}</td>
+                                <td>{{jobwork.e_invoice_no}}</td>
+                                <td>{{jobwork.waybill}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="9"><b>Total</b></td>
+                                <td><b>{{totalpackqty}}</b></td>
+                                <td><b>{{totalitemqty | number:'1.3-3'}}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm12">
+        <fieldset>
+            <legend>Sales Credit Note Invoice Type Wise Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date<span class="red">*</span></mat-label>
+                    <input type="date" class="form-control" formControlName="creditnotefromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date<span class="red">*</span></mat-label>
+                    <input type="date" class="form-control" formControlName="creditnotetodate">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>Invoice Type<span class="red">*</span></mat-label>
+                    <mat-select-autocomplete class="form-control ats" [options]="invoiceType" [display]="'invtype_name'"
+                        [value]="'invtype_id'" [multiple]='false' ngDefaultControl
+                        [formControl]="userForm12.controls['creditnote_invoice_type']">
+                    </mat-select-autocomplete>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchSalesCreditNote()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX12()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable12">
+                        <thead>
+
+                            <tr>
+                                <th>Invoice Type</th>
+                                <th>Credit Note Inv No.</th>
+                                <th>Credit Note Inv Date</th>
+                                <th>State</th>
+                                <th>Party Name</th>
+                                <th>GST No</th>
+                                <th> Broker Name</th>
+                                <th>Challan</th>
+                                <th>E-Invoice No.</th>
+                                <th>Sales Return Note No</th>
+                                <th>Sales Return Note Date</th>
+                                <th>Sales Return Reason</th>
+                                <th>Ref Challan No</th>
+                                <th>Ref Challan Date</th>
+                                <th>Item Name</th>
+                                <th>Item Group Name</th>
+                                <th>Packing Item</th>
+                                <th>HSN Code</th>
+                                <th>Packing Qty.</th>
+                                <th>Packing UOM</th>
+                                <th>Item Qty.</th>
+                                <th>Item UOM</th>
+                                <th>Mat Wt.</th>
+                                <th>Price</th>
+                                <th>Price Based On</th>
+                                <th>Amount</th>
+                                <th>Discount Amt.</th>
+                                <th>Tax Code</th>
+                                <th>Tax Rate(%)</th>
+                                <th>Cgst</th>
+                                <th>Sgst</th>
+                                <th>Igst</th>
+                                <th>Tax Amount</th>
+                                <th>Total Amt.</th>
+                                <th>Vehicle No.</th>
+                                <th>Round Off</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let creditnote of creditnote_jobwork_list">
+                                <td>{{creditnote.invoice_typename}}</td>
+                                <td>{{creditnote.creditnoteno}}</td>
+                                <td>{{creditnote.creditnotedate}}</td>
+                                <td>{{creditnote.state}}</td>
+                                <td>{{creditnote.partyname}}</td>
+                                <td>{{creditnote.gstno}}</td>
+                                <td>{{creditnote.brokercode}}</td>
+                                <td>{{creditnote.challan}}</td>
+                                <td>{{creditnote.e_invoice_no}}</td>
+                                <td>{{creditnote.salesorderno}}</td>
+                                <td>{{creditnote.salesorderdate}}</td>
+                                <td>{{creditnote.creditnotetype}}</td>
+                                <td>{{creditnote.refchallanno}}</td>
+                                <td>{{creditnote.refchallandate}}</td>
+                                <td>{{creditnote.item_name}}</td>
+                                <td>{{creditnote.item_groupname}}</td>
+                                <td>{{creditnote.packing_name}}</td>
+                                <td>{{creditnote.hsn_code}}</td>
+                                <td>{{creditnote.squantity}}</td>
+                                <td>{{creditnote.suom}}</td>
+                                <td>{{creditnote.quantity}}</td>
+                                <td>{{creditnote.uom}}</td>
+                                <td>{{creditnote.mat_wt}}</td>
+                                <td>{{creditnote.price}}</td>
+                                <td>{{creditnote.price_based_on}}</td>
+                                <td>{{creditnote.amount}}</td>
+                                <td>{{creditnote.discount_amt}}</td>
+                                <td>{{creditnote.tax_code}}</td>
+                                <td>{{creditnote.tax_rate}}</td>
+                                <td>{{creditnote.cgst}}</td>
+                                <td>{{creditnote.sgst}}</td>
+                                <td>{{creditnote.igst}}</td>
+                                <td>{{creditnote.tax_amt}}</td>
+                                <td>{{creditnote.total_amt}}</td>
+                                <td>{{creditnote.vehicleno}}</td>
+                                <td>{{creditnote.roundoff_amt}}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="18"><b>Total</b></td>
+                                <td><b>{{totalcnpackqty}}</b></td>
+                                <td></td>
+                                <td><b>{{totalcnitemqty | number:'1.3-3'}}</b></td>
+                                <td></td>
+                                <td><b>{{totalcnmatwt | number:'1.3-3'}}</b></td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm14">
+        <fieldset>
+            <legend>Insurance Transit Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date<span class="red">*</span></mat-label>
+                    <input type="date" class="form-control" formControlName="salesinvfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date<span class="red">*</span></mat-label>
+                    <input type="date" class="form-control" formControlName="salesinvtodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchtransitreport()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX14()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable14">
+                        <thead>
+                            <tr>
+                                <th>Invoice Date</th>
+                                <th>Invoice No.</th>
+                                <th>State</th>
+                                <th>Party Name</th>
+                                <th>Address</th>
+                                <th>Item Name</th>
+                                <th>Packing Name</th>
+                                <th>Packing Qty</th>
+                                <th>Item Qty</th>
+                                <th>Price</th>
+                                <th>Amount</th>
+                                <th>CGST</th>
+                                <th>SGST</th>
+                                <th>IGST</th>
+                                <th>Tax Amount</th>
+                                <th>Total Amount</th>
+                                <th>Payable Amount</th>
+                                <th>Vehicle No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let insurance of insurancetransit">
+                                <td>{{insurance.invoice_date}}</td>
+                                <td>{{insurance.invoice_no}}</td>
+                                <td>{{insurance.state}}</td>
+                                <td>{{insurance.partyname}}</td>
+                                <td>{{insurance.address}}</td>
+                                <td>{{insurance.item_name}}</td>
+                                <td>{{insurance.packing_name}}</td>
+                                <td>{{insurance.squantity}}</td>
+                                <td>{{insurance.quantity}}</td>
+                                <td>{{insurance.price}}</td>
+                                <td>{{insurance.amount}}</td>
+                                <td>{{insurance.cgstamt}}</td>
+                                <td>{{insurance.igstamt}}</td>
+                                <td>{{insurance.sgstamt}}</td>
+                                <td>{{insurance.tax_amt}}</td>
+                                <td>{{insurance.total_amt}}</td>
+                                <td>{{insurance.payable_amt}}</td>
+                                <td>{{insurance.vehicleno}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm151">
+        <fieldset>
+            <legend>Sales Freight Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date<span class="red">*</span></mat-label>
+                    <input type="date" class="form-control" formControlName="dchallanfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date<span class="red">*</span></mat-label>
+                    <input type="date" class="form-control" formControlName="dchallantodate">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>Invoice Type<span class="red">*</span></mat-label>
+                    <mat-select-autocomplete class="form-control ats" [options]="invoiceType" [display]="'invtype_name'"
+                        [value]="'invtype_id'" [multiple]='false' ngDefaultControl
+                        [formControl]="userForm151.controls['dchallan_invoice_type']">
+                    </mat-select-autocomplete>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchSalesFreight()">Search</button>
+                </div>
+            </div>
+
+            <fieldset class="table_container">
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX151()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable151">
+                        <thead>
+                            <tr>
+                                <th>Invoice Date</th>
+                                <th>State</th>
+                                <th>Invoice No.</th>
+                                <th>Party Name</th>
+                                <th>Place</th>
+                                <th>Broker</th>
+                                <th>Item Name</th>
+                                <th>QTY</th>
+                                <th>Packing UOM</th>
+                                <th>Item Qty</th>
+                                <th>Item UOM</th>
+                                <th>Price</th>
+                                <th>Price (QTL)</th>
+                                <th>Freight (QTL)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let freight of freight_list">
+                                <td>{{freight.challan_date}}</td>
+                                <td>{{freight.state}}</td>
+                                <td>{{freight.challan_no}}</td>
+                                <td>{{freight.partyname}}</td>
+                                <td>{{freight.district}}</td>
+                                <td>{{freight.broker_name}}</td>
+                                <td>{{freight.item_name}}</td>
+                                <td>{{freight.squantity}}</td>
+                                <td>{{freight.suom}}</td>
+                                <td>{{freight.quantity}}</td>
+                                <td>{{freight.uom}}</td>
+                                <td>{{freight.price}}</td>
+                                <td>{{freight.price_qtl}}</td>
+                                <td>{{freight.freight_qtl}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm152">
+        <fieldset>
+            <legend>JobWork Allocation</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date<span class="red">*</span></mat-label>
+                    <input type="date" class="form-control" formControlName="allocationfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date<span class="red">*</span></mat-label>
+                    <input type="date" class="form-control" formControlName="allocationtodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchJobWorkAllocation()">Search</button>
+                </div>
+            </div>
+
+            <fieldset class="table_container">
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX152()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable152">
+                        <thead>
+                            <tr>
+                                <th>Purchase Order Date</th>
+                                <th>Purchase Order No.</th>
+                                <th>Document No.</th>
+                                <th>Actual GRN Qty</th>
+                                <th>Adjusted Qty</th>
+                                <th>GRN Allocation Before</th>
+                                <th>GRN Allocation After</th>
+                                <th>Loading Mat. Wt.</th>
+                                <th>Rest Wt</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let jwallocation of JWAllocation_list">
+                                <td>{{jwallocation.ord_date}}</td>
+                                <td>{{jwallocation.pur_order_no}}</td>
+                                <td>{{jwallocation.document_no}}</td>
+                                <td>{{jwallocation.actualgrnqty}}</td>
+                                <td>{{jwallocation.adjusted_qty}}</td>
+                                <td>{{jwallocation.grnallocationbefore}}</td>
+                                <td>{{jwallocation.grnallocationafter}}</td>
+                                <td>{{jwallocation.loading_mwt}}</td>
+                                <td>{{jwallocation.rest_wt}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm15">
+        <fieldset>
+            <legend>Master List Report</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group ht_59">
+                    <mat-label>Master Type<span class="red">*</span></mat-label>
+                    <mat-select formControlName="mastertype" class="form-control"
+                        (selectionChange)="onChangeMasterType($event.value)">
+                        <mat-option value="Supplier">Supplier</mat-option>
+                        <mat-option value="Customer">Customer</mat-option>
+                    </mat-select>
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" style="background:repeating-radial-gradient(tomato,transparent 100px);"
+                        class="btn btn-primary" (click)="getSupplierMasterReport()">Get Report</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX15()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable15" *ngIf="Supplier;else Customer">
+                        <thead>
+                            <tr>
+                                <th>Type</th>
+                                <th>Code</th>
+                                <th>Name</th>
+                                <th>Alt. Name</th>
+                                <th>Group</th>
+                                <th>Parent Group</th>
+                                <th>Bussiness Unit</th>
+                                <th>Constitution</th>
+                                <th>State</th>
+                                <th>District</th>
+                                <th>City</th>
+                                <th>Pin Code</th>
+                                <th>Address 1</th>
+                                <th>Address 2</th>
+                                <th>Address 3</th>
+                                <th>PAN No.</th>
+                                <th>GST No.</th>
+                                <th>Supplier Type</th>
+                                <th>Broker Name</th>
+                                <th>Account Holder Name</th>
+                                <th>Account Number</th>
+                                <th>Bank Name</th>
+                                <th>Branch</th>
+                                <th>IFSC Code</th>
+                                <th>Mobile Number</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let supplier of supplierList">
+                                <td>{{supplier.bp_type}}</td>
+                                <td>{{supplier.bp_code}}</td>
+                                <td>{{supplier.bp_name}}</td>
+                                <td>{{supplier.alt_name}}</td>
+                                <td>{{supplier.group_type_name}}</td>
+                                <td>{{supplier.sub_group_type}}</td>
+                                <td>{{supplier.businessunit_name}}</td>
+                                <td>{{supplier.constitution}}</td>
+                                <td>{{supplier.state}}</td>
+                                <td>{{supplier.district}}</td>
+                                <td>{{supplier.city}}</td>
+                                <td>{{supplier.pincode}}</td>
+                                <td>{{supplier.add1}}</td>
+                                <td>{{supplier.add2}}</td>
+                                <td>{{supplier.add3}}</td>
+                                <td>{{supplier.pan_no}}</td>
+                                <td>{{supplier.gst_no}}</td>
+                                <td>{{supplier.supplier_type}}</td>
+                                <td>{{supplier.ven_name}}</td>
+                                <td>{{supplier.accountholder}}</td>
+                                <td>{{supplier.acc_no}}</td>
+                                <td>{{supplier.bankname}}</td>
+                                <td>{{supplier.branch}}</td>
+                                <td>{{supplier.ifsc}}</td>
+                                <td>{{supplier.mobile}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+
+                    <ng-template #Customer>
+                        <table class="table table-bordered" id="dynamictable15">
+                            <thead>
+                                <tr>
+                                    <th>Type</th>
+                                    <th>Code</th>
+                                    <th>Name</th>
+                                    <th>Alt. Name</th>
+                                    <th>Print To Name</th>
+                                    <th>Group</th>
+                                    <th>Parent Group</th>
+                                    <th>Bussiness Unit</th>
+                                    <th>Constitution</th>
+                                    <th>State</th>
+                                    <th>District</th>
+                                    <th>City</th>
+                                    <th>Pin Code</th>
+                                    <th>Address 1</th>
+                                    <th>Address 2</th>
+                                    <th>Address 3</th>
+                                    <th>Contact Person</th>
+                                    <th>Mob. No.</th>
+                                    <th>PAN No.</th>
+                                    <th>GST No.</th>
+                                    <th>Customer Type</th>
+                                    <th>Broker Name</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let customer of customerList">
+                                    <td>{{customer.cp_type}}</td>
+                                    <td>{{customer.cp_code}}</td>
+                                    <td>{{customer.cp_name}}</td>
+                                    <td>{{customer.alt_name}}</td>
+                                    <td>{{customer.print_to_name}}</td>
+                                    <td>{{customer.group_name}}</td>
+                                    <td>{{customer.sub_group_type}}</td>
+                                    <td>{{customer.businessunit_name}}</td>
+                                    <td>{{customer.constitution}}</td>
+                                    <td>{{customer.state}}</td>
+                                    <td>{{customer.district}}</td>
+                                    <td>{{customer.city}}</td>
+                                    <td>{{customer.pincode}}</td>
+                                    <td>{{customer.add1}}</td>
+                                    <td>{{customer.add2}}</td>
+                                    <td>{{customer.add3}}</td>
+                                    <td>{{customer.contact_person}}</td>
+                                    <td>{{customer.mobile}}</td>
+                                    <td>{{customer.pan_no}}</td>
+                                    <td>{{customer.gst_no}}</td>
+                                    <td>{{customer.customer_type}}</td>
+                                    <td>{{customer.ven_name}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </ng-template>
+                </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+</div>

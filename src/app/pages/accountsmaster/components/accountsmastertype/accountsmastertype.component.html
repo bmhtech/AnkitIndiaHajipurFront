@@ -1,0 +1,128 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')" ><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+  </section>
+    <div class="progress_loader_box" *ngIf="status == false">
+      <div class="progress-loader"> 
+        <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+      </div>
+    </div>
+
+    <form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">  
+      <section class="master_container">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <fieldset>
+                <legend>Accounts Type Details</legend>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label >Accounts Type Code</label>
+                    <input formControlName="acc_type_code" [(ngModel)]="seq_no" type="text" readonly class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label >Group Name<span class="red">*</span></label>
+                    <input formControlName="acc_type_name" type="text" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label>Classifications</label>
+                    <mat-select  class="form-control" formControlName="acc_type_classification" (selectionChange)="onChangeclassification($event.value)" >
+                      <mat-option value="ASSETS">ASSETS</mat-option>
+                      <mat-option value="INCOME">INCOME</mat-option>
+                      <mat-option value="LIABILTY">LIABILTY</mat-option>
+                      <mat-option value="EXPENDITURE">EXPENDITURE</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label>Sub Classifications</label>
+                    <mat-select  class="form-control" formControlName="acc_type_sub_classification">
+                      <mat-option *ngFor="let sub of subclassification" [value]="sub">  {{sub}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label>Catagory</label>
+                    <mat-select  class="form-control" formControlName="acc_type_catagory">
+                      <mat-option *ngFor="let cat of catagory" [value]="cat">  {{cat}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+              </fieldset>
+            </div>
+          </div>
+      
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group" >
+            <button (click)="send()" type="submit" class="btn btn-primary"   *ngIf="itemtypesave">Submit</button> 
+          </div>
+        </div>
+      </div>
+    </section>
+    </form> 
+ 
+
+  
+
+  <!-- List Start-->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Accounts Type List</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <input type="text" placeholder="Search ....." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Accounts Type Code</th>
+                  <th>Accounts Type</th>
+                  <th colspan="2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Accts_type_master of listAccts_type_master">
+                  <td>{{Accts_type_master.accts_code}}</td>
+                  <td>{{Accts_type_master.acc_type_name}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(Accts_type_master.id,'view')">View</button></td>
+                  <td><button class="btn btn-danger" (click)="onDelete(Accts_type_master.id,Accts_type_master.accts_id)">Delete</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  

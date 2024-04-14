@@ -1,0 +1,132 @@
+
+<mat-dialog-content>
+  <button class="close_btn" mat-button mat-dialog-close ><i class="fa fa-close icon"></i></button>
+<div class="container-fluid" >
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Misc Lab Report Finished Goods</legend>
+        <div class="table_content">
+          <table border="1" style="padding:10px; width:100%" >
+            <thead>
+              <tr>
+                <td colspan="16"><b>{{company_name}}</b></td>
+             </tr>
+              <tr>
+                <td colspan="16"><b>Misc Lab Report Finished Goods</b></td>
+             </tr>
+
+              <tr>
+                 <td colspan="3"></td>
+                 <td colspan="2"><b> Date:</b> {{ date}}</td>
+                 <td colspan="3"><b> Bussiness Unit Name:</b> {{ business_unitname}}</td>
+                 <td colspan="3"><b> Shift:</b> {{ shift}}</td>
+                 <td colspan="3"><b> Approved By:</b> {{ approvedby_name}}</td>
+              </tr>
+              
+              <tr>
+                <td>Srl No</td>
+                <td>Item Name</td>
+                <td>Batch No</td>
+                <td>Time</td>
+                <td>Moisture</td>
+                <td>Colour</td>
+                <td>PSD</td>
+                <td>Wet Gluten</td>
+                <td>Dry Gluten</td>
+                <td>Qulality Of Gluten</td>
+                <td>SV</td>
+                <td>C2CL4</td>
+                <td>Odour</td>
+                <td>Infestation</td>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let misclab of misclabreportfglist">
+                    <td>{{misclab.slno}}</td>
+                    <td>{{misclab.item_name}}</td>
+                    <td>{{misclab.batchno}}</td>
+                    <td>{{misclab.time}}</td>
+                    <td>{{misclab.moisture}}</td>
+                    <td>{{misclab.colour}}</td>
+                    <td>{{misclab.psd}}</td>
+                    <td>{{misclab.wet_gluten}}</td>
+                    <td>{{misclab.dry_gluten}}</td>
+                    <td>{{misclab.qty_gluten}}</td>
+                    <td>{{misclab.sv}}</td>
+                    <td>{{misclab.c2cl4}}</td>
+                    <td>{{misclab.odour}}</td>
+                    <td>{{misclab.infestation}}</td>
+                  </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div  id="print-section" class="print " hidden>
+    <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+    <h5 class="uc"  style="text-align: center;">Misc Lab Report Finished Goods</h5>
+    <div>
+        <table class="table table-bordered" >
+            <thead>
+              
+
+              <tr>
+                <td colspan="3"></td>
+                <td colspan="2"><b> Date:</b> {{ date}}</td>
+                <td colspan="3"><b> Bussiness Unit Name:</b> {{ business_unitname}}</td>
+                <td colspan="3"><b> Shift:</b> {{ shift}}</td>
+                <td colspan="3"><b> Approved By:</b> {{ approvedby_name}}</td>
+              </tr>
+             
+              <tr>
+                <td>Srl No</td>
+                <td>Item Name</td>
+                <td>Batch No</td>
+                <td>Time</td>
+                <td>Moisture</td>
+                <td>Colour</td>
+                <td>PSD</td>
+                <td>Wet Gluten</td>
+                <td>Dry Gluten</td>
+                <td>Qulality Of Gluten</td>
+                <td>SV</td>
+                <td>C2CL4</td>
+                <td>Odour</td>
+                <td>Infestation</td>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let misclab of misclabreportfglist">
+                    <td>{{misclab.slno}}</td>
+                    <td>{{misclab.item_name}}</td>
+                    <td>{{misclab.batchno}}</td>
+                    <td>{{misclab.time}}</td>
+                    <td>{{misclab.moisture}}</td>
+                    <td>{{misclab.colour}}</td>
+                    <td>{{misclab.psd}}</td>
+                    <td>{{misclab.wet_gluten}}</td>
+                    <td>{{misclab.dry_gluten}}</td>
+                    <td>{{misclab.qty_gluten}}</td>
+                    <td>{{misclab.sv}}</td>
+                    <td>{{misclab.c2cl4}}</td>
+                    <td>{{misclab.odour}}</td>
+                    <td>{{misclab.infestation}}</td>
+                  </tr>
+            </tbody>
+        </table>
+    </div> 
+</div>
+
+<div  class="col-lg-12">
+  <div class="form-group">
+      <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+   </div>
+</div>
+
+</div>
+</mat-dialog-content>

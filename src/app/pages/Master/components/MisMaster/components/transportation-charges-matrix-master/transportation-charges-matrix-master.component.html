@@ -1,0 +1,245 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section> 
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+  
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid"> 
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>TCM Master info</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="TCM_Code">TCM Code</label>
+                <input type="text"  [(ngModel)]="seq_no" formControlName="tcm_code" class="form-control" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="TCM_Description">TCM Description<span class="red">*</span></label>
+                <input type="text" [(ngModel)]="Model.tcm_description" formControlName="tcm_description" class="form-control" id="tcm_description">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="TCM_EffectiveDate">TCM EffectiveDate<span class="red">*</span></label>
+                <input type="date" [(ngModel)]="Model.tcm_effectivedate" formControlName="tcm_effectivedate" class="form-control" id="tcm_effectivedate">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Bussiness Unit<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="bUnitCodes"
+                [display]="'businessunit_name'"
+                [value]="'businessunit_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['businessunit_code']">
+              </mat-select-autocomplete>
+              </div>
+          </div> 
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>GST Payable Own Reverse Charges</mat-label>
+                <mat-select class="form-control" [(ngModel)]="Model.gst_pay_own_rev_charges" formControlName="gst_pay_own_rev_charges">
+                  <mat-option value="No">NO</mat-option>
+                  <mat-option value="Yes">YES</mat-option>                
+                </mat-select>
+              </div>   
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Transportation Mode<span class="red">*</span></mat-label>
+                <mat-select class="form-control" [(ngModel)]="Model.trans_mode" formControlName="trans_mode">
+                  <mat-option value="Purchase Order">PURCHASE ORDER</mat-option>
+                  <mat-option value="Sales Order">SALES ORDER</mat-option>              
+                </mat-select>
+              </div>   
+            </div>
+
+            <div class="clr"></div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-checkbox [(ngModel)]="Model.tcm_active" formControlName="tcm_active">Master Type Active</mat-checkbox> 
+              </div>
+            </div>
+
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-checkbox [(ngModel)]="Model.trans_charges_appl" formControlName="trans_charges_appl">Transportation Charges Applicable</mat-checkbox> 
+              </div>
+            </div>
+          </fieldset>
+
+
+          <fieldset>
+            <legend>TCM Details</legend>
+              <div class="col-lg-12">
+                <div class="dyn_table_conent">
+                  <div  class="dyn_table_header">
+                    <label class="label_col"><h3>Action</h3></label>
+                    <label class="label_col"><h3 class="wdt_164">Trans. Charge Code</h3></label>
+                    <label class="label_col"><h3>Transportation From</h3></label>
+                    <label class="label_col"><h3>Transportation To</h3></label>
+                    <label class="label_col"><h3>Distance(km)</h3></label>
+                    <label class="label_col"><h3>Vehicles Type</h3></label>                       
+                    <label class="label_col"><h3>Full Truck Load Rate</h3></label>
+                    <label class="label_col"><h3>Rate Per UOM</h3></label>                  
+                    <label class="label_col"><h3>UOM</h3></label>
+                    <label class="label_col"><h3 class="wdt_164">Tax Code</h3></label>
+                    <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                    <label class="label_col"><h3>Transportation Acc.</h3></label>
+                    <!-- <label class="label_col"><h3>TDS Code</h3></label>
+                    <label class="label_col"><h3>TDS Rate</h3></label>
+                    <label class="label_col"><h3>TDS Acc.</h3></label> -->
+                    <label class="label_col"><h3>Transporter Name</h3></label>
+                    <label class="label_col"><h3>Allowed Shortage</h3></label>
+                    <label class="label_col"><h3>Deduction Based On</h3></label>
+                  </div>
+                            
+                  <div  class="dyn_table_data_cont" formArrayName="transportation_chgs_matrix_details" >
+                    <div class="dyn_table" *ngFor="let item of transportation_chgs_matrix_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                        <div class="label_col"><input class="form-control wdt_form_164"  type="text" formControlName="trans_charge_code" readonly/></div>
+                        <div class="label_col"><select formControlName="transportation_from" class="form-control"><option *ngFor="let list of areaList" [value]="list.area_name">{{list.area_name}}</option></select> </div>
+                        <div class="label_col"><select formControlName="transportation_to" class="form-control"><option *ngFor="let list of areaList" [value]="list.area_name">{{list.area_name}}</option></select> </div>
+                        <div class="label_col"><input class="form-control" min="0" type="number" formControlName="distance_in_km" /></div>
+                        <div class="label_col"><select formControlName="vehicles_type"  class="form-control"><option *ngFor="let veh_no of veh_type" [value]="veh_no.vehtype_name">{{veh_no.vehtype_name}}</option></select></div>
+                        <div class="label_col"><input class="form-control"  type="number" min='0' formControlName="full_truck_load_rate" /></div>
+                        <div class="label_col"><input class="form-control" type="number" min="0" formControlName="rate_uom" /></div>
+                        <div class="label_col"><select formControlName="uom"  class="form-control"><option *ngFor="let uom of uoms" [value]="uom.customuom_id">{{uom.description}}</option></select></div>
+                        <div class="label_col"><input class="form-control wdt_form_164" type="text" formControlName="tax_code" style="text-align: left;" /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp1(pointIndex)" aria-hidden="true"></i></div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="tax_rate" readonly/></div>
+                       
+                        <div class="label_col" >
+                          <mat-select-autocomplete class="form-control" 
+                          [options]="ledgerName"
+                          [display]="'ledgername'"
+                          [value]="'ledgerid'"
+                          [multiple]='false'
+                          [selectedOptions]="selectedTransacc[pointIndex]"
+                          (selectionChange)="getTransacc($event,pointIndex)"
+                          ngDefaultControl
+                          [formControlName] = "'transportation_acc'">
+                        </mat-select-autocomplete>
+                        </div>
+                        
+                        <!-- <div class="label_col"> <select formControlName="tds_code" class="form-control" (change)="onchangeTdsCode($event, pointIndex)"><option *ngFor="let list of tdscode" [value]="list.tds_id">{{list.tds_type}}</option></select> </div>
+                        <div class="label_col"><input class="form-control" type="number" formControlName="tds_rate" readonly/></div>
+                        
+                        <div class="label_col" >
+                          <mat-select-autocomplete class="form-control" 
+                          [options]="ledgerName"
+                          [display]="'ledgername'"
+                          [value]="'ledgerid'"
+                          [multiple]='false'
+                          [selectedOptions]="selectedTdsacc[pointIndex]"
+                          (selectionChange)="getTdsacc($event,pointIndex)"
+                          ngDefaultControl
+                          [formControlName] = "'tds_acc'">
+                        </mat-select-autocomplete>
+                        </div> -->
+                        
+                        <div class="label_col" >
+                          <mat-select-autocomplete class="form-control" 
+                          [options]="translist"
+                          [display]="'bp_name'"
+                          [value]="'bp_id'"
+                          [multiple]='true'
+                          [selectedOptions]="selectedTransName[pointIndex]"
+                          (selectionChange)="getTrans($event,pointIndex)"
+                          ngDefaultControl
+                          [formControlName] = "'transporter'">
+                        </mat-select-autocomplete>
+                        </div>
+
+                        <div class="label_col"><input class="form-control" type="number" formControlName="allowed_shortage" /></div>
+                        <div class="label_col"><select formControlName="deduction_basedon"  class="form-control"><option value="0">-Select-</option><option value="Full Shortage">Full Shortage</option><option value="Excess Shortage">Excess Shortage</option></select></div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="btm_btn_content">
+                    <button type="button" class="btn btn-success"  (click)="add()">Add </button>
+                  </div>
+                </div>
+              </fieldset>
+   
+            </div>       
+          </div>
+         <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <button (click)="send()" type="submit" class="btn btn-primary" *ngIf="transchargesmastersave">Submit</button>
+              </div>
+            </div>
+         </div>
+        </div>
+    </section>
+</form>
+     
+<div class="master_container_box" *ngIf="isHidden==false">
+  <div class="container-fluid">   
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>TCM Master List</legend>
+          <div class="table_content">
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Tcm Code</th>
+                  <th>Description</th>
+                  <th>Effective Date</th>              
+                  <th>Tcm Active</th>
+                  <th colspan="3">Action</th>
+                </tr>  
+              </thead>
+              <tbody>
+                <tr *ngFor="let TransportationChgsMatrix of listTransportationChgsMatrix">
+                  <td>{{TransportationChgsMatrix.tcm_code}}</td>
+                  <td>{{TransportationChgsMatrix.tcm_description}}</td>
+                  <td>{{TransportationChgsMatrix.tcm_effectivedate}}</td>
+                  <td>{{TransportationChgsMatrix.tcm_active}}</td>    
+                  <td><button class="btn btn-success" (click)="onUpdate(TransportationChgsMatrix.id,TransportationChgsMatrix.tcm_id,'View')" *ngIf="transchargesmasterview">View</button></td>                 
+                  <td><button class="btn btn-info" (click)="onUpdate(TransportationChgsMatrix.id,TransportationChgsMatrix.tcm_id,'Update')" *ngIf="transchargesmasterupdate">Update</button></td>                 
+                  <td><button class="btn btn-danger" (click)="onDelete(TransportationChgsMatrix.id,TransportationChgsMatrix.tcm_id)" *ngIf="transchargesmasterdelete">Delete</button></td>               
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+</div>

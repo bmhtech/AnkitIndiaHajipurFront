@@ -1,0 +1,48 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader">
+    <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div>
+
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm1">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <fieldset>
+          <legend>Other Weighment Details for Termination</legend>
+
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="showotherweighmentno">
+            <div class="form-group">
+              <mat-label>Other Weighment No. </mat-label>
+
+             <!--  <mat-select formControlName="ter_oth_wgmnt_no" class="form-control">
+                <mat-option *ngFor="let list of othWgmntList" [value]="list.wgment_id">{{list.wgment_no}}</mat-option>
+              </mat-select> -->
+
+              <mat-select-autocomplete class="form-control ats" [options]="othWgmntList" [display]="'wgment_no'"
+                [value]="'wgment_id'" [multiple]='false' ngDefaultControl
+                [formControl]="userForm1.controls['ter_oth_wgmnt_no']">
+                >
+              </mat-select-autocomplete>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Remarks</mat-label>
+              <textarea formControlName="terminate_remarks" class="form-control" style="height: 110px;"></textarea>
+            </div>
+          </div>
+          <div>
+            <span style="color:red;float: left;font-weight: bold;">{{alertmsg}}</span>
+          </div>
+        </fieldset>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+    <mat-dialog-actions>
+      <button class="btn btn-info" (click)="SendDataToDifferentComponenet()">Submit</button>
+    </mat-dialog-actions>
+  </form>
+</div>

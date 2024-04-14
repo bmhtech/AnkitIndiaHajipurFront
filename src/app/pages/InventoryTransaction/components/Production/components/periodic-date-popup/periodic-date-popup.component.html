@@ -1,0 +1,151 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box" *ngIf="processmaintenance;else elseBlock1">
+  <form [formGroup]="userForm1">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Date List</legend>
+            <div class="dyn_table_conent" style="padding:0 10px;">
+              <div class="dyn_table_header">
+                <label class="label_col" ><mat-checkbox (change)="selectallnew($event)"></mat-checkbox><h3>Select</h3></label>
+                <label class="label_col" style="display: none;"><h3>Sl No.</h3></label>
+                <label class="label_col"*ngIf="process_freq=='Daily'"><h3>Select Date</h3></label>
+                <label class="label_col"*ngIf="process_freq=='Periodic'"><h3>Start Date</h3></label>
+                <label class="label_col"*ngIf="process_freq=='Periodic'"><h3>End date</h3></label>
+                <label class="label_col"><h3 class="wdt_275_big">Shift</h3></label>             
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="periodic_date_details">
+                <div class="dyn_table" *ngFor="let item of periodic_date_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  
+                  <div *ngIf="disabledcheck[pointIndex];else elseBlock ">
+                    <div class="label_col"><mat-checkbox  formControlName="checkbox" class="form-control" disabled></mat-checkbox></div>
+                 
+
+                    <div class="label_col" style="display: none;"><input class="form-control" formControlName="sl_no" type="number" /></div>
+                    <div class="label_col" *ngIf="process_freq=='Daily'"> <input class="form-control" type="text" formControlName="fromdate" readonly/></div>
+                    <div class="label_col" *ngIf="process_freq=='Periodic'"> <mat-select (selectionChange)="onChangeStartDate($event.value, pointIndex)" formControlName="fromdate" class="form-control"><mat-option value="0">-Select-</mat-option> <mat-option *ngFor="let fromdate of dateArray" [value]="fromdate">{{fromdate}}</mat-option></mat-select> </div>
+                    <div class="label_col" *ngIf="process_freq=='Periodic'"> <select formControlName="todate" class="form-control"><option value="0">-Select-</option><option *ngFor="let todate of dateArray" [value]="todate">{{todate}}</option></select> </div> 
+                    <div class="label_col" *ngIf="process_freq=='Periodic'">
+                         <mat-select multiple formControlName="shift"  class="form-control sift wdt_275">
+                           <mat-option *ngFor="let Shift of c[pointIndex]"  [value]="Shift.shiftinfo">{{Shift.shiftinfo}}</mat-option></mat-select> 
+                    </div>
+                    
+                    
+  
+                    <div class="label_col" *ngIf="process_freq=='Daily'">
+                        <mat-select multiple formControlName="shift"  class="form-control sift wdt_275">
+                          <mat-option *ngFor="let Shift of d[pointIndex]"  [value]="Shift.shiftinfo">{{Shift.shiftinfo}}</mat-option></mat-select> 
+                    </div>
+                          
+                           <div class="label_col" style="display: none;"><input class="form-control" formControlName="shift1" type="text" /></div>
+                       
+
+                  </div>
+                  <ng-template #elseBlock>
+
+                    <div class="label_col"><mat-checkbox *ngIf="process_freq=='Periodic'" formControlName="checkbox" class="form-control"></mat-checkbox></div>
+                    <div class="label_col"><mat-checkbox *ngIf="process_freq=='Daily'" (change)="onChangeDaily($event, pointIndex)" formControlName="checkbox" class="form-control"></mat-checkbox></div>
+                   
+                    
+                  <div class="label_col" style="display: none;"><input class="form-control" formControlName="sl_no" type="number" /></div>
+                  <div class="label_col" *ngIf="process_freq=='Daily'"> <input class="form-control" type="text" formControlName="fromdate" readonly/></div>
+                  <div class="label_col" *ngIf="process_freq=='Periodic'"> <mat-select (selectionChange)="onChangeStartDate($event.value, pointIndex)" formControlName="fromdate" class="form-control"><mat-option value="0">-Select-</mat-option> <mat-option *ngFor="let fromdate of dateArray" [value]="fromdate">{{fromdate}}</mat-option></mat-select> </div>
+                  <div class="label_col" *ngIf="process_freq=='Periodic'"> <select formControlName="todate" class="form-control"><option value="0">-Select-</option><option *ngFor="let todate of dateArray" [value]="todate">{{todate}}</option></select> </div> 
+                  <div class="label_col" *ngIf="process_freq=='Periodic'">
+                       <mat-select multiple formControlName="shift"  class="form-control sift wdt_275">
+                         <mat-option *ngFor="let Shift of c[pointIndex]"  [value]="Shift.shiftinfo">{{Shift.shiftinfo}}</mat-option></mat-select> 
+                  </div>
+                  
+                  
+
+                  <div class="label_col" *ngIf="process_freq=='Daily'">
+                      <mat-select multiple formControlName="shift"  class="form-control sift wdt_275">
+                        <mat-option *ngFor="let Shift of d[pointIndex]"  [value]="Shift.shiftinfo">{{Shift.shiftinfo}}</mat-option></mat-select> 
+                  </div>
+                        
+
+                         <div class="label_col" style="display: none;"><input class="form-control" formControlName="shift1" type="text" /></div>
+
+                        
+                    <!-- <div class="label_col"><input class="form-control" type="text" /></div>
+                    <div class="label_col"><input class="form-control" type="text"/></div>  
+                    <div class="label_col"><input class="form-control" type="text"/></div> 
+                    <div class="label_col" style="display: none;"><input class="form-control" type="text" formControlName="item_group" readonly/></div>  -->
+                    <!-- <div class="label_col"><input class="form-control" type="text" formControlName="hsn_code" /></div>   
+                    <div class="label_col"><input class="form-control" type="text" formControlName="item_category" /></div>  
+                    <div class="label_col"><input class="form-control" type="text" formControlName="mstock_unit" /></div>    -->
+                   
+
+                         <div class="label_col" style="display: none;"><input class="form-control" formControlName="shift1" type="text" /></div>
+                     
+                  </ng-template>
+
+
+                  </div>
+                </div>  
+              </div>
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <mat-dialog-actions align="end">
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+        </mat-dialog-actions>
+  </form>
+</div>
+
+<ng-template #elseBlock1>
+  <div class="container-fluid modal_box">
+    <form [formGroup]="userForm1">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <mat-dialog-content class="mat-typography">
+            <fieldset>
+              <legend>Date List</legend>
+              <div class="dyn_table_conent" style="padding:0 10px;">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Select</h3><mat-checkbox (change)="selectallnew($event)"></mat-checkbox></label>
+                  <label class="label_col" style="display: none;"><h3>Sl No.</h3></label>
+                  <label class="label_col"*ngIf="process_freq=='Daily'"><h3>Select Date</h3></label>
+                  <label class="label_col"*ngIf="process_freq=='Periodic'"><h3>Start Date</h3></label>
+                  <label class="label_col"*ngIf="process_freq=='Periodic'"><h3>End date</h3></label>
+                  <label class="label_col"><h3 class="wdt_275_big">Shift</h3></label>
+                            
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="periodic_date_details">
+                  <div class="dyn_table" *ngFor="let item of periodic_date_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><mat-checkbox *ngIf="process_freq=='Periodic'" formControlName="checkbox" class="form-control"></mat-checkbox></div>
+                    <div class="label_col"><mat-checkbox *ngIf="process_freq=='Daily'" formControlName="checkbox" (change)="onChangeDaily($event, pointIndex)" class="form-control"></mat-checkbox></div>
+                    <div class="label_col" style="display: none;"><input class="form-control" formControlName="sl_no" type="number" /></div>
+                    <div class="label_col" *ngIf="process_freq=='Daily'"> <input class="form-control" type="text" formControlName="fromdate" readonly/></div>
+                    <div class="label_col" *ngIf="process_freq=='Periodic'"> <mat-select formControlName="fromdate" class="form-control"><mat-option value="0">-Select-</mat-option> <mat-option *ngFor="let fromdate of dateArray" [value]="fromdate">{{fromdate}}</mat-option></mat-select> </div>
+                    <div class="label_col" *ngIf="process_freq=='Periodic'"> <select formControlName="todate" class="form-control"><option value="0">-Select-</option><option *ngFor="let todate of dateArray" [value]="todate">{{todate}}</option></select> </div> 
+                    
+                    <div class="label_col"><input class="form-control wdt_275_big" formControlName="shift" type="text" readonly/></div>
+                    <div class="label_col" style="display: none;"><input class="form-control" formControlName="shift1" type="text" /></div>
+                    </div>
+                  </div>  
+                </div>
+              
+            </fieldset>
+          </mat-dialog-content>
+        </div>
+        <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+      </div>
+        <mat-dialog-actions align="end">
+            <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+          </mat-dialog-actions>
+    </form>
+  </div>
+</ng-template>
+  
+  
+  
+  

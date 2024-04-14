@@ -1,0 +1,165 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Driver Master</legend>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Name<span class="red">*</span></mat-label>
+                    <input type="text"  formControlName="driver_name" class="form-control" >
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Catagory</mat-label>
+                    <mat-select formControlName="catagory" class="form-control">
+                      <mat-option value="Driver">Driver</mat-option>
+                      <mat-option value="Staff">Staff</mat-option>                
+                      <mat-option value="Visitor">Visitor</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Document No.</mat-label>
+                    <input type="text"  formControlName="doc_no" class="form-control" >
+                  </div>
+                </div> 
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Vehicle No.<span class="red">*</span></mat-label>
+
+                    <!-- <mat-select class="form-control"  formControlName="veh_no">
+                      <mat-option value="0">~Select Vehicle~</mat-option>
+                      <mat-option *ngFor="let list of vehclenos" [value]="list.vehicle_id">{{list.vehicle_no}}</mat-option>
+                   </mat-select> -->
+                  <mat-select-autocomplete class="form-control ats"
+                    [options]="vehclenos"
+                    [display]="'vehicle_no'"
+                    [value]="'vehicle_id'"
+                    [multiple]='false'
+                    ngDefaultControl
+                    [formControl]="userForm.controls['veh_no']"
+    
+                   >
+                  </mat-select-autocomplete> 
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Phone no</mat-label>
+                    <input type="text"  formControlName="phone_no" class="form-control" >
+                  </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Address</mat-label>
+                   
+                    <textarea class="form-control"   formControlName="address" style="height: 110px;"></textarea>
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                  <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div class="form-group">
+                        <mat-label>Upload Identity</mat-label>
+                        <div class="form-control" style="min-height: 110px; border: 1px solid #ccc; border-radius: 4px;width:127px">
+                          <div class="imagePreview" *ngIf="imageURL && imageURL !== ''"> 
+                                    <input type="image" [src]="imageURL" height="100px;" width="100px" (click)="viewimg(this.src)">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div class="form-group">
+                        <input type="file" accept="image/*"  #myFileInput  (change)="onFileSelected($event)">
+                      </div>
+                    </div>
+                   
+                  </div>
+                </div>
+                
+              
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="drivermastersave">Submit</button>
+                  </div>
+                </div>
+
+
+          </fieldset>
+        </div>
+       </div>
+    </div>
+  </section>
+</form>
+
+ <!-- list -->
+
+ <div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">   
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Driver Information List</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Driver Name</th>
+                  <th>Phone No.</th>
+                  <th>Vehicle No.</th>
+                  <th colspan="3" style="width:200px">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let driver of listdriver">
+                  <td>{{driver.driver_name}}</td>
+                  <td>{{driver.phone_no}}</td>
+                  <td>{{driver.vehicle_no}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(driver.id,'view')" >View</button></td>    
+                  <td><button class="btn btn-info" (click)="onUpdate(driver.id,'update')" >Update</button></td> 
+                  <!-- <td><button class="btn btn-danger" (click)="onDelete(driver.id)" >Delete</button></td>   -->
+
+
+                  <td><button class="btn btn-info" (click)="printdriverdetails(driver.driver_name,driver.phone_no,driver.address,driver.doc_type,driver.doc_no,driver.description,driver.doc_img,driver.veh_no,driver.catagory,driver.exp_date)" >Print</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+ 

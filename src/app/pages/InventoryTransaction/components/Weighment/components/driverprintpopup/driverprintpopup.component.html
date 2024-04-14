@@ -1,0 +1,95 @@
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <div class="modal_main_content">
+        <div id="print-section" class="print ">
+        <div class="container-fluid">
+          <div class="main_content inv">
+            <div class="section1">
+              <div class="main_header">
+                <div class="top_div">
+                  <table class="table">
+                    <tbody>
+                      <tr>
+                        <!-- <td style="width: 70%;">GSTIN : 19AADCA25181H12V &nbsp; </td> -->
+                        <!-- <td style="width: 30%;">Phone : 2287-4064/2287-1538</td> -->
+                      </tr>
+                      <tr>
+                        <!-- <td style="width: 70%;">PAN : AADCA251EH &nbsp;</td> -->
+                        <!-- <td style="width: 30%;">FAX : 2281-8269<br></td> -->
+                        
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+                <h1 class="uc">Ankit India Limited (B-Mill)</h1>
+                <div class="top_h4">(CIN No : L15500WB1981PLC033900)<br>
+                  14A, 5thfloor, FMC FORTUNA<br>
+                  234/3A A.J.C Bose Road, Kolkata 700020</div>
+                <h1 class="uc">Gatepass Slip</h1>
+              </div>
+              <div class="box_table">
+                <div class="bxx-top">
+                  <table class="table table_top table-bordered">
+                    <tbody>
+                      <tr>
+                        <td style="width: 45%; vertical-align: top;" class="brdr_right">
+                          <div class="form-control" style="min-height: 110px; border: 1px solid #ccc; border-radius: 4px;">
+  
+                            <input type="image" [src]="imageURL12" class="imageContainer" style="height:106px;width: 175px;" >   
+                          </div>
+                        </td>
+
+                        <td style="width: 55%;" class="comp_adrs">
+                          <table style="width: 100%;">
+                            <tr>
+                              <td>Driver Name: </td>
+                              <td>{{driver_name1}}</td>
+                              <td>Date:</td>
+                              <td>21.05.2021</td>
+                            </tr>
+                            <tr>
+                              <td>Address: </td>
+                              <td>{{address1}}</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                              <td>Licence No: </td>
+                              <td>{{doc_no1}}</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                              <td>Phone No: </td>
+                              <td>{{phoneno1}}</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                           
+                          </table>
+                        </td>
+                     </tr>
+                     
+                    </tbody>
+                  </table>
+                  
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    <!-- <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+      <button class="btn btn-info" mat-button [mat-dialog-close]="true" cdkFocusInitial>Save</button>
+    </mat-dialog-actions> -->
+    <mat-dialog-actions align="end">
+      <button [useExistingCss]="true" printSectionId="print-section" ngxPrint>print</button>
+    </mat-dialog-actions>
+
+  </div>
+</div>

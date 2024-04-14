@@ -1,0 +1,249 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          <fieldset>
+            <legend>Basic Information</legend>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Business Unit<span class="red">*</span></mat-label>
+                    <mat-select class="form-control"  [(ngModel)]="BuUnit" formControlName="business_unit">
+                      <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Power Cut Date</mat-label>
+                    <input type="date" [(ngModel)]="currentDate" formControlName="powercutdate" class="form-control" (change)="onChangepowercutdate($event)">
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Power Cut Time</mat-label>
+                    <input type="time" formControlName="powercuttime" class="form-control"  (change)="onChangepowercuttime($event)">
+                  </div>
+                </div>
+
+                
+                <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Power On Date</mat-label>
+                    <input type="date" [(ngModel)]="currentDate1" formControlName="powerondate" class="form-control" (change)="onChangepowerondate($event)">
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Power On Time</mat-label>
+                    <input type="time" formControlName="powerontime" class="form-control" (change)="onChangepowerontime($event)">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Difference Hours</mat-label>
+                    <input  formControlName="diffpower" type="text" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Remarks</mat-label>
+                    <input  formControlName="remarks" type="text" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-12" >
+                  <div class="form-group">
+                    <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="powercutsave">Submit</button>
+                  </div>
+                </div>
+                
+          </fieldset>
+        </div>
+       </div>
+    </div>
+  </section>
+</form>
+
+
+
+
+<div class="master_container_box" *ngIf="isHidden==false">
+  <form [formGroup]="userForm1">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="todate">
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
+      </div>
+    </div>
+  </form>
+ 
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          
+          <div class="col-lg-12" style="float: right;">
+            <div  class="form-group">
+                <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+                <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+            </div>
+           </div>
+
+          <legend>Power Cut Report List</legend>
+          <div class="table_content">
+            <table class="table table-bordered" >
+              <thead>
+                <tr>
+                 
+                  <th>Business Unit Name</th>
+                  <th>Power Cut Date</th>
+                  <th>Power Cut Time</th>
+                  <th>Power On Date</th>
+                  <th>Power On Time</th>
+                  <th>Difference Hours</th>
+                  <th>Remarks</th>
+                  <th colspan="3">Action</th>       
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let powercut of powercutlist">
+                      
+                      <td>{{powercut.business_unitname}}</td>
+                      <td>{{powercut.powercutdate}}</td>
+                      <td>{{powercut.powercuttime}}</td>
+                      <td>{{powercut.powerondate}}</td>
+                      <td>{{powercut.powerontime}}</td>
+                      <td>{{powercut.diffpower}}</td>
+                      <td>{{powercut.remarks}}</td>
+                      <td><button class="btn btn-success" (click)="onUpdate(powercut.id, powercut.powercutid, 'view')" >View</button></td>
+                      <td><button class="btn btn-info" (click)="onUpdate(powercut.id, powercut.powercutid, 'update')" >Update</button></td>  
+                      <td><button class="btn btn-danger" (click)="onDelete(powercut.id)" >Delete</button></td>
+                    
+                    </tr>
+              </tbody>
+            </table>
+            <table class="table table-bordered" id="dynamictable" hidden>
+              <thead>
+                <tr>
+                 
+                  <th>Business Unit Name</th>
+                  <th>Power Cut Date</th>
+                  <th>Power Cut Time</th>
+                  <th>Power On Date</th>
+                  <th>Power On Time</th>
+                  <th>Difference Hours</th>
+                  <th>Remarks</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let powercut of powercutlist">
+                      
+                      <td>{{powercut.business_unitname}}</td>
+                      <td>{{powercut.powercutdate}}</td>
+                      <td>{{powercut.powercuttime}}</td>
+                      <td>{{powercut.powerondate}}</td>
+                      <td>{{powercut.powerontime}}</td>
+                      <td>{{powercut.diffpower}}</td>
+                      <td>{{powercut.remarks}}</td>
+                      
+                    </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+      <div  id="print-section" class="print " hidden>
+        <h3 class="uc" style="text-align: center;">{{company}}</h3>
+        <h5 class="uc"  style="text-align: center;">Power Cut Report</h5>
+        <div>
+            <table class="table table-bordered" >
+                <thead>
+                    <tr>
+                      <th>Business Unit Name</th>
+                      <th>Power Cut Date</th>
+                      <th>Power Cut Time</th>
+                      <th>Power On Date</th>
+                      <th>Power On Time</th>
+                      <th>Difference Hours</th>
+                      <th>Remarks</th>
+                     
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let powercut of powercutlist">
+                          
+                          <td>{{powercut.business_unitname}}</td>
+                          <td>{{powercut.powercutdate}}</td>
+                          <td>{{powercut.powercuttime}}</td>
+                          <td>{{powercut.powerondate}}</td>
+                          <td>{{powercut.powerontime}}</td>
+                          <td>{{powercut.diffpower}}</td>
+                          <td>{{powercut.remarks}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+    </div>
+
+    <!-- <div  class="col-lg-12">
+      <div class="form-group">
+          <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+       </div>
+   </div> -->
+    </div>
+  </div>
+</div>
+
+
+
+                
+
+
+               
+                  
+
+                  
+                  
+
+

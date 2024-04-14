@@ -1,0 +1,217 @@
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <div class="modal_main_content">
+        <div id="print-section" class="print ">
+        <div class="container-fluid">
+          <div class="main_content inv">
+            <div class="section1">
+              <div class="main_header">
+              <div class="top_div">
+                   
+                </div>
+
+
+                
+                <h1 class="uc">Ankit India Limited </h1>
+                <div class="top_h4">(CIN No : L15500WB1981PLC033900)<br>
+                  14A, 5th floor, FMC FORTUNA<br>
+                  234/3A A.J.C Bose Road, Kolkata 700020</div>
+                <h1 class="uc">STOCK TRANSFER CHALLAN ({{business_name}})</h1>
+              </div>
+              <div class="box_table">
+                <div class="bxx-top">
+                  <table class="table table_top table-bordered">
+                    <tbody>
+                      <tr>
+                        <!--<td style="width: 50%; vertical-align: top;" class="brdr_right">-->
+                          <td style="width: 50%;" class="brdr_right">
+                          <!--<div class="form-control" style="min-height: 110px; border: 1px solid #ccc; border-radius: 4px;">
+  
+                            <input type="image" [src]="imageURL12" class="imageContainer" style="height:106px;width: 175px;" >  
+                          </div>-->
+                          <table style="width: 100%;" class="uc">
+                            <tr>
+                              <!-- <td>Customer: </td> -->
+                              <td>{{customer}}</td>
+                             <!-- <td>Date:</td>
+                              <td>{{currentDate}}</td>  -->
+                            </tr>
+                            <tr>
+                              <!-- <td>Address: </td> -->
+                              <td colspan="3">{{address}}</td>
+                              <!--<td>&nbsp;</td>
+                              <td>&nbsp;</td>-->
+                            </tr>
+                            <tr>
+                              <!-- <td>Broker: </td>
+                              <td colspan="3">{{brokername}}</td> -->
+                              <!--<td>&nbsp;</td>
+                              <td>&nbsp;</td>-->
+                            </tr>
+                            <!-- <tr>
+                              <td>Purchase Order: </td>
+                              <td><b>{{purNo}}</b></td>
+                              <td>Date:</td>
+                              <td>{{orddate}}</td>
+                            </tr> -->
+                           
+                          </table>
+                        </td>
+
+                        <td style="width: 50%;" class="comp_adrs">
+                          <table style="width: 100%;" class="uc">
+                            <tr>
+                              <td>Challan No: </td>
+                              <td>{{challanno}}</td>
+                              <td>Dated:</td>
+                              <td>{{challandate}}</td>
+                            </tr>
+                            <tr>
+                              <td>Order No: </td>
+                              <td>{{orderno}}</td>
+                              <td>Dated:</td>
+                              <td>{{orderdate}}</td>
+                            </tr>
+                            <tr>
+                              <td>Truck No: </td>
+                              <td colspan="3">{{vehicle}}</td>
+                              <td>Trm:</td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td>Permit No: </td>
+                              <td></td>
+                              <!-- <td>{{permit}}</td> -->
+                              <!-- <td>Own:</td>
+                              <td></td>
+                              <td>(P):</td>
+                              <td></td> -->
+                            </tr>
+                            <tr>
+                              <td>Freight: </td>
+                              <td>{{freight_amt}}</td>
+                              <td></td>
+                              <td></td>
+                              <td>Adv. Paid:</td>
+                              <td>{{adv_paid}}</td>
+                            </tr>
+                           
+                          </table>
+                        </td>
+                     </tr>
+                     
+                    </tbody>
+                  </table>
+                  <br/>
+                  <div class="bxx">
+                    <table class="table table-bordered" style="padding: 5px;text-align: center;">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 6%">SL.</th>
+                          <th scope="col" style="width: 15%;">Particular</th>
+                          <th scope="col" style="width: 15%;">Packing</th>
+                          <!-- <th scope="col" style="width: 15%;">Hsn Code</th> -->
+                          <th scope="col" style="width: 5%;">Bags</th>
+                          <th scope="col" style="width: 5%;">Weight</th>
+                          <th scope="col" style="width: 5%;">Unit</th>
+                          <th scope="col" style="width: 5%;">Rate</th>
+                          <th scope="col" style="width: 5%;">Per</th>
+                          <th scope="col" style="width: 5%;">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr  *ngFor="let i of itemDetails; let poinIndex = index">
+                          <td>{{poinIndex+1}}</td> 
+                          <td>{{i.item_name}}</td>
+                          <td>{{i.packing_name}}</td>
+                          <!-- <td>{{i.hsn_code}}</td> -->
+                          <td>{{i.squantity}}</td>
+                          <td>{{i.mat_wt | number:'1.3-3'}}</td>
+                          <td>{{i.suom}}</td>
+                          <td>{{i.price | number:'1.2-2'}}</td>
+                          <td>{{i.uom}}</td>
+                          <td >{{i.total_amt | number:'1.2-2'}}</td>
+                        </tr>
+                                              
+                      </tbody>
+                    </table>
+  
+                  </div>
+                  <br/>
+                  <!-- <div class="bxx">
+                    <ul>
+                      <li><b>Remark (if any)</b></li>
+                      <li><b>Party GSTIN No:{{gstinno}}</b></li>
+                      <li>Broker Name:{{broker1}}</li>
+                      <li>For</li>
+                    </ul>
+                  </div>
+                  <div>
+                    <ul>
+                      <li><b>E.& O.E</b></li>
+                    </ul>
+                    <ul>
+                      <li></li>
+                      <li>For <b>ANKIT INDIA LIMITED</b></li>
+                    </ul>
+
+                  </div> -->
+                  <div class="bxx">
+                    <b>Remark (if any)</b>
+                    <!-- <b style="padding-left: 32%;">Broker Name:{{broker1}}</b> -->
+                    <b style="float: right;">E.& O.E</b>
+                    
+                   
+                  </div>
+                  <div class="bxx"  style="float: right;">
+                   
+                    
+                      For <b>ANKIT INDIA LIMITED</b>
+                   
+
+                  </div>
+                  <br/><br/>
+                  <br/><br/>
+                  <div class="bxx-toppest">
+                    
+                      <b style="float: left;">Received By</b>
+                      <b>Godown Incharge</b>
+                      <b style="float: right;">Authorised Signatory</b>
+
+                  </div>
+                  <!-- <div class="bxx-toppest">
+                    <ul>
+                      <li>Received By</li>
+                      <li>Godown Incharge</li>
+                      <li>Authorised Signatory</li>
+                      
+                    </ul>
+                  </div> -->
+                </div>
+              </div>
+              <hr style="border: 1px solid black;">
+              <div class="addresscenter">
+                    <b >PS DOMJUR, NH5, HOWRAH 711411 MOBILE- 9830697900 </b>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    
+    <!-- <mat-dialog-actions align="end">
+      <button [useExistingCss]="true" printSectionId="print-section" ngxPrint>print</button>
+    </mat-dialog-actions> -->
+
+  </div>
+</div>
+
+
+
+
+
+
+

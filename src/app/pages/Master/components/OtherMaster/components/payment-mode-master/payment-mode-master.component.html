@@ -1,0 +1,112 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+  
+          <!-- <form [formGroup]="payment_mode_master_form" (ngSubmit)="send()"> -->
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid"> 
+      <div class="row">
+        <div class="col-lg-12">  
+          <fieldset>
+            <legend>Payment Mode Master</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Payment Mode code">Payment Mode Code</label>
+                <input type="text" [(ngModel)]="Acc_pay_mode.paymode_code" class="form-control"  formControlName="paymode_code" >
+                <!-- <small *ngIf="paymode_code.invalid" class="form-text text-danger">Validation mag</small> -->
+              </div>
+            </div>
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <label for="Payment Mode Name">Payment Mode Name</label>
+                <input type="text" [(ngModel)]="Acc_pay_mode.paymode_name" class="form-control"  formControlName="paymode_name" >
+                <!-- <small *ngIf="paymode_name.invalid" class="form-text text-danger">Validation mag</small> -->
+              </div>
+          </div>
+                  
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <label for="Business Unit Code">Business Unit Code</label>
+              <input type="text" [(ngModel)]="Acc_pay_mode.buint_code" class="form-control"  formControlName="buint_code" >
+              <!-- <small *ngIf="buint_code.invalid" class="form-text text-danger">Validation mag</small> -->
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <label for="Business Unit Name">Business Unit Name</label>
+              <input type="text" [(ngModel)]="Acc_pay_mode.bunit_name" class="form-control"  formControlName="bunit_name" >
+              <!-- <small *ngIf="bunit_name.invalid" class="form-text text-danger">Validation mag</small> -->
+            </div>
+          </div>
+                  
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-checkbox [(ngModel)]="Acc_pay_mode.paymode_active" formControlName="paymode_active">Payment Mode Active</mat-checkbox> 
+                        <!-- <input [(ngModel)]="Acc_pay_mode.paymode_active" class="checkbox checkbox-primary" type="checkbox" id="color-checkbox1"  formControlName="paymode_active"   checked>
+                      <label class="check-label" for="color-checkbox1"> Payment Mode Active</label> -->
+                      <!-- <small *ngIf="paymode_active.invalid" class="form-text text-danger">Validation mag</small> -->
+              </div>
+            </div>   
+          </fieldset>
+        </div>
+      </div> 
+    
+      <div class="col-lg-12">
+        <div class="form-group">
+           <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+    </div> 
+  </section>
+</form>
+            
+
+
+<div class="master_container_box" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Payment Mode Master List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Paymode code</th>
+                  <th>Paymode Name</th>
+                  <th>Business Unit Code</th>
+                  <th>Action</th>
+                </tr>  
+              </thead>
+              <tbody>
+                <tr *ngFor="let Acc_pay_mode of listAcc_pay_mode">
+                  <td>{{Acc_pay_mode.paymode_code}}</td>
+                  <td>{{Acc_pay_mode.paymode_name}}</td>
+                  <td>{{Acc_pay_mode.buint_code}}</td> 
+                  <td><button class="btn btn-info" (click)="onUpdate(Acc_pay_mode.id)">Update</button></td>                   
+                </tr>
+              </tbody>
+            </table>
+         </div>
+       </fieldset>
+     </div>
+   </div>
+  </div>
+</div>

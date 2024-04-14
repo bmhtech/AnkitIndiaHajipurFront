@@ -1,0 +1,549 @@
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <div class="modal_main_content">
+        <div id="print-section" class="print ">
+        <div class="container-fluid">
+          <div class="main_content inv">
+
+            <div class="section1">
+              <div class="main_header">
+                <div class="top_div">
+                  <!--<table class="table">
+                    <tbody>
+                       <tr>
+                        <td style="width: 70%;">GSTIN : 19AADCA2518H1ZV </td>
+                        <td style="width: 30%;">Phone : 2287-4064/2287-1538</td>
+                        <td style="width: 3%;">FAX : 2281-8269</td> 
+                      </tr>
+                      <tr>
+                       <td style="width: 70%;">PAN : AADCA2518H1</td>
+                       <td style="width: 30%;">FAX : 2281-8269</td> 
+                      </tr> 
+                    </tbody>
+                  </table>-->
+                </div>
+                <h1 class="uc" *ngIf ="weighmentfor;else elseBlock" style="text-align: center;">{{company_name}} </h1><!-- ({{Businessunit}}) -->
+                <ng-template #elseBlock>
+                  <!-- <h1 class="uc">{{company_name}} </h1> -->
+                <h1 class="uc" style="text-align: center;">{{company_name}} </h1><!-- ({{Businessunit}}) -->
+                </ng-template>
+                <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                  {{work_address}}<br>
+                  {{state_name}},{{city_name}},{{pin_no}}</div>
+                  <ng-template #elseBlockf>
+                  <div class="top_h4" style="text-align: center;">(CIN : {{cin_no}})<br>
+                    <!-- 14A, 5thfloor, FMC FORTUNA<br>
+                    234/3A A.J.C Bose Road, Kolkata 700020</div> -->
+                    {{work_address}}<br>
+                    {{state_name}},{{city_name}},{{pin_no}}</div>
+                  </ng-template>
+                <h1 class="uc" style="text-align: center;">Weighment Slip</h1>
+
+                <div class="rule_act" style="text-align: right;">Office Copy</div>
+
+              </div>
+              <div class="box_table">
+                <div class="bxx-top">
+                  <table class="table table_top table-bordered">
+                    <tbody>
+                      <tr>
+                        <td style="width: 55%;" class="comp_adrs">
+                          
+                            <table  style="text-transform: uppercase;width: 100%;">
+                              <!-- <tr>
+                                <td>Party Code: </td><td>{{suppliername}}</td>
+                              </tr> -->
+                              <!-- <tr>
+                                <td>Address: </td><td>{{partyaddress}}</td>
+                              </tr> 
+                               <tr>
+                                <td>State: </td><td>{{partystate}}</td>
+                              </tr> -->
+                              <tr>
+                               <!--  <td>District: </td><td>{{partydistrict}}</td> -->
+                               <td>Weighment Serial No: </td>
+                              <td >{{weighmentno}}</td>
+                              <td>Dt.</td>
+                              <td>{{staticdate}}</td>
+                              </tr>
+                              <!-- <tr>
+                                <td>City: </td><td>{{partycity}}</td>
+                              </tr>
+                              <tr>
+                                <td>Pincode: </td><td>{{partypincode}}</td>
+                              </tr> -->
+                              <tr>
+                                <td>Weigh Type: </td>
+                                <td *ngIf ="weighmentfor;else elseBlock4">{{rawmaterial}}</td>
+                                <ng-template #elseBlock4>
+                                  <td>{{invoicetype}}</td>
+                                </ng-template>
+                              </tr>
+                            </table>
+                                  
+                         
+                        </td>
+                      
+                        <td style="width: 55%;" class="comp_adrs">
+                          <table style="width: 100%;">
+                            <!-- <tr>
+                              <td></td>
+                            </tr> -->
+                            <!-- <tr>
+                              <td>Doc. Ref. No: </td>
+                              <td>{{ref_no}}</td>
+                              <td>Dt.</td>
+                              <td>{{ref_date}}</td>
+                            </tr> -->
+                            <tr>
+                              <td style="font-size: large;"colspan="1"><b>Truck No:</b> </td>
+                              <td style="font-size: large;" colspan="3"><b>{{trucknumber}}</b></td>
+                              
+                            </tr>
+                            <!-- <tr>
+                              <td>Commodity: </td>
+                              <td>{{itemname}}</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                              <td>Weigh Type: </td>
+                              <td *ngIf ="weighmentfor;else elseBlock4">{{rawmaterial}}</td>
+                              <ng-template #elseBlock4>
+                                <td>FINISHED</td>
+                              </ng-template>
+                              <td>&nbsp;</td>
+                              <td *ngIf ="weighmentfor;else elseBlock1">For Unloading</td>
+                              <ng-template #elseBlock1>
+                                <td>For Loading</td>
+                              </ng-template>
+                            </tr> -->
+                            <tr>
+                              <!-- <td *ngIf ="weighmentfor;else elseBlock11">Unload Adv No.</td>
+                              <ng-template #elseBlock11>
+                                <td>Load Adv No.</td>
+                              </ng-template>
+                              <td colspan="3">{{adviceno}}</td> -->
+                              <td>Adv No. </td>
+                              <td colspan="3">{{adviceno}}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                 
+                      <table class="table comp_tble" style="padding: 15px; text-align: center;border:1px;">
+                        <thead>
+                          <tr>
+                            <th style="width: 25%;">&nbsp;</th>
+                            <th style="width: 20%;">WEIGHT</th>
+                            <th style="width: 20%;">UOM</th>
+                            <th style="width: 20%;">DATE</th>
+                            <th style="width: 20%;">TIME</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr style="width: 55%;" class="comp_adrs" *ngIf="purchase1st">
+                            <td>Gr. Weight</td>
+                            <td style="padding: 5px; text-align: center;">{{grossweight | number:'1.2-2'}}</td>
+                            <td style="padding: 5px; text-align: center;">QNTL</td>
+                            <td style="padding: 5px; text-align: center;">{{grossdate}}</td>
+                            <td style="padding: 5px; text-align: center;">{{grosstime}}</td>
+                          </tr>
+                          <tr style="width: 55%;" class="comp_adrs" *ngIf="sale1st">
+                            <td>Tare Weight</td>
+                            <td style="padding: 5px; text-align: center;">{{tareweight | number:'1.2-2'}}</td>
+                            <td style="padding: 5px; text-align: center;">QNTL</td>
+                            <td style="padding: 5px; text-align: center;">{{taredate}}</td>
+                            <td style="padding: 5px; text-align: center;">{{taretime}}</td>
+                          </tr>
+                          <tr style="border-top: 1px solid #000;">
+                            <td><strong>Net Weight</strong></td>
+                            <td style="padding: 5px; text-align: center;"><b>{{netweight | number:'1.2-2'}}</b></td>
+                            <td style="padding: 5px; text-align: center;"><b>QNTL</b></td>
+                            <td style="padding: 5px; text-align: center;"><b>Bags</b></td>
+                            <td style="padding: 5px; text-align: center;"><b>{{tarebags}}</b></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      
+
+                  
+                  <!-- <div><b>Weighment Charges: Rs. {{wgment_rs}}</b></div> -->
+                  <div class="ftr_btm ar" style="padding-top: 20px;" style="text-align: right;"><strong>Weigh - Bridge Incharge</strong></div>
+                </div>
+              </div>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="section2">
+              <div class="main_header">
+                <div class="top_div">
+                  <!--<table class="table">
+                    <tbody>
+                       <tr>
+                        <td style="width: 70%;">GSTIN : 19AADCA2518H1ZV </td>
+                        <td style="width: 30%;">Phone : 2287-4064/2287-1538</td>
+                        <td style="width: 3%;">FAX : 2281-8269</td> 
+                      </tr>
+                      <tr>
+                       <td style="width: 70%;">PAN : AADCA2518H1</td>
+                       <td style="width: 30%;">FAX : 2281-8269</td> 
+                      </tr> 
+                    </tbody>
+                  </table>-->
+                </div>
+                <h1 class="uc" *ngIf ="weighmentfor;else elseBlock" style="text-align: center;">{{company_name}}</h1><!-- ({{Businessunit}}) -->
+                <ng-template #elseBlock>
+                  <!-- <h1 class="uc">{{company_name}} </h1> -->
+                  <h1 class="uc" style="text-align: center;">{{company_name}}</h1><!-- ({{Businessunit}}) -->
+                </ng-template>
+                <div class="top_h4" style="text-align: center;" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                  {{work_address}}<br>
+                  {{state_name}},{{city_name}},{{pin_no}}</div>
+                <ng-template #elseBlockf>
+                <div class="top_h4" style="text-align: center;">(CIN : {{cin_no}})<br>
+                  <!-- 14A, 5thfloor, FMC FORTUNA<br>
+                  234/3A A.J.C Bose Road, Kolkata 700020</div> -->
+                  {{work_address}}<br>
+                  {{state_name}},{{city_name}},{{pin_no}}</div>
+                </ng-template>
+                <h1 class="uc" style="text-align: center;">Weighment Slip</h1>
+
+                <div class="rule_act" style="text-align: right;">Party Copy</div>
+
+              </div>
+              <div class="box_table">
+                <div class="bxx-top">
+                  <table class="table table_top table-bordered">
+                    <tbody>
+                      <tr>
+                        <td style="width: 55%;" class="comp_adrs">
+                          
+                            <table  style="text-transform: uppercase;width: 100%;">
+                              <!-- <tr>
+                                <td>Party Code: </td><td>{{suppliername}}</td>
+                              </tr> -->
+                              <!-- <tr>
+                                <td>Address: </td><td>{{partyaddress}}</td>
+                              </tr> 
+                               <tr>
+                                <td>State: </td><td>{{partystate}}</td>
+                              </tr> -->
+                              <tr>
+                                <!-- <td>District: </td><td>{{partydistrict}}</td> -->
+                                <td>Weighment Serial No: </td>
+                              <td >{{weighmentno}}</td>
+                              <td>Dt.</td>
+                              <td>{{staticdate}}</td>
+                              </tr>
+                              <!-- <tr>
+                                <td>City: </td><td>{{partycity}}</td>
+                              </tr>
+                              <tr>
+                                <td>Pincode: </td><td>{{partypincode}}</td>
+                              </tr> -->
+                              <tr>
+                                <td>Weigh Type: </td>
+                                <td *ngIf ="weighmentfor;else elseBlock4">{{rawmaterial}}</td>
+                                <ng-template #elseBlock4>
+                                  <td>{{invoicetype}}</td>
+                                </ng-template>
+                              </tr>
+                            </table>
+                                  
+                         
+                        </td>
+                      
+                        <td style="width: 55%;" class="comp_adrs">
+                          <table style="width: 100%;">
+                            <!-- <tr>
+                              <td>Weighment Serial No: </td>
+                              <td >{{weighmentno}}</td>
+                              <td>Dt.</td>
+                              <td>{{staticdate}}</td>
+                            </tr> -->
+                            <!-- <tr>
+                              <td>Doc. Ref. No: </td>
+                              <td>{{ref_no}}</td>
+                              <td>Dt.</td>
+                              <td>{{ref_date}}</td>
+                            </tr> -->
+                            <tr>
+                              <td style="font-size: large;"colspan="1"><b>Truck No:</b> </td>
+                              <td style="font-size: large;" colspan="3"><b>{{trucknumber}}</b></td>
+                              
+                            </tr>
+                            <!-- <tr>
+                              <td>Commodity: </td>
+                              <td>{{itemname}}</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                              <td>Weigh Type: </td>
+                              <td *ngIf ="weighmentfor;else elseBlock4">{{rawmaterial}}</td>
+                              <ng-template #elseBlock4>
+                                <td>FINISHED</td>
+                              </ng-template>
+                              <td>&nbsp;</td>
+                              <td *ngIf ="weighmentfor;else elseBlock1">For Unloading</td>
+                              <ng-template #elseBlock1>
+                                <td>For Loading</td>
+                              </ng-template>
+                            </tr> -->
+                            <tr>
+                              <!-- <td *ngIf ="weighmentfor;else elseBlock11">Unload Adv No.</td>
+                              <ng-template #elseBlock11>
+                                <td>Load Adv No.</td>
+                              </ng-template>
+                              <td colspan="3">{{adviceno}}</td> -->
+
+                              <td>Adv No. </td>
+                              <td colspan="3">{{adviceno}}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                      <table class="table comp_tble" style="padding: 15px; text-align: center;border:1px;">
+                        <thead>
+                          <tr>
+                            <th style="width: 25%;">&nbsp;</th>
+                            <th style="width: 20%;">WEIGHT</th>
+                            <th style="width: 20%;">UOM</th>
+                            <th style="width: 20%;">DATE</th>
+                            <th style="width: 20%;">TIME</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr style="width: 55%;" class="comp_adrs" *ngIf="purchase1st">
+                            <td>Gr. Weight</td>
+                            <td style="padding: 5px; text-align: center;">{{grossweight | number:'1.2-2'}}</td>
+                            <td style="padding: 5px; text-align: center;">QNTL</td>
+                            <td style="padding: 5px; text-align: center;">{{grossdate}}</td>
+                            <td style="padding: 5px; text-align: center;">{{grosstime}}</td>
+                          </tr>
+                          <tr style="width: 55%;" class="comp_adrs" *ngIf="sale1st">
+                            <td>Tare Weight</td>
+                            <td style="padding: 5px; text-align: center;">{{tareweight | number:'1.2-2'}}</td>
+                            <td style="padding: 5px; text-align: center;">QNTL</td>
+                            <td style="padding: 5px; text-align: center;">{{taredate}}</td>
+                            <td style="padding: 5px; text-align: center;">{{taretime}}</td>
+                          </tr>
+                          <tr style="border-top: 1px solid #000;">
+                            <td><strong>Net Weight</strong></td>
+                            <td style="padding: 5px; text-align: center;"><b>{{netweight | number:'1.2-2'}}</b></td>
+                            <td style="padding: 5px; text-align: center;"><b>QNTL</b></td>
+                            <td style="padding: 5px; text-align: center;"><b>Bags</b></td>
+                            <td style="padding: 5px; text-align: center;"><b>{{tarebags}}</b></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                     
+                  <!-- <div><b>Weighment Charges: Rs. {{wgment_rs}}</b></div> -->
+                  <div class="ftr_btm ar" style="padding-top: 20px;" style="text-align: right;"><strong>Weigh - Bridge Incharge</strong></div>
+                </div>
+              </div>
+            </div>
+
+            <br>
+            <br>
+
+            <div class="section3">
+              <div class="main_header">
+                <div class="top_div">
+                  <!--<table class="table">
+                    <tbody>
+                       <tr>
+                        <td style="width: 70%;">GSTIN : 19AADCA2518H1ZV </td>
+                        <td style="width: 30%;">Phone : 2287-4064/2287-1538</td>
+                        <td style="width: 3%;">FAX : 2281-8269</td> 
+                      </tr>
+                      <tr>
+                       <td style="width: 70%;">PAN : AADCA2518H1</td>
+                       <td style="width: 30%;">FAX : 2281-8269</td> 
+                      </tr> 
+                    </tbody>
+                  </table>-->
+                </div>
+                <h1 class="uc" *ngIf ="weighmentfor;else elseBlock" style="text-align: center;">{{company_name}}</h1><!-- ({{Businessunit}}) -->
+                <ng-template #elseBlock>
+                  <!-- <h1 class="uc">{{company_name}} </h1> -->
+                  <h1 class="uc" style="text-align: center;">{{company_name}}</h1><!-- ({{Businessunit}}) -->
+                </ng-template>
+                <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockfr">(FRN : {{cin_no}})<br>
+                  {{work_address}}<br>
+                  {{state_name}},{{city_name}},{{pin_no}}</div>
+                <ng-template #elseBlockfr>
+                <div class="top_h4" style="text-align: center;">(CIN : {{cin_no}})<br>
+                  <!-- 14A, 5thfloor, FMC FORTUNA<br>
+                  234/3A A.J.C Bose Road, Kolkata 700020</div> -->
+                  {{work_address}}<br>
+                  {{state_name}},{{city_name}},{{pin_no}}</div>
+                </ng-template>
+                <h1 class="uc" style="text-align: center;">Weighment Slip</h1>
+
+                <div class="rule_act" style="text-align: right;">Weight Bridge Copy</div>
+
+              </div>
+              <div class="box_table">
+                <div class="bxx-top">
+                  <table class="table table_top table-bordered">
+                    <tbody>
+                      <tr>
+                        <td style="width: 55%;" class="comp_adrs">
+                          
+                            <table  style="text-transform: uppercase;width: 100%;">
+                              <!-- <tr>
+                                <td>Party Code: </td><td>{{suppliername}}</td>
+                              </tr> -->
+                              <!-- <tr>
+                                <td>Address: </td><td>{{partyaddress}}</td>
+                              </tr> 
+                               <tr>
+                                <td>State: </td><td>{{partystate}}</td>
+                              </tr> -->
+                              <tr>
+                                <!-- <td>District: </td><td>{{partydistrict}}</td> -->
+                                <td>Weighment Serial No: </td>
+                              <td >{{weighmentno}}</td>
+                              <td>Dt.</td>
+                              <td>{{staticdate}}</td>
+                              </tr>
+                              <!-- <tr>
+                                <td>City: </td><td>{{partycity}}</td>
+                              </tr>
+                              <tr>
+                                <td>Pincode: </td><td>{{partypincode}}</td>
+                              </tr> -->
+                              <tr>
+                                <td>Weigh Type: </td>
+                                <td *ngIf ="weighmentfor;else elseBlock4">{{rawmaterial}}</td>
+                                <ng-template #elseBlock4>
+                                  <td>{{invoicetype}}</td>
+                                </ng-template>
+                              </tr>
+                            </table>
+                                  
+                         
+                        </td>
+                      
+                        <td style="width: 55%;" class="comp_adrs">
+                          <table style="width: 100%;">
+                            <!-- <tr>
+                              <td>Weighment Serial No: </td>
+                              <td>{{weighmentno}}</td>
+                              <td>Dt.</td>
+                              <td>{{staticdate}}</td>
+                            </tr> -->
+                            <!-- <tr>
+                              <td>Doc. Ref. No: </td>
+                              <td>{{ref_no}}</td>
+                              <td>Dt.</td>
+                              <td>{{ref_date}}</td>
+                            </tr> -->
+                            <tr>
+                              <td style="font-size: large;"colspan="1"><b>Truck No:</b></td>
+                              <td style="font-size: large;" colspan="3"><b>{{trucknumber}}</b></td>
+                             
+                            </tr>
+                            <!-- <tr>
+                              <td>Commodity: </td>
+                              <td>{{itemname}}</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>
+                            </tr>
+                            <tr>
+                              <td>Weigh Type: </td>
+                              <td *ngIf ="weighmentfor;else elseBlock4">{{rawmaterial}}</td>
+                              <ng-template #elseBlock4>
+                                <td>FINISHED</td>
+                              </ng-template>
+                              <td>&nbsp;</td>
+                              <td *ngIf ="weighmentfor;else elseBlock1">For Unloading</td>
+                              <ng-template #elseBlock1>
+                                <td>For Loading</td>
+                              </ng-template>
+                            </tr> -->
+                            <tr>
+                              <!-- <td *ngIf ="weighmentfor;else elseBlock11">Unload Adv No.</td>
+                              <ng-template #elseBlock11>
+                                <td>Load Adv No.</td>
+                              </ng-template>
+                              <td colspan="3">{{adviceno}}</td> -->
+
+                              
+                              <td>Adv No. </td>
+                              <td colspan="3">{{adviceno}}</td>
+                            </tr>
+                          </table>
+                        </td>
+                      </tr>
+                    </tbody>
+                  </table>
+                  
+                      <table class="table comp_tble" style="padding: 15px; text-align: center;border:1px;">
+                        <thead>
+                          <tr>
+                            <th style="width: 25%;">&nbsp;</th>
+                            <th style="width: 20%;">WEIGHT</th>
+                            <th style="width: 20%;">UOM</th>
+                            <th style="width: 20%;">DATE</th>
+                            <th style="width: 20%;">TIME</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr style="width: 55%;" class="comp_adrs" *ngIf="purchase1st">
+                            <td>Gr. Weight</td>
+                            <td style="padding: 5px; text-align: center;">{{grossweight | number:'1.2-2'}}</td>
+                            <td style="padding: 5px; text-align: center;">QNTL</td>
+                            <td style="padding: 5px; text-align: center;">{{grossdate}}</td>
+                            <td style="padding: 5px; text-align: center;">{{grosstime}}</td>
+                          </tr>
+                          <tr style="width: 55%;" class="comp_adrs" *ngIf="sale1st">
+                            <td>Tare Weight</td>
+                            <td style="padding: 5px; text-align: center;">{{tareweight | number:'1.2-2'}}</td>
+                            <td style="padding: 5px; text-align: center;">QNTL</td>
+                            <td style="padding: 5px; text-align: center;">{{taredate}}</td>
+                            <td style="padding: 5px; text-align: center;">{{taretime}}</td>
+                          </tr>
+                          <tr style="border-top: 1px solid #000;">
+                            <td><strong>Net Weight</strong></td>
+                            <td style="padding: 5px; text-align: center;"><b>{{netweight | number:'1.2-2'}}</b></td>
+                            <td style="padding: 5px; text-align: center;"><b>QNTL</b></td>
+                            <td style="padding: 5px; text-align: center;"><b>Bags</b></td>
+                            <td style="padding: 5px; text-align: center;"><b>{{tarebags}}</b></td>
+                          </tr>
+                        </tbody>
+                      </table>
+                      
+
+                  
+                  <!-- <div><b>Weighment Charges: Rs. {{wgment_rs}}</b></div> -->
+                  <div class="ftr_btm ar" style="padding-top: 20px;" style="text-align: right;"><strong>Weigh - Bridge Incharge</strong></div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    <!-- <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+      <button class="btn btn-info" mat-button [mat-dialog-close]="true" cdkFocusInitial>Save</button>
+    </mat-dialog-actions> -->
+    <mat-dialog-actions align="end">
+      <button [useExistingCss]="true" printSectionId="print-section" ngxPrint>print</button>
+    </mat-dialog-actions>
+
+  </div>
+</div>

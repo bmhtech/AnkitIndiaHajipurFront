@@ -1,0 +1,129 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Miscellaneous Information</legend>
+                <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label for="MasterType_code">Master Type Code</label>
+                        <input type="text" [(ngModel)]="materialType.mattype_name" formControlName="mattype_name" class="form-control" id="masterType_code">
+                    </div>
+                </div> -->
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                 <label for="Master Type Name">Master Type Name<span class="red">*</span></label>
+                 <mat-select class="form-control" [(ngModel)]="mise.mastertype_name" formControlName="mastertype_name">
+                    <mat-option *ngFor="let mastertype_name of masterTypeNameList" [value]="mastertype_name">{{mastertype_name}}</mat-option>
+                 </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Description Head">Description Head<span class="red">*</span></label>
+                <input type="text" [(ngModel)]="mise.description_head" formControlName="description_head" class="form-control" id="description_head">
+              </div>
+            </div>
+                    
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Mastertype_remarks">Master Type Remarks</label>
+                <input type="text" [(ngModel)]="mise.mastertype_remarks" formControlName="mastertype_remarks" class="form-control" id="mastertype_remarks">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="bUnitCodes"
+                [display]="'businessunit_name'"
+                [value]="'businessunit_code'"
+                [multiple]='false'            
+                ngDefaultControl
+                [formControl]="userForm.controls['businessunit_code']">
+              </mat-select-autocomplete>
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group  chk_tp_pad">
+                <mat-checkbox [(ngModel)]="mise.mastertype_active" formControlName="mastertype_active">Master Type Active</mat-checkbox> 
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="mismastersave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+
+  <!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">   
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Miscellaneous Information List</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Master Type Name</th>
+                  <th>Master Type Remarks</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let mise of listmise">
+                  <td>{{mise.mastertype_name}}</td>
+                  <td>{{mise.mastertype_remarks}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(mise.id,'view')" *ngIf="mismasterview">View</button></td>         
+                  <td><button class="btn btn-info" (click)="onUpdate(mise.id,'update')" *ngIf="mismasterupdate">Update</button></td>         
+                  <td><button class="btn btn-danger" (click)="onDelete(mise.id,mise.mastertype_code)" *ngIf="mismasterdelete">Delete</button></td>                 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

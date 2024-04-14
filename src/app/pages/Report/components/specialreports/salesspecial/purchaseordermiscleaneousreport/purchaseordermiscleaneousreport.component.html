@@ -1,0 +1,241 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+<div class="master_container_box" >
+  <form [formGroup]="userForm">
+      <fieldset>
+          <legend>Purchase Order(RAW MATERIALS) Miscllaneous Report</legend>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Business Unit<span class="red">*</span></mat-label>
+              <mat-select class="form-control"  [(ngModel)]="BuUnit" formControlName="business_unit">
+                <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+            <mat-label>From Date<span class="red">*</span></mat-label>
+            <input type="date" class="form-control"  formControlName="fromdate">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+              <mat-label>To Date<span class="red">*</span></mat-label>
+              <input type="date" [(ngModel)]="currentDate" class="form-control"  formControlName="todate">
+              </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+              <mat-label>Catagory<span class="red">*</span></mat-label>
+                <mat-select formControlName="catagory" class="form-control" (selectionChange)="onChangetype($event.value)">
+                  <mat-option value="0">Choosen an option</mat-option>
+                  <mat-option value="All">All</mat-option>
+                  <mat-option value="Brokerwise">Brokerwise</mat-option>
+                  <mat-option value="Partywise">Supplier</mat-option>
+              </mat-select>
+              </div>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-6 col-12" *ngIf="partyshow">
+            <div class="form-group">
+              <mat-label>Supplier Name<span class="red">*</span></mat-label>
+              <mat-select-autocomplete class="form-control ats"  
+              [options]="supplierNames"
+              [display]="'supplier'"
+              [value]="'supplier_name'"
+              [multiple]='true'
+              ngDefaultControl
+              [formControl]="userForm.controls['supplier_name']"
+              >
+              </mat-select-autocomplete>
+            </div>
+          </div> 
+
+          <div class="col-lg-3 col-md-3 col-sm-6 col-12" *ngIf="brokershow">
+            <div class="form-group">
+              <mat-label>Broker Name<span class="red">*</span></mat-label>
+              <mat-select-autocomplete class="form-control ats"  
+              [options]="brokerNames"
+              [display]="'ven_name'"
+              [value]="'ven_code_name'"
+              [multiple]='true'
+              ngDefaultControl
+              [formControl]="userForm.controls['ven_code_name']"
+              >
+              </mat-select-autocomplete>
+            </div>
+          </div> 
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+            <mat-label>Status Type</mat-label>
+              <mat-select formControlName="statustype" class="form-control">
+                <mat-option value="All">All</mat-option>
+                <mat-option value="Open">Open</mat-option>
+                <mat-option value="Closed">Completed</mat-option>
+                <mat-option value="Terminated">Terminated</mat-option>
+            </mat-select>
+            </div>
+        </div>
+        <div class="col-lg-12" >
+            <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
+            </div>
+        </div>
+         
+
+      </fieldset>
+          <fieldset class="table_container">
+              
+            <div class="col-lg-12" style="float: right;">
+                <div  class="form-group">
+                    <button mat-raised-button (click)="exportAsXLSX()" color="primary" style="top:8px">Export To Excel</button>
+                    <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info" style="top:8px">Print</button>
+                    <button mat-button class="btn" (click)=" openPopUp()" style="top:8px; background: green;">Execute</button>
+                    <button mat-button class="btn" (click)=" openPopUptracking()" style="top:8px; background: violet;">Tracking</button>
+                </div>
+            </div>
+          <div class="table_content">
+                  <table class="table table-bordered" id="dynamictable" >
+                  <thead>
+                     <tr><td colspan="16" style="text-align: center;"><b>{{headingtop}}</b></td></tr>
+                      <tr>
+                        <th style="width: auto;">&nbsp;</th> 
+                        <th style="width: auto;">Sl_No</th>
+                        <th style="width: auto;">PO</th>
+                        <th style="width: auto;">Pur_Order_Dt</th>
+                        <th style="width: auto;">Supplier</th>
+                        <th style="width: auto;">Broker</th>
+                        <th style="width: auto;">Item_Name</th>
+                        <th style="width: auto;">Packing</th>
+                        <th style="width: auto;">T</th>
+                        <th style="width: auto;">Bags</th>
+                        <th style="width: auto;">P-U</th>
+                        <th style="width: auto;">Qtls</th>
+                        <th style="width: auto;">I-U</th>
+                        <th style="width: auto;">Price</th>
+                        <th style="width: auto;">Type</th>
+                        <th style="width: auto;">DS</th>
+                        <th style="width: auto;">S</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let misc of misclist; let pointIndex=index">
+                          
+                          <td><input type="checkbox" (click)="clickCheckBox($event,pointIndex,misc.order_id)"/></td>
+                          <td style="width: auto;text-align: center;">{{pointIndex+1}}</td>
+                          <td style="width: auto;text-align: left;">{{misc.pur_order_no}}</td>
+                          <td style="width: auto;text-align: center;">{{misc.orderdate | date:'dd-MM-yy'}}</td>
+                          <td style="width: auto;text-align: left;">{{misc.allias_partyname}}</td>
+                          <td style="width: auto;text-align: left;">{{misc.allias_brokername}}</td>
+                          <td style="width: auto;text-align: left;">{{misc.item_alliasname}}</td>
+                          <td style="width: auto;text-align: left;">{{misc.packing_alliasname}}</td>
+                          <td style="width: auto;text-align: right;">{{misc.truck}}</td>
+                          <td style="width: auto;text-align: right;">{{misc.packingqty}}</td>
+                          <td style="width: auto;text-align: left;">{{misc.packing_uom}}</td>
+                          <td style="width: auto;text-align: right;">{{misc.itemqty | number:'1.3-3'}}</td>
+                          <td style="width: auto;text-align: left;">{{misc.stock_uom}}</td>
+                          <td style="width: auto;text-align: right;">{{misc.rate | number:'1.2-2'}}</td>
+                          <td style="width: auto;text-align: left;">{{misc.ordertype}}</td>
+                          <td style="width: auto;text-align: left;">{{misc.delivery}}</td>
+                          <td style="width: auto;text-align: left;">{{misc.po_status}}</td>
+                      </tr>
+                      <tr>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                        <td><b>Total</b></td>
+                        <td><b>{{totaltruck}}</b></td>
+                        <td><b>{{totalpackqty}}</b></td>
+                        <td></td>
+                        <td><b>{{totalitemqty| number:'1.3-3'}}</b></td>
+                        <td></td>
+                        <td><b>{{totalprice| number:'1.2-2'}}</b></td>
+                        <td></td>
+                        <td></td>
+                        <td></td>
+                      </tr>
+                  </tbody>
+                </table>
+              </div>
+
+              <div  id="print-section" hidden>
+                <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+                <div>
+                    <table class="table table-bordered" >
+                        <thead>
+                          <tr><td colspan="16" style="text-align: center;"><b>{{headingtop}}</b></td></tr>
+                            <tr>
+                              <th style="width: auto;">Sl</th>
+                              <th style="width: auto;">Order_Dt</th>
+                              <th style="width: auto;">PO</th>
+                              <th style="width: auto;">Supplier</th>
+                              <th style="width: auto;">Broker</th>
+                              <th style="width: auto;">Item_Name</th>
+                              <th style="width: auto;">Packing</th>
+                              <th style="width: auto;">T</th>
+                              <th style="width: auto;">Bags</th>
+                              <th style="width: auto;">P-U</th>
+                              <th style="width: auto;">Qtls</th>
+                              <th style="width: auto;">I-U</th>
+                              <th style="width: auto;">Price</th>
+                              <th style="width: auto;">Type</th>
+                              <th style="width: auto;">DS</th>
+                              <th style="width: auto;">S</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let misc of misclist; let pointIndex=index">
+                              <td style="width: auto;text-align: left;">{{pointIndex+1}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.orderdate | date:'dd-MM-yy'}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.pur_order_no}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.allias_partyname}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.allias_brokername}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.item_alliasname}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.packing_alliasname}}</td>
+                              <td style="width: auto;text-align: right;">{{misc.truck}}</td>
+                              <td style="width: auto;text-align: right;">{{misc.packingqty}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.packing_uom}}</td>
+                              <td style="width: auto;text-align: right;">{{misc.itemqty | number:'1.3-3'}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.stock_uom}}</td>
+                              <td style="width: auto;text-align: right;">{{misc.rate | number:'1.2-2'}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.ordertype}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.delivery}}</td>
+                              <td style="width: auto;text-align: left;">{{misc.po_status}}</td>
+                          </tr>
+                          <tr>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td><b>Total</b></td>
+                            <td><b>{{totaltruck}}</b></td>
+                            <td><b>{{totalpackqty}}</b></td>
+                            <td></td>
+                            <td><b>{{totalitemqty | number:'1.3-3'}}</b></td>
+                            <td></td>
+                            <td><b>{{totalprice | number:'1.2-2'}}</b></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                          </tr>
+                        </tbody>
+                    </table>
+                </div> 
+            </div>
+      </fieldset>
+  </form>
+  
+</div>

@@ -1,0 +1,176 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+       </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+      
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Business Partner Group</legend>
+                        
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Group Code">Group Code</label>
+                <input type="text" value="0" class="form-control" formControlName="bp_trans_code" #iCodeInput (blur)="chkTransGrpCodeStatus($event)" [(ngModel)]="seq_no" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Business Partner Type">Business Partner Type</label>
+                <mat-select class="form-control" formControlName="bp_type" [(ngModel)]="bp_type1" >
+                  <mat-option value="TRANSPORTER">TRANSPORTER</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group ht_59">
+                <mat-label>Control Account</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="subGroupNames"
+                [display]="'ledgername'"
+                [value]="'ledgerid'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['control_acc']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Group Name">Group Name<span class="red">*</span></label>
+                <input formControlName="bp_grp_name" [(ngModel)]="model.bp_grp_name" type="text" class="form-control" #GrpNameInput (blur)="focusOutFunctionGroupName($event)">
+              </div>
+            </div>
+
+            
+          
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Control Account">Control Account</label>
+                <mat-select type="text" formControlName="control_acc" [(ngModel)]="model.control_acc" class="form-control">
+                  <mat-option value = "0">-Select Control Account-</mat-option>
+                  <mat-option *ngFor="let control_acc of subGroupNames" [value]="control_acc.subgroupcode">{{control_acc.subgroupname}}</mat-option>  
+                </mat-select>
+              </div>
+            </div> -->
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Control Account">Parent Group</label>
+                <mat-select type="text" formControlName="parent_group" [(ngModel)]="model.parent_group" class="form-control">
+                  <mat-option value="0">-Select Parent Group-</mat-option>
+                  <mat-option *ngFor="let parentgroup of userParentGroups" [value]="parentgroup.bp_trans_id">{{parentgroup.bp_grp_name}}</mat-option>
+                </mat-select>
+              </div>
+              </div>  -->
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group ht_59">
+                  <mat-label>Parent Group</mat-label>
+                  <mat-select-autocomplete class="form-control ats"  
+                  [options]="userParentGroups"
+                  [display]="'bp_grp_name'"
+                  [value]="'bp_trans_id'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['parent_group']"
+                  [labelCount]="2">
+                </mat-select-autocomplete>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group chk_tp_pad">
+                    <mat-checkbox formControlName="bp_trans_active" [(ngModel)]="activeIsChecked">Active</mat-checkbox>
+                  <!-- <mat-checkbox [(ngModel)]="bp_trans_active" formControlName="bp_trans_active">Active</mat-checkbox>  -->
+                </div>
+              </div>
+
+
+          </fieldset>
+         </div>
+        </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="transportgroupsave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>  
+</form>
+
+ 
+
+
+<!--List-->
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Transporter Group List</legend>
+            <div class="table_content">
+
+              <div class="row" style="margin-bottom: 15px;">
+                <div class="col-sm-12 col-md-6" style="display: none;">
+                  <div class="dataTables_length bs-select pull-left">
+                   <label>Show <select name="dtBasicExample_length" aria-controls="dtBasicExample" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label>
+                  </div>
+                 </div>
+                 <div class="col-sm-12 col-md-4 col-md-offset-8"><input type="text" class="form-control" placeholder="Search.." (keydown)="search($event)"></div> 
+              </div>
+              
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Group Code</th>
+                    <th>Group Name</th>
+                    <th>Parent Group</th>
+                    <th>Control Account</th>
+                    <th colspan="3">Action</th>
+                  </tr>
+                </thead>
+                <tbody>
+                 <!-- | searchPipe:{bp_trans_code: searchText,bp_grp_name:searchText,parent_group: searchText,control_acc: searchText}; -->
+                  <tr *ngFor="let Transporter_group of listTransporter_group">
+                      <td>{{Transporter_group.bp_trans_code}}</td>
+                    <td>{{Transporter_group.bp_grp_name}}</td>
+                    <td>{{Transporter_group.parent_group}}</td>
+                    <td>{{Transporter_group.control_acc}}</td>
+                    <td><button class="btn btn-success" (click)="onUpdate(Transporter_group.id,'view')" *ngIf="transportgroupview">View</button></td>         
+                    <td><button class="btn btn-info" (click)="onUpdate(Transporter_group.id,'update')" *ngIf="transportgroupupdate">Update</button></td>         
+                    <td><button class="btn btn-danger" (click)="onDelete(Transporter_group.id,Transporter_group)" *ngIf="transportgroupdelete">Delete</button></td>               
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+         </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

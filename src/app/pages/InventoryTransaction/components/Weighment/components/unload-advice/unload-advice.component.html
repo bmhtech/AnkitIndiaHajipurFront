@@ -1,0 +1,1596 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i
+                  class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i
+                  class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader">
+    <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm" *ngIf="isHidden  ==  true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Unload Advice</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Advice Date</mat-label>
+                <input type="date" formControlName="ula_date" [(ngModel)]="currentDate" class="form-control"
+                  (change)="onChangeUnloadDate($event)" />
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit<span class="red">*</span></mat-label>
+                <div class="clr"></div>
+                <mat-select type="text" formControlName="business_unit" [(ngModel)]="business_unit1"
+                  class="form-control" (selectionChange)="onChangeBusinessUnit($event.value, 'create')">
+                  <mat-option *ngFor="let list of bussiness_unit_list"
+                    [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Advice Number</mat-label>
+                <input type="text" class="form-control" [(ngModel)]="seq_no" formControlName="unadviceno" readonly />
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Advice Type<span class="red">*</span></mat-label>
+                <mat-select formControlName="advice_type" [(ngModel)]="selectedAdviceType" class="form-control"
+                  (selectionChange)="onChangeAdviceType($event.value)">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option value="Purchase Order">Purchase</mat-option>
+                  <mat-option value="Sales Return">Sales Return</mat-option>
+                  <mat-option value="Stock Transfer">Stock Transfer</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Referance Type<span class="red">*</span></mat-label>
+                <mat-select formControlName="ref_type" [(ngModel)]="ref_type1" class="form-control"
+                  (selectionChange)="openbuttonstatus($event.value)"
+                  [disabled]="model.advice_type == 'Stock Transfer' || model.advice_type == 'Sales Return'">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let list of referenceTypeList" [value]="list.value">{{list.name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <!-- ------------------------------------------Business Partner------------------------------------------- -->
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="adviceType == 'Purchase Order' || adviceType == '0'">
+              <div class="form-group">
+                <mat-label>Business Partner<span class="red">* {{showgstno}}</span></mat-label>
+                <!-- <mat-select formControlName="busi_partner" [(ngModel)]="model.busi_partner" class="form-control" (selectionChange)="onChangeSupplierName($event.value)">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let busi_partner of businessPartnerList" [value]="busi_partner.bp_Id">{{busi_partner.bp_name}}</mat-option>
+                </mat-select> -->
+                <mat-select-autocomplete class="form-control ats" [options]="businessPartnerList" [display]="'bp_name'"
+                  [value]="'bp_Id'" [multiple]='false' (selectionChange)="onChangeSupplierName($event)" ngDefaultControl
+                  [formControl]="userForm.controls['busi_partner']">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="adviceType == 'Sales Return'">
+              <div class="form-group">
+                <mat-label>Business Partner<span class="red">* {{showgstno}}</span></mat-label>
+                <!-- <mat-select formControlName="customer" [(ngModel)]="customer1" class="form-control" (selectionChange)="onChangeCustomerName($event.value)">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let busi_partner of businessPartnerList" [value]="busi_partner.cp_Id">{{busi_partner.cp_name}}</mat-option>
+                </mat-select>
+                -->
+                <mat-select-autocomplete class="form-control ats" [options]="businessPartnerList" [display]="'cp_name'"
+                  [value]="'cp_Id'" [multiple]='false' (selectionChange)="onChangeCustomerName($event)" ngDefaultControl
+                  [formControl]="userForm.controls['customer']">
+                </mat-select-autocomplete>
+
+                <!-- <mat-select-autocomplete class="form-control ats"
+                [options]="businessPartnerList"
+                [display]="'cp_name'"
+                [value]="'cp_Id'"
+                [multiple]='false'
+                (selectionChange)="onChangeCustomerName($event)"
+                ngDefaultControl
+                [formControl]="userForm.controls['customer']">
+                </mat-select-autocomplete> -->
+              </div>
+            </div>
+            <!-- ------------------------------------------Business Partner------------------------------------------- -->
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="adviceType != 'Sales Return'">
+              <div class="form-group">
+                <mat-label>Service / Item Type<span class="red">*</span></mat-label>
+                <mat-select formControlName="item_type" [(ngModel)]="item_type1" class="form-control">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option value="Item">Item</mat-option>
+                  <mat-option value="Service">Service</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="adviceType != 'Sales Return'">
+              <div class="form-group">
+                <mat-label>Service / Item Sub Type<span class="red">*</span></mat-label>
+                <mat-select formControlName="item_subtype" [(ngModel)]="item_subtype1" class="form-control"
+                  (selectionChange)="onChangeServicesItemType($event.value, model.ref_type)">
+                  <mat-option *ngFor="let itemSubtype of itemtypes"
+                    [value]="itemSubtype.item_id">{{itemSubtype.item_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="adviceType != 'Sales Return'">
+              <div class="form-group">
+                <mat-label>Supplier Ref. Document Type</mat-label>
+                <mat-select formControlName="supp_ref_doc" [(ngModel)]="model.supp_ref_doc" class="form-control">
+                  <mat-option value="Challan">Challan</mat-option>
+                  <mat-option value="Gate Pass">Gate Pass</mat-option>
+                  <mat-option value="Party Bill Details">Party Bill Details</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="adviceType != 'Sales Return'">
+              <div class="form-group">
+                <mat-label>Supplier Ref. Document No.</mat-label>
+                <input type="text" formControlName="supp_ref_docno" [(ngModel)]="model.supp_ref_docno"
+                  class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="adviceType != 'Sales Return'">
+              <div class="form-group">
+                <mat-label>Supplier Ref. Document Date</mat-label>
+                <input type="date" formControlName="supp_ref_doc_date" [(ngModel)]="model.supp_ref_doc_date"
+                  class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Transporter Name</mat-label>
+                <mat-select formControlName="transporter_code" [(ngModel)]="transporter_code1" class="form-control"
+                  (selectionChange)="onChangeTransporterName($event.value)" [disabled]="openadvice">
+                  <mat-option value="0">-Select-</mat-option>
+
+                  <mat-option *ngFor="let transporterName of transporterNames"
+                    [value]="transporterName.bp_Id">{{transporterName.bp_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <!-- chnages on 12-04-2022 -->
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Vehicle No.</mat-label>
+                <mat-select formControlName="vehicle_id" [(ngModel)]="model.vehicle_id" class="form-control" (selectionChange)="onChangeVechileNo($event.value)">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let vehicle_no of vehclenos" [value]="vehicle_no.vehicle_id">{{vehicle_no.vehicle_no}}</mat-option>
+                </mat-select>
+              </div>
+            </div>  -->
+
+
+            <!-- [selectedOptions]="selectedOptions"
+ -->
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Vehicle No.<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats" [options]="vehclenos" [display]="'vehicle_no'"
+                  [value]="'vehicle_id'" (selectionChange)="onChangeVechileNo($event)" [multiple]='false'
+                  ngDefaultControl [formControl]="userForm.controls['vehicle_id']" [disabled]="openadvice">
+                </mat-select-autocomplete>
+
+              </div>
+            </div>
+
+            <!-- chnages on 12-04-2022 ends-->
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="adviceType != 'Sales Return'">
+              <div class="form-group">
+                <mat-label>PO Quantity<span class="red">*</span></mat-label>
+                <div class="clr"></div>
+                <input type="text" formControlName="total_qty" [(ngModel)]="model.total_qty" class="form-control"
+                  [readonly]="true">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Unload Quantity<span class="red">*</span></mat-label>
+                <div class="clr"></div>
+                <input type="text" formControlName="total_qty_copy" [(ngModel)]="model.total_qty_copy"
+                  class="form-control" [readonly]="true">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>UoM<span class="red">*</span></mat-label>
+                <mat-select formControlName="uom" [(ngModel)]="uomnew" class="form-control"
+                  (selectionChange)="onChangeUom($event.value)">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let uom of customUOMs" [value]="uom.customuom_id">{{uom.description}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Return Remark</mat-label>
+                <input formControlName="return_remarks" [(ngModel)]="model.return_remarks" type="text"
+                  class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>&nbsp;</mat-label>
+                <div class="clr"></div>
+                <mat-checkbox formControlName="return_type" [(ngModel)]="model.return_type">Return Type
+                  Partial</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>&nbsp;</mat-label>
+                <div class="clr"></div>
+                <mat-checkbox formControlName="we_req" [(ngModel)]="model.we_req">Weightment Required</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>&nbsp;</mat-label>
+                <div class="clr"></div>
+                <mat-checkbox formControlName="qc_required" [(ngModel)]="model.qc_required">QC Required</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>&nbsp;</mat-label>
+                <div class="clr"></div>
+                <mat-checkbox formControlName="we_chg_app" [(ngModel)]="model.we_chg_app">Weighment Charges
+                  Applicable</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12" *ngIf="adviceType == 'Sales Return'">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox formControlName="jobwork" (change)="jobworkshow($event)">Job Work Service</mat-checkbox>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12" *ngIf="adviceType == 'Sales Return'">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox formControlName="looseitem" (change)="looseitemshow($event)">Loose Item</mat-checkbox>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="action == 'update'">
+              <div class="form-group">
+                <mat-label>Add New Vehicle</mat-label>
+                <div class="clr"></div>
+                <button class="btn btn-info" (click)="addNewVechile()">Add New Vehicle</button>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="action == 'update'">
+              <div class="form-group" *ngIf="refNo">
+                <mat-label style="display: block; margin-bottom: 0px;">&nbsp;</mat-label>
+                <button class="btn btn-info" (click)="onClickShow()">Show</button>
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+      <!--  Dynamic Start-->
+
+      <div class="dyn_table_conent" style="border: none;">
+        <mat-tab-group animationDuration="1000ms">
+          <mat-tab label="Job Item" *ngIf="jobtransaction; else elseitemdetails">
+
+
+            <div class="dyn_table_conent" style="border: none;">
+              <div class="dyn_table_header">
+                <label class="label_col">
+                  <h3 class="act">Action</h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="srln">Srl No</h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="i_nam">Job Item<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="i_nam">Job Packing<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>HSN Code</h3>
+                </label>
+                <label class="label_col">
+                  <h3>Packing Qty.<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Packing Uom</h3>
+                </label>
+                <label class="label_col">
+                  <h3>Price Based On<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Item Qty.<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Item Uom</h3>
+                </label>
+                <label class="label_col">
+                  <h3>Tolerance(%)</h3>
+                </label>
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="wm_unload_advice_item_dtls_for_jobwork">
+                <div class="dyn_table"
+                  *ngFor="let item of wm_unload_advice_item_dtls_for_jobwork.controls; let pointIndex=index"
+                  [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action"
+                      (click)="deletejobItems(pointIndex)"></i></div>
+
+                  <div class="label_col">
+                    <input class="form-control srln" formControlName="sl_no" type="number" readonly />
+                  </div>
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam" [options]="jobitemlist"
+                      [display]="'item_name'" [value]="'item_id'" [multiple]='false'
+                      [selectedOptions]="selectedJobItem[pointIndex]" ngDefaultControl [formControlName]="'job_item'"
+                      disabled>
+                    </mat-select-autocomplete>
+                  </div>
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam" [options]="jobpackinglist[pointIndex]"
+                      [display]="'item_name'" [value]="'item_code'" [multiple]='false'
+                      [selectedOptions]="selectedJobPacking[pointIndex]" ngDefaultControl
+                      [formControlName]="'job_packing'" disabled>
+                    </mat-select-autocomplete>
+                  </div>
+
+                  <div class="label_col"><input class="form-control" formControlName="job_hsn" type="text" readonly />
+                  </div>
+                  <div class="label_col"><input class="form-control" formControlName="pack_qty" type="number"
+                      (keyup)="getJobPackingQty($event, pointIndex)" readonly /></div>
+                  <div class="label_col"><input type="text" class="form-control" formControlName="pack_uom" readonly>
+                  </div>
+                  <div class="label_col">
+                    <select class="form-control" formControlName="price_based_on">
+                      <option value="Item">Item</option>
+                      <option value="Packing">Packing</option>
+                    </select>
+                  </div>
+                  <div class="label_col"><input class="form-control" formControlName="item_qty" type="number"
+                      (focusout)="getJobItemQty($event, pointIndex)" [readonly]="jobworklooseitem" /></div>
+                  <div class="label_col"><input class="form-control" formControlName="item_uom" type="text" readonly />
+                  </div>
+                  <div class="label_col"><input class="form-control" formControlName="tolerance" type="number"
+                      readonly /></div>
+
+
+                </div>
+
+              </div>
+            </div>
+            <div class="btm_btn_content">
+              <button type="button" class="btn btn-success" *ngIf="!show_Row" (click)="addJobItem()">Add Row </button>
+            </div>
+            <div class="clr"></div>
+
+          </mat-tab>
+          <ng-template #elseitemdetails>
+            <mat-tab label="Service / Item Details">
+              <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col">
+                    <h3>Action</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="srln">Srl No</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Item Name<span class="red">*</span></h3>
+                  </label>
+                  <label class="label_col" *ngIf="storepurchase">
+                    <h3 class="i_nam">Classified Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Packing Item<span class="red">*</span></h3>
+                  </label>
+
+                  <!-- <label class="label_col" *ngIf="potype_packing">
+                    <h3>Code</h3>
+                  </label>
+                  <label class="label_col" *ngIf="potype_packing">
+                    <h3>Size</h3>
+                  </label>
+                  <label class="label_col" *ngIf="potype_packing">
+                    <h3>Weight</h3>
+                  </label>
+                  <label class="label_col" *ngIf="potype_packing">
+                    <h3>Laminated/Non-Laminated</h3>
+                  </label> -->
+
+                  <label class="label_col">
+                    <h3>Packing Quantity<span class="red">*</span></h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Packing Uom</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Item Quantity<span class="red">*</span></h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Item Uom</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Conversion <br>Factor</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Mat.Wt</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>QC Norms</h3>
+                  </label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="wm_unload_advice_item_dtls">
+                  <div class="dyn_table" *ngFor="let item of wm_unload_advice_item_dtls.controls; let pointIndex=index"
+                    [formGroupName]="pointIndex">
+
+                    <div *ngIf="adviceType == 'Sales Return' || adviceType == 'Stock Transfer';else elseBlock4">
+
+
+                      <div class="label_col"><i class="fa fa-trash form-control action"></i></div>
+                      <div class="label_col"><input class="form-control srln" formControlName="sl_no" type="number"
+                          name="srl no" readonly /></div>
+                      <div class="label_col"><mat-select formControlName="item_code" class="form-control i_nam"
+                          [disabled]="true">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option *ngFor="let item_code of item_codes"
+                            [value]="item_code.item_id">{{item_code.item_name}}</mat-option></mat-select></div>
+
+
+
+
+                      <div class="label_col"><select formControlName="packing" class="form-control i_nam" disabled>
+
+                          <option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">
+                            {{packingitm.item_name}}</option>
+                        </select></div>
+
+                      <div class="label_col"><input class="form-control" formControlName="s_qty" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input type="text" class="form-control" formControlName="s_uom" readonly />
+                      </div>
+                      <!-- <div class="label_col"><input class="form-control" formControlName="quantity" type="text" name="quantity" (keyup)="getItemQty($event, pointIndex)"/></div> -->
+                      <div class="label_col"><input class="form-control" formControlName="quantity" type="text"
+                          name="quantity" readonly />
+                        <input class="form-control" type="hidden" formControlName="toleranceqty" readonly />
+                      </div>
+
+                      <div class="label_col"><input type="text" class="form-control" formControlName="uom" name="uom"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="con_factor" type="text" />
+                      </div>
+                      <div class="label_col"><input class="form-control" formControlName="mat_wt" type="number"
+                          name="mat-wt" readonly /></div>
+
+                      <!-- <div class="label_col"><input class="form-control" formControlName="qc_norms" type="text" readonly/></div> -->
+                      <div class="label_col">
+                        <select type="text" formControlName="qc_norms" class="form-control">
+                          <option *ngFor="let qc of qc_normsList[pointIndex]" [value]="qc.qc_id">{{qc.qc_description}}
+                          </option>
+                        </select>
+                      </div>
+
+
+                    </div>
+                    <ng-template #elseBlock4>
+
+
+                      <div *ngIf="poitemnumberstatus;else singleitemstatus"><!--means po has multipleitems -->
+                        <div class="label_col"><i class="fa fa-trash form-control action"
+                            (click)="deleteItem(pointIndex)"></i></div>
+                        <div class="label_col"><input class="form-control srln" formControlName="sl_no" type="number"
+                            name="srl no" readonly /></div>
+                        <div class="label_col"><mat-select formControlName="item_code" class="form-control i_nam"
+                            (selectionChange)="onChangeItemName(pointIndex, $event.value)">
+                            <mat-option value="0">-Select-</mat-option>
+                            <mat-option *ngFor="let item_code of item_codes"
+                              [value]="item_code.item_id">{{item_code.item_name}}</mat-option></mat-select></div>
+                        <div class="label_col" *ngIf="storepurchase"><input type="text" class="form-control i_nam"
+                            formControlName="classified_item_name" readonly /></div>
+                        <div class="label_col"><select formControlName="packing" class="form-control i_nam"
+                            (change)="onChangePackingItem(pointIndex, $event)">
+                            <option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">
+                              {{packingitm.item_name}}</option>
+                          </select></div>
+
+                        <!-- <div class="label_col" *ngIf="potype_packing">
+                          <input class="form-control" type="text"
+                            formControlName="packing_item_code" readonly />
+                        </div>
+
+                        <div class="label_col" *ngIf="potype_packing"><input class="form-control" type="text"
+                            formControlName="packing_size" readonly /></div>
+                        <div class="label_col" *ngIf="potype_packing"><input class="form-control" type="text"
+                            formControlName="packing_weight" readonly /></div>
+                        <div class="label_col" *ngIf="potype_packing"><input class="form-control" type="text"
+                            formControlName="packing_type" readonly /></div> -->
+
+                        <div class="label_col"><input class="form-control" formControlName="s_qty" type="number"
+                            (focusout)="getPackingQty($event, pointIndex)" /></div>
+                        <div class="label_col"><input type="text" class="form-control" formControlName="s_uom"
+                            readonly /></div>
+                        <!-- <div class="label_col"><input class="form-control" formControlName="quantity" type="text" name="quantity" (keyup)="getItemQty($event, pointIndex)"/></div> -->
+                        <div class="label_col"><input class="form-control" formControlName="quantity" type="text"
+                            name="quantity"
+                            (focusout)="getItemQty($event, pointIndex,wm_unload_advice_item_dtls.controls)" />
+                          <input class="form-control" type="hidden" formControlName="toleranceqty" readonly />
+                        </div>
+
+                        <div class="label_col"><input type="text" class="form-control" formControlName="uom" name="uom"
+                            readonly /></div>
+
+                        <div class="label_col"><input class="form-control" formControlName="con_factor" type="number"
+                            (keyup)="getconfactorwt(pointIndex)" /></div>
+
+                        <div class="label_col"><input class="form-control" formControlName="mat_wt" type="number"
+                            name="mat-wt" readonly /></div>
+                        <!-- <div class="label_col"><input class="form-control" formControlName="qc_norms" type="text" readonly/></div> -->
+
+                        <div class="label_col">
+                          <select type="text" formControlName="qc_norms" class="form-control">
+                            <option *ngFor="let qc of qc_normsList[pointIndex]" [value]="qc.qc_id">{{qc.qc_description}}
+                            </option>
+                          </select>
+                        </div>
+
+                      </div>
+                      <ng-template #singleitemstatus>
+
+                        <div class="label_col"><i class="fa fa-trash form-control action"
+                            (click)="deleteItem(pointIndex)"></i></div>
+                        <div class="label_col"><input class="form-control srln" formControlName="sl_no" type="number"
+                            name="srl no" readonly /></div>
+                        <div class="label_col"><mat-select formControlName="item_code" class="form-control i_nam"
+                            (selectionChange)="onChangeItemName(pointIndex, $event.value)" disabled>
+                            <mat-option value="0">-Select-</mat-option>
+                            <mat-option *ngFor="let item_code of item_codes"
+                              [value]="item_code.item_id">{{item_code.item_name}}</mat-option></mat-select></div>
+                        <div class="label_col"><select formControlName="packing" class="form-control i_nam"
+                            (change)="onChangePackingItem(pointIndex, $event)">
+
+                            <option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">
+                              {{packingitm.item_name}}</option>
+                          </select></div>
+                        <div class="label_col"><input class="form-control" formControlName="s_qty" type="number"
+                            (focusout)="getPackingQtysingleitem($event, pointIndex)" /></div>
+                        <div class="label_col"><input type="text" class="form-control" formControlName="s_uom"
+                            readonly /></div>
+                        <div class="label_col"><input class="form-control" formControlName="quantity" type="text"
+                            name="quantity" (focusout)="getItemQtysingle($event, pointIndex)" />
+                          <input class="form-control" type="hidden" formControlName="toleranceqty" readonly />
+                        </div>
+
+                        <div class="label_col"><input type="text" class="form-control" formControlName="uom" name="uom"
+                            readonly /></div>
+
+                        <div class="label_col"><input class="form-control" formControlName="con_factor" type="number"
+                            (keyup)="getconfactorwt(pointIndex)" /></div>
+
+                        <div class="label_col"><input class="form-control" formControlName="mat_wt" type="number"
+                            name="mat-wt" readonly /></div>
+                        <!-- <div class="label_col"><input class="form-control" formControlName="qc_norms" type="text" readonly/></div> -->
+
+                        <div class="label_col">
+                          <select type="text" formControlName="qc_norms" class="form-control">
+                            <option *ngFor="let qc of qc_normsList[pointIndex]" [value]="qc.qc_id">{{qc.qc_description}}
+                            </option>
+                          </select>
+                        </div>
+
+                      </ng-template>
+
+                    </ng-template>
+
+
+                  </div>
+                </div>
+              </div>
+              <div class="btm_btn_content" *ngIf="action == 'update'">
+                <button type="button" class="btn btn-success" (click)="addItemupdate()" [disabled]="showaddrow">Add Row
+                </button>
+              </div>
+              <div class="clr"></div>
+
+
+            </mat-tab>
+          </ng-template>
+          <mat-tab label="Party Weighment">
+            <div formGroupName="wm_unload_advice_party_wm">
+
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                <div class="form-group">
+                  <mat-label>Gross Wt.</mat-label>
+                  <input formControlName="gross_wt" type="number" class="form-control" (keyup)="getGrossWt($event)">
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Uom</mat-label>
+                  <mat-select formControlName="uom1" class="form-control" [disabled]="true">
+                    <mat-option *ngFor="let uom of customUOMs"
+                      [value]="uom.customuom_id">{{uom.description}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                <div class="form-group">
+                  <mat-label>Tare Wt.</mat-label>
+                  <input formControlName="tare_wt" type="number" class="form-control" (keyup)="getTareWt($event)">
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Uom</mat-label>
+                  <mat-select formControlName="uom2" class="form-control" [disabled]="true">
+                    <mat-option *ngFor="let uom of customUOMs"
+                      [value]="uom.customuom_id">{{uom.description}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                <div class="form-group">
+                  <mat-label>Net Wt.</mat-label>
+                  <input type="number" formControlName="net_wt" class="form-control" readonly />
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Uom</mat-label>
+                  <mat-select formControlName="uom3" class="form-control" [disabled]="true">
+                    <mat-option *ngFor="let uom of customUOMs"
+                      [value]="uom.customuom_id">{{uom.description}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                <div class="form-group">
+                  <mat-label>Slip No.</mat-label>
+                  <input formControlName="slip_no" type="text" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                <div class="form-group">
+                  <mat-label>Date</mat-label>
+                  <input formControlName="pw_date" type="date" class="form-control"
+                    (change)="onChangePartyDate($event)">
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                <div class="form-group">
+                  <mat-label>Weigh Bridge Name</mat-label>
+                  <input formControlName="wb_name" type="text" class="form-control">
+                  <!-- <mat-select formControlName="wb_name" class="form-control">
+                  <mat-option *ngFor="let list of WeighBridgeList" [value]="list.mastertype_code">{{list.description_head}}</mat-option>
+                </mat-select> -->
+                </div>
+              </div>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Driver Details">
+            <div formGroupName="wm_unload_advice_driver_dtls">
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12" *ngIf="action == 'update'">
+                <div class="form-group">
+                  <mat-label>&nbsp;</mat-label>
+                  <div class="clr"></div>
+                  <button mat-button class="btn btn-info" (click)="createNewDriver($event)">Add New Driver</button>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Spot Transportation Advance</mat-label>
+                  <input type="text" formControlName="spot_trans" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-5 col-md-5 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Remarks</mat-label>
+                  <input type="text" formControlName="remarks" class="form-control">
+                </div>
+              </div>
+              <div class="clr"></div>
+              <fieldset style="padding: 10px 0;">
+                <div class="col-lg-7 col-md-8 col-sm-6 col-12">
+                  <div class="row">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>&nbsp;</mat-label>
+                        <div class="clr"></div>
+                        <div class="form-control"
+                          style="min-height: 110px; border: 1px solid #ccc; border-radius: 4px;">
+
+                          <div class="imagePreview" *ngIf="imageURL && imageURL !== ''">
+                            <!-- <input type="image" [src]="imageURL" style="height:106px;width: 175px;"  (click)="viewfullscreen()"> -->
+                            <input type="image" [src]="imageURL" class="imageContainer"
+                              style="height:106px;width: 175px;" (click)="viewimg(this.src)">
+                          </div>
+
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-5 col-md-4 col-sm-6 col-12">
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>Driver Name<span class="red">*</span></mat-label>
+                            <mat-select formControlName="driver_name" class="form-control"
+                              (selectionChange)="onChangeDriverName($event.value)">
+                              <mat-option value="0">-Select-</mat-option>
+                              <mat-option *ngFor="let driver of driver_names"
+                                [value]="driver.driver_id">{{driver.driver_name}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>Phone no</mat-label>
+                            <input formControlName="phone" type="tel" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Address</mat-label>
+                        <textarea formControlName="address" class="form-control" style="height: 110px;"></textarea>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-12 col-md-12 col-sm-6 col-12">
+                      <div class="form-group">
+
+                        <button class="btn btn-info"
+                          (click)="printdriverdetails(wm_unload_advice_driver_dtls)">Gatepass</button>
+
+                      </div>
+                    </div>
+
+                  </div>
+                </div>
+                <div class="col-lg-5 col-md-4 col-sm-6 col-12">
+                  <div class="row">
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div class="row">
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                          <div class="form-group">
+                            <mat-label>Document Type</mat-label>
+                            <input type="text" formControlName="doc_type" class="form-control"
+                              value={{selectedDocumentType}} readonly />
+                          </div>
+                        </div>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                          <div class="form-group">
+                            <mat-label>Document No.</mat-label>
+                            <input type="text" formControlName="doc_no" class="form-control">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div class="form-group">
+                        <mat-label>Description</mat-label>
+                        <textarea class="form-control" formControlName="description" style="height: 110px;"></textarea>
+                      </div>
+                    </div>
+
+
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </mat-tab>
+
+          <!-- <mat-tab label="Broker Details" *ngIf="model.ref_type != 'Stock Transfer'"> -->
+          <mat-tab label="Broker Details" *ngIf="brokerdetailsshow">
+            <div class="form-group" style="width: 150px; margin: 0;">
+              <mat-checkbox (change)="onChangeBrokerageApplStatus($event)" [checked]="isBrokerageApplicable"
+                [(ngModel)]="model.brokerage_active" formControlName="brokerage_active">Brokerage
+                Applicable</mat-checkbox>
+            </div>
+            <div class="dyn_table_conent">
+              <div class="dyn_table_header">
+                <label class="label_col ">
+                  <h3>Action</h3>
+                </label>
+                <label class="label_col">
+                  <h3>Srl No</h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="i_nam">Broker Name<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Basis</h3>
+                </label>
+                <label class="label_col">
+                  <h3>Rate</h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="i_nam">Brokerage Account</h3>
+                </label>
+                <label class="label_col">
+                  <h3>TDS Rate</h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="i_nam">TDS Account</h3>
+                </label>
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="wm_unload_advice_broker_dtls">
+                <div class="dyn_table" *ngFor="let item of wm_unload_advice_broker_dtls.controls; let pointIndex=index"
+                  [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action"
+                      (click)="deleteBroker(pointIndex)"></i> </div>
+                  <div class="label_col"><input type="number" class="form-control" formControlName="sl_no" /></div>
+
+                  <div class="label_col" *ngIf="false"><mat-select formControlName="ven_code_name"
+                      class="form-control i_nam" (selectionChange)="onChangeBrokerName(pointIndex, $event.value)">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let list of brokerNameList"
+                        [value]="list.ven_code_name">{{list.ven_name}}</mat-option>
+                    </mat-select>
+                  </div>
+                  <div class="label_col"><mat-select formControlName="ven_code_name" class="form-control i_nam"
+                      type="text" (selectionChange)="onChangeBrokerName(pointIndex, $event.value)">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let list of brokerNameList"
+                        [value]="list.broker_id">{{list.name}}</mat-option>
+                    </mat-select>
+                  </div>
+
+                  <div class="label_col"><input class="form-control" formControlName="basis" type="text" /></div>
+                  <div class="label_col"><input class="form-control" formControlName="rate" min="0" type="number" />
+                  </div>
+                  <div class="label_col"><mat-select class="form-control i_nam" formControlName="brokerage_acc"
+                      type="text">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let list of ledgerNames"
+                        [value]="list.ledgerid">{{list.ledgername}}</mat-option>
+                    </mat-select></div>
+                  <div class="label_col"><input class="form-control" formControlName="tds_rate" type="number" /></div>
+                  <div class="label_col"><mat-select class="form-control i_nam" formControlName="tds_acc" type="text">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let list of ledgerNames"
+                        [value]="list.ledgerid">{{list.ledgername}}</mat-option>
+                    </mat-select></div>
+
+                </div>
+              </div>
+            </div>
+            <div class="btm_btn_content" *ngIf="action == 'update'">
+              <button type="button" *ngIf="isBrokerageApplicable" class="btn btn-success"
+                (click)="addBroker(pointIndex)">Add Row</button>
+              <div class="clr"></div>
+            </div>
+          </mat-tab>
+
+          <!-- <mat-tab label="Transport Information" *ngIf="model.ref_type != 'Stock Transfer'"> -->
+          <mat-tab label="Transport Information" *ngIf="transportdetailsshow">
+            <div formGroupName="wm_unload_advice_trans_info">
+              <fieldset class="dnmk">
+                <legend>Transport Information</legend>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Transport Borne By</mat-label>
+                    <mat-select class="form-control" formControlName="trans_borne_by"
+                      (selectionChange)="onChangeTransportBorneBy($event.value)">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let trans_borne_by of transBrone"
+                        [value]="trans_borne_by">{{trans_borne_by}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Transporter Name</mat-label>
+                    <mat-select type="text" class="form-control" formControlName="transporter_name"
+                      [disabled]="isTranporterInfoIsDisabled"
+                      (selectionChange)="onChangeTInfoTransporterName($event.value)">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let transporterName of transporterNames"
+                        [value]="transporterName.bp_Id">{{transporterName.bp_name}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Mode Of Transport</mat-label>
+                    <mat-select class="form-control" formControlName="mode_of_trans"
+                      [disabled]="isTranporterInfoIsDisabled">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let mode_of_trans of modeOfTransport"
+                        [value]="mode_of_trans">{{mode_of_trans}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Transportation Rate</mat-label>
+                    <mat-select class="form-control" formControlName="transport_rate"
+                      [disabled]="isTranporterInfoIsDisabled">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let transport_rate of transRate" [value]="transport_rate">{{transport_rate}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label for="Charge Code">Charge Code</mat-label>
+                  <mat-select class="form-control" formControlName="charge_code" [disabled]="isTranporterInfoIsDisabled">
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option *ngFor="let list of chargesList" [value]="list.wm_charge_id">{{list.wm_charge_desc}}</mat-option>
+                  </mat-select>
+                </div>
+              </div> -->
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Charge Code</mat-label>
+                    <input type="text" class="form-control" formControlName="charge_code"
+                      [disabled]="isTranporterInfoIsDisabled">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Rate Value</mat-label>
+                    <input type="number" min="0" class="form-control" formControlName="rate_value"
+                      [readonly]="isTranporterInfoIsDisabled">
+                  </div>
+                </div>
+              </fieldset>
+              <fieldset class="dnmk">
+                <legend>Payment</legend>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+
+                  <div class="form-group">
+                    <mat-label>Payment Mode</mat-label>
+                    <mat-select class="form-control" formControlName="payment_mode"
+                      [disabled]="isTranporterInfoIsDisabled">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let payment_mode of payModes" [value]="payment_mode">{{payment_mode}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Cash Amt.</mat-label>
+                    <input type="number" min="0" class="form-control" formControlName="cash_limit"
+                      [readonly]="isTranporterInfoIsDisabled">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Payment Terms</mat-label>
+                    <mat-select class="form-control" formControlName="payment_terms"
+                      [disabled]="isTranporterInfoIsDisabled">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let payTerm of payTerms"
+                        [value]="payTerm.payterm_id">{{payTerm.payterm_desc}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Bank Name</mat-label>
+                    <input type="text" class="form-control" formControlName="bank_name"
+                      [readonly]="isTranporterInfoIsDisabled" />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Account Holder Name</mat-label>
+                    <input type="text" class="form-control" formControlName="account_name"
+                      [readonly]="isTranporterInfoIsDisabled">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Account No</mat-label>
+                    <input type="number" min="0" class="form-control" formControlName="account_no"
+                      [readonly]="isTranporterInfoIsDisabled">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Branch</mat-label>
+                    <input type="text" class="form-control" formControlName="branch"
+                      [readonly]="isTranporterInfoIsDisabled">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>IFSC Code</mat-label>
+                    <input type="text" formControlName="ifsc_code" class="form-control"
+                      [readonly]="isTranporterInfoIsDisabled">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Mobile Number</mat-label>
+                    <input type="number" formControlName="mobile" class="form-control"
+                      [readonly]="isTranporterInfoIsDisabled">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>IBAN</mat-label>
+                    <input type="text" class="form-control" formControlName="iban"
+                      [readonly]="isTranporterInfoIsDisabled">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>BIC/SWIFT Code</mat-label>
+                    <input type="text" class="form-control" formControlName="bic_swift_code"
+                      [readonly]="isTranporterInfoIsDisabled">
+                  </div>
+                </div>
+
+              </fieldset>
+            </div>
+          </mat-tab>
+
+          <mat-tab label="Terms & Condition" *ngIf="model.ref_type == 'Purchase Order'">
+            <div formGroupName="wm_unload_advice_terms_con">
+              <fieldset>
+                <legend>Payment</legend>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Payment Mode</mat-label>
+                    <mat-select formControlName="payment_mode" class="form-control"
+                      (selectionChange)="onChangePaymentMode($event.value)" [disabled]="true">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let payment_mode of payModes" [value]="payment_mode">{{payment_mode}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12" *ngIf="is_cash_limit_active">
+                  <div class="form-group">
+                    <mat-label>Cash Amt.</mat-label>
+                    <input type="number" min="0" class="form-control" formControlName="cash_limit" readonly />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>TCS Applicable</mat-label>
+                    <mat-select formControlName="tcs_applicable" class="form-control"
+                      (selectionChange)="onChangeTcsApplicable($event.value)">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option value="Yes">Yes</mat-option>
+                      <mat-option value="No">No</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="isTcsApplicable">
+                  <div class="form-group">
+                    <mat-label>TCS Rate</mat-label>
+                    <input type="number" formControlName="tcs_rate" class="form-control" readonly />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Payment Terms</mat-label>
+                    <mat-select formControlName="payment_terms" class="form-control" [disabled]="true">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let payTerm of payTerms"
+                        [value]="payTerm.payterm_id">{{payTerm.payterm_desc}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Bank Name</mat-label>
+                    <input type="text" class="form-control" formControlName="bank_name" readonly />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Account Holder Name</mat-label>
+                    <input type="text" formControlName="account_name" class="form-control" readonly />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Account No</mat-label>
+                    <input type="number" formControlName="account_no" min="0" class="form-control" readonly />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Branch</mat-label>
+                    <input type="text" formControlName="branch" class="form-control" readonly />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>IFSC Code</mat-label>
+                    <input type="text" formControlName="ifsc" class="form-control" readonly />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Mobile Number</mat-label>
+                    <input type="number" formControlName="mobile" class="form-control" readonly />
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>IBAN</mat-label>
+                    <input type="text" formControlName="iban" class="form-control" readonly />
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>BIC/SWIFT Code</mat-label>
+                    <input type="text" formControlName="bic_swift_code" class="form-control" readonly />
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+            <fieldset>
+              <legend>Applicable Charges</legend>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label for="Payment Mode">Applicable Charges</mat-label>
+                  <mat-select formControlName="app_chgs_id" [(ngModel)]="model.app_chgs_id" class="form-control"
+                    (selectionChange)="onChangeApplicableCharges($event.value)">
+                    <mat-option value="0">Select Id</mat-option>
+                    <mat-option *ngFor="let list of chargesIdList"
+                      [value]="list.charge_id">{{list.charge_desc}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+
+              <div class="ht_15"></div>
+              <div class="singel col-lg-12 col-md-12 col-sm-12 col-12"
+                style="margin-bottom:15px; margin-left: 15px; padding: 0;">
+                <div class="tble_row">
+                  <div class="dyn_table_header" style="border-bottom: 1px solid #ccc;">
+                    <label class="label_col">
+                      <h3>Charges Name.</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 style="width: 226px;">Rate Calculation Method</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Tax Rate(%)</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Amount</h3>
+                    </label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="wm_unload_advice_app_chgs">
+                    <div class="dyn_table" *ngFor="let item of wm_unload_advice_app_chgs.controls; let pointIndex=index"
+                      [formGroupName]="pointIndex">
+                      <div class="label_col"><input formControlName="charges_name" class="form-control" type="text" />
+                      </div>
+                      <div class="label_col"><input formControlName="rate_cal_method" class="form-control"
+                          style="width: 220px;" /> </div>
+                      <div class="label_col"><input formControlName="tax_rate" class="form-control" min="0"
+                          type="number" /></div>
+                      <div class="label_col"><input formControlName="amount" class="form-control wdt_form_107" min="0"
+                          type="number" /></div>
+                    </div>
+                  </div>
+                  <div class="clr"></div>
+                </div>
+              </div>
+            </fieldset>
+          </mat-tab>
+
+          <mat-tab label="Business Partner Details" *ngIf="model.ref_type != 'Stock Transfer'">
+            <div formGroupName="wm_unload_advice_bp_dtls">
+              <fieldset class="dnmk">
+                <legend>Supplier Information</legend>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="row">
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Name</mat-label>
+                        <mat-select type="text" formControlName="sp_name" class="form-control"
+                          (selectionChange)="onChangeSuppInfoName($event.value)">
+                          <mat-option>-Select-</mat-option>
+                          <mat-option *ngFor="let list of contAddrs"
+                            [value]="list.contact_person">{{list.contact_person}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Phone No.</mat-label>
+                        <input type="number" min="0" class="form-control" formControlName="sp_phone">
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Fax</mat-label>
+                        <input type="text" min="0" class="form-control" formControlName="sp_fax">
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>E-Mail</mat-label>
+                        <input type="email" class="form-control" formControlName="sp_email">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div class="form-group" style="height: auto;">
+                        <mat-label>Address</mat-label>
+                        <textarea class="form-control" formControlName="sp_address" rows="1"
+                          style="height: 108px;"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+
+              <fieldset class="dnmk">
+                <legend>Contact Person Information</legend>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="row">
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12"
+                      *ngIf="adviceType == 'Purchase Order' || adviceType == '0'">
+                      <div class="form-group">
+                        <mat-label>Name</mat-label>
+                        <mat-select type="text" formControlName="cp_name" class="form-control"
+                          (selectionChange)="onChangeContInfoName($event.value)">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option *ngFor="let list of delvAddrs"
+                            [value]="list.contact_person">{{list.contact_person}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12" *ngIf="adviceType == 'Sales Return'">
+                      <div class="form-group">
+                        <mat-label>Name</mat-label>
+                        <mat-select type="text" formControlName="cp_name" class="form-control"
+                          (selectionChange)="onChangeContInfoName($event.value)">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option *ngFor="let list of delvAddrs"
+                            [value]="list.b_unit_name">{{list.b_unit_name}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Designation</mat-label>
+                        <input type="text" formControlName="cp_designation" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Phone No.</mat-label>
+                        <input type="number" formControlName="cp_phone" min="0" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Fax</mat-label>
+                        <input type="number" formControlName="cp_fax" min="0" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>E-Mail</mat-label>
+                        <input type="email" formControlName="cp_email" class="form-control">
+                      </div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                  <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div class="form-group">
+                        <mat-label>Address</mat-label>
+                        <textarea class="form-control" formControlName="cp_address" rows="1"
+                          style="height: 108px;"></textarea>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+
+          </mat-tab>
+          <mat-tab label="Remarks">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12 dnmk">
+              <div class="form-group">
+                <mat-label>Remarks</mat-label>
+                <textarea formControlName="remarks" [(ngModel)]="model.remarks" class="form-control" rows="1"
+                  cols="20"></textarea>
+              </div>
+            </div>
+          </mat-tab>
+          <mat-tab label="Document Attachment">
+            <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+              <div class="dyn_table_conent" style="float:left;">
+                <div class="dyn_table_header">
+                  <label class="label_col">
+                    <h3>Action</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Document Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="wdt_220">Document Upload</h3>
+                  </label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="wm_unload_advice_docs">
+                  <div class="dyn_table" *ngFor="let item of wm_unload_advice_docs.controls; let pointIndex=index"
+                    [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action"
+                        (click)="deleteDocument(pointIndex)"></i></div>
+                    <div class="label_col"><input class="form-control" formControlName="doc_name" type="text" /></div>
+                    <!-- <div class="label_col"><input class="form-control wdt_215" type="file" /></div> -->
+                    <div class="label_col"><input class="form-control  wdt_220_s"
+                        (change)="onFileSelected($event,pointIndex,wm_unload_advice_docs.controls)" #myFileInput
+                        type="file" /></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="btm_btn_content" *ngIf="action == 'update'">
+                <button type="button" class="btn btn-success" (click)="addDocument(pointIndex)">Add </button>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <fieldset>
+                <legend>Document List</legend>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+
+                  <div class="dyn_table_conent">
+                    <div class="dyn_table_header">
+
+                      <label class="label_col">
+                        <h3 class="wdt_215">Document Name</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3> Download</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3> Action</h3>
+                      </label>
+                    </div>
+                    <div class="dyn_table_data_cont" formArrayName="wm_unload_advice_docs_list">
+                      <div class="dyn_table"
+                        *ngFor="let item of wm_unload_advice_docs_list.controls; let pointIndex=index"
+                        [formGroupName]="pointIndex">
+
+                        <div class="label_col"><input formControlName="doc_name" class="form-control wdt_215 "
+                            type="text" /></div>
+                        <div class="label_col"><button type="button" class="fa fa-download "
+                            (click)="viewpdf(pointIndex,wm_unload_advice_docs_list.controls)">Download </button></div>
+                        <div class="label_col"><i class="fa fa-trash form-control action wdt_215"
+                            (click)="deletepdf(pointIndex,wm_unload_advice_docs_list.controls)"></i></div>
+
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+
+      <div class="col-lg-12" *ngIf="action == 'update'">
+        <div class="form-group">
+          <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="unloadadvicesave">Submit</button>
+        </div>
+      </div>
+      <!--  Dynamic End-->
+    </div>
+  </section>
+</form>
+
+
+<div class="master_container_box" *ngIf="isHidden==false">
+
+  <form [formGroup]="userForm1">
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Advice No.</mat-label>
+        <input type="text" formControlName="order1_no" class="form-control" />
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date" class="form-control" formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label>
+        <input type="date" class="form-control" formControlName="todate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Business Partner</mat-label>
+        <mat-select-autocomplete class="form-control ats" [options]="business_Partner_List" [display]="'bp_name'"
+          [value]="'bp_Id'" [multiple]='false' ngDefaultControl [formControl]="userForm1.controls['busi_partner1']">
+          >
+        </mat-select-autocomplete>
+
+
+      </div>
+    </div>
+
+    <div class="col-lg-12">
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()">Search</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Unload Advice List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Advice No</th>
+                  <th>Date</th>
+                  <th>Business Partner</th>
+                  <th>Business Unit</th>
+                  <!-- <th>Item/Service</th> -->
+                  <th>Item Type</th>
+                  <th>Vehicle Number</th>
+                  <!-- <th>Weighment Req</th> -->
+                  <th>Advice Type</th>
+                  <th>PO No.</th>
+                  <th colspan="4">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let UnloadAdvice of listUnloadAdvice">
+                  <td>{{UnloadAdvice.unadviceno}}</td>
+                  <td>{{UnloadAdvice.ula_date}}</td>
+                  <td>{{UnloadAdvice.customer}}</td>
+                  <td>{{UnloadAdvice.business_unitname}}</td>
+                  <!-- <td>{{UnloadAdvice.item_type}}</td> -->
+                  <td>{{UnloadAdvice.item_subtypename}}</td>
+                  <td>{{UnloadAdvice.vehicle_no}}</td>
+                  <!-- <td>{{UnloadAdvice.we_req}}</td> -->
+                  <td>{{UnloadAdvice.ref_type}}</td>
+                  <td>{{UnloadAdvice.po_no}}</td>
+                  <td>
+                    <button class="btn btn-success" (click)="onUpdate(UnloadAdvice.id, UnloadAdvice.unadviceid, 'view')"
+                      *ngIf="unloadadviceview">View</button>
+                  </td>
+                  <td *ngIf="UnloadAdvice.grn_status =='1';else elseBlock ">
+                    <button class="btn btn-info" [disabled]="true">Update</button>
+                  </td>
+                  <ng-template #elseBlock>
+                    <td>
+                      <div *ngIf="unloadadviceupdate">
+                        <button class="btn btn-info"
+                          (click)="onUpdate(UnloadAdvice.id,UnloadAdvice.unadviceid, 'update')">Update</button>
+                      </div>
+                    </td>
+                  </ng-template>
+                  <td *ngIf="UnloadAdvice.weighment_status =='0';else elseBlock1 "><button class="btn btn-danger"
+                      (click)="onDelete(UnloadAdvice.id)" *ngIf="unloadadvicedelete">Delete</button></td>
+                  <ng-template #elseBlock1>
+                    <td><button class="btn btn-danger" [disabled]="true">Delete</button></td>
+                  </ng-template>
+                  <!-- <td><button class="btn btn-info" (click)="onClickBillPrint()" *ngIf="unloadadvicebillprint">Print</button></td> -->
+                  <td><button class="btn btn-info" (click)="onClickBillPrint(UnloadAdvice.id,UnloadAdvice.unadviceid)"
+                      *ngIf="unloadadvicebillprint">Print</button></td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    <!-- <div class="col-lg-12 pagination_content">
+      <mat-paginator [pageSizeOptions]="[10, 25, 100]" [pageSize]="10" [length]="totalElements"
+        (page)="nextPage($event)">
+
+    </mat-paginator>
+    </div> -->
+  </div>
+</div>

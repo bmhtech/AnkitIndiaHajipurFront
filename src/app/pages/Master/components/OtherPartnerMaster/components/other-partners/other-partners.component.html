@@ -1,0 +1,719 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Basic Information</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Type">Type</label>
+                <mat-select class="form-control" [(ngModel)]="model.bp_type" formControlName="bp_type" data-toggle="tooltip" data-placement="right" title="Select Type">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option value="Borrower">BORROWER</mat-option>
+                  <mat-option value="Lender">LENDER</mat-option>
+                  <mat-option value="Transporter">TRANSPORTER</mat-option>               
+                  <mat-option value="Venture Capitalist">VENTURE CAPITALIST</mat-option>                
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Code">Code</label>
+                <input type="text" class="form-control" [(ngModel)]="model.bp_code" formControlName="bp_code">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" class="form-control" [(ngModel)]="model.bp_name" formControlName="bp_name">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Alt. Name">Alt. Name</label>
+                <input type="text" class="form-control" [(ngModel)]="model.alt_name" formControlName="alt_name">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Group Type</mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.group_type" formControlName="group_type"  (selectionChange)="onChangeLedger($event.value)">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let group_type of subGroupNames" [value]="group_type.subgroupcode"> {{group_type.subgroupname}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Sub Group Type</mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.sub_group_type" formControlName="sub_group_type">
+                  <mat-option value="0">~Select Sub Group Type~</mat-option>
+                  <mat-option *ngFor="let sub_group_type of ledgerNames" [value]="sub_group_type.ledgername"> {{sub_group_type.ledgername}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label for="Area">Area</mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.area" formControlName="area">
+                  <mat-option value="0">-Area-</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Trans. Currency</mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.trans_currency" formControlName="trans_currency">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let trans_currency of currs" [value]="trans_currency">{{trans_currency}}
+                  </mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div [hidden]="!isBlockChecked" class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label for="Payable Control Account">Reason</mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.reason" formControlName="reason">
+                  <mat-option value="0">Reason</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="singel">
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-checkbox [(ngModel)]="model.bp_active" formControlName="bp_active">Active</mat-checkbox>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-checkbox [(ngModel)]="model.block_active" formControlName="block_active"
+                    (change)="onChangeBlockStatus($event)" [checked]="isBlockChecked">Block</mat-checkbox>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset style="padding: 10px;">
+            <legend>Business Partner - Details Information</legend>
+            <div class="row dyn_cont_area">
+              <div class="col-lg-12">
+                <div class="dyn_table_conent">
+                  <mat-tab-group animationDuration="1000ms">
+                    <mat-tab label="Address">
+                      <div formGroupName="op_bussiness_partner_address">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Contact Person">Contact Person</label>
+                            <input type="text" class="form-control" formControlName="contact_person">
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Designation">Designation</label>
+                            <input type="text" class="form-control" formControlName="designation">
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Telephone No.">Telephone No.</label>
+                            <input type="number" min="0" class="form-control" formControlName="phone">
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Mobile No.">Mobile No.</label>
+                            <input type="number" min="0" class="form-control" formControlName="mobile">
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Fax No.">Fax No.</label>
+                            <input type="number" min="0" class="form-control" formControlName="fax">
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="E-Mail">E-Mail</label>
+                            <input type="email" class="form-control" formControlName="email">
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Web Site">Web Site</label>
+                            <input type="text" class="form-control" formControlName="website">
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>Country</mat-label>
+                            <mat-select class="form-control" formControlName="country" (selectionChange)="onChangeCountry($event.value)">
+                              <mat-option value="0">-Select-</mat-option>
+                              <mat-option *ngFor="let country of countries" [value]="country.country_name">{{country.country_name}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>State</mat-label>
+                            <mat-select class="form-control" formControlName="state" (selectionChange)="onChangeState($event.value)">
+                              <mat-option value="0">-Select-</mat-option>
+                              <mat-option *ngFor="let state1 of states" [value]="state1.state_name">{{state1.state_name}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>District</mat-label>
+                            <mat-select class="form-control" formControlName="district" (selectionChange)="onChangeDistrict($event.value)">
+                              <mat-option value="0">-Select-</mat-option>
+                              <mat-option *ngFor="let district1 of districts" [value]="district1.dist_name">{{district1.dist_name}}
+                              </mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>City</mat-label>
+                            <mat-select class="form-control" formControlName="city">
+                              <mat-option value="0">-Select-</mat-option>
+                              <mat-option *ngFor="let city1 of cities" [value]="city1.city_name">{{city1.city_name}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Pin Code">Pin Code</label>
+                            <input type="number" class="form-control" formControlName="pincode">
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Address 1">Address 1</label>
+                            <textarea class="form-control" formControlName="add1" rows="1"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Address 2">Address 2</label>
+                            <textarea class="form-control" formControlName="add2" rows="1"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Address 3">Address 3</label>
+                            <textarea class="form-control" formControlName="add3" rows="1"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Web Site">Alternative</label>
+                            <input type="button" class="btn btn-success" value="Contact Person">
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+
+
+                    <mat-tab label="Billing Address">
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-checkbox [(ngModel)]="model.copy_bp_addr" formControlName="copy_bp_addr" (change)="onChangeCopyBpAddrStatus($event)" >Copy BP Address</mat-checkbox>
+                        </div>
+                      </div>
+
+                      <div formGroupName="op_bussiness_partner_bill_addr">
+                        <div class="clr"></div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Contact Person">Contact Person</label>
+                            <input type="text" class="form-control" formControlName="contact_person" />
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Designation">Designation</label>
+                            <input type="text" class="form-control" formControlName="designation"/>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Telephone No.">Telephone No.</label>
+                            <input type="number" class="form-control" formControlName="phone" />
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Mobile No.">Mobile No.</label>
+                            <input type="number" min="0" class="form-control" formControlName="mobile" />
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Fax No.">Fax No.</label>
+                            <input type="number" min="0" class="form-control" formControlName="fax" />
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="E-Mail">E-Mail</label>
+                            <input type="email" class="form-control" formControlName="email" />
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>Country</mat-label>
+                            <mat-select class="form-control" formControlName="country" (selectionChange)="onChangeCountryBill($event.value)">
+                              <mat-option value="0">-Select-</mat-option>
+                              <mat-option *ngFor="let country of countries" [value]="country.country_name">{{country.country_name}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>State</mat-label>
+                            <mat-select class="form-control" formControlName="state" (selectionChange)="onChangeStateBill($event.value)" >
+                              <mat-option value="0">-Select-</mat-option>
+                              <mat-option *ngFor="let state2 of statesBills" [value]="state2.state_name">{{state2.state_name}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>District</mat-label>
+                            <mat-select class="form-control" formControlName="district" (selectionChange)="onChangeDistrictBill($event.value)">
+                              <mat-option value="0">-Select-</mat-option>
+                              <mat-option *ngFor="let district2 of districtsBills" [value]="district2.dist_name">{{district2.dist_name}}
+                              </mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>City</mat-label>
+                            <mat-select class="form-control" formControlName="city">
+                              <mat-option value="0">-Select-</mat-option>
+                              <mat-option *ngFor="let city2 of citiesBills" [value]="city2.city_name">{{city2.city_name}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Pin Code">Pin Code</label>
+                            <input type="number" min="0" class="form-control" formControlName="pincode">
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Address 1">Address 1</label>
+                            <textarea class="form-control" formControlName="add1" rows="1"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Address 2">Address 2</label>
+                            <textarea class="form-control" formControlName="add2" rows="1"></textarea>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Address 3">Address 3</label>
+                            <textarea class="form-control" formControlName="add3" rows="1"></textarea>
+                          </div>
+                        </div>
+                      </div>
+                    </mat-tab>
+
+                    <mat-tab label="Delivery From">
+                      <div class="dyn_table_conent">
+                        <div class="dyn_table_header">
+                          <label class="label_col"> <h3>Action</h3></label>
+                          <label class="label_col"><h3>Srl No</h3></label>
+                          <label class="label_col"> <h3>Contact Person</h3></label>
+                          <label class="label_col"><h3>Designation</h3></label>
+                          <label class="label_col"> <h3>Address</h3></label>
+                          <label class="label_col"><h3>City</h3></label>
+                          <label class="label_col"><h3>Pin Code</h3></label>
+                          <label class="label_col"><h3>Telephone No </h3></label>
+                          <label class="label_col"><h3>Mobile No </h3></label>
+                          <label class="label_col"> <h3>FAX No </h3></label>
+                          <label class="label_col"> <h3>E-Mail </h3></label>
+                        </div>
+                        <div class="dyn_table_data_cont" formArrayName="op_bussiness_partner_delv_from">
+                          <div class="dyn_table" *ngFor="let item of op_bussiness_partner_delv_from.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                            <div class="label_col"><input class="form-control" type="number" min="0" formControlName="sl_no" /></div>
+                            <div class="label_col"><input class="form-control" type="text" formControlName="contact_person" /></div>
+                            <div class="label_col"><input class="form-control" type="text" formControlName="designation" /></div>
+                            <div class="label_col"><input class="form-control" type="text" formControlName="address" /></div>
+                            <div class="label_col"><select formControlName="city" class="form-control"> <option value="0">-Select City-</option> <option *ngFor="let city of citiNames" [value]="city">{{city}}</option></select></div>
+                            <div class="label_col"><input class="form-control" type="number" min="0" formControlName="pincode" /></div>
+                            <div class="label_col"><input class="form-control" type="number" min="0" formControlName="phone" /></div>
+                            <div class="label_col"><input class="form-control" type="number" min="0" formControlName="mobile" /></div>
+                            <div class="label_col"><input class="form-control" type="text" formControlName="fax" /></div>
+                            <div class="label_col"><input class="form-control" type="email" formControlName="email" />
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="btm_btn_content">
+                        <button type="button" class="btn btn-success" (click)="add(pointIndex)">Add</button>
+                        <div class="clr"></div>
+                      </div>
+
+                    </mat-tab>
+
+                    <mat-tab label="Accounting">
+                      <div formGroupName="op_bussiness_partner_accont">
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label for="Payable Control Account">Payable Control Account</mat-label>
+                            <mat-select type="text" formControlName="pay_cont_acc" class="form-control">
+                              <mat-option value="0">-Select Payable Control Account-</mat-option>
+                              <mat-option *ngFor="let pay_cont_acc of subGroupNames" [value]="pay_cont_acc.subgroupcode"> {{pay_cont_acc.subgroupname}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label for="Advance Payment Account">Advance Payment Account</mat-label>
+                            <mat-select type="text" formControlName="adv_pay_acc" class="form-control">
+                              <mat-option value="0">-Select Advance Payment Account-</mat-option>
+                              <mat-option *ngFor="let adv_pay_acc of subGroupNames" [value]="adv_pay_acc.subgroupcode">{{adv_pay_acc.subgroupname}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label for="Payment Term">Payment Term</mat-label>
+                            <mat-select type="text" formControlName="pay_term" class="form-control ht_34">
+                              <mat-option value="0">-Select Payment Term-</mat-option>
+                              <mat-option *ngFor="let pay_term of payTermNames" [value]="pay_term">{{pay_term}}</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Discount %">Discount %</label>
+                            <input type="number" min="0" class="form-control" formControlName="discount">
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Credit Limit">Credit Limit</label>
+                            <input type="number" min="0" class="form-control" formControlName="credit_lim">
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Credit Days">Credit Days</label>
+                            <input type="number" min="0" class="form-control" formControlName="credit_days">
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-checkbox formControlName="cash_lim_status"> Cash Limit </mat-checkbox>
+                            <input type="number" min="0" class="form-control" formControlName="cash_limit">
+                            <!-- <input type="checkbox"  formControlName="cash_lim_status"> Cash Limit <input type="text" class="form-control" formControlName="cash_limit"> -->
+                            <!-- <input class="checkbox checkbox-primary" type="checkbox" id="color-checkbox1" checked>
+                    <label class="check-label chk_brdr_no" for="color-checkbox1">Cash Limit</label> -->
+                          </div>
+                        </div>
+                        <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                      <input type="text" class="form-control">
+                    </div>
+              </div> -->
+                      </div>
+                    </mat-tab>
+
+                    <mat-tab label="Statutory Details">
+                      <div formGroupName="op_bussiness_partner_statutory">
+                        <fieldset>
+                          <legend>
+                            <div class="form-group" style="width: 150px; margin: 0;">
+                              <mat-checkbox [(ngModel)]="model.registered" formControlName="registered" (change)="onChangeRegisteredStatus($event)" [checked]="isRegisteredChecked">Registered</mat-checkbox>
+                            </div>
+                          </legend>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="PAN No.">PAN No.</label>
+                              <input [readonly]="!isRegisteredChecked" type="text" class="form-control" [(ngModel)]="model.pan_no" formControlName="pan_no">
+                            </div>
+                          </div>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="LST/VAT No.">LST/VAT No.</label>
+                              <input [readonly]="!isRegisteredChecked" type="text" class="form-control" [(ngModel)]="model.vat_no" formControlName="vat_no">
+                            </div>
+                          </div>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="TIN No">TIN No</label>
+                              <input [readonly]="!isRegisteredChecked" type="text" class="form-control" [(ngModel)]="model.tin_no" formControlName="tin_no">
+                            </div>
+                          </div>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="CST No">CST No</label>
+                              <input [readonly]="!isRegisteredChecked" type="text" class="form-control" [(ngModel)]="model.cst_no" formControlName="cst_no">
+                            </div>
+                          </div>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="TAN No">TAN No</label>
+                              <input [readonly]="!isRegisteredChecked" type="text" class="form-control" [(ngModel)]="model.tan_no" formControlName="tan_no">
+                            </div>
+                          </div>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="Service Tax Reg. No.">Service Tax Reg. No.</label>
+                              <input [readonly]="!isRegisteredChecked" type="text" class="form-control" [(ngModel)]="model.service_tax" formControlName="service_tax">
+                            </div>
+                          </div>
+                        </fieldset>
+
+                        <fieldset>
+                          <legend>
+                            <div class="form-group" style="width: 150px; margin: 0;">
+                              <mat-checkbox [(ngModel)]="model.excise_app" formControlName="excise_app" (change)="onChangeExciseApleStatus($event)" [checked]="isExciseApleChecked">Excise Applicable</mat-checkbox>
+                            </div>
+                          </legend>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="ECC No">ECC No</label>
+                              <input [readonly]="!isExciseApleChecked" type="text" class="form-control" [(ngModel)]="model.ecc_no" formControlName="ecc_no">
+                            </div>
+                          </div>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="C.E. Reg. No."> C.E. Reg. No.</label>
+                              <input [readonly]="!isExciseApleChecked" type="text" class="form-control" [(ngModel)]="model.ce_reg_no" formControlName="ce_reg_no">
+                            </div>
+                          </div>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="C.E. Range">C.E. Range</label>
+                              <input [readonly]="!isExciseApleChecked" type="text" class="form-control" [(ngModel)]="model.ce_range" formControlName="ce_range">
+                            </div>
+                          </div>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="C.E. Division">C.E. Division</label>
+                              <input [readonly]="!isExciseApleChecked" type="text" class="form-control" [(ngModel)]="model.ce_dev" formControlName="ce_dev">
+                            </div>
+                          </div>
+
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <label for="C.E. Commissionerate">C.E. Commissionerate</label>
+                              <input [readonly]="!isExciseApleChecked" type="text" class="form-control" [(ngModel)]="model.ce_comm" formControlName="ce_comm">
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div>
+                    </mat-tab>
+
+                    <mat-tab label="Broker Details">
+
+                      <div class="form-group" style="width: 150px; margin: 0;">
+                        <mat-checkbox (change)="onChangeBrokerDtlsStatus($event)" [checked]="isBrokerDtlsChecked">Broker Details</mat-checkbox>
+                      </div>
+
+                      <div class="clr"></div>
+                      <div class="dyn_table_header">
+                        <label class="label_col"><h3>Action</h3></label>
+                        <label class="label_col"><h3>Srl No</h3></label>
+                        <label class="label_col"><h3>Broker Name</h3></label>
+                        <label class="label_col"><h3>Broker Code</h3></label>
+                      </div>
+                      <div [hidden]="!isBrokerDtlsChecked" class="dyn_table_data_cont" formArrayName="op_bussiness_partner_broker">
+                        <div class="dyn_table" *ngFor="let item of op_bussiness_partner_broker.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                          <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteBroker(pointIndex)"></i></div>
+                          <div class="label_col"><input class="form-control" min="0" type="number" formControlName="sl_no" readonly/></div>
+                          <div class="label_col"><select formControlName="broker_name" class="form-control"> <option value="0">-Select-</option> <option *ngFor="let broker_name of brokerNames" [value]="broker_name">{{broker_name}}</option> </select></div>
+                          <div class="label_col"><select formControlName="broker_code" class="form-control"> <option value="0">-Select-</option> <option *ngFor="let broker_code of brokerCodess" [value]="broker_code">{{broker_code}}</option></select></div>
+                        </div>
+                      </div>
+
+                      <div class="btm_btn_content">
+                        <button [disabled]="!isBrokerDtlsChecked" type="button" class="btn btn-success" (click)="addBroker()">Add</button>
+                        <div class="clr"></div>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="TDS">
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <!-- <label for="Party Nature">Party Nature</label>
+                            <select   class="form-control" [(ngModel)]="model.party_nature" formControlName="party_nature"><option value="value">-Party Nature-</option></select> -->
+                          <mat-label>Party Nature</mat-label>
+                          <mat-select class="form-control" formControlName="party_nature" [(ngModel)]="model.party_nature">
+                            <mat-option value="0">-Select-</mat-option>
+                            <mat-option *ngFor="let party_nature of natures" [value]="party_nature">{{party_nature}}
+                            </mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">                        
+                          <mat-label>Default TDS Nature</mat-label>
+                          <mat-select class="form-control" formControlName="def_tds_nature" [(ngModel)]="model.def_tds_nature">
+                            <mat-option value="0">-Select-</mat-option>
+                            <mat-option *ngFor="let def_tds_nature of tdsnatures" [value]="def_tds_nature"> {{def_tds_nature}}</mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                        <div class="form-group">
+                          <label for="TDS Nature List">TDS Nature List</label>
+                          <textarea class="form-control" rows="1"></textarea>
+                        </div>
+                      </div>
+                    </mat-tab>
+                    <mat-tab label="Document Attachment">
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                        <div class="form-group">
+                          <label for="Document List">Document List</label>
+                          <textarea class="form-control" rows="1"></textarea>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                        <div class="form-group">
+                          <label for="Document Name">Document Name</label>
+                          <input type="text" class="form-control" [(ngModel)]="model.doc_name" formControlName="doc_name">
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                        <div class="form-group">
+                          <label for="upload">&nbsp;</label>
+                          <input type="file" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <label for="upload">&nbsp;</label>
+                          <button type="button" class="btn btn-success">Upload</button>
+                        </div>
+                      </div>
+                    </mat-tab>
+                  </mat-tab-group>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="otherpartnermastersave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+
+
+<!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Other Partner Master List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Other Partner Code</th>
+                  <th>Other Partner Name</th>
+                  <th>Alternate Name</th>
+                  <th>Group Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let model of listOtherPartner">
+                  <td>{{model.bp_code}}</td>
+                  <td>{{model.bp_name}}</td>
+                  <td>{{model.alt_name}}</td>
+                  <td>{{model.group_type}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

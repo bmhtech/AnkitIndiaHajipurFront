@@ -1,0 +1,261 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>WareHouse Info</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="warehouse code">Warehouse Code</label>
+                <input type="text" class="form-control"  [(ngModel)]="seq_no" formControlName="warehouse_code" readonly>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="WareHouse Name">WareHouse Name<span class="red">*</span></label>
+                <input type="text"  [(ngModel)]="wareHouse.warehouse_name" formControlName="warehouse_name" class="form-control" id="wareHouse_name">
+              </div>
+            </div> 
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="WareHouse Address">WareHouse Address<span class="red">*</span></label>
+                <input type="text"  [(ngModel)]="wareHouse.warehouse_address" formControlName="warehouse_address" class="form-control" id="warehouse_address">
+              </div>
+            </div> 
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="WareHouse Remarks">WareHouse Remarks</label>
+                <input type="text"  [(ngModel)]="wareHouse.warehouse_remarks" formControlName="warehouse_remarks" class="form-control" id="warehouse_remarks">
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit Name<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="bUnitCodes"
+                [display]="'businessunit_name'"
+                [value]="'businessunit_code'"
+                [multiple]='false'            
+                ngDefaultControl
+                [formControl]="userForm.controls['businessunit_code']">
+              </mat-select-autocomplete>
+              </div>
+            </div> 
+          
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Country<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="countries"
+                [display]="'country_name'"
+                [value]="'country_name'"
+                [multiple]='false'
+                (selectionChange)="onChangeCountry($event)"
+                ngDefaultControl
+                [formControl]="userForm.controls['country_name']">
+              </mat-select-autocomplete>
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>State<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="states"
+                [display]="'state_name'"
+                [value]="'state_code'"
+                [multiple]='false'
+                (selectionChange)="onChangeState($event)"
+                ngDefaultControl
+                [formControl]="userForm.controls['state_code']">
+              </mat-select-autocomplete>
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>District<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="districtsList"
+                [display]="'dist_name'"
+                [value]="'dist_code'"
+                [multiple]='false'
+                [selectedOptions]="selectedDist"
+                (selectionChange)="onChangeDist($event)"
+                ngDefaultControl
+                [formControl]="userForm.controls['dist_code']">
+              </mat-select-autocomplete>
+              </div>
+            </div> 
+
+          <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>City</mat-label>
+              <mat-select-autocomplete class="form-control ats"  
+              [options]="citiNames"
+              [display]="'city_name'"
+              [value]="'city_code'"
+              [multiple]='false'
+              [selectedOptions]="selectedCity"
+              ngDefaultControl
+              [formControl]="userForm.controls['city_code']">
+            </mat-select-autocomplete>
+            </div>
+          </div>  -->
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>City</mat-label>
+              <input type="text" class="form-control" formControlName="city_code">
+            </div>
+          </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="PIN Code">PIN Code</label>
+                <input type="number"  [(ngModel)]="wareHouse.pin_code" formControlName="pin_code" class="form-control" min="0">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox  [(ngModel)]="wareHouse.maintain_stack" formControlName="maintain_stack" (change)="stackdetails($event)"> Maintain Stack</mat-checkbox> 
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox  [(ngModel)]="wareHouse.warehouse_active" formControlName="warehouse_active" > WareHouse Active</mat-checkbox> 
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    
+
+      <div class="row" *ngIf="showstackdetails">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Stack Details</legend>
+              <div class="col-lg-12">
+                <div class="dyn_table_conent">
+                  <div class="dyn_table_header">
+                    <label class="label_col"><h3>Action</h3></label>
+                    <label class="label_col"><h3 class="srln">Sl.No.</h3></label>
+                    <label class="label_col"><h3>Stack No.<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Packing Qty<span class="red">*</span></h3></label>
+                    
+                    <label class="label_col"><h3>Packing UoM</h3></label>
+                    <label class="label_col"><h3>Item Qty</h3></label>
+                    <label class="label_col"><h3>Item UoM</h3></label>
+                    <label class="label_col"><h3>Opening Packing Qty</h3></label>
+                    <label class="label_col"><h3>Opening Item Qty</h3></label>
+                    <label class="label_col"><h3 style="width: 135px;">Date</h3></label>
+                  </div>
+
+                  <div class="dyn_table_data_cont" formArrayName="warehouse_stack_dtls">
+                    <div class="dyn_table" *ngFor="let stack of warehouse_stack_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                      <div class="label_col"><input class="form-control srln" type="number" formControlName="sl_no" readonly/></div>
+                      
+                      <div class="label_col"><input formControlName="stack_no" class="form-control" type="text" ></div>
+                      <div class="label_col"><input formControlName="packing_qty" class="form-control" type="text" ></div>
+                     
+                      <!-- <div class="label_col"><input formControlName="packing_uom" class="form-control" type="text" ></div> -->
+                      <div class="label_col"><mat-select formControlName="packing_uom"class="form-control"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let packuom of customUOMs" [value]="packuom.customuom_id">{{packuom.description}}</mat-option></mat-select></div>
+                      <div class="label_col"><input formControlName="item_qty" class="form-control" type="text" ></div>
+                      <!-- <div class="label_col"><input formControlName="item_uom" class="form-control" type="text" ></div> -->
+                      <div class="label_col"><mat-select formControlName="item_uom"class="form-control"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let itemuom of customUOMs" [value]="itemuom.customuom_id">{{itemuom.description}}</mat-option></mat-select></div>
+                      <div class="label_col"><input formControlName="opening_packing_qty" class="form-control" type="text" ></div> 
+                      <div class="label_col"><input formControlName="opening_item_qty" class="form-control" type="text" ></div>
+                      <div class="label_col"><input formControlName="stack_date" class="form-control" style="width: 135px;" type="date" ></div>
+                    </div>
+                  </div>
+
+                  <div class="btm_btn_content">
+                    <button type="button" class="btn btn-success" (click)="add(pointIndex)">Add</button>
+                  </div>
+
+               </div>
+               
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">      
+            <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="warehousemastersave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+   
+
+
+ <!-- list -->
+
+ <div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>WareHouse  Master List</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>WareHouse Code</th>
+                  <th>WareHouse Name</th>
+                  <th>State Name</th>
+                  <th>Address</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let wareHouse of listwareHouse">
+                  <td>{{wareHouse.warehouse_code}}</td>
+                  <td>{{wareHouse.warehouse_name}}</td>
+                  <td>{{wareHouse.state_name}}</td>
+                  <td>{{wareHouse.warehouse_address}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(wareHouse.id,wareHouse.warehouse_id,'view')" *ngIf="warehousemasterview">View</button></td>
+                  <td><button class="btn btn-info" (click)="onUpdate(wareHouse.id,wareHouse.warehouse_id,'update')" *ngIf="warehousemasterupdate">Update</button></td>         
+                  <td><button class="btn btn-danger" (click)="onDelete(wareHouse.id,wareHouse.warehouse_code,wareHouse.warehouse_id)" *ngIf="warehousemasterdelete">Delete</button></td>               
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

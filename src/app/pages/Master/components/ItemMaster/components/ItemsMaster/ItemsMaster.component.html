@@ -1,0 +1,1071 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>  
+    
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-9 col-md-9 col-sm-6 col-12">
+          <fieldset>
+            <legend>Basic Information</legend>
+            <div class="madate">(<span class="red"> * </span> fields are mandatory)</div>
+            <div class="clr"></div>
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12" hidden >
+              <div class="form-group">
+                <mat-label>ID</mat-label>
+                <input type="text"  [(ngModel)]="model.id" formControlName="id" class="form-control" >
+              </div>
+            </div> -->
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12" >
+              <div class="form-group">
+                <mat-label>Item Code</mat-label>
+                <input type="text" #iCodeInput formControlName="item_code" [(ngModel)]="seq_no" [readonly]="itemCodeReadOnly" required class="form-control" (blur)="chkItemCodeStatus($event)" >
+                
+                <div hidden> <input type="text"  [(ngModel)]="model.id" formControlName="id" readonly class="form-control" >
+                <input type="text"  [(ngModel)]="model.item_id" formControlName="item_id" readonly class="form-control" ></div>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>HSN Code<span class ="red">*</span></mat-label>
+                <input type="text" formControlName="hsn_code" [(ngModel)]="hsncode" class="form-control" >
+              </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Item Name<span class="red">*</span></mat-label>
+                <input type="text" #iNameInput required formControlName="item_name" [(ngModel)]="itemname" class="form-control" (blur)="onFocusoutCheckUnique($event)" [readonly]="lockitemname">
+              </div>
+            </div>
+
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>Item Group<span class="red">*</span> </mat-label>
+                  <mat-select-autocomplete class="form-control ats"  
+                  [options]="itemGroups"
+                  [display]="'group_name'"
+                  [value]="'item_group_id'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['item_group']"
+                  (selectionChange)="getItemGroupUom($event)">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+            <!-- <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>Item Ledger<span class="red">*</span> </mat-label>
+                  <mat-select-autocomplete class="form-control ats"  
+                  [options]="ledgerbankacc"
+                  [display]="'ledgername'"
+                  [value]="'ledgerid'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['sub_group']">
+                </mat-select-autocomplete>
+              </div>
+            </div> -->
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Item Category<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="itemCatagories"
+                [display]="'catagory_name'"
+                [value]="'catagory_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['item_category']"
+                (selectionChange)="onchangeItemCategory($event)">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Item Type</mat-label>
+                <input type="text" [(ngModel)]="model.item_type" formControlName="item_type" class="form-control" value="{{staticItemName}}">
+             </div>
+            </div>           
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Alternative Name</mat-label>
+                <input formControlName="alt_name" [(ngModel)]="model.alt_name" type="text" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Unit Type<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="unit_type" (selectionChange)="OnChangeUnitType($event.value)" [(ngModel)]="model.unit_type">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option value="SUOM">STANDARD UOM</mat-option>
+                  <mat-option value="WUOM">WEIGHMENT UOM</mat-option>
+                </mat-select>
+              </div>
+            </div>
+              
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Master Stock Keeping Unit<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="customUOMs"
+                [display]="'description'"
+                [value]="'customuom_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['mstock_unit']"
+                (selectionChange)="onChangeMSKeepingUnit($event)">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Standard Rate</mat-label>
+                <div class="input-group">
+                  <span class="input-group-addon input-group-addon-primary addon-left">INR</span>
+                  <input  formControlName="standard_rate" [(ngModel)]="model.standard_rate" class="form-control with-primary-addon" data-toggle="tooltip" min="0" type="number">
+                </div>
+              </div>
+            </div>
+
+            
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+              
+                <mat-checkbox formControlName="item_active" [(ngModel)]="activeIsChecked">Active</mat-checkbox> 
+              </div>
+            </div>
+
+            <!-- <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+               
+                <mat-checkbox formControlName="dominatorstatus" >Active</mat-checkbox> 
+              </div>
+            </div>
+           
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Dominator Factor</mat-label>
+                <input formControlName="dominator_factor"  type="text" class="form-control">
+              </div>
+            </div>
+                 -->
+              
+            <div class="singel">
+              
+              <div class="col-lg-2 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-checkbox formControlName="inventory_item" [(ngModel)]="model.inventory_item">Inventory Item</mat-checkbox> 
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-checkbox formControlName="sales_item" [(ngModel)]="model.sales_item">Sales Item</mat-checkbox>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-checkbox formControlName="purchase_item" [(ngModel)]="model.purchase_item">Purchase Item</mat-checkbox>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <!-- <mat-checkbox formControlName="processed_item" [(ngModel)]="model.processed_item"  (change)="checkprocessed($event.checked)">Processed Item</mat-checkbox> -->
+                 <mat-checkbox formControlName="processed_item" [(ngModel)]="model.processed_item" >Processed Item</mat-checkbox>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-checkbox formControlName="impurities_item" [(ngModel)]="model.impurities_item">Impurities Item</mat-checkbox>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-checkbox formControlName="qc_require" [(ngModel)]="model.qc_require" (change)="check($event.checked)">QC Require</mat-checkbox>
+                </div>
+              </div>
+<!-- 
+              <div class="col-lg-2 col-md-4 col-sm-6 col-12" *ngIf="proceeseditemshow">
+                <div class="form-group">
+                  <mat-checkbox formControlName="chakki_prod" >Chakki item</mat-checkbox>
+                </div>
+              </div>
+
+              <div class="col-lg-2 col-md-4 col-sm-6 col-12" *ngIf="proceeseditemshow">
+                <div class="form-group">
+                  <mat-checkbox formControlName="roller_prod" >Roller item</mat-checkbox>
+                </div>
+              </div>
+
+              <div class="col-lg-2 col-md-4 col-sm-6 col-12" *ngIf="proceeseditemshow">
+                <div class="form-group">
+                  <mat-checkbox formControlName="input_prod" >Input/Output item</mat-checkbox>
+                </div>
+              </div> -->
+
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+          <fieldset>
+            <legend>
+              <div class="form-group" style="width: 150px; margin: 0;">
+                <mat-checkbox formControlName="all_unit" [(ngModel)]="model.all_unit" style="font-size: 16px;" (change)="onChangeSelectAllUnit($event.checked)">Select All Unit<span class="red">*</span></mat-checkbox>   
+              </div>
+            </legend>
+
+            <div class="mx_ht1">
+
+              <div class="col-lg-12 col-md-12 col-sm-6 col-12">
+                <div class="form-group" *ngFor="let list of bussiness_unit_list; let pointIndex = index">
+                  <mat-checkbox [checked]="(is_select_all_unit || is_select_unit[pointIndex])" [value]="list.businessunit_id" (change)="onChangeUnit($event, list, pointIndex)">{{list.businessunit_name}}</mat-checkbox>
+                </div>
+              </div>
+               
+              <div class="col-lg-12 col-md-12 col-sm-6 col-12" style="display: none;">
+                <div class="form-group">
+                  <input formControlName="item_unit" type="text" class="form-control" readonly/>
+                </div>
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row dyn_cont_area">
+        <div class="col-lg-12">
+          <div class="dyn_table_conent">
+            <mat-tab-group animationDuration="1000ms" (selectedTabChange)="getIndexOfMatTab($event)">
+              <mat-tab label="Inventory Data 1">
+                <div formGroupName="item_master_inv_data1">
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Selling Unit</mat-label>
+                      <mat-select-autocomplete class="form-control ats"  
+                      [options]="customUOMs"
+                      disabled="true"
+                      [display]="'description'"
+                      [value]="'customuom_id'"
+                      [multiple]='false'
+                      ngDefaultControl
+                      [formControl]="item_master_inv_data1.controls['selling_unit']"
+                      [labelCount]="2">
+                    </mat-select-autocomplete>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Purchase Unit</mat-label>
+                      <mat-select-autocomplete class="form-control ats"  
+                      [options]="customUOMs"
+                      disabled="true"
+                      [display]="'description'"
+                      [value]="'customuom_id'"
+                      [multiple]='false'
+                      ngDefaultControl
+                      [formControl]="item_master_inv_data1.controls['purchase_unit']"
+                      [labelCount]="2">
+                    </mat-select-autocomplete>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Valuation Type</mat-label>
+                      <mat-select class="form-control" formControlName="valuation_type" >
+                        <mat-option value="0">-Select-</mat-option>
+                        <mat-option value="BATCH VALUATION">BATCH VALUATION</mat-option>
+                        <mat-option value="FIFO">FIFO</mat-option>
+                        <mat-option value="LIFO">LIFO</mat-option>
+                       
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>MRP</mat-label>
+                      <input formControlName="mrp" type="number" min="0" class="form-control">
+                    </div>
+                  </div> 
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>MSP</mat-label>
+                      <input formControlName="msp" type="number" min="0" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Min. Inventory Limit</mat-label>
+                      <input formControlName="min_inv_limit"  type="number" min="0" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Tolerance</mat-label>
+                      <input formControlName="tolerance" type="number" min="0" class="form-control">
+                    </div>
+                  </div>
+
+
+
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>EAN No. 1</mat-label>
+                      <input formControlName="eanno1" type="text" class="form-control">
+                      </div>
+                  </div> 
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>EAN No. 2</mat-label>
+                      <input formControlName="eanno2" type="text" class="form-control">
+                    </div>
+                  </div>
+                 
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Sr. No.</mat-label>
+                      <input formControlName="srno" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Catalog No.</mat-label>
+                      <input formControlName="catalog_no" type="text" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>STD.Lead Time</mat-label>
+                      <input formControlName="std_lead_time" type="time" class="form-control">
+                    </div>
+                  </div>
+                  <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Opening Stock</mat-label>
+                      <input formControlName="opening_stock" type="text" class="form-control">
+                    </div>
+                  </div> -->
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group chk_tp_pad">
+                      <mat-checkbox formControlName="mng_by_batch">Managed By Batch</mat-checkbox> 
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group chk_tp_pad">
+                      <mat-checkbox formControlName="mng_by_slno">Managed By Sl No.</mat-checkbox> 
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12">
+                    <div class="form-group">
+                      <button (click)="openDialog1()" class="btn btn-primary">Alternative Item</button>
+                    </div>
+                  </div>
+                </div>
+
+
+                
+                <div  class="col-lg-12">
+                 <div class="dyn_table_header">
+                    <label class="label_col pdg" style="display:none;"><h3>Item Id</h3></label>
+                    <label class="label_col"><h3>HSN Code</h3></label>
+                    <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                    <label class="label_col"><h3>Item Group</h3></label>
+                    <label class="label_col"><h3>Item Category</h3></label>
+                    <label class="label_col"><h3>Uom</h3></label>
+                    <label class="label_col"><h3>Add/Less</h3></label>
+                    <label class="label_col"><h3>Packing Cost</h3></label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="item_master_alternative_dtls" >
+                    <div class="dyn_table" *ngFor="let item of item_master_alternative_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><input formControlName="item_id_old" class="form-control" style="display:none;" type="text"/></div>
+                      <div class="label_col"><input formControlName="hsn_code" class="form-control" type="text"/></div>
+                      <div class="label_col"><input formControlName="item_name" class="form-control ats i_nam" type="text"/></div>
+                      <div class="label_col"><input formControlName="group_name" class="form-control" type="text"/></div>
+                      <div class="label_col"><input formControlName="category_name" class="form-control" type="text"/></div>
+                      <div class="label_col"><input formControlName="uom_name" class="form-control" type="text"/></div>
+                      <div class="label_col"><mat-select class="form-control" formControlName="addless">
+                        <mat-option value="0">-Select-</mat-option>
+                        <mat-option value="Add">Add</mat-option>
+                        <mat-option value="Less">Less</mat-option>
+                      </mat-select></div>
+                      <div class="label_col"><input formControlName="packing_cost" class="form-control" type="text"/></div>
+                      <div hidden> <div class="label_col" ><input type="text" class="form-control" formControlName="item_group" readonly /></div>
+                      <div class="label_col" ><input type="text" class="form-control" formControlName="item_category" readonly /></div>
+                      <div class="label_col" ><input type="text" class="form-control" formControlName="mstock_unit" readonly /></div></div>
+                    </div>
+                  </div>
+                
+                </div>
+              </mat-tab>
+
+            
+              <mat-tab label="Inventory Data 2">
+                <div formGroupName="item_master_inv_data2">
+
+                  <fieldset>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group chk_tp_pad">
+                        <mat-checkbox formControlName="neg_inv_allow">Negative Inventory Allowed</mat-checkbox>  
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group chk_tp_pad">
+                        <mat-checkbox formControlName="manage_inv_wh">Manage Inventory By Warehouse</mat-checkbox> 
+                      </div>
+                    </div>
+                      
+                  </fieldset>
+
+                  <fieldset>
+                    <legend>Minimum Sales Order</legend>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Qty</mat-label>
+                        <input formControlName="sales_qty" type="number" min="0" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>UOM</mat-label>
+                        <mat-select-autocomplete class="form-control ats"  
+                        [options]="customUOMs"
+                        disabled="true"
+                        [display]="'description'"
+                        [value]="'customuom_id'"
+                        [multiple]='false'
+                        ngDefaultControl
+                        [formControl]="item_master_inv_data2.controls['sales_uom']"
+                        [labelCount]="2">
+                      </mat-select-autocomplete>
+                      </div>
+                    </div>
+
+                  </fieldset>
+                  <fieldset>
+                    <legend>Min. Purchase Order</legend>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Qty</mat-label>
+                        <input formControlName="pur_qty" type="number" min="0" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>UOM</mat-label>
+                        <mat-select-autocomplete class="form-control ats"  
+                        [options]="customUOMs"
+                        disabled="true"
+                        [display]="'description'"
+                        [value]="'customuom_id'"
+                        [multiple]='false'
+                        ngDefaultControl
+                        [formControl]="item_master_inv_data2.controls['pur_uom']"
+                        [labelCount]="2">
+                      </mat-select-autocomplete>
+                      </div>
+                    </div>
+
+                  </fieldset>
+                  <fieldset>
+                    <legend>EOQ Level</legend>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Qty</mat-label>
+                        <input formControlName="eoq_qty" type="number" min="0" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>UOM</mat-label>
+                        <mat-select-autocomplete class="form-control ats"  
+                        [options]="customUOMs"
+                        disabled="true"
+                        [display]="'description'"
+                        [value]="'customuom_id'"
+                        [multiple]='false'
+                        ngDefaultControl
+                        [formControl]="item_master_inv_data2.controls['eoq_uom']"
+                        [labelCount]="2">
+                      </mat-select-autocomplete>
+                      </div>
+                    </div>
+
+
+                  </fieldset>
+                  <fieldset>
+                    <legend>Reorder Level</legend>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Qty</mat-label>
+                        <input formControlName="reorder_qty" type="number" min="0" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>UOM</mat-label>
+                        <mat-select-autocomplete class="form-control ats"  
+                        [options]="customUOMs"
+                        disabled="true"
+                        [display]="'description'"
+                        [value]="'customuom_id'"
+                        [multiple]='false'
+                        ngDefaultControl
+                        [formControl]="item_master_inv_data2.controls['reorder_uom']"
+                        [labelCount]="2">
+                      </mat-select-autocomplete>
+                      </div>
+                    </div>
+
+                  </fieldset>
+                  </div>
+                </mat-tab>
+
+
+                <mat-tab label="Other Information"> 
+                  <div formGroupName="item_master_other_info">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Generic Name</mat-label>
+                        <input formControlName="gen_name" type="text" class="form-control">
+                      </div>
+                    </div> 
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label >Self Life</mat-label>
+                        <input formControlName="self_life" type="text" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="type == 'date'">
+                      <div class="form-group">
+                        <mat-label>Expiry Date</mat-label>
+                        <input formControlName="exp_date" type="date" min="0" class="form-control">
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="type == 'text'">
+                      <div class="form-group">
+                        <mat-label>Expiry Date</mat-label>
+                        <input formControlName="exp_date" type="date" min="0" class="form-control">
+                      </div>
+                    </div>
+                   
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Specific Description</mat-label>
+                        <input formControlName="specific_desc"  type="text" class="form-control">
+                      </div>
+                    </div>
+                    <div class="clr"></div>
+                    <fieldset>
+                      <legend>Item</legend>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-checkbox formControlName="ser_item">Service Item</mat-checkbox> 
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-checkbox formControlName="non_store_item">Non Store Item</mat-checkbox> 
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-checkbox formControlName="stock_item">Stock Item</mat-checkbox> 
+                        </div>
+                      </div>
+                    </fieldset> 
+                  
+                  </div>
+                </mat-tab>
+                <mat-tab label="Statutory Information">
+                  <div class="dyn_table_header">
+                    <label class="label_col"><h3>Action</h3></label>
+                    <label class="label_col"><h3>Srl No</h3></label>
+                    <label class="label_col"><h3>Tax Code<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                    <label class="label_col"><h3 class="date_col">Effect Date</h3></label>
+                    <label class="label_col"><h3>Applicable</h3></label>
+                   
+                  </div>
+                  <div  class="dyn_table_data_cont" formArrayName="item_master_stat_infos">
+                    <div class="dyn_table" *ngFor="let item of item_master_stat_infos.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete_item_stst(pointIndex)"></i></div>
+                      <div class="label_col"><input formControlName="sl_no" class="form-control" type="number" /></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="tax_code" /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp1(pointIndex)" aria-hidden="true"></i></div>
+                      <div class="label_col"><input class="form-control" type="number" formControlName="tax_rate" /></div>
+                      <!-- <div class="label_col" style="display: none;"><input class="form-control" type="number" formControlName="cess" /></div> -->
+                      <div class="label_col"><input formControlName="eff_date" class="form-control date_col" type="date"/></div>
+                      <div class="label_col"><input formControlName="applicable" type="checkbox" class="form-control" /></div> 
+                      <!-- <div class="label_col"><select class="form-control" formControlName="Stat_select" (change)="getItemGr($event)" ><option>Select</option> <option>Yes</option><option >No</option></select></div> -->
+                    </div>
+                  </div>
+        
+                  <div class="btm_btn_content">
+                    <button type="button" class="btn btn-success" (click)="add_item_stst(pointIndex)">Add Row </button>
+                    <div class="clr"></div>
+                  </div>
+                  <div class="clr"></div>
+                  <fieldset style="padding: 15px 0px;">
+
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>Input Credit</mat-label>
+                            <select class="form-control" (change)="selectcredit($event)"><option >select</option><option value="yes">Yes</option><option value="no">No</option></select>
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="isChecked1">
+                          <div class="form-group">
+                            <mat-label>Input Credit</mat-label>
+                            <select class="form-control"  (change)="openDialog($event)" ><option>select</option><option>Full</option><option>Partial</option></select>
+                          </div>
+                        </div>
+                </fieldset>
+
+
+                  </mat-tab>
+
+                <mat-tab label="Latest Transaction">
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Preferred Vendor</mat-label>
+                      <mat-select class="form-control">
+                        <mat-option value="0">-Preferred Vendor-</mat-option>
+                        <mat-option *ngFor="let list of preferedVendor " [value]="list.bp_Id">{{list.bp_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                  <div class="clr"></div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <fieldset>
+                      <legend>Sales</legend>
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="form-group">
+                          <input type="text" class="form-control">
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <fieldset>
+                      <legend>Purchase</legend>
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="form-group">
+                          <input type="text" class="form-control">
+                        </div>
+                      </div>
+                    </fieldset>
+                  </div>
+                </mat-tab>
+
+                <mat-tab label="Packing Material Tagging">
+                  <div class="dyn_table_header">
+                    <label class="label_col"><h3>Action</h3></label>
+                    <label class="label_col"><h3>Srl No</h3></label>
+                    <label class="label_col"><h3>Packing Item Name</h3></label>
+                    <label class="label_col"><h3>Capacity</h3></label>
+                    <label class="label_col"><h3>Item Uom</h3></label> 
+                    <label class="label_col"><h3>Based On</h3></label>
+                    <label class="label_col"><h3 class="wdt_130">Empty bag weight</h3></label> 
+                    <label class="label_col"><h3>Packing Uom Per Unit</h3></label>
+                    <label class="label_col"><h3>Tolerance (%)</h3></label> 
+                     
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="item_master_pack_mat_tags" >
+                    <div class="dyn_table" *ngFor="let item of item_master_pack_mat_tags.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete_item_mat(pointIndex)"></i></div>
+                      <div class="label_col"><input formControlName="sl_no" min="0" class="form-control" type="number" readonly/></div>
+                      <div class="label_col"> <select formControlName="item_code" class="form-control" (change)="onchangeItemCode(pointIndex,$event)" ><option value="0">-Select Item Code-</option><option *ngFor="let itemCode of itemCodes" [value]="itemCode.item_id">{{itemCode.item_name}}</option></select> 
+                        <input formControlName="item_name" class="form-control" type="text" style="display: none;"/>
+                      </div>
+                      <div class="label_col"><input formControlName="capacity" min="0" class="form-control" type="number" /></div>
+                      <div class="label_col"><input formControlName="item_uom" min="0" class="form-control" type="text" /></div>
+                      <div class="label_col"> <select formControlName="empbagwt_based_on" class="form-control"><option value="%">%</option><option value="UOM">UOM</option></select> </div>
+                      <div class="label_col"><input formControlName="empty_big_wt" min="0" class="form-control wdt_form_130" type="number" /></div>
+                      <div class="label_col"><input formControlName="uom1" min="0" class="form-control" type="text" /></div>
+                      <div class="label_col"><input formControlName="tolerance" min="0" class="form-control" type="number" /></div>       
+                    </div>
+                  </div>
+          
+                  <div class="btm_btn_content">
+                      <button type="button" class="btn btn-success" (click)="add_item_mat()">Add Row </button>
+                      <div class="clr"></div>
+                  </div>
+        
+                </mat-tab>
+
+                <mat-tab label="QC Details" *ngIf="model.qc_require == true">
+                  <div class="dyn_table_header">
+                    <label class="label_col"><h3>Action</h3></label>
+                    <label class="label_col"><h3>Srl No</h3></label>
+                    <label class="label_col"><h3>QC Description</h3></label> 
+                    <label class="label_col"><h3>QC Code</h3></label>
+                  </div>
+                  <div  class="dyn_table_data_cont" formArrayName="itmItem_master_qc_details" >
+                    <div class="dyn_table" *ngFor="let item of itmItem_master_qc_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete_qc(pointIndex)"></i></div>
+                      <div class="label_col"><input formControlName="sl_no" min="0" class="form-control" type="number" /></div>
+                      <div class="label_col"><select (change)="onChangeQcDec(pointIndex,$event)" formControlName="qc_id" class="form-control"><option value="0">-Select-</option><option *ngFor="let list of qc_descriptions" [value]="list.qc_id">{{list.qc_name}}</option></select></div>
+                      <!-- <div class="label_col"><input formControlName="qc_description" class="form-control" type="text"   /></div> -->
+                      <div class="label_col"><input readonly formControlName="qc_code" class="form-control" type="text" /></div>                    
+                    </div>
+                  </div>
+          
+                  <!-- <div class="btm_btn_content">
+                    <button type="button" class="btn btn-success" (click)="add_qc(pointIndex)">Add Row </button>
+                    <div class="clr"></div>
+                  </div> -->
+                </mat-tab>
+
+                <mat-tab label="Approval">
+                
+                  <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Confirmed By</mat-label>
+                      <mat-select class="form-control" [(ngModel)]="model.confirmed_by" formControlName="confirmed_by">
+                        <mat-option *ngFor="let list of employeeNames" [value]="list.emp_id">{{list.emp_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div> -->
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Confirmed By<span class="red">*</span></mat-label>
+                      <mat-select-autocomplete class="form-control ats"  
+                      [options]="employeeNames"
+                      [display]="'emp_name'"
+                      [value]="'emp_id'"
+                      [multiple]='false'
+                      ngDefaultControl
+                      [formControl]="userForm.controls['confirmed_by']"
+                      [labelCount]="2">
+                    </mat-select-autocomplete>
+                    </div>
+                  </div>
+                
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Approved<span class="red">*</span></mat-label>
+                      <mat-select class="form-control" [(ngModel)]="model.approval" formControlName="approval">
+                        <mat-option value="0">-Select-</mat-option>
+                        <mat-option value="NO">NO</mat-option>
+                        <mat-option value="YES">YES</mat-option>
+                       
+                      </mat-select>
+                    </div>
+                  </div>
+        
+                  <!-- <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Reason</mat-label>
+                      <mat-select formControlName="reason" [(ngModel)]="model.reason" class="form-control">
+                        <mat-option *ngFor="let list of reasonIdList" [value]="list.reason_id">{{list.reason}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div> -->
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Reason<span class="red">*</span></mat-label>
+                      <mat-select-autocomplete class="form-control ats"  
+                      [options]="reasonIdList"
+                      [display]="'reason'"
+                      [value]="'reason_id'"
+                      [multiple]='false'
+                      ngDefaultControl
+                      [formControl]="userForm.controls['reason']"
+                      [labelCount]="2">
+                    </mat-select-autocomplete>
+                    </div>
+                  </div>
+               </mat-tab>
+
+               <mat-tab label="Stock">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Action</h3></label>
+                  <label class="label_col"><h3  class="i_nam">Bussiness Unit<span class="red">*</span></h3></label>
+                  <label class="label_col"><h3>Opening Stock</h3></label>
+                  <label class="label_col"><h3>UOM<span class="red">*</span></h3></label>
+                  
+                  
+                </div>
+
+                <div class="dyn_table_data_cont" formArrayName="item_master_stock_details" >
+                  <div class="dyn_table" *ngFor="let item_stock of item_master_stock_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete_item_mat(pointIndex)"></i></div>
+                    
+                    <div class="label_col">
+                      <mat-select formControlName="businessunit" class="form-control i_nam" (selectionChange)="onChangestockbusinessunit(pointIndex)">
+                        <mat-option *ngFor="let business_unit of stock_business_unit" [value]="business_unit.businessunit_id">{{business_unit.businessunit_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                    <div class="label_col"><input formControlName="opening_stock" min="0" class="form-control wdt_form_130" type="number" /></div>
+                    <div class="label_col">
+                      <mat-select formControlName="uom" class="form-control " (selectionChange)="onChangestockbusinessunit(pointIndex)">
+                        <mat-option *ngFor="let uom of customUOMs" [value]="uom.customuom_id">{{uom.description}}</mat-option>
+                      </mat-select>
+                    </div>
+
+                   
+                   
+                  </div>
+                </div>
+        
+                <!-- <div class="btm_btn_content">
+                    <button type="button" class="btn btn-success" (click)="add_item_stock()">Add Row </button>
+                    <div class="clr"></div>
+                </div> -->
+              </mat-tab>
+
+              <mat-tab label="Item Classification" *ngIf="classifieditem">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Action</h3></label>
+                  <label class="label_col"><h3>Sl No</h3></label>
+                  <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                   
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="item_master_classification" >
+                  <div class="dyn_table" *ngFor="let item of item_master_classification.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete_classified_item(pointIndex)"></i></div>
+                    <div class="label_col"><input formControlName="sl_no" min="0" class="form-control" type="number" readonly/></div>
+                    <div class="label_col"><input formControlName="classified_item_name" class="form-control i_nam" type="text" /></div>
+                         
+                  </div>
+                </div>
+        
+                <div class="btm_btn_content">
+                    <button type="button" class="btn btn-success" (click)="add_classified_item()">Add Row </button>
+                    <div class="clr"></div>
+                </div>
+      
+              </mat-tab>
+
+              <!-- <mat-tab label="Item Size & Weight" *ngIf="classifieditemsize">
+                <div class="dyn_table_header"> -->
+                  <!-- <label class="label_col"><h3>Action</h3></label> -->
+                  <!-- <label class="label_col"><h3>Sl No</h3></label>
+                  <label class="label_col"><h3 class="i_nam">Packing Item Name</h3></label>
+                  <label class="label_col"><h3>Code</h3></label>
+                  <label class="label_col"><h3>Item Size</h3></label>
+                  <label class="label_col"><h3>Item Weight</h3></label>
+                  <label class="label_col"><h3>Item Tolerance</h3></label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="item_master_size_weight" >
+                  <div class="dyn_table" *ngFor="let item of item_master_size_weight.controls; let pointIndex=index" [formGroupName]="pointIndex"> -->
+                    <!-- <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete_item_size(pointIndex)"></i></div> -->
+                    <!-- <div class="label_col"><input formControlName="sl_no" class="form-control" type="number" readonly/></div>
+                    <div class="label_col"> <select formControlName="item_code" class="form-control i_nam" ><option value="0">-Select Item Code-</option><option *ngFor="let itemCode of packingItemList" [value]="itemCode.item_id">{{itemCode.item_name}}</option></select> </div>
+                    <div class="label_col"><input formControlName="master_code" class="form-control" type="text" /></div>
+                    <div class="label_col"><input formControlName="item_size" class="form-control" type="text" /></div>
+                    <div class="label_col"><input formControlName="item_weight" class="form-control" type="text" /></div>
+                    <div class="label_col"><input formControlName="weight_tolerance" class="form-control" type="text" /></div>
+                  </div>
+                </div> -->
+        
+                <!-- <div class="btm_btn_content">
+                    <button type="button" class="btn btn-success" (click)="add_item_size()">Add Row </button>
+                    <div class="clr"></div>
+                </div> -->
+      
+              <!-- </mat-tab> -->
+
+              </mat-tab-group>
+            </div>        
+          </div>
+        </div> 
+        <div class="row">
+        <div class="col-lg-12" *ngIf="action == 'update' || action == 'save'" >
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="itemmastersave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section> 
+</form>
+  
+<!-- list -->
+
+<div class="master_container_box" *ngIf="isHidden==false">
+ 
+  <form [formGroup]="userForm1">
+    <fieldset>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>Item Type<span class="red">*</span></mat-label>
+      <mat-select-autocomplete class="form-control ats"  
+      [options]="itemtypes"
+      [display]="'item_name'"
+      [value]="'item_name'"
+      [multiple]='true'
+      ngDefaultControl
+      [formControl]="userForm1.controls['itemtype1']">
+      </mat-select-autocomplete>
+      </div>
+    </div>
+
+    <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>Item Name</mat-label>
+      <mat-select-autocomplete class="form-control ats"  
+      [options]="itemnamelist"
+      [display]="'item_name'"
+      [value]="'item_id'"
+      [multiple]='true'
+      ngDefaultControl
+      [formControl]="userForm1.controls['itemname1']">
+      </mat-select-autocomplete>
+      </div>
+    </div> -->
+  
+    <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>Item Group</mat-label>
+      <mat-select-autocomplete class="form-control ats"  
+      [options]="itemGroups"
+      [display]="'group_name'"
+      [value]="'item_group_id'"
+      [multiple]='true'
+      ngDefaultControl
+      [formControl]="userForm1.controls['itemgroup']">
+    </mat-select-autocomplete>
+      </div>
+    </div> -->
+
+    <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>Item Catagory</mat-label>
+      <mat-select-autocomplete class="form-control ats"  
+        [options]="itemCatagories"
+        [display]="'catagory_name'"
+        [value]="'catagory_id'"
+        [multiple]='false'
+        ngDefaultControl
+        [formControl]="userForm1.controls['itemcategory']">
+      </mat-select-autocomplete>
+      </div>
+    </div> -->
+
+    
+
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
+      </div>
+    </div>
+  </fieldset>
+</form> 
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Item Master List</legend>
+          <div class="table_content"> 
+           
+          
+
+
+
+            <div class="col-lg-7 col-md-7 col-sm-12 col-12" style="float: right;">
+              <div class="form-group">
+                <input class="form-control" placeholder="Search Item ..." type="text" (keydown)="searchItem($event)">
+              </div>
+            </div> 
+          <!-- <div class="row">
+            <div class="col-sm-12 col-md-6">
+              <div class="dataTables_length bs-select pull-left">
+               <label>Show <select name="dtBasicExample_length" aria-controls="dtBasicExample" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label>
+              </div>
+             </div>
+             <div class="col-sm-12 col-md-4 col-md-offset-2"><input type="text" class="form-control" placeholder="Search.." (keydown)="search($event)"></div> 
+          </div> -->
+           
+            <table class="table table-bordered" matSort (matSortChange)="sortData($event)">
+              <thead>
+                <tr>
+                  <th mat-sort-header="item_code">Item Code</th>
+                  <th mat-sort-header="hsn_code">HSN Code</th>
+                  <th mat-sort-header="item_name">Item Name  <i class="fa fa-sort" aria-hidden="true"></i></th>
+                  <th mat-sort-header="item_group_name">Item Group</th> 
+                  <th mat-sort-header="item_category_name">Item Category</th>
+                  <th mat-sort-header="mstock_unit_name">Stock Keeping Unit</th>
+                  <th mat-sort-header="item_type">Item Type</th>
+                  <th mat-sort-header="item_active">Active Status</th>
+                  <th colspan="4">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+               <!-- | searchPipe: {item_id: searchText, hsn_code:searchText,  item_name: searchText,item_group: searchText,item_category: searchText, mstock_unit: searchText, item_type: searchText,item_active: searchText}; -->
+                <tr *ngFor="let ItemMaster of sortedData">
+                  <td>{{ItemMaster.item_code}}</td>
+                  <td>{{ItemMaster.hsn_code}}</td>                 
+                  <td>{{ItemMaster.item_name}}</td>
+                  <td>{{ItemMaster.item_group_name}}</td>
+                  <td>{{ItemMaster.item_category_name}}</td>
+                  <td>{{ItemMaster.mstock_unit_name}}</td>
+                  <td>{{ItemMaster.item_type}}</td>
+                  <td>{{ItemMaster.item_active}}</td>     
+                  <td><button class="btn btn-success" (click)="onUpdate(ItemMaster.id,ItemMaster.item_id,'view')" *ngIf="itemmasterview">View</button></td>
+                  
+                  <!-- <td *ngIf="usernamelock;else elseBlock1 " ><button class="btn btn-info" (click)="onUpdate(ItemMaster.id,ItemMaster.item_id,'update')" *ngIf="itemmasterupdate">Update</button></td>
+                  <ng-template #elseBlock1>
+                    <td><button class="btn btn-warning" [disabled] ="true" >Update</button></td>  
+                  </ng-template> -->
+                  <td ><button class="btn btn-info" (click)="onUpdate(ItemMaster.id,ItemMaster.item_id,'update')" *ngIf="itemmasterupdate">Update</button></td>
+                 
+
+                  <td><button class="btn btn-danger" (click)="onDelete(ItemMaster.id,ItemMaster.item_id)" *ngIf="itemmasterdelete">Delete</button></td>               
+                  <!-- <td><button class="btn btn-warning" (click)="accountitemposting(ItemMaster.id)" *ngIf="itemmasterposting">posting</button></td>   -->
+                  
+                  <td *ngIf="ItemMaster.export == 0 && itemmasterposting;else elseBlock " ><button class="btn btn-warning" (click)="accountitemposting(ItemMaster.id,'Posting')" >Posting</button></td>  
+                  <ng-template #elseBlock>
+                    <td><button class="btn btn-info" (click)="accountitemposting(ItemMaster.id,'Undo')">Undo</button></td>  
+                  </ng-template>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+

@@ -1,0 +1,43 @@
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm1">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <fieldset>
+          <legend>Transporter List</legend>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="table_content">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">&nbsp;</th>
+                    <th>Sl No.</th>
+                    <th>Transporter Id</th>
+                    <th>Transporter Code</th>
+                    <th>Transporter Name</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let i of listTransBussinessPartner; let poinIndex = index">
+                  <td><mat-checkbox (change)="check1($event, i , listTransBussinessPartner)"></mat-checkbox></td>
+                  <td>{{poinIndex+1}}</td>
+                  <td>{{i.bp_Id}}</td>
+                  <td>{{i.bp_code}}</td>
+                  <td>{{i.bp_name}}</td>
+                </tr> 
+              </tbody>
+            </table>
+            <!-- <input type="text" class="form-control"  formControlName="bp_code" >
+            <br>
+            <input type="text" class="form-control"  formControlName="index" > -->
+          </div>
+        </div>
+      </fieldset>
+    </div>
+
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+    <mat-dialog-actions align="end">
+        <button class="btn btn-info" mat-button [mat-dialog-close]="true" (click)="SendDataToDifferentComponenet()">Submit</button>
+      </mat-dialog-actions>
+  </form>
+</div>

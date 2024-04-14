@@ -1,0 +1,196 @@
+
+<div class="row">
+  <fieldset *ngIf="purchase">
+  <legend>Purchase Transaction</legend>
+    <div class="col-md-3 animated fadeIn" *ngIf="purchaseorder">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Purchase Order</h4></div>
+        <button class="tip-ico tip-ico-success" (click)="purchaseOrder()"> 
+          <i class="fa fa-shopping-cart"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="purchasegrn">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>GRN</h4></div>
+        <button class="tip-ico tip-ico-success" (click)="purchaseGrn()"> 
+          <i class="fa fa-id-card"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="purchasebill">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Purchase Bill</h4></div>
+        <button class="tip-ico tip-ico-success" (click)="purchaseBill()"> 
+          <i class="fa fa-calculator"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="purchasereturnApproval">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Purchase Return Approval</h4></div>
+        <button class="tip-ico tip-ico-success" (click)="purchaseReturnApproval()"> 
+          <i class="fa fa-car"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="purchasereturnNote">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Purchase Return Note</h4></div>
+        <button class="tip-ico tip-ico-success" (click)="purchaseReturnNote()"> 
+          <i class="fa fa-file-text-o"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="debitnote">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Debit Note</h4></div>
+        <button class="tip-ico tip-ico-success" (click)="debitNote()"> 
+          <i class="fa fa-list"></i>
+        </button>
+      </div>
+    </div>            
+</fieldset>
+<fieldset *ngIf="sales">
+  <legend>Sales Transaction</legend>
+    <div class="col-md-3 animated fadeIn" *ngIf="salesorder">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Sales Order</h4></div>
+        <button class="tip-ico tip-ico-primary" (click)="salesOrder()"> 
+          <i class="fa fa-usd"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="deliverychallan">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Delivery Challan</h4></div>
+        <button class="tip-ico tip-ico-primary" (click)="deliveryChallan()"> 
+          <i class="fa fa-usd"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="salesinvoice">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Sales Invoice</h4></div>
+        <button class="tip-ico tip-ico-primary" (click)="salesInvoice()"> 
+          <i class="fa fa-usd"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="returnappNote">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Sales Return Approval Note</h4></div>
+        <button class="tip-ico tip-ico-primary" (click)="returnAppNote()"> 
+          <i class="fa fa-usd"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="salesreturnNote">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Sales Return Note</h4></div>
+        <button class="tip-ico tip-ico-primary" (click)="salesReturnNote()"> 
+          <i class="fa fa-usd"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="creditnote">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Credit Note</h4></div>
+        <button class="tip-ico tip-ico-primary" (click)="creditNote()"> 
+          <i class="fa fa-usd"></i>
+        </button>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset *ngIf="weight">
+    <legend>Weighment</legend>
+    <div class="col-md-3 animated fadeIn" *ngIf="tagadviceWithPo">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Tag Advice With PO</h4></div>
+        <button class="tip-ico tip-ico-info" (click)="tagAdviceWithPo()"> 
+          <i class="fa fa-truck"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="loadadvice">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Load Advice</h4></div>
+        <button class="tip-ico tip-ico-info" (click)="loadAdvice()"> 
+          <i class="fa fa-truck"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="unloadadvice">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Unload Advice</h4></div>
+        <button class="tip-ico tip-ico-info" (click)="unloadAdvice()"> 
+          <i class="fa fa-truck"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="kata">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Weighment</h4></div>
+        <button class="tip-ico tip-ico-info" (click)="weighment()"> 
+          <i class="fa fa-truck"></i>
+        </button>
+      </div>
+    </div>
+  </fieldset>
+  <fieldset *ngIf="gatepass">
+    <legend>Gatepass</legend>
+    <div class="col-md-3 animated fadeIn" *ngIf="gatepasschecklist">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Gate Pass Check List</h4></div>
+        <button class="tip-ico tip-ico-danger" (click)="gatepassCheckList()"> 
+          <i class="fa fa-subway"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="gatein">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Gate In</h4></div>
+        <button class="tip-ico tip-ico-danger" (click)="gateIn()"> 
+          <i class="fa fa-subway"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="gateoutauthorization">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Gate Out Authorization</h4></div>
+        <button class="tip-ico tip-ico-danger" (click)="gateOutAuthorization()"> 
+          <i class="fa fa-subway"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" *ngIf="gatepassgateout">
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Gate Pass Gate Out</h4></div>
+        <button class="tip-ico tip-ico-danger" (click)="gatePassGateOut()"> 
+          <i class="fa fa-subway"></i>
+        </button>
+      </div>
+    </div>
+  </fieldset>
+ 
+  <fieldset *ngIf="production">
+    <legend>Production</legend>
+    <div class="col-md-3 animated fadeIn" >
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Production Transaction(Reg)</h4></div>
+        <button class="tip-ico tip-ico-success" (click)="productiontransreg()"> 
+          <i class="fa fa-pagelines"></i>
+        </button>
+      </div>
+    </div>
+    <div class="col-md-3 animated fadeIn" >
+      <div class="card card-block tip-card">
+        <div class="tip-msg"><h4>Production Transaction(Spc)</h4></div>
+        <button class="tip-ico tip-ico-success" (click)="productiontransspc()"> 
+          <i class="fa fa-pied-piper"></i>
+        </button>
+      </div>
+    </div>
+   
+  </fieldset>
+</div>

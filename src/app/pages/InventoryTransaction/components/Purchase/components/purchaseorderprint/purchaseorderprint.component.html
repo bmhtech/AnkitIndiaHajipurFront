@@ -1,0 +1,242 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<body>
+  <div class="container-fluid modal_box">
+    <div class="row">
+      <mat-dialog-content class="mat-typography">
+        <div class="modal_main_content">
+          <div id="print-section" class="print">
+            <div class="container-fluid">
+              <div class="main_content inv" style="height: 850px;">
+                <div class="section1">
+                  <div class="main_header">
+
+                    <div class="top_div">
+                    </div>
+
+                    <h1 class="uc">{{company_name}}</h1>
+                    <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock "><b>(FRN: {{cin_no}})</b><br>
+                    <b>Registered Office Address:</b> {{ho_address}}<br>
+                    <b>Factory Address:</b> {{bu_address}}, {{dist}}, {{city_name}}, {{company_state}} - {{pin}}<br>
+                      <b>Email:</b> {{email_id}}
+                      <b>Phone:</b> {{phone_no}}
+                    <b>GSTIN :</b>{{gst_no}}
+                    </div>
+                    <ng-template #elseBlock>
+                    <div class="top_h4" ><b>(CIN: {{cin_no}})</b><br>
+                      <b>Registered Office Address:</b> {{ho_address}}<br>
+                      <b>Factory Address:</b> {{bu_address}}, {{dist}}, {{city_name}}, {{company_state}} - {{pin}}<br>
+                        <b>Email:</b> {{email_id}}
+                        <b>Phone:</b> {{phone_no}}
+                      <b>GSTIN :</b>{{gst_no}}
+                      </div>
+                    </ng-template>
+                    <hr style="border-top: 3px double black;">
+                  </div>
+                  <h3  style="text-align: center;"><u><b>PURCHASE ORDER</b></u></h3>
+                  <div class="box_table">
+                    <div class="bxx-top">
+                      <table class="table table_top table-bordered" style="border: none;">
+                        <tbody>
+                          <tr>
+                            <td style="width: 50%; border: none;" class="brdr_right">
+
+                              <table style="width: 100%;" class="uc">
+                                <tr>
+                                  <td><b>PO No :</b> {{pono}}</td>
+                                </tr>
+                                <tr>
+                                  <td><b>Date:</b> {{orderdate}}</td>
+                                </tr>
+                                <tr>
+                                  <td><b>Party Name :</b> {{partyname}}</td>
+                                </tr>
+                                <tr></tr>
+                                <tr>
+                                   <td><b>Address :</b> {{address}}</td>
+                                </tr>
+
+                              </table>
+                            </td>
+
+                            <td style="width: 50%;" class="comp_adrs">
+                              <table style="width: 100%;" >
+                                <tr>
+                                  <td><b><u>Delivery Address </u></b></td>
+                                </tr>
+                                <tr> 
+                                  <td><b>Company Name :</b> {{company_name}}</td>
+                                </tr>
+                                <tr>
+                                  <td><b>Address :</b>{{bu_address}}, {{dist}}, {{city_name}}, {{company_state}} - {{pin}}</td>
+                                </tr>
+
+                                <tr> </tr>
+
+                                <tr> </tr>
+
+                                <tr> </tr>
+
+                              </table>
+                            </td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+
+                      <br />
+                      <div class="bxx">
+                        <p style="font: 400 14px/20px Roboto,Helvetica Neue,sans-serif;">We are pleased to release the purchase order in your favour
+                         for the following items based on quotation given by you and discussion theirafter.
+                        </p>
+                        <br>
+                        <div *ngIf="ser_item_subtype_name == 'STORE PURCHASE';else elseBlock123 ">
+                          <table class="table table-bordered" style="padding: 5px; text-align:center;">
+                            <thead>
+                              <tr>
+                                <th scope="col" style="width: 1%; vertical-align: middle;">SL.No.</th>
+                                <th scope="col" style="width: 20%; vertical-align: middle;">Particulars</th>
+                                <!-- <th scope="col" style="width: 5%; vertical-align: middle;">HSN Code</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Code</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Size</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Weight</th>
+                                <th scope="col" style="width: 2%; vertical-align: middle;">Laminated /<br>Non-Laminated
+                                </th> -->
+                                <th scope="col" style="width: 5%; vertical-align: middle;">UOM</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Qty</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Rate</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Discount Rate</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Discount Amount(₹)</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Amount(₹)</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let i of itemDetails; let poinIndex = index">
+                                <td style="text-align: center; vertical-align: middle;">{{poinIndex+1}}</td>
+                                <td style="vertical-align: middle;">{{i.classified_item_name}}</td>
+                                <!-- <td style="text-align: center; vertical-align: middle;">{{i.hsn_code}}</td>
+                                <td style="text-align: center; vertical-align: middle;">{{i.packing_item_code}}</td>
+                                <td style="text-align: center; vertical-align: middle;">{{i.packing_size}}</td>
+                                <td style="text-align: center; vertical-align: middle;">{{i.packing_weight}}</td>
+                                <td style="text-align: center!important; vertical-align: middle;">{{i.packing_type}}</td> -->
+                                <td style="text-align: center; vertical-align: middle;">{{i.packing_uom}}</td>
+                                <td style="text-align: center!important; vertical-align: middle;" *ngIf="i.price_based_on == 'Packing';else elseBlock1234 ">{{i.packing_qty | number:'1.2-2'}}</td>
+                                <ng-template #elseBlock1234>
+                                  <td style="text-align: center!important; vertical-align: middle;">{{i.stock_qty | number:'1.2-2'}}</td>
+                                </ng-template>
+                                <td style="text-align: center!important; vertical-align: middle;">{{i.price |
+                                  number:'1.2-2'}}</td>
+                                <td style="text-align: center; vertical-align: middle;">{{i.discount+ i.discount_basedon}}</td>
+                                <td style="text-align: center; vertical-align: middle;">{{i.discount_amount}}</td>
+                                <td style="text-align: center; vertical-align: middle;">{{i.total_amount | number:'1.2-2'}}</td>
+                              </tr>
+                              <tr>
+                                <td colspan="7"><b>Total</b></td>
+                                <td><b>{{totalamount | number:'1.2-2'}}</b></td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </div>
+                        <ng-template #elseBlock123>
+                          <table class="table table-bordered" style="padding: 5px; text-align:center;">
+                            <thead>
+                              <tr>
+                                <th scope="col" style="width: 1%; vertical-align: middle;">SL.No.</th>
+                                <th scope="col" style="width: 20%; vertical-align: middle;">Particular</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">HSN Code</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Code</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Size</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Weight</th>
+                                <th scope="col" style="width: 2%; vertical-align: middle;">Laminated /<br>Non-Laminated
+                                </th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Qty Pcs</th>
+                                <th scope="col" style="width: 5%; vertical-align: middle;">Rate</th>
+                              </tr>
+                            </thead>
+                            <tbody>
+                              <tr *ngFor="let i of itemDetails; let poinIndex = index">
+                                <td style="text-align: center; vertical-align: middle;">{{poinIndex+1}}</td>
+                                <td style="vertical-align: middle;">{{i.item_name}}</td>
+                                <td style="text-align: center; vertical-align: middle;">{{i.hsn_code}}</td>
+                                <td style="text-align: center; vertical-align: middle;">{{i.packing_item_code}}</td>
+                                <td style="text-align: center; vertical-align: middle;">{{i.packing_size}}</td>
+                                <td style="text-align: center; vertical-align: middle;">{{i.packing_weight}}</td>
+                                <td style="text-align: center!important; vertical-align: middle;">{{i.packing_type}}</td>
+                                <td style="text-align: center!important; vertical-align: middle;">{{i.stock_qty |
+                                  number:'1.2-2'}}</td>
+                                <td style="text-align: center!important; vertical-align: middle;">{{i.price |
+                                  number:'1.2-2'}}</td>
+                              </tr>
+                            </tbody>
+                          </table>
+                        </ng-template>
+                        
+
+                      </div>
+                      <br />
+                      <div class="bxx">
+
+                      </div>
+                      <div>
+                        <table class="bxx">
+                          <tr><b>Terms & Conditions :</b></tr>
+                          <tr *ngFor="let terms of termscondition; let poinIndex = index">
+                            <td>{{poinIndex+1}}.{{terms.terms_name}} : {{terms.description}}</td>
+                          </tr>
+                          <tr></tr>
+                          <br>
+                         
+                        </table>
+                        <br>
+                        <p style="font: 400 14px/20px Roboto,Helvetica Neue,sans-serif;">You are requested to send us
+                          the
+                          final sales confirmation & make arrangements to dispatch the
+                          material.</p>
+                      </div>
+                      <br /><br />
+
+                      <div class="bxx">
+                        <ul>
+                          <p style="font: 400 14px/20px Roboto,Helvetica Neue,sans-serif;">Thanking You,<br>
+                            For <b>{{company_name}}</b></p>
+                        </ul>
+                        <ul>
+                          <p style="font: 400 14px/20px Roboto,Helvetica Neue,sans-serif;text-align: right;" >Seller's Acceptance<br>
+                        </ul>
+                      </div>
+
+                      <div class="bxx-toppest">
+                        <br><br>
+                        <ul>
+                          <li style="float: left;">Authorised Signatory</li>
+                        </ul>
+                        <ol>
+                          <li style="font: 400 14px/20px Roboto,Helvetica Neue,sans-serif;text-align: right;">Authorised Signatory</li>
+                        </ol>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </mat-dialog-content>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+
+      <mat-dialog-actions align="end">
+        <button [useExistingCss]="true" printSectionId="print-section" ngxPrint>print</button>
+      </mat-dialog-actions>
+
+    </div>
+  </div>
+</body>
+
+</html>

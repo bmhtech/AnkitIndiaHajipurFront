@@ -1,0 +1,182 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid"> 
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Bin Master</legend> 
+              <!-- <form [formGroup]="bin_master" (ngSubmit)="send()"> -->   
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Bin Code<span class="red">*</span></mat-label>
+                <input type="text" [(ngModel)]="Bin.bin_code" formControlName="bin_code" class="form-control">
+              </div>
+            </div> -->
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Bin Name<span class="red">*</span></mat-label>
+                <input type="text" formControlName="bin_description" class="form-control">
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="bUnitCodes"
+                [display]="'businessunit_name'"
+                [value]="'businessunit_code'"
+                [multiple]='false'  
+                (selectionChange)="onChangeBUnitName($event)"          
+                ngDefaultControl
+                [formControl]="userForm.controls['businessunit_code']">
+              </mat-select-autocomplete>
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>WareHouse</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="warehouseCode"
+                [display]="'warehouse_name'"
+                [value]="'warehouse_code'"
+                [multiple]='false'     
+                ngDefaultControl
+                [formControl]="userForm.controls['warehouse_code']">
+              </mat-select-autocomplete>
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Bin Group<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="binTypeList"
+                [display]="'bingroupname'"
+                [value]="'bingroupid'"
+                [multiple]='false'     
+                ngDefaultControl
+                [formControl]="userForm.controls['bin_type']">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Bin Height(ft)</mat-label>
+                <input type="number" min="0" [(ngModel)]="Bin.empty_bin_height" formControlName="empty_bin_height" class="form-control">
+              </div>
+            </div>
+
+             <!--<div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Bin Width(QTLS)</mat-label>
+                <input type="number" min="0" [(ngModel)]="Bin.empty_bin_length" formControlName="empty_bin_length" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Volume</mat-label>
+                <input type="number" min="0" [(ngModel)]="Bin.bin_volume" formControlName="bin_volume" class="form-control">
+              </div>
+            </div> -->
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Bin Capacity(QTLS)<span class="red">*</span></mat-label>
+                <input type="number" min="0" [(ngModel)]="Bin.bin_capacity_kg" formControlName="bin_capacity_kg" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group pad_top_25">
+                <mat-checkbox  [(ngModel)]="Bin.bin_active" formControlName="bin_active"> Bin Active</mat-checkbox>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="binmastersave">Submit</button>
+          </div>
+        </div>
+      </div>
+   </div>
+  </section> 
+</form>
+
+<!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Bin Master List</legend>
+          <div class="table_content">
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+            
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Bin Name</th>
+                  <th>WareHouse</th>
+                  <th>Group</th>
+                  <th>Bin Height(ft)</th>
+                  <!-- <th>Bin Width(QTLS)</th> -->
+                  <th>Capacity(QTLS)</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Bin of listBin">
+                  <td>{{Bin.bin_description}}</td>
+                  <th>{{Bin.warehouse_name}}</th>
+                  <th>{{Bin.bin_typename}}</th>
+                  <td>{{Bin.empty_bin_height}}</td>
+                  <!-- <td>{{Bin.empty_bin_length}}</td> -->
+                  <td>{{Bin.bin_capacity_kg}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(Bin.id,'view')" *ngIf="binmasterview">View</button></td>         
+                  <td><button class="btn btn-info" (click)="onUpdate(Bin.id,'update')" *ngIf="binmasterupdate">Update</button></td>         
+                  <td><button class="btn btn-danger" (click)="onDelete(Bin.id,Bin.bin_id)" *ngIf="binmasterdelete">Delete</button></td>                 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  

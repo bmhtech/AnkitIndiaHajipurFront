@@ -1,0 +1,143 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader"> <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner></div>
+</div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>JobWork Item Allocation</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Item Name<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats i_nam"  
+                  [options]="jobitemlist"
+                  [display]="'item_name'"
+                  [value]="'item_id'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['job_item']"
+                  (selectionChange)="checkitemnameparty($event)">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Party Name<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="list_party"
+                [display]="'cp_name'"
+                [value]="'cp_Id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['party']" 
+                (selectionChange)="checkpartyitemname($event)">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>UoM<span class="red">*</span></mat-label>
+                <mat-select formControlName="qty_uom"  class="form-control">
+                  <mat-option *ngFor="let uom of UOMs" [value]="uom.customuom_id">{{uom.description}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Qty<span class="red">*</span></mat-label>
+                <input type="text" formControlName="qty" class="form-control" (focusout)="checkQtyUpdate($event)" />
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Allocated Qty<span class="red">*</span></mat-label>
+                <input type="text" formControlName="allocatedqty" class="form-control" readonly />
+              </div>
+            </div>
+
+
+          </fieldset>
+
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <button type="submit" class="btn btn-info" (click)="sendCheck()">Check</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <button type="submit" (click)="send()" class="btn btn-primary"  *ngIf="itemallocationsave" [disabled]="submitsave">Submit</button>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+<div class="master_container_box" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>JobWork Item Allocation List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Item Name</th>
+                  <th>Party Name</th>
+                  <th>UoM</th>
+                  <th>Qty</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let item of listItemAllocation">
+                  <td>{{item.job_item_name}}</td>
+                  <td>{{item.party_name}}</td>
+                  <td>{{item.qty_uom_name}}</td>
+                  <td>{{item.qty}}</td>
+
+                  <td><button class="btn btn-success" (click)="onUpdate(item.id,'view')" >View</button></td>
+                  <td><button class="btn btn-info" (click)="onUpdate(item.id, 'update')">Update</button></td> 
+                  <td><button class="btn btn-danger" (click)="onDelete(item.id)">Delete</button></td>
+                  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    
+  </div>
+</div>

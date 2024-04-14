@@ -1,0 +1,149 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Visitor Master</legend>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Name<span class="red">*</span></mat-label>
+                    <input type="text"  formControlName="visitor_name" class="form-control" >
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Catagory</mat-label>
+                    <mat-select formControlName="catagory" class="form-control">
+                      <mat-option value="Driver">Driver</mat-option>
+                      <mat-option value="Staff">Staff</mat-option>                
+                      <mat-option value="Visitor">Visitor</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Document No.</mat-label>
+                    <input type="text"  formControlName="doc_no" class="form-control" >
+                  </div>
+                </div> 
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Vehicle No.</mat-label>
+                      <input type="text"  formControlName="veh_no" class="form-control" >
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Phone no</mat-label>
+                    <input type="text"  formControlName="phone_no" class="form-control" >
+                  </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Address</mat-label>
+                    <textarea class="form-control"   formControlName="address" style="height: 110px;"></textarea>
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                  <div class="row">
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div class="form-group">
+                        <mat-label>Upload Identity</mat-label>
+                        <div class="form-control" style="min-height: 110px; border: 1px solid #ccc; border-radius: 4px;width:127px">
+                          <div class="imagePreview" *ngIf="imageURL && imageURL !== ''"> 
+                                    <input type="image" [src]="imageURL" height="100px;" width="100px" (click)="viewimg(this.src)">
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div class="form-group">
+                        <input type="file" accept="image/*"  #myFileInput  (change)="onFileSelected($event)">
+                      </div>
+                    </div>
+                   
+                  </div>
+                </div>
+                
+              
+                <div class="col-lg-12">
+                  <div class="form-group">
+                    <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="visitormastersave">Submit</button> 
+                    <!-- <button type="submit" (click)="send()" class="btn btn-primary">Submit</button> -->
+                  </div>
+                </div>
+
+
+          </fieldset>
+        </div>
+       </div>
+    </div>
+  </section>
+</form>
+
+ <!-- list -->
+
+ <div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">   
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Visitor Information List</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Name</th>
+                  <th>Catagory</th>
+                  <th>Phone No.</th>
+                  <th colspan="4" style="width:200px">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let visitor of listvisitors">
+                  <td>{{visitor.visitor_name}}</td>
+                  <td>{{visitor.catagory}}</td>
+                  <td>{{visitor.phone_no}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(visitor.id,'view')" *ngIf="visitormasterview">View</button></td>    
+                  <td><button class="btn btn-info" (click)="onUpdate(visitor.id,'update')" *ngIf="visitormasterupdate">Update</button></td> 
+                  <td><button class="btn btn-danger" (click)="onDelete(visitor.id,visitor.visitor_id)" *ngIf="visitormasterdelete">Delete</button></td>   
+                  <td><button class="btn btn-info" (click)="printVisitors(visitor.visitor_name,visitor.phone_no,visitor.address,visitor.veh_no,visitor.doc_img)" *ngIf="visitormasterprint">Print</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+ 

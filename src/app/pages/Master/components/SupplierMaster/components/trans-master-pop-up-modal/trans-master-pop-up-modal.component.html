@@ -1,0 +1,140 @@
+
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+<form [formGroup]="userForm" autocomplete="off" >
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Vehicle Details</legend>
+          
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Vehicle_no">Vehicle No.</label>
+                <input type="text" [(ngModel)]="Vehicle.vehicle_no" formControlName="vehicle_no" class="form-control" >
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Vehtype Code</mat-label>
+                <input type="text" [(ngModel)]="Vehicle.vehtype_code" formControlName="vehtype_code" class="form-control">
+              </div>
+            </div>
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Vehtype_name">Vehtype Name</label>
+                <input type="text" [(ngModel)]="Vehicle.vehtype_name" formControlName="vehtype_name" class="form-control"  >
+              </div>
+            </div> -->
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group ht_59" >
+                <mat-label>Business Unit Code</mat-label>
+                <input type="text" [(ngModel)]="Vehicle.businessunit_code" formControlName="businessunit_code" class="form-control"  >
+              </div>
+            </div> -->
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Businessunit_Name">Business Unit Name</label>
+                <input type="text" [(ngModel)]="Vehicle.businessunit_name" formControlName="businessunit_name" class="form-control"  >
+              </div>
+            </div> -->
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Vehicle_aliasno">Vehicle Alias No.</label>
+                <input type="text" [(ngModel)]="Vehicle.vehicle_aliasno" formControlName="vehicle_aliasno" class="form-control" readonly/>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Vehicle_ChassisNo">Vehicle Chassis No.</label>
+                <input type="text" [(ngModel)]="Vehicle.vehicle_chassisno" formControlName="vehicle_chassisno" class="form-control" readonly/>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="TareWeight_Qty">Tare Weight Qty</label>
+                <input type="number" [(ngModel)]="Vehicle.tareweight_qty" formControlName="tareweight_qty" class="form-control" min="0" readonly/>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="TareWeight Uom">TareWeight Uom</label>
+                <input type="number" [(ngModel)]="Vehicle.tareweight_uom" formControlName="tareweight_uom" class="form-control" min="0" readonly/>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <label for="Load_Capacity">Load Capacity</label>
+                  <input type="number" [(ngModel)]="Vehicle.load_capacity" formControlName="load_capacity" class="form-control" min="0" readonly/>
+               </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Load Capacity Uom">Load Capacity Uom</label>
+                <input type="number" [(ngModel)]="Vehicle.loadcapacity_uom" formControlName="loadcapacity_uom" class="form-control" min="0" readonly/>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Onwer_Name">Onwer Name</label>
+                <input type="text" [(ngModel)]="Vehicle.onwer_name" formControlName="onwer_name" class="form-control" readonly/>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Onwer_Address">Onwer Address</label>
+                <input type="text" [(ngModel)]="Vehicle.onwer_address" formControlName="onwer_address" class="form-control" readonly/>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Onwer_phoneNo">Onwer Phone No.</label>
+                <input type="number" [(ngModel)]="Vehicle.onwer_phoneno" formControlName="onwer_phoneno" class="form-control" min="0" readonly/>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox [(ngModel)]="Vehicle.vehicle_active" formControlName="vehicle_active" readonly>Vehicle Active</mat-checkbox> 
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+              <mat-dialog-actions align="end">
+                  <button class="btn btn-info" mat-button [mat-dialog-close]="true" cdkFocusInitial>Close</button>
+                </mat-dialog-actions>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+   
+
+ 
+
+
+
+

@@ -1,0 +1,122 @@
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm">
+    <div class="row">
+      <div class="col-lg-8 col-md-12 col-sm-12 col-12 col-lg-offset-2">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Document List</legend>
+            <div class="xy">
+              <div class="table_content" style="padding: 0 0 10px; margin: 0;">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 50px;">&nbsp;</th>
+                      <th>Sl No.</th>
+                      <th>Enquiry No</th>
+                      <th>Enquiry Date</th>    
+                      <th>Department</th> 
+                      <th style="display: none;">Enquiry Id</th>            
+                    </tr>  
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let i of purEnqList; let poinIndex = index">
+                      <td><mat-radio-button (change)="check1(i)"></mat-radio-button></td>
+                      <td>{{poinIndex+1}}</td>
+                      <td>{{i.enquiry_no}}</td>
+                      <td>{{i.enquiry_date}}</td>  
+                      <td>{{i.dept}}</td>
+                      <td style="display: none;">{{i.enquiry_id}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>           
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset style="padding: 0 10px;">
+            <legend>Purchase Enquiry List</legend>
+            <div class="dyn_table_conent">
+              <div class="dyn_table_header">
+              <label class="label_col"><h3>Select</h3></label>
+              <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+              <label class="label_col"><h3 class="i_nam" >Packing Item</h3></label>
+              <label class="label_col"><h3>Packing UOM</h3></label>
+              <label class="label_col"><h3>Packing Qty</h3></label> 
+              <label class="label_col"><h3>Item UOM</h3></label>
+              <label class="label_col"><h3>Item Qty</h3></label>
+              <label class="label_col"><h3>Mat Wt</h3></label>
+              <label class="label_col"><h3>Price</h3></label>
+              <label class="label_col"><h3>Price Based on</h3></label>
+              <label class="label_col"><h3>Amount</h3></label>
+              <label class="label_col" ><h3>Net Amount</h3></label> 
+              <label class="label_col" ><h3>Tax Code</h3></label> 
+              <label class="label_col" ><h3>Tax Rate</h3></label> 
+              <label class="label_col" ><h3>Tax Amt.</h3></label> 
+              <label class="label_col" ><h3>Total Amt.</h3></label> 
+              <label class="label_col"><h3>QC Norms</h3></label> 
+              <label class="label_col"><h3>Priorioty</h3></label> 
+              <label class="label_col"><h3 class="date_col">Delivery date</h3></label> 
+              <label class="label_col"><h3 class="date_col">Required date</h3></label> 
+              <label class="label_col"><h3>Purpose</h3></label>
+              <label class="label_col"><h3>Where to be used</h3></label> 
+              <label class="label_col"><h3>Remarks</h3></label> 
+              <label class="label_col"><h3>packing List Req.</h3></label>
+              <label class="label_col"><h3>packing List</h3></label>
+            </div>
+                <div class="dyn_table_data_cont" formArrayName="EnquiryServiceDetails">
+                  <div class="dyn_table" *ngFor="let item of EnquiryServiceDetails.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><mat-checkbox class="form-control" formControlName="checkbox"></mat-checkbox></div>
+                    <div class="label_col"><input formControlName="item_code" style="display: none;" class="form-control" readonly/></div>
+                    <div class="label_col"><input formControlName="item_name" class="form-control i_nam" readonly/></div>
+                    <div class="label_col"><input formControlName="packing_item_name" class="form-control i_nam" readonly/></div>
+                    <div class="label_col"><input formControlName="packing_item" style="display: none;" class="form-control" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="packing_uom" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="packing_qty" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="item_uom" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="item_qty" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="mat_weight" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="mrp" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="price_based_on" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="amount" readonly/></div>
+                    <div class="label_col" ><input class="form-control" type="text" formControlName="net_amount" readonly/></div>
+                    <div class="label_col" ><input class="form-control" type="text" formControlName="tax_code" readonly/></div>
+                    <div class="label_col" ><input class="form-control" type="text" formControlName="tax_rate" readonly/></div>
+                    <div class="label_col" ><input class="form-control" type="text" formControlName="tax_amount" readonly/></div>
+                    <div class="label_col" ><input class="form-control" type="text" formControlName="total_amount" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="qc_norms" readonly/></div>
+                    <div class="label_col"><input formControlName="priority" class="form-control" readonly/></div>
+                    <div class="label_col"><input class="form-control date_col" type="text" formControlName="delivery_date" readonly/></div>
+                    <div class="label_col"><input class="form-control date_col" type="text" formControlName="required_date" readonly/></div>
+                    <div class="label_col"> <input formControlName="purpose" class="form-control" readonly/></div>
+                    <div class="label_col"> <input formControlName="to_be_used" class="form-control" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="remarks" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="packing_list_req" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="packing_list" readonly/></div>
+                  </div>
+                </div>  
+              </div>
+            
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <mat-dialog-actions align="end">
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+        </mat-dialog-actions>
+  </form>
+</div>
+  
+  
+  
+  

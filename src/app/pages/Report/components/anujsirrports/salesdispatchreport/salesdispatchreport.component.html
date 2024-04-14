@@ -1,0 +1,196 @@
+<form [formGroup]="userForm">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <fieldset>
+            <legend>Dynamic Report</legend>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Report Name</mat-label>
+               
+
+                <mat-select formControlName="reportname" class="form-control">
+                  <mat-option value="Trial 17.11.22 Del Challan">Trial 17.11.22 Del Challan</mat-option>
+                  <mat-option value="WEIGHMENT REPORT">WEIGHMENT REPORT</mat-option> 
+                  </mat-select>
+
+              </div>
+            </div>
+          
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>From Date</mat-label>
+                <input type="date"  formControlName="fromdate" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>To Date</mat-label>
+                <input type="date"  formControlName="todate" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-12">
+              <div class="form-group">
+                <button type="submit" (click)="send()" class="btn btn-info">Search</button>
+              </div>
+            </div> 
+
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+<div class="master_container_box" >
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend> Report List</legend>
+
+          <!-- <div class="table_content" *ngIf="weighmentshow">
+            <table class="table table-bordered" id="dynamictable">
+              <thead>
+                <tr>
+               
+                 <th *ngFor="let flist of columnslist" >
+                    {{flist}}
+                </th>
+               
+                  
+                  
+                </tr>
+              </thead>
+              <tbody>
+                
+                <tr *ngFor="let dlist of datalist">
+                  <td *ngFor="let list of columnslist;index as i">
+                      {{dlist[i]}}
+                  </td>
+                
+                    <tr><td></td>
+                    
+                  </tr>
+              </tbody>
+            </table>
+          </div> -->
+
+          <div class="table_content" *ngIf="weighmentshow">
+            <table class="table table-bordered" id="dynamictable">
+              <thead>
+                <tr>
+               
+                 <th *ngFor="let flist of columnslist" >
+                    {{flist}}
+                </th>
+               
+                  
+                  
+                </tr>
+              </thead>
+              <tbody>
+                
+                <tr *ngFor="let dlist of datalist">
+                  <td *ngFor="let list of columnslist;index as i">
+                      {{dlist[i]}}
+                  </td>
+                
+                    <tr><td></td>
+                    
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="table_content" *ngIf="trialshow">
+            <table class="table table-bordered" id="dynamictable">
+                <thead>
+                    <tr>
+                      <th>Invoice Type</th>
+                      <th>Ref Type</th>
+                      <th>Challan Date</th>
+                      <th>Challan No</th>
+                      <th>Advice No</th>
+                      <th>Party Name</th>
+                      <th>Price Term</th>
+                      <th>Date</th>
+                      <th>Grand Total</th>
+                      <th>Item Name</th>
+                      <th>Packing Item</th>
+                      <th>Packing Qty</th>
+                      <th>Packing Uom</th>
+                      <th>Item Qty</th>
+                      <th>Item Uom</th>
+                      <th>Mat Wt.</th>
+                      <th>Price</th>
+                      <th>Price Base On</th>
+                      <th>Amount</th>
+                      <th>Discount</th>
+                      <th>Discount Based On</th>
+                      <th>Discount Amt</th>
+                      <th>Tax Code</th>
+                      <th>Tax Rate</th>
+                      <th>Tax Amt</th>
+                      <th>Total Amt</th>
+                      <th>Uom</th>
+                      <th>Gross</th>
+                      <th>Tare</th>
+                      <th>Net</th>
+                      <th>Vehicle No</th>
+                    </tr>
+                  </thead>
+                  <tbody>                                                         
+                                                                
+                        <tr *ngFor="let item of trialdata">
+                          <td>{{item.inv_type_name}}</td>
+                          <td>{{item.reftype}}</td>
+                          <td>{{item.challan_date}}</td>
+                          <td>{{item.challan_no}}</td>
+                          <td>{{item.adviceno}}</td>
+                          <td>{{item.partyname}}</td>
+                          <td>{{item.price_term}}</td>
+                          <td>{{item.date2}}</td>
+                          <td>{{item.grand_total}}</td>
+                          <td>{{item.item_name}}</td>
+                          <td>{{item.packing_name}}</td>
+                          <td>{{item.squantity}}</td>
+                          <td>{{item.suom}}</td>
+                          <td>{{item.quantity}}</td>
+                          <td>{{item.uom}}</td>
+                          <td>{{item.mat_wt}}</td>
+                          <td>{{item.price}}</td>
+                          <td>{{item.price_based_on}}</td>
+                          <td>{{item.amount}}</td>
+                          <td>{{item.discount_rate}}</td>
+                          <td>{{item.discount_type}}</td>
+                          <td>{{item.discount_amt}}</td>
+                          <td>{{item.tax_name}}</td>
+                          <td>{{item.tax_rate}}</td>
+                          <td>{{item.tax_amt}}</td>
+                          <td>{{item.total_amt}}</td>
+                          <td>{{item.own_uom_name}}</td>
+                          <td>{{item.own_gross}}</td>
+                          <td>{{item.own_tare}}</td>
+                          <td>{{item.own_net}}</td>
+                          <td>{{item.vehicle_no}}</td>
+                        </tr>
+                  </tbody>
+            </table>
+        </div>
+
+          <div  class="col-lg-12">
+             <div class="form-group">
+                 <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+              </div>
+          </div>
+
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

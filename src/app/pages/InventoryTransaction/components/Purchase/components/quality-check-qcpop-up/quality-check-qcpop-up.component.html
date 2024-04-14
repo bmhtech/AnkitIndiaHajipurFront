@@ -1,0 +1,56 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm1">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset style="padding: 0 10px;">
+            <legend>QC Rules List</legend>
+            <div class="dyn_table_conent">
+              <div class="dyn_table_header">
+              <label class="label_col"><h3 class="srln">Sl No</h3></label>
+              <label class="label_col"><h3 class="i_nam">QC Code</h3></label>
+              <label class="label_col"><h3 class="i_nam">Qc Param</h3></label>
+              <label class="label_col"><h3>Calculation Basis</h3></label> 
+              <label class="label_col"><h3>Basis Amt Uom</h3></label>
+              <label class="label_col"><h3>Min</h3></label>
+              <label class="label_col"><h3>Max</h3></label>
+              <label class="label_col"><h3>Sample</h3></label>
+              <label class="label_col"><h3>Peripheral Observation</h3></label>
+              <label class="label_col"><h3>Out of QC Param</h3></label>
+              <label class="label_col"><h3>Master Observation</h3></label>
+              <label class="label_col"><h3>Remarks</h3></label>
+            </div>
+                <div class="dyn_table_data_cont" formArrayName="QcDetails">
+                  <div class="dyn_table" *ngFor="let item of QcDetails.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><input formControlName="sl_no" class="form-control srln" readonly/></div>
+                    <div class="label_col"><input formControlName="qc_code" class="form-control i_nam" readonly/></div>
+                    <div class="label_col"><input class="form-control i_nam" type="text" formControlName="qc_param" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="cal_basis" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="basis_amt_UoM" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="min" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="max" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="sample" [readonly]="updateQC"/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="observation" (focusout)="checkObs($event, pointIndex)" [readonly]="updateQC"/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="out_qc_param" [readonly]="qcApproverName[pointIndex] || updateQC"/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="master_observation"/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="qc_remarks"/></div>
+                  </div>
+                </div>  
+              </div>
+            
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+    <mat-dialog-actions align="end">
+      <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+    </mat-dialog-actions>
+  </form>
+</div>

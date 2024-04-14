@@ -1,0 +1,294 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>User Information</legend>
+            
+            <div class="madate">(<span class="red"> * </span> fields are mandatory)</div>
+            <div class="clr"></div>
+            <div *ngIf="usernamelock;else elseBlock1">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+              <div class="form-group">
+                <mat-label for="User code">User Code<span class="red">*</span></mat-label>
+                <input type="text" class="form-control"  [(ngModel)]="seq_no" formControlName="emp_code" readonly>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label for="User Name">User Name<span class="red">*</span></mat-label>
+                <input type="text"  [(ngModel)]="model.emp_name" formControlName="emp_name" class="form-control" [readonly]="userrole_acess">
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label for="User Email">User Email</mat-label>
+                <input type="text"  [(ngModel)]="model.email_id" formControlName="email_id" class="form-control" id="Employee_remarks" (focusout)="onFocusOutEvent($event)" [readonly]="userrole_acess"/>
+              </div>
+            </div> 
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label for="PIN Code">Mobile No.</mat-label>
+                <input type="number"  [(ngModel)]="model.mobile_no" formControlName="mobile_no" class="form-control" maxlength="10">
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label for="User Address">User Address</mat-label>
+                <input type="text"  [(ngModel)]="model.address" formControlName="address" class="form-control" id="Employee_address">
+              </div>
+            </div>
+            
+       
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Country</mat-label>
+                <mat-select class="form-control" formControlName="country_id">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let country_name of countries" [value]="country_name.country_name">{{country_name.country_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group" >
+                <mat-label>State Name</mat-label>
+                <mat-select class="form-control" formControlName="state_id" (selectionChange)="onChangeState($event.value)">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let state_name of states" [value]="state_name.state_name">{{state_name.state_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label for="City Name">City Name</mat-label>
+                <mat-select type="text" formControlName="city_id" class="form-control">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let city_name of citiNames" [value]="city_name.city_name">{{city_name.city_name}}</mat-option>  
+                </mat-select>
+              </div>
+            </div>
+
+           <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Department Name</mat-label>
+                <mat-select class="form-control" formControlName="dept_id">
+                  <mat-option *ngFor="let list of Deptnames" [value]="list.department_code">{{list.department_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-12">
+              <fieldset>
+                <legend>User Login Credential</legend>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label for="employee Name">User Id<span class="red">* In between 3 to 50 Ch</span></mat-label>
+                    <input type="text"  [(ngModel)]="model.emp_username" formControlName="emp_username" class="form-control" [readonly]="userrole_acess">
+                  </div>
+                </div> 
+    
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label for="employee Name">Password<span class="red">* In between 6 to 40 Ch</span></mat-label>
+                    <input type="text"  [(ngModel)]="model.password" formControlName="password" class="form-control" required>
+                  </div>
+                </div> 
+    
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12" formArrayName="role">
+                  <div class="form-group" *ngFor="let item of role.controls; let pointIndex=index" [formGroupName]="pointIndex" >
+                    <mat-label>Role<span class="red">*</span></mat-label>
+                    <mat-select class="form-control" formControlName="user_role_id"  min="0" (selectionChange)="onChangeRoleType($event.value)">
+                      <mat-option *ngFor="let Roles of RolesList" [value]="Roles.role_id">{{Roles.name}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                </fieldset>
+            </div>   
+          </div>
+          <ng-template #elseBlock1>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+                <div class="form-group">
+                  <mat-label for="User code">User Code<span class="red">*</span></mat-label>
+                  <input type="text" class="form-control"  [(ngModel)]="seq_no" formControlName="emp_code" readonly>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label for="User Name">User Name<span class="red">*</span></mat-label>
+                  <input type="text"  [(ngModel)]="model.emp_name" formControlName="emp_name" class="form-control" readonly>
+                </div>
+              </div> 
+  
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label for="User Email">User Email</mat-label>
+                  <input type="text"  [(ngModel)]="model.email_id" formControlName="email_id" class="form-control" id="Employee_remarks" (focusout)="onFocusOutEvent($event)" readonly/>
+                </div>
+              </div> 
+  
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label for="PIN Code">Mobile No.</mat-label>
+                  <input type="number"  [(ngModel)]="model.mobile_no" formControlName="mobile_no" class="form-control" maxlength="10" readonly>
+                </div>
+              </div>
+  
+  
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label for="User Address">User Address</mat-label>
+                  <input type="text"  [(ngModel)]="model.address" formControlName="address" class="form-control" id="Employee_address" readonly>
+                </div>
+              </div>
+              
+         
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Country</mat-label>
+                  <mat-select class="form-control" formControlName="country_id" [disabled]="userrole_acess">
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option *ngFor="let country_name of countries" [value]="country_name.country_name">{{country_name.country_name}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+  
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group" >
+                  <mat-label>State Name</mat-label>
+                  <mat-select class="form-control" formControlName="state_id" (selectionChange)="onChangeState($event.value)" [disabled]="userrole_acess">
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option *ngFor="let state_name of states" [value]="state_name.state_name">{{state_name.state_name}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+  
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label for="City Name">City Name</mat-label>
+                  <mat-select type="text" formControlName="city_id" class="form-control" [disabled]="userrole_acess">
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option *ngFor="let city_name of citiNames" [value]="city_name.city_name">{{city_name.city_name}}</mat-option>  
+                  </mat-select>
+                </div>
+              </div>
+  
+             <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Department Name</mat-label>
+                  <mat-select class="form-control" formControlName="dept_id" [disabled]="userrole_acess">
+                    <mat-option *ngFor="let list of Deptnames" [value]="list.department_code">{{list.department_name}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-lg-12">
+                <fieldset>
+                  <legend>User Login Credential</legend>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label for="employee Name">User Id<span class="red">* In between 3 to 50 Ch</span></mat-label>
+                      <input type="text"  [(ngModel)]="model.emp_username" formControlName="emp_username" class="form-control" readonly>
+                    </div>
+                  </div> 
+      
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label for="employee Name">Password<span class="red">* In between 6 to 40 Ch</span></mat-label>
+                      <input type="text"  [(ngModel)]="model.password" formControlName="password" class="form-control" required>
+                    </div>
+                  </div> 
+      
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12" formArrayName="role">
+                    <div class="form-group" *ngFor="let item of role.controls; let pointIndex=index" [formGroupName]="pointIndex" >
+                      <mat-label>Role<span class="red">*</span></mat-label>
+                      <mat-select class="form-control" formControlName="user_role_id"  min="0" (selectionChange)="onChangeRoleType($event.value)">
+                        <mat-option *ngFor="let Roles of RolesList" [value]="Roles.role_id">{{Roles.name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                 
+  
+                  </fieldset>
+              </div> 
+            </ng-template>
+          </fieldset>
+        </div>
+      </div>
+    
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">      
+            <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="empsave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+   
+ <!-- list -->
+
+ <div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>User List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>User Code</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Mobile</th>
+                  <th>User Name</th>
+                  <th>Password</th>
+                  <th colspan="2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let employee_master_list of listemployee_master_list">
+                  <td>{{employee_master_list.emp_code}}</td>
+                  <td>{{employee_master_list.emp_name}}</td>
+                  <td>{{employee_master_list.email_id}}</td>
+                  <td>{{employee_master_list.mobile_no}}</td>
+                  <td>{{employee_master_list.emp_username}}</td>
+                  <td>{{employee_master_list.password}}</td> 
+                  <td><button class="btn btn-success" (click)="onUpdate(employee_master_list.id,'view')">View</button></td>      
+                  <td><button class="btn btn-info" (click)="onUpdate(employee_master_list.id,'update')">Update</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

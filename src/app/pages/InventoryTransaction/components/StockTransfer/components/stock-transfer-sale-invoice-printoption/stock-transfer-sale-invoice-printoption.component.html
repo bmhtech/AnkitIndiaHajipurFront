@@ -1,0 +1,66 @@
+
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="pop_div">
+        <fieldset>
+          <legend><mat-checkbox  formControlName="select_all" [(ngModel)]="model.select_all" (change)="onChangeSelectAll($event.checked)">Select All</mat-checkbox></legend>
+        
+        <mat-dialog-content class="mat-typography">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="form-group">           
+              <mat-checkbox  formControlName="original_bill" [(ngModel)]="model.original_bill">Original For Receipt</mat-checkbox>            
+            </div>
+          </div>
+
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12" hidden>
+            <div class="form-group">
+              <mat-label>Original_bill </mat-label>
+              <input type="text" class="form-control" [(ngModel)]="model.original_bill1" formControlName="original_bill1" readonly/>
+            </div>
+          </div>
+
+
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="form-group">
+              <mat-checkbox formControlName="duplicate_bill" [(ngModel)]="model.duplicate_bill">Duplicate For Transporter</mat-checkbox>
+            </div>
+          </div>
+
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12" hidden>
+            <div class="form-group">
+              <mat-label>Duplicate_bill1 </mat-label>
+              <input type="text" class="form-control" [(ngModel)]="model.duplicate_bill1" formControlName="duplicate_bill1" readonly/>
+            </div>
+          </div>
+
+          
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            <div class="form-group">
+              <mat-checkbox formControlName="triplicate_bill" [(ngModel)]="model.triplicate_bill">Triplicate For Suppliers</mat-checkbox>
+            </div>
+          </div>
+
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12" hidden>
+            <div class="form-group">
+              <mat-label>Triplicate_bill1 </mat-label>
+              <input type="text" class="form-control" [(ngModel)]="model.triplicate_bill1" formControlName="triplicate_bill1" readonly/>
+            </div>
+          </div>
+        
+        </mat-dialog-content>
+      </fieldset>
+      </div>
+      <button class="close_btn ac" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+  </div>
+      <mat-dialog-actions align="center">
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Continue</button>
+        </mat-dialog-actions>
+  </form>
+</div>
+  
+  
+  
+  

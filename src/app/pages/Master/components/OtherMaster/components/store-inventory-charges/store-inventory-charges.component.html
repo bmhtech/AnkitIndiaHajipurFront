@@ -1,0 +1,115 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" ><mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner></div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Store Inventory Charges</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Description Head">Store Charges Description<span class="red">*</span></label>
+                <input type="text" formControlName="store_charge_desc" class="form-control" >
+              </div>
+            </div>
+         
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Charges Details</legend>
+              <div class="col-lg-12">
+                <div class="dyn_table_conent">
+                  <div class="dyn_table_header">
+                    <label class="label_col"><h3>Action</h3></label>
+                    <label class="label_col"><h3 class="i_nam">Charges Name<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3 class="i_nam">Charges Account<span class="red">*</span></h3></label>
+                    
+                  </div>
+
+                  <div class="dyn_table_data_cont" formArrayName="store_inv_charge_master_dtls">
+                    <div class="dyn_table" *ngFor="let item of store_inv_charge_master_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                      <div class="label_col"><input formControlName="store_charge_name" class="form-control i_nam" type="text"/></div>
+                      <div class="label_col"><select formControlName="store_charge_ac" class="form-control i_nam"><option value="0">-Select-</option><option *ngFor="let ledger of ledgerName" [value]="ledger.ledgerid">{{ledger.ledgername}}</option></select></div>
+                     
+                    </div>
+                  </div>
+               </div>
+               <div class="btm_btn_content">
+                <button type="button" class="btn btn-success" (click)="add(pointIndex)">Add</button>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="storechargesave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+
+  <!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">   
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Store Inventory Charges List</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Charge Id</th>
+                  <th>Store Charges Description</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Charges of listCharges">
+                  <td>{{Charges.store_charge_id}}</td>
+                  <td>{{Charges.store_charge_desc}}</td>
+                   <td><button class="btn btn-success" (click)="onUpdate(Charges.id,Charges.store_charge_id,'view')" >View</button></td>
+                  <td><button class="btn btn-info" (click)="onUpdate(Charges.id,Charges.store_charge_id,'update')" >Update</button></td>                 
+                  <td><button class="btn btn-danger" (click)="onDelete(Charges.id,Charges.store_charge_id)" >Delete</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

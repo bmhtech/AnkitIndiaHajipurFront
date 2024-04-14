@@ -1,0 +1,95 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Reason Master</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Screen Name<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="screen_code" >
+                <mat-option value="0">Select Sreen Name</mat-option>
+                <mat-option *ngFor="let list of screenList" [value]="list.screen_id">{{list.screen_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Reason<span class="red">*</span></mat-label>
+                  <textarea class="form-control textarea_ht" rows="1" formControlName="reason" ></textarea>
+                </div>
+              </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <div class="btn-toolbar">
+              <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="reasonmastersave">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+<!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">   
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Reason Master List</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Screen Code</th>
+                  <th>Reason</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let reasonMaster of listreasonMaster">
+                  <td>{{reasonMaster.screen_code}}</td>
+                  <td>{{reasonMaster.reason}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(reasonMaster.id)" *ngIf="reasonmasterview">View</button></td>                 
+                  <td><button class="btn btn-info" (click)="onUpdate(reasonMaster.id)" *ngIf="reasonmasterupdate">Update</button></td>                 
+                  <td><button class="btn btn-danger" (click)="onDelete(reasonMaster.id,reasonMaster)" *ngIf="reasonmasterdelete">Delete</button></td>                 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

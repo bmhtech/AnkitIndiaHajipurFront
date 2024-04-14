@@ -1,0 +1,115 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>TDS Master</legend>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>TDS Type<span class="red">*</span></mat-label>
+                <input type="text" formControlName="tds_type" [(ngModel)]="model.tds_type" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Section<span class="red">*</span></mat-label>
+                <input type="text" formControlName="tds_section" [(ngModel)]="model.tds_section" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Rate</mat-label>
+                <input type="number" formControlName="tds_rate" [(ngModel)]="model.tds_rate" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>TDS Account</mat-label>
+                <mat-select-autocomplete class="form-control" 
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              (selectionChange)="getTdsacc($event)"
+                             
+                              ngDefaultControl
+                              [formControl]="userForm.controls['tds_acc']">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+
+          </fieldset>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <div class="btn-toolbar">
+              <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="qtdsmastersave">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+    
+    <!-- list -->
+    
+    <div class="master_containerr" *ngIf="isHidden==false">
+      <div class="container-fluid"> 
+        <div class="row">
+          <div class="col-lg-12">
+            <fieldset class="table_container">
+              <legend>TDS Master</legend>
+              <div class="table_content">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>TDS Code</th>
+                      <th>TDS Type</th>
+                      <th>Section</th>
+                      <th>Rate</th>   
+                      <th colspan="3">Action</th>   
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let Tds_master of listTds_master">
+                      <td>{{Tds_master.tds_id}}</td>
+                      <td>{{Tds_master.tds_type}}</td>
+                      <td>{{Tds_master.tds_section}}</td>
+                      <td>{{Tds_master.tds_rate}}</td>
+                      <td><button class="btn btn-success" (click)="onUpdate(Tds_master.id,'view')" *ngIf="qtdsmasterview">View</button></td>
+                      <td><button class="btn btn-info" (click)="onUpdate(Tds_master.id,'update')" *ngIf="qtdsmasterupdate">Update</button></td>
+                      <td><button class="btn btn-danger" (click)="onDelete(Tds_master.id,Tds_master.tds_id)" *ngIf="qtdsmasterdelete">Delete</button></td>                   
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>

@@ -1,0 +1,317 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <fieldset>
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          
+          <fieldset>
+            <legend>Daily Wheat Stock</legend>
+            <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+              <mat-label>Date</mat-label>
+              <input type="date" [(ngModel)]="currentDate" formControlName="date" class="form-control" >
+              </div>
+            </div>
+        
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit<span class="red">*</span></mat-label>
+                <mat-select class="form-control" [(ngModel)]="BuUnit"  formControlName="business_unit" (selectionChange)="getitemname($event.value)">
+                  <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Created By<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="createdby">
+                  <mat-option *ngFor="let emplist of employeelist" [value]="emplist.emp_id">{{emplist.emp_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </fieldset>
+            <fieldset>
+              <legend>Daily Wheat Stock Details</legend>
+
+                    <div class="col-lg-12">
+                      <div class="dyn_table_conent">
+                        
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3>Action</h3></label>
+                          <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                          <label class="label_col"><h3 class="i_nam">Stack</h3></label>
+                          <label class="label_col"><h3 class="i_nam">Grade</h3></label>
+                          <label class="label_col"><h2>Opening Stock</h2></label>
+                          <label class="label_col"><h2>Receipt</h2></label>
+                          <label class="label_col"><h2>Issue To Hopper</h2></label>
+                          <label class="label_col"><h2>Closing Stock</h2></label>
+                         
+
+                        
+                        </div>
+
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3>Action</h3></label>
+                          <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                          <label class="label_col"><h3 class="i_nam">Stack</h3></label>
+                          <label class="label_col"><h3 class="i_nam">Grade</h3></label>
+                          <label class="label_col"><h3>Bags</h3></label>
+                          <label class="label_col"><h3>Qty</h3></label>
+                          <label class="label_col"><h3>Loose</h3></label>
+                         
+                          <label class="label_col"><h3>Bags</h3></label>
+                          <label class="label_col"><h3>Qty</h3></label>
+                          <label class="label_col"><h3>Loose</h3></label>
+
+
+                          <label class="label_col"><h3>Bags</h3></label>
+                          <label class="label_col"><h3>Qty</h3></label>
+                          <label class="label_col"><h3>Loose</h3></label>
+
+                          <label class="label_col"><h3>Bags</h3></label>
+                          <label class="label_col"><h3>Qty</h3></label>
+                          <label class="label_col"><h3>Loose</h3></label>
+
+                        
+                        </div>
+                        <div class="dyn_table_data_cont" formArrayName="wheatstock_Dtls">
+                          <div class="dyn_table" *ngFor="let item of wheatstock_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete2(pointIndex)"></i></div>
+                            <div class="label_col"><input formControlName="slno" class="form-control srln" type="text" readonly/></div>
+                            <div class="label_col"><input formControlName="stack" class="form-control i_nam" type="text" /></div>
+                            <div class="label_col">
+                              <mat-select-autocomplete class="form-control ats i_nam"  
+                              [options]="itemList"
+                              [display]="'item_name'"
+                              [value]="'item_id'"
+                              [multiple]='false'
+                              [selectedOptions]="selectedItemName3[pointIndex]"
+                              (selectionChange)="onchangeItemNamestock(pointIndex, $event)"
+                              ngDefaultControl
+                              [formControlName] = "'wheat_grade'">
+                            </mat-select-autocomplete>
+                            </div>
+
+                            <div class="label_col"><input formControlName="openingbags" class="form-control" type="text" (keyup)="calstack(pointIndex)"/></div>
+                            <div class="label_col"><input formControlName="openingqty" class="form-control" type="text" (keyup)="calstack(pointIndex)"/></div>
+                            <div class="label_col"><input formControlName="openingloose" class="form-control" type="text" (keyup)="calstack(pointIndex)"/></div>
+
+                            <div class="label_col"><input formControlName="receiptbags" class="form-control" type="text" (keyup)="calstack(pointIndex)"/></div>
+                            <div class="label_col"><input formControlName="receiptqty" class="form-control" type="text" (keyup)="calstack(pointIndex)"/></div>
+                            <div class="label_col"><input formControlName="receiptloose" class="form-control" type="text" (keyup)="calstack(pointIndex)"/></div>
+
+                            <div class="label_col"><input formControlName="issuebags" class="form-control" type="text" (keyup)="calstack(pointIndex)"/></div>
+                            <div class="label_col"><input formControlName="issueqty" class="form-control" type="text" (keyup)="calstack(pointIndex)"/></div>
+                            <div class="label_col"><input formControlName="issueloose" class="form-control" type="text" (keyup)="calstack(pointIndex)"/></div>
+
+                            <div class="label_col"><input formControlName="closingbags" class="form-control" type="text" readonly/></div>
+                            <div class="label_col"><input formControlName="closingqty" class="form-control" type="text" readonly/></div>
+                            <div class="label_col"><input formControlName="closingloose" class="form-control" type="text" readonly/></div>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="btm_btn_content" >
+                    <button type="button" class="btn btn-success"  (click)="addItems2()">Add Row </button>
+                  </div>
+
+
+
+
+            </fieldset>
+
+            <fieldset>
+              <legend>Details of Wheat Received</legend>
+              
+                <div class="col-lg-12">
+                  <div class="dyn_table_conent">
+                    
+                    
+
+                    <div class="dyn_table_header">
+                      <label class="label_col"><h3>Action</h3></label>
+                      <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                      <label class="label_col"><h3  class="i_nam">Truck No</h3></label>
+                      <label class="label_col"><h3>Hub</h3></label>
+                      <label class="label_col"><h3 class="i_nam">Grade</h3></label>
+                      <label class="label_col"><h3>Bags</h3></label>
+                      <label class="label_col"><h3>Qty</h3></label>
+                      <label class="label_col"><h3>Total</h3></label>
+                      <label class="label_col"><h3>Stack No.</h3></label> 
+                    
+                    </div>
+                    <div class="dyn_table_data_cont" formArrayName="wheatreceiving_Dtls">
+                      <div class="dyn_table" *ngFor="let item of wheatreceiving_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                        <div class="label_col"><input formControlName="slno" class="form-control srln" type="text" readonly/></div>
+                        <div class="label_col"><input formControlName="truckno" class="form-control i_nam" type="text"/></div>
+                        <div class="label_col"><select formControlName="hub" class="form-control"><option value="0">-Select-</option><option *ngFor="let hubli of hublist" [value]="hubli.hubid">{{hubli.hubname}}</option></select> </div>
+                        
+                        <!-- <div class="label_col"><input type="text" class="form-control" formControlName="grade"></div> -->
+                        
+                        <div class="label_col">
+                          <mat-select-autocomplete class="form-control ats i_nam"  
+                          [options]="itemList"
+                          [display]="'item_name'"
+                          [value]="'item_id'"
+                          [multiple]='false'
+                          [selectedOptions]="selectedItemName[pointIndex]"
+                          (selectionChange)="onchangeItemNamerecieve(pointIndex, $event)"
+                          ngDefaultControl
+                          [formControlName] = "'grade'">
+                        </mat-select-autocomplete>
+                        </div>
+
+                        <div class="label_col"><input formControlName="sixtykgbags" class="form-control" type="text"/></div>
+                        <div class="label_col"><input formControlName="sixtykgqty" class="form-control" type="text"/></div>
+                       
+                        <div class="label_col"><input type="text" class="form-control" formControlName="total"></div>
+                        <div class="label_col"><input type="text" class="form-control" formControlName="stackno"></div>
+                      </div>
+                    </div>
+                 </div>
+              </div>
+              <div class="btm_btn_content" >
+                <button type="button" class="btn btn-success"  (click)="addItems()">Add Row </button>
+              </div>
+
+                
+                
+          </fieldset>
+          <fieldset>
+                  <legend>Issue Details</legend>
+                  <div class="col-lg-12">
+                    <div class="dyn_table_conent">
+                      <div class="dyn_table_header">
+                        <label class="label_col"><h3>Action</h3></label>
+                        <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                        <label class="label_col"><h3  class="i_nam">Grade</h3></label>
+                        <label class="label_col"><h3>Stack No</h3></label>
+                        <label class="label_col"><h3>Bags</h3></label>
+                        <label class="label_col"><h3>Quantity</h3></label> 
+                      
+                      </div>
+                      <div class="dyn_table_data_cont" formArrayName="wheat_issue_Dtls">
+                        <div class="dyn_table" *ngFor="let item of wheat_issue_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                          <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete1(pointIndex)"></i></div>
+                          <div class="label_col"><input formControlName="slno" class="form-control srln" type="text" readonly/></div>
+                          <!-- <div class="label_col"><input formControlName="issue_grade" class="form-control i_nam" type="text"/></div> -->
+                          <div class="label_col">
+                            <mat-select-autocomplete class="form-control ats i_nam"  
+                            [options]="itemList"
+                            [display]="'item_name'"
+                            [value]="'item_id'"
+                            [multiple]='false'
+                            [selectedOptions]="selectedItemName1[pointIndex]"
+                            (selectionChange)="onchangeItemNameissue(pointIndex, $event)"
+                            ngDefaultControl
+                            [formControlName] = "'issue_grade'">
+                          </mat-select-autocomplete>
+                          </div>
+
+                          <div class="label_col"><input type="text" class="form-control" formControlName="stack_no"></div>
+                          <div class="label_col"><input formControlName="issue_bags" class="form-control" type="text"/></div>
+                          <div class="label_col"><input formControlName="issue_qty" class="form-control" type="text"/></div>
+                        </div>
+                      </div>
+                    </div>
+                </div>
+                <div class="btm_btn_content" >
+                  <button type="button" class="btn btn-success"  (click)="addItems1()">Add Row </button>
+                </div>
+          </fieldset>
+
+          <div class="col-lg-12" >
+            <div class="form-group">
+              <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="wheatreceivingsave">Submit</button>
+            </div>
+          </div>
+        </div>
+       </div>
+
+    </div>
+  </fieldset>
+  </section>
+</form>
+
+
+<div class="container-fluid" *ngIf="isHidden==false">
+      
+  <form [formGroup]="userForm1">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="todate">
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()"  >Search</button>
+      </div>
+    </div>
+  </form> 
+
+ <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Wheat Receiving Report List</legend>
+        <div class="table_content">
+          <table class="table table-bordered" >
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Bussiness Unit</th>
+                <th>Created By</th>
+                <th colspan="4">Action</th>       
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let wheatreceive of wheatreceivinglist">
+                    <td>{{wheatreceive.date}}</td>
+                    <td>{{wheatreceive.business_unitname}}</td>
+                    <td>{{wheatreceive.createdby_name}}</td>
+                    <td><button class="btn btn-success" (click)="onUpdate(wheatreceive.id, 'view')" >View</button></td>
+                    <td><button class="btn btn-info" (click)="onUpdate(wheatreceive.id, 'update')" >Update</button></td>  
+                    <td><button class="btn btn-danger" (click)="onDelete(wheatreceive.id)" >Delete</button></td>
+                    <td><button class="btn btn-success" (click)="print(wheatreceive.wheatreceiveid)" >Print</button></td>
+
+                  
+                  </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      </fieldset>
+    </div>
+  </div> 
+</div>

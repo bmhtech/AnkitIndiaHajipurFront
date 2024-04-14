@@ -1,0 +1,1505 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+          <div class="button_row">
+            <ul>
+              <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+              <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+            </ul>   
+          </div>
+        </div>
+      </div>
+  </div>
+</section>  
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">  
+  <div class="row">
+    <section class="master_container">
+      <div class="container-fluid"> 
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Item Group</legend>
+
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Group Code">Item Group Code</label>
+                <input type="text" formControlName="item_group_code" [(ngModel)]="seq_no" #iCodeInput (blur)="chkItemGrpCodeStatus($event)" readonly class="form-control">
+              </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Group Type<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="group_type" (selectionChange)="seleType($event)">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option value="Normal">Normal</mat-option>
+                  <mat-option value="Job Work">Job Work</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Group Name">Item Group Name<span class="red">*</span></label>
+                <input formControlName="group_name" [(ngModel)]="groupname" type="text" class="form-control" (blur)="focusOutFunctionGroupName($event)"/>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Parent Group</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="itemGroups"
+                [display]="'group_name'"
+                [value]="'item_group_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['parent_group']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox formControlName="group_active" [(ngModel)]="activeIsChecked">Active</mat-checkbox> 
+              </div>
+            </div>
+
+          </fieldset>
+
+          <div class="col-lg-12">
+            <div class="dyn_table_conent" style="border: none;">
+            <mat-tab-group animationDuration="1000ms">
+           
+
+          <div *ngIf="normalactive">
+            <mat-tab label="Sales A/C">
+
+
+              <div formGroupName="item_group_master_sales_acc">
+              <div class="row" *ngIf="isHidden==true">
+                <div class="table_container">
+                  <div class="table_content">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th style="width: 50px;">Srl No</th>
+                          <th>Description</th>
+                          <th>GL Ac</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>Item Total</td>
+                         <td>
+                              <mat-select-autocomplete class="form-control"  
+                            
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_sales_acc.controls['item_total']"
+                              [labelCount]="2">                          
+                            </mat-select-autocomplete>                     
+                        </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td>2</td>
+                          <td>Discount</td>
+                  
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_master_sales_acc.controls['discount']"
+                            [labelCount]="2">  
+                          </mat-select-autocomplete>
+                        
+                      </td>
+                          <td></td>
+                        </tr>
+
+                        <!-- <tr>
+                             <td>3</td>
+                          <td>Net Total</td>
+                         
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_master_sales_acc.controls['net_total']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                        
+                      </td>
+                          <td></td>
+                        </tr> -->
+
+                        <!-- <tr>
+                          <td>4</td>
+                          <td>Total Bill Amount</td>
+                          
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_master_sales_acc.controls['total_bill_amt']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                        
+                      </td>
+                          <td></td>
+                        </tr> -->
+
+                        <tr>
+
+                       <td>3</td>
+                          <td>Adj(+)</td>
+                         
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_master_sales_acc.controls['adjplus']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                        
+                      </td>
+                          <td></td>
+                        </tr>
+
+                        <tr>
+                          <td>4</td>
+                          <td>Adj(-)</td>
+                        
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_master_sales_acc.controls['adjminus']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>                     
+                      </td>
+                          <td></td>
+                        </tr>
+
+                        <!-- <tr>
+                          <td>7</td>
+                          <td>Final Bill Amount</td>
+                         
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_master_sales_acc.controls['final_bill_amt']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                         
+                         </td>
+                          <td></td>
+                        </tr> -->
+                        <tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            </mat-tab>
+
+            <mat-tab label="Sales Ret A/C">
+
+              <div formGroupName="item_group_master_sales_retacc">
+                <div class="row" *ngIf="isHidden==true">
+                  <div class="table_container">
+                    <div class="table_content">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th style="width: 50px;">Srl No</th>
+                            <th>Description</th>
+                            <th>GL Ac</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>Item Total</td>
+                           <td>
+                                <mat-select-autocomplete class="form-control"  
+                              
+                                [options]="ledgerNames"
+                                [display]="'ledgername'"
+                                [value]="'ledgerid'"
+                                [multiple]='false'
+                                ngDefaultControl
+                                [formControl]="item_group_master_sales_retacc.controls['item_total']"
+                                [labelCount]="2">                          
+                              </mat-select-autocomplete>                     
+                          </td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>Discount</td>
+                    
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_sales_retacc.controls['discount']"
+                              [labelCount]="2">  
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <!-- <tr>
+                               <td>3</td>
+                            <td>Net Total</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_sales_retacc.controls['net_total']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr> -->
+  
+                          <!-- <tr>
+                            <td>4</td>
+                            <td>Total Bill Amount</td>
+                            
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_sales_retacc.controls['total_bill_amt']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr> -->
+  
+                          <tr>
+  
+                         <td>3</td>
+                            <td>Adj(+)</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_sales_retacc.controls['adjplus']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+                            <td>4</td>
+                            <td>Adj(-)</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_sales_retacc.controls['adjminus']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <!-- <tr>
+                            <td>7</td>
+                            <td>Final Bill Amount</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_sales_retacc.controls['final_bill_amt']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                           
+                           </td>
+                            <td></td>
+                          </tr> -->
+                          <tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Purchase A/C">
+
+              <div formGroupName="item_group_master_pur_acc">
+                <div class="row" *ngIf="isHidden==true">
+                  <div class="table_container">
+                    <div class="table_content">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th style="width: 50px;">Srl No</th>
+                            <th>Description</th>
+                            <th>GL Ac</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>Item Total</td>
+                           <td>
+                                <mat-select-autocomplete class="form-control"  
+                              
+                                [options]="ledgerNames"
+                                [display]="'ledgername'"
+                                [value]="'ledgerid'"
+                                [multiple]='false'
+                                ngDefaultControl
+                                [formControl]="item_group_master_pur_acc.controls['item_total_gl_ac']"
+                                [labelCount]="2">                          
+                              </mat-select-autocomplete>                     
+                          </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                            <td>1</td>
+                            <td>Asset Item Total</td>
+                           <td>
+                                <mat-select-autocomplete class="form-control"  
+                              
+                                [options]="ledgerNames"
+                                [display]="'ledgername'"
+                                [value]="'ledgerid'"
+                                [multiple]='false'
+                                ngDefaultControl
+                                [formControl]="item_group_master_pur_acc.controls['item_total_asset_gl_ac']"
+                                [labelCount]="2">                          
+                              </mat-select-autocomplete>                     
+                          </td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>Discount</td>
+                    
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_acc.controls['discount_gl_ac']"
+                              [labelCount]="2">  
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <!-- <tr>
+                               <td>3</td>
+                            <td>Net Total</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_acc.controls['net_amt_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr> -->
+  
+                          <tr>
+                            <td>3</td>
+                            <td>Amount After Deduction</td>
+                            
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_acc.controls['amt_after_deduction_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+  
+                         <td>4</td>
+                            <td>Post Tax Amount</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_acc.controls['post_tax_amt_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+                            <td>5</td>
+                            <td>Payable Amount</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_acc.controls['payable_amt_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+                            <td>6</td>
+                            <td>Already Paid</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_acc.controls['already_paid_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                           
+                           </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                            <td>7</td>
+                            <td>Adj(+)</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_acc.controls['adjplus']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+
+                          <tr>
+                            <td>8</td>
+                            <td>Adj(-)</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_acc.controls['adjminus']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                            <td>9</td>
+                            <td>Payable To Party</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_acc.controls['payable_party_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+
+                          <tr>
+                            <td>10</td>
+                            <td>Net Payable Party</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_acc.controls['net_payable_party_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </mat-tab>
+
+            <mat-tab label="Purchase Ret A/C">
+
+              <div formGroupName="item_group_master_pur_retacc">
+                <div class="row" *ngIf="isHidden==true">
+                  <div class="table_container">
+                    <div class="table_content">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th style="width: 50px;">Srl No</th>
+                            <th>Description</th>
+                            <th>GL Ac</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>Item Total</td>
+                           <td>
+                                <mat-select-autocomplete class="form-control"  
+                              
+                                [options]="ledgerNames"
+                                [display]="'ledgername'"
+                                [value]="'ledgerid'"
+                                [multiple]='false'
+                                ngDefaultControl
+                                [formControl]="item_group_master_pur_retacc.controls['item_total_gl_ac']"
+                                [labelCount]="2">                          
+                              </mat-select-autocomplete>                     
+                          </td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>Discount</td>
+                    
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_retacc.controls['discount_gl_ac']"
+                              [labelCount]="2">  
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <!-- <tr>
+                               <td>3</td>
+                            <td>Net Total</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_retacc.controls['net_amt_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr> -->
+  
+                          <tr>
+                            <td>3</td>
+                            <td>Amount After Deduction</td>
+                            
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_retacc.controls['amt_after_deduction_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+  
+                         <td>4</td>
+                            <td>Post Tax Amount</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_retacc.controls['post_tax_amt_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+                            <td>5</td>
+                            <td>Payable Amount</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_retacc.controls['payable_amt_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+                            <td>6</td>
+                            <td>Already Paid</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_retacc.controls['already_paid_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                           
+                           </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                            <td>7</td>
+                            <td>Adj(+)</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_retacc.controls['adjplus']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+
+                          <tr>
+                            <td>8</td>
+                            <td>Adj(-)</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_retacc.controls['adjminus']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                            <td>9</td>
+                            <td>Payable To Party</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_retacc.controls['payable_party_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+
+                          <tr>
+                            <td>10</td>
+                            <td>Net Payable Party</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_pur_retacc.controls['net_payable_party_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+            </mat-tab>
+
+            <mat-tab label="Stock Transfer Sale">
+
+              <div formGroupName="item_group_master_stk_trans_sale">
+                <div class="row" *ngIf="isHidden==true">
+                  <div class="table_container">
+                    <div class="table_content">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th style="width: 50px;">Srl No</th>
+                            <th>Description</th>
+                            <th>GL Ac</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>Item Total</td>
+                           <td>
+                                <mat-select-autocomplete class="form-control"  
+                              
+                                [options]="ledgerNames"
+                                [display]="'ledgername'"
+                                [value]="'ledgerid'"
+                                [multiple]='false'
+                                ngDefaultControl
+                                [formControl]="item_group_master_stk_trans_sale.controls['item_total']"
+                                [labelCount]="2">                          
+                              </mat-select-autocomplete>                     
+                          </td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>Discount</td>
+                    
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_sale.controls['discount']"
+                              [labelCount]="2">  
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <!-- <tr>
+                               <td>3</td>
+                            <td>Net Total</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_sale.controls['net_total']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr> -->
+  
+                          <!-- <tr>
+                            <td>4</td>
+                            <td>Total Bill Amount</td>
+                            
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_sale.controls['total_bill_amt']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr> -->
+  
+                          <tr>
+  
+                         <td>3</td>
+                            <td>Adj(+)</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_sale.controls['adjplus']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+                            <td>4</td>
+                            <td>Adj(-)</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_sale.controls['adjminus']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <!-- <tr>
+                            <td>7</td>
+                            <td>Final Bill Amount</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_sale.controls['final_bill_amt']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                           
+                           </td>
+                            <td></td>
+                          </tr> -->
+                          <tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Stock Transfer Purchase">
+
+              <div formGroupName="item_group_master_stk_trans_pur">
+                <div class="row" *ngIf="isHidden==true">
+                  <div class="table_container">
+                    <div class="table_content">
+                      <table class="table table-bordered">
+                        <thead>
+                          <tr>
+                            <th style="width: 50px;">Srl No</th>
+                            <th>Description</th>
+                            <th>GL Ac</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr>
+                            <td>1</td>
+                            <td>Item Total</td>
+                           <td>
+                                <mat-select-autocomplete class="form-control"  
+                              
+                                [options]="ledgerNames"
+                                [display]="'ledgername'"
+                                [value]="'ledgerid'"
+                                [multiple]='false'
+                                ngDefaultControl
+                                [formControl]="item_group_master_stk_trans_pur.controls['item_total_gl_ac']"
+                                [labelCount]="2">                          
+                              </mat-select-autocomplete>                     
+                          </td>
+                            <td></td>
+                          </tr>
+                          <tr>
+                            <td>2</td>
+                            <td>Discount</td>
+                    
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_pur.controls['discount_gl_ac']"
+                              [labelCount]="2">  
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <!-- <tr>
+                               <td>3</td>
+                            <td>Net Total</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_pur.controls['net_amt_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr> -->
+  
+                          <tr>
+                            <td>3</td>
+                            <td>Amount After Deduction</td>
+                            
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_pur.controls['amt_after_deduction_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+  
+                         <td>4</td>
+                            <td>Post Tax Amount</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_pur.controls['post_tax_amt_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+                            <td>5</td>
+                            <td>Payable Amount</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_pur.controls['payable_amt_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+  
+                          <tr>
+                            <td>6</td>
+                            <td>Already Paid</td>
+                           
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_pur.controls['already_paid_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                           
+                           </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                            <td>7</td>
+                            <td>Adj(+)</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_pur.controls['adjplus']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+
+                          <tr>
+                            <td>8</td>
+                            <td>Adj(-)</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_pur.controls['adjminus']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                            <td>9</td>
+                            <td>Payable To Party</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_pur.controls['payable_party_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+
+                          <tr>
+                            <td>10</td>
+                            <td>Net Payable Party</td>
+                          
+                            <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="item_group_master_stk_trans_pur.controls['net_payable_party_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>                     
+                        </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+          </div>
+          <div *ngIf="jobworkactive">
+            <mat-tab label="JobWork Sales A/C">
+              <div formGroupName="item_group_jobwork_sales_acc">
+              <div class="row" *ngIf="isHidden==true">
+                <div class="table_container">
+                  <div class="table_content">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th style="width: 50px;">Srl No</th>
+                          <th>Description</th>
+                          <th>GL Ac</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>Item Total</td>
+                         <td>
+                              <mat-select-autocomplete class="form-control"  
+                            
+                              [options]="grpServiceNames"
+                              [display]="'service_name'"
+                              [value]="'service_id'"
+                              [multiple]='true'
+                              ngDefaultControl
+                              [formControl]="item_group_jobwork_sales_acc.controls['jw_item_total']"
+                              (selectionChange)="getItemGroupjobwork($event)"
+                              [labelCount]="2">                          
+                            </mat-select-autocomplete>                     
+                        </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td>2</td>
+                          <td>Discount</td>
+                  
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_jobwork_sales_acc.controls['jw_discount']"
+                            [labelCount]="2">  
+                          </mat-select-autocomplete>
+                        </td>
+                        <td></td>
+                        </tr>
+
+                        <tr>
+                        <td>3</td>
+                        <td>Adj(+)</td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_jobwork_sales_acc.controls['jw_adjplus']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                      </td>
+                      <td></td>
+                      </tr>
+
+                        <tr>
+                          <td>4</td>
+                          <td>Adj(-)</td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_jobwork_sales_acc.controls['jw_adjminus']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>                     
+                          </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </mat-tab>
+            <mat-tab label="JobWork Sales Return A/C">
+              <div formGroupName="item_group_jobwork_sales_return_acc">
+              <div class="row" *ngIf="isHidden==true">
+                <div class="table_container">
+                  <div class="table_content">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th style="width: 50px;">Srl No</th>
+                          <th>Description</th>
+                          <th>GL Ac</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>Item Total</td>
+                         <td>
+                              <mat-select-autocomplete class="form-control"  
+                            
+                              [options]="grpServiceNames"
+                              [display]="'service_name'"
+                              [value]="'service_id'"
+                              [multiple]='true'
+                              ngDefaultControl
+                              [formControl]="item_group_jobwork_sales_return_acc.controls['jw_sr_item_total']"
+                              (selectionChange)="getItemGroupjobwork1($event)"
+                              [labelCount]="2">                          
+                            </mat-select-autocomplete>                     
+                        </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td>2</td>
+                          <td>Discount</td>
+                  
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_jobwork_sales_return_acc.controls['jw_sr_discount']"
+                            [labelCount]="2">  
+                          </mat-select-autocomplete>
+                        </td>
+                        <td></td>
+                        </tr>
+
+                        <tr>
+                        <td>3</td>
+                        <td>Adj(+)</td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_jobwork_sales_return_acc.controls['jw_sr_adjplus']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                      </td>
+                      <td></td>
+                      </tr>
+
+                        <tr>
+                          <td>4</td>
+                          <td>Adj(-)</td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="item_group_jobwork_sales_return_acc.controls['jw_sr_adjminus']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>                     
+                      </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+            </mat-tab>
+          </div>
+          </mat-tab-group>
+        </div>
+      </div>
+
+          <div class="row">
+              <div class="col-lg-12" *ngIf=" action == 'update' || action == 'save'">
+                <div class="form-group" >
+                  <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="itemgroupsave">Submit</button>
+                </div>
+              </div>
+            </div>
+        </div>
+      </div>  
+    </section> 
+  </div>  
+</form>
+    
+<!-- list -->
+<div class="master_containerr" *ngIf="isHidden==false">
+    <div class="container-fluid">
+      <div class="row">
+          <div class="col-lg-12">
+            <fieldset class="table_container">
+              <legend>Item Group List</legend>
+                <div class="table_content">
+
+                  <div class="row" style="margin-bottom: 15px;">
+                    <div class="col-sm-12 col-md-6" style="display: none;">
+                      <div class="dataTables_length bs-select pull-left">
+                       <label>Show <select name="dtBasicExample_length" aria-controls="dtBasicExample" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label>
+                      </div>
+                     </div>
+                     <div class="col-sm-12 col-md-4 col-md-offset-8"><input type="text" class="form-control" placeholder="Search.." (keydown)="search($event)"></div> 
+                  </div>
+                 
+                  <table class="table table-bordered">
+                      <thead>
+                          <tr>
+                              <!-- <th>Group ID</th> -->
+                              <th>Group Code</th>
+                              <th>Group Name</th>
+                              <th>Parent Group</th>
+                              <th>Active Status</th>
+                              <th colspan="3">Action</th>
+                          </tr>
+                      </thead>
+                      <tbody>
+                          <!--| searchPipe: {item_group_id: searchText, item_group_code: searchText, group_name: searchText,parent_group: searchText,group_active: searchText};  -->
+                        <!-- <tr *ngFor="let Item_group_master of listItem_group_master| searchPipe: {item_group_id: searchText, item_group_code: searchText, group_name: searchText,parent_group: searchText,group_active: searchText}; "> -->
+                          <tr *ngFor="let Item_group_master of listItem_group_master">
+                              <!-- <td>{{Item_group_master.item_group_id}}</td>  -->
+                              <td>{{Item_group_master.item_group_code}}</td>
+                              <td>{{Item_group_master.group_name}}</td>
+                              <td>{{Item_group_master.parent_group}}</td>
+                              <td>{{Item_group_master.group_active}}</td>
+                              <td><button class="btn btn-success" (click)="onUpdate(Item_group_master.id,Item_group_master.item_group_id,'view')"   *ngIf="itemgroupview">View</button></td>         
+                              <td><button class="btn btn-info" (click)="onUpdate(Item_group_master.id,Item_group_master.item_group_id,'update')"   *ngIf="itemgroupupdate">Update</button></td>         
+                              <td><button class="btn btn-danger" (click)="onDelete(Item_group_master.id,Item_group_master)"  *ngIf="itemgroupdelete">Delete</button></td>               
+                          </tr>
+                    </tbody>
+              </table>
+            </div>
+          </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+    

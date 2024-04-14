@@ -1,0 +1,104 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm1">
+    <div class="row">
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Description List</legend>
+            <div class="col-lg-12">
+              <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  
+                  <label class="label_col"><h3>Action</h3></label>
+                  <label class="label_col"><h3 class="srln">Srl No</h3></label>
+                  <label class="label_col"><h3 style="width: 248px;">Description Name</h3></label>
+                  <label class="label_col"><h3>Billing Period</h3></label>
+                  <label class="label_col"><h3>Billing On</h3></label>
+                  <label class="label_col"><h3>Billig Mode Changable</h3></label>
+                  <label class="label_col"><h3>Quantity</h3></label>
+                  <label class="label_col"><h3>UOM</h3></label>
+                  <label class="label_col"><h3>Rate</h3></label>
+                  <label class="label_col"><h3>Amount Total</h3></label>
+                  <label class="label_col"><h3 style="width: 130px;">Billing From</h3></label>
+                  <label class="label_col"><h3 style="width: 130px;">Billing To</h3></label>
+                  <label class="label_col"><h3 style="width: 130px;">Due Date</h3></label>
+                  <label class="label_col"><h3 style="width: 248px;">Remarks</h3></label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="nonservicesrn_desc_details">
+                  <div class="dyn_table" *ngFor="let item of nonservicesrn_desc_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                   
+                    <div class="label_col"><i class="fa fa-trash form-control action" (click)="itemdelete(pointIndex)"></i></div>
+                    <div class="label_col"><input class="form-control srln" type="number" min="0" formControlName="slno" readonly/></div>
+                    
+                    <div class="label_col">
+                        <mat-select formControlName="desc_name" class="form-control" style="width: 245PX;">
+                            <mat-option *ngFor="let ser of servicedetailslist" [value]="ser.service_name">{{ser.service_name}}</mat-option>
+                        </mat-select>
+                    </div>
+
+                    <div class="label_col"><input class="form-control" type="text" formControlName="bill_period"  readonly/> </div>
+                 
+                    <div class="label_col">
+                      <select class="form-control" formControlName="bill_on">
+                          <option value="Quantity">Quantity</option>
+                          <option value="Fixed">Fixed</option>
+                      </select>
+                    </div>
+                    <div class="label_col">
+                      <select class="form-control" formControlName="amount_change">
+                          <option value="Yes">Yes</option>
+                          <option value="No">No</option>
+                      </select>
+                    </div>
+
+                    <div class="label_col"><input class="form-control"  type="text" formControlName="desc_qty" (focusout)="getprice(pointIndex)"/></div>
+                    
+                    <div class="label_col">
+                      <mat-select formControlName="desc_uom" class="form-control">
+                           <mat-option *ngFor="let uom of serviceUOMlist" [value]="uom.customuom_id">{{uom.description}}</mat-option>
+                      </mat-select>
+                    </div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="desc_price" (focusout)="getqty(pointIndex)"/></div> 
+                    <div class="label_col"><input class="form-control"  type="text" formControlName="desc_total" (keyup)="getAmount()"/></div>
+                    <div class="label_col"><input class="form-control" type="date" formControlName="billing_from"  style="width: 130px;"/></div> 
+                    <div class="label_col"><input class="form-control" type="date" formControlName="billing_to" style="width: 130px;"/></div> 
+                    <div class="label_col"><input class="form-control" type="date" formControlName="duedate" style="width: 130px;"/></div>
+                    <div class="label_col"> <input class="form-control"  type="text" style="width: 245PX;" formControlName="remarks" />
+                      <input class="form-control"  type="hidden"  formControlName="serviceno" readonly/>
+                    </div>
+                    
+                  </div>
+                </div>  
+
+                <!-- <div class="btm_btn_content">
+                  <button type="button" class="btn btn-success" (click)="add(pointIndex)">Add</button>
+                </div> -->
+
+              </div>
+            </div>
+             
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+
+      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="form-group">
+          <mat-label >Total Amount</mat-label>
+          <input type="text" class="form-control" formControlName="totalamt" >
+        </div>
+      </div>
+      
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <mat-dialog-actions align="end">
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+        </mat-dialog-actions>
+  </form>
+</div>

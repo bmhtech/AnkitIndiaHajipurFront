@@ -1,0 +1,1812 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i
+                  class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i
+                  class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader">
+    <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Credit Note</legend>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Invoice Type<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats" [options]="invoiceType" [display]="'invtype_name'"
+                  [value]="'invtype_id'" [multiple]='false' (selectionChange)="onChangeSalesReturnType($event)"
+                  ngDefaultControl [formControl]="userForm.controls['invoice_type']">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Sales Return Type<span class="red">*</span></mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.creditnotetype" formControlName="creditnotetype"
+                  (selectionChange)="onChangeSeqNo($event.value)">
+                  <mat-option value="Acceptance of Lower Rate">Acceptance of Lower Rate</mat-option>
+                  <mat-option value="Goods Return Due To Rejection">Goods Return Due To Rejection</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Credit Note Inv No.<span class="red">*</span></mat-label>
+                <input type="text" formControlName="creditnoteno" [(ngModel)]="seqId" class="form-control" />
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Credit Note Inv Date<span class="red">*</span></mat-label>
+                <input type="date" formControlName="creditnotedate" [(ngModel)]="currentDate" class="form-control"
+                  (change)="getCreditNoteDate($event)">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats" [options]="businesslists"
+                  [display]="'businessunit_name'" [value]="'businessunit_id'" [multiple]='false'
+                  (selectionChange)="onChangeBusinessUnit($event)" ngDefaultControl
+                  [formControl]="userForm.controls['business_unit']">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Party Name<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats" [options]="partyList" [display]="'cp_name'"
+                  [value]="'cp_Id'" [multiple]='false' (selectionChange)="onChangeParty($event)" ngDefaultControl
+                  [formControl]="userForm.controls['party']">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" hidden>
+              <div class="form-group">
+                <mat-label>State</mat-label>
+                <input type="text" formControlName="state" [(ngModel)]="model.state" class="form-control" hidden>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Challan<span class="red">*</span></mat-label>
+                <mat-select class="form-control" [(ngModel)]="defaultChallan" formControlName="challan">
+                  <mat-option value="Multiple">Multiple</mat-option>
+                  <mat-option value="Single">Single</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="einvoiceshow == true">
+              <div class="form-group">
+                <mat-label>E-Invoice Ack. No.<span class="red">*</span></mat-label>
+                <input type="text" formControlName="e_invoice_no" class="form-control"> <!-- [(ngModel)]="model.e_invoice_no" -->
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Sales Return Note No<span class="red">*</span></mat-label>
+                <input type="text" formControlName="salesorderno" [(ngModel)]="model.salesorderno" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Sales Return Note Date<span class="red">*</span></mat-label>
+                <input type="date" formControlName="salesorderdate" [(ngModel)]="model.salesorderdate"
+                  class="form-control">
+                <input type="hidden" formControlName="allsalesorderdate" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Ref Challan No</mat-label>
+                <input type="text" formControlName="refchallanno" [(ngModel)]="model.refchallanno" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Ref Challan Date</mat-label>
+                <input type="date" formControlName="refchallandate" [(ngModel)]="model.refchallandate"
+                  class="form-control">
+
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" > <!-- *ngIf="ewaybillshow" -->
+              <div class="form-group">
+                <mat-label>Way Bill</mat-label>
+                <input type="text" formControlName="waybill" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12"
+              *ngIf="(model.creditnotetype == 'Goods Return Due To Rejection') && action == 'update'">
+              <div class="form-group">
+                <mat-label>Ref Return Note</mat-label>
+                <button class="btn btn-success" type="submit" (click)="openSalesRetPopUp()">Sales Return Note</button>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12"
+              *ngIf="(model.creditnotetype == 'Acceptance of Lower Rate') && action == 'update'">
+              <div class="form-group">
+                <mat-label>Ref Return Note</mat-label>
+                <button class="btn btn-success" type="submit" (click)="openSalesRetApprovalPopUp()">Sales Return
+                  Approval Note</button>
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+
+
+
+      <!--  Dynamic Start-->
+      <div class="weigh_n">
+        <div class="dyn_table_conent" style="border: none;">
+          <mat-tab-group animationDuration="1000ms">
+            <div *ngIf="jobtransaction;else jobwork">
+              <mat-tab label="Job Item">
+                <div class="dyn_table_conent" style="border: none;">
+                  <div class="dyn_table_header">
+                    <label class="label_col">
+                      <h3 class="act">Action</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="srln">Srl No</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="i_nam">Job Item<span class="red">*</span></h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="i_nam">Job Packing<span class="red">*</span></h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>HSN Code</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Packing Qty.<span class="red">*</span></h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Packing Uom</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Price Based On<span class="red">*</span></h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Item Qty.<span class="red">*</span></h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Item Uom</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Tolerance(%)</h3>
+                    </label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="sales_credit_note_item_dtls_for_jobwork">
+                    <div class="dyn_table"
+                      *ngFor="let item of sales_credit_note_item_dtls_for_jobwork.controls; let pointIndex=index"
+                      [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action"></i></div>
+
+                      <div class="label_col">
+                        <input class="form-control srln" formControlName="sl_no" type="number" readonly />
+                      </div>
+                      <div class="label_col">
+                        <mat-select-autocomplete class="form-control ats i_nam" [options]="jobitemlist"
+                          [display]="'item_name'" [value]="'item_id'" [multiple]='false'
+                          [selectedOptions]="selectedJobItem[pointIndex]" ngDefaultControl
+                          [formControlName]="'job_item'">
+                        </mat-select-autocomplete>
+                      </div>
+
+                      <div class="label_col">
+                        <mat-select-autocomplete class="form-control ats i_nam" [options]="jobpackinglist[pointIndex]"
+                          [display]="'item_name'" [value]="'item_code'" [multiple]='false'
+                          [selectedOptions]="selectedJobPacking[pointIndex]" ngDefaultControl
+                          [formControlName]="'job_packing'">
+                        </mat-select-autocomplete>
+                      </div>
+
+                      <div class="label_col"><input class="form-control" formControlName="job_hsn" type="text"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="pack_qty" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input type="text" class="form-control" formControlName="pack_uom"
+                          readonly></div>
+                      <div class="label_col">
+                        <select class="form-control" formControlName="price_based_on" disable>
+                          <option value="Item">Item</option>
+                          <option value="Packing">Packing</option>
+                        </select>
+                      </div>
+                      <div class="label_col"><input class="form-control" formControlName="item_qty" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="item_uom" type="text"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="tolerance" type="number"
+                          readonly /></div>
+
+
+                    </div>
+
+                  </div>
+                </div>
+
+
+                <div class="clr"></div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Grand Total</mat-label>
+                    <input type="text" [(ngModel)]="model.grand_total" formControlName="grand_total"
+                      class="form-control" readonly />
+                  </div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Job Work Price">
+                <div class="dyn_table_conent" style="border: none;">
+                  <div class="dyn_table_header">
+                    <label class="label_col">
+                      <h3 class="srln">Srl No</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="i_nam">Service Item<span class="red">*</span></h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>SAC Code</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Price</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Taxable Value</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="i_nam">Tax Code Name</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>CGST Tax(%)</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>CGST Amount</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>SGSt Tax(%)</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>SGST Amount</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>IGSt Tax(%)</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>IGST Amount</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Total Amt</h3>
+                    </label>
+
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="sales_credit_note_item_dtls_for_jobwork_price">
+                    <div class="dyn_table"
+                      *ngFor="let item of sales_credit_note_item_dtls_for_jobwork_price.controls; let pointIndex=index"
+                      [formGroupName]="pointIndex">
+
+                      <div class="label_col">
+                        <input class="form-control srln" formControlName="slno" type="number" readonly />
+                      </div>
+                      <div class="label_col">
+                        <mat-select-autocomplete class="form-control ats i_nam" [options]="item_services"
+                          [display]="'service_name'" [value]="'service_id'" [multiple]='false'
+                          [selectedOptions]="selectedService[pointIndex]" ngDefaultControl
+                          [formControlName]="'item_service'" aria-readonly="true">
+                        </mat-select-autocomplete>
+                      </div>
+
+                      <div class="label_col"><input class="form-control" formControlName="sac_code" type="text"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="job_price" type="number"
+                          readonly></div>
+                      <div class="label_col"><input class="form-control" formControlName="tax_value" type="number"
+                          readonly /></div>
+                      <div class="label_col"><mat-select formControlName="taxcode" class="form-control i_nam"
+                          type="text" disabled>
+                          <mat-option value="0">-Select Name-</mat-option>
+                          <mat-option *ngFor="let list of taxcodelist"
+                            [value]="list.tax_id">{{list.tax_name}}</mat-option></mat-select></div>
+
+                      <div class="label_col"><input class="form-control" formControlName="cgst_tax" type="number"
+                          readonly></div>
+                      <div class="label_col"><input class="form-control" formControlName="cgst_amt" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="sgst_tax" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="sgst_amt" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="igst_tax" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="igst_amt" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="tot_amount" type="number"
+                          readonly /></div>
+
+                    </div>
+
+                  </div>
+                </div>
+
+
+                <div class="col-lg-8 col-md-8 col-sm-6 col-12" hidden>
+                  <div class="dyn_table_conent" style="float:left;">
+                    <div class="dyn_table_header">
+                      <label class="label_col">
+                        <h3>Tax Code</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Tax Rate</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Tax Amount</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Percentage</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>CGST Ledger</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>SGST Ledger</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>IGST Ledger</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>CGST</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>SGST</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>IGST</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Taxable Amt</h3>
+                      </label>
+
+                    </div>
+                    <div class="dyn_table_data_cont" formArrayName="credit_item_groupwise_taxsumm">
+                      <div class="dyn_table"
+                        *ngFor="let item of credit_item_groupwise_taxsumm.controls; let pointIndex=index"
+                        [formGroupName]="pointIndex">
+
+                        <div class="label_col"><input class="form-control" type="text" formControlName="tax_code" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="tax_rate" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="tax_amt" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="percentage" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="cgstledgerid" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="sgstledgerid" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="igstledgerid" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="cgst" /></div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="sgst" /></div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="igst" /></div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="taxable_amt" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <div class="clr"></div>
+              </mat-tab>
+
+
+
+            </div>
+            <ng-template #jobwork>
+              <mat-tab label="Item Details">
+                <div class="dyn_table_conent" style="border: none;">
+                  <div class="dyn_table_header">
+                    <label class="label_col">
+                      <h3 class="act">Action</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="srln">Srl No</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="i_nam">Item Name</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Item Group</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="i_nam">Packing Item</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>HSN Code</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Packing Qty.</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Packing Uom</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Item Qty.</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Item Uom</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Mat.Wt</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Price</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Price Based On</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Amount</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Discount</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Discount Based On</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Discount Amt</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Tax Code</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Tax Rate(%)</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>@CGST</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>@SGST</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>@IGST</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Tax Amt.</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Total Amt.</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Quality<br> Norms</h3>
+                    </label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="sales_credit_note_item_dtls">
+                    <div class="dyn_table"
+                      *ngFor="let item of sales_credit_note_item_dtls.controls; let pointIndex=index"
+                      [formGroupName]="pointIndex">
+
+                      <div class="label_col"><i class="fa fa-trash form-control action"
+                          (click)="deleteItem(pointIndex)"></i></div>
+                      <div class="label_col"><input class="form-control srln" formControlName="slno" type="number" />
+                      </div>
+                      <div class="label_col"><select formControlName="item_code" class="form-control i_nam"
+                          (change)="onChangeItemName(pointIndex,$event)" disabled>
+                          <option value="0">-Select-</option>
+                          <option *ngFor="let item_name of item_codes" [value]="item_name.item_id">
+                            {{item_name.item_name}}</option>
+                        </select></div>
+                      <div class="label_col"><input class="form-control" formControlName="item_group" type="text"
+                          readonly /></div>
+                      <div class="label_col"><select formControlName="packing" type="text" class="form-control i_nam"
+                          (change)="onChangePackingItem(pointIndex,$event)" disabled>
+                          <option value="0">-Select-</option>
+                          <option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">
+                            {{packingitm.item_name}}</option>
+                        </select></div>
+                      <div class="label_col"><input class="form-control" formControlName="hsn_code" type="text"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="squantity" style="text-align: right;" type="number"
+                          (keyup)="getPackingQty($event, pointIndex)" readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="suom" type="text" readonly>
+                      </div>
+                      <div class="label_col"><input class="form-control" formControlName="quantity" style="text-align: right;" type="number"
+                          (keyup)="getItemQty($event, pointIndex)" readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="uom" type="text" readonly>
+                      </div>
+                      <div class="label_col"><input class="form-control" formControlName="mat_wt" style="text-align: right;" type="number"
+                          (keyup)="getMatWt($event, pointIndex)" readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="price" style="text-align: right;" type="number"
+                          (keyup)="getPrice($event, pointIndex)" readonly /></div>
+                      <div class="label_col"><select class="form-control" formControlName="price_based_on"
+                          (change)="onChangePriceBasedOn($event, pointIndex)" disabled>
+                          <option value="Item">Item</option>
+                          <option value="Packing">Packing</option>
+                        </select></div>
+                      <div class="label_col"><input class="form-control" formControlName="amount" style="text-align: right;" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="discount_rate" type="number"
+                          (keyup)="getDiscount($event, pointIndex)" readonly /></div>
+                      <div class="label_col"><select class="form-control" formControlName="discount_type"
+                          (change)="onchangeDiscountBasedOn($event, pointIndex)" disabled>
+                          <option value="%">On %</option>
+                          <option value="Uom">On UoM</option>
+                        </select></div>
+                      <div class="label_col"><input class="form-control" formControlName="discount_amt" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="tax_code" type="text"
+                          readonly /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp(pointIndex)"
+                          aria-hidden="true"></i></div>
+                      <div class="label_col"><input class="form-control" formControlName="tax_rate" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="cgstamt" style="text-align: right;" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="sgstamt" style="text-align: right;" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="igstamt" style="text-align: right;" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="tax_amt" style="text-align: right;" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="total_amt" style="text-align: right;" type="number"
+                          readonly /></div>
+                      <div class="label_col"><input class="form-control" formControlName="acc_norms" type="text"
+                          readonly /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp2(pointIndex)"
+                          aria-hidden="true"></i></div>
+                      <div class="label_col"><input class="form-control" formControlName="salesreturnnoteno"
+                          type="hidden"></div>
+                      <div class="label_col"><input class="form-control" formControlName="salesreturnnoteid"
+                          type="hidden"></div>
+
+                    </div>
+                  </div>
+                </div>
+                <div class="btm_btn_content" *ngIf="action == 'update'">
+                  <button type="button" class="btn btn-success" (click)="addItem()">Add Row </button>
+                </div>
+                <div class="clr"></div>
+                <fieldset>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Grand Total</mat-label>
+                      <input type="text" style="text-align: right;" [(ngModel)]="model.grand_total" formControlName="grand_total"
+                        class="form-control" readonly />
+                    </div>
+                  </div>
+
+                </fieldset>
+
+                <div class="col-lg-8 col-md-8 col-sm-6 col-12" hidden>
+                  <div class="dyn_table_conent" style="float:left;">
+                    <div class="dyn_table_header">
+                      <label class="label_col">
+                        <h3>Item Group</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Amount</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Discount</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Item Ledger</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Discount Ledger</h3>
+                      </label>
+                    </div>
+                    <div class="dyn_table_data_cont" formArrayName="credit_item_groupwise_summ">
+                      <div class="dyn_table"
+                        *ngFor="let item of credit_item_groupwise_summ.controls; let pointIndex=index"
+                        [formGroupName]="pointIndex">
+
+                        <div class="label_col"><input class="form-control" type="text" formControlName="item_group" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="item_total" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="discount_amt" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="item_ledger" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text"
+                            formControlName="discount_ledger" /></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+                <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Tax Calculate</mat-label>
+                <button class="btn btn-success" (click)=" OnCalcute()" type="submit">Tax Calculate</button>
+              </div>
+            </div> -->
+
+                <div class="col-lg-8 col-md-8 col-sm-6 col-12" hidden>
+                  <div class="dyn_table_conent" style="float:left;">
+                    <div class="dyn_table_header">
+                      <label class="label_col">
+                        <h3>Tax Code</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Tax Rate</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Tax Amount</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Percentage</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>CGST Ledger</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>SGST Ledger</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>IGST Ledger</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>CGST</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>SGST</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>IGST</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Taxable Amt</h3>
+                      </label>
+
+                    </div>
+                    <div class="dyn_table_data_cont" formArrayName="credit_item_groupwise_taxsumm">
+                      <div class="dyn_table"
+                        *ngFor="let item of credit_item_groupwise_taxsumm.controls; let pointIndex=index"
+                        [formGroupName]="pointIndex">
+
+                        <div class="label_col"><input class="form-control" type="text" formControlName="tax_code" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="tax_rate" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="tax_amt" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="percentage" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="cgstledgerid" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="sgstledgerid" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="igstledgerid" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="cgst" /></div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="sgst" /></div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="igst" /></div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="taxable_amt" />
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+
+
+                <div class="col-lg-8 col-md-8 col-sm-6 col-12" hidden>
+                  <div class="dyn_table_conent" style="float:left;">
+                    <div class="dyn_table_header">
+                      <label class="label_col">
+                        <h3>HSN Code</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Amount</h3>
+                      </label>
+                    </div>
+                    <div class="dyn_table_data_cont" formArrayName="credit_item_groupwise_hsnsumm">
+                      <div class="dyn_table"
+                        *ngFor="let item of credit_item_groupwise_hsnsumm.controls; let pointIndex=index"
+                        [formGroupName]="pointIndex">
+
+                        <div class="label_col"><input class="form-control" type="text" formControlName="hsn_code" />
+                        </div>
+                        <div class="label_col"><input class="form-control" type="text" formControlName="amount" /></div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+
+
+              </mat-tab>
+            </ng-template>
+            <mat-tab label="Tax Information">
+              <div formGroupName="sales_credit_note_tax_info">
+                <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>PAN No</mat-label>
+                    <input type="text" formControlName="panno" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>GST No</mat-label>
+                    <input type="tel" formControlName="gstno" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>CIN No</mat-label>
+                    <input type="text" formControlName="cinno" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>TAN No</mat-label>
+                    <input type="text" formControlName="tanno" class="form-control">
+                  </div>
+                </div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Broker Details">
+              <div class="form-group" style="width: 150px; margin: 0;">
+                <mat-checkbox formControlName="brokage_app" [(ngModel)]="model.brokage_app">Brokerage
+                  Applicable</mat-checkbox>
+              </div>
+              <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col">
+                    <h3>Action</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="srln">Srl No</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Broker Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Basis</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Rate</h3>
+                  </label>
+                </div>
+
+                <div class="dyn_table_data_cont" formArrayName="sales_credit_note_broker_dtls">
+                  <div class="dyn_table"
+                    *ngFor="let item of sales_credit_note_broker_dtls.controls; let pointIndex=index"
+                    [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action"
+                        (click)="deleteBrokers(pointIndex)"></i></div>
+                    <div class="label_col"><input class="form-control srln" min="0" formControlName="slno" type="number"
+                        readonly /></div>
+                    <div class="label_col"><select formControlName="brokercode" class="form-control i_nam" type="text">
+                        <option *ngFor="let list of brokerNames" [value]="list.broker_id">{{list.name}}
+                        </option>
+                      </select></div>
+                    <div class="label_col"><input type="text" formControlName="basis" class="form-control" /></div>
+                    <div class="label_col"><input type="number" formControlName="rate" class="form-control" /></div>
+                  </div>
+                </div>
+              </div>
+              <div class="btm_btn_content" *ngIf="action == 'update'">
+                <button type="button" class="btn btn-success" *ngIf="!show_Row" (click)="addBrokers()">Add</button>
+                <div class="clr"></div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Transporter Details">
+              <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col">
+                    <h3>Action</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="srln">Srl No</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Transporter Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Vehicle Type</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Vehicle No</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>E-Way Bill No</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>E-Way Bill Date</h3>
+                  </label>
+                </div>
+
+                <div class="dyn_table_data_cont" formArrayName="sales_credit_note_trans_dtls">
+                  <div class="dyn_table"
+                    *ngFor="let item of sales_credit_note_trans_dtls.controls; let pointIndex=index"
+                    [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action"
+                        (click)="deleteTransporter(pointIndex)"></i></div>
+                    <div class="label_col"><input class="form-control srln" min="0" formControlName="slno" type="number"
+                        readonly /></div>
+                    <div class="label_col"><mat-select formControlName="transname" class="form-control i_nam">
+                        <mat-option value="0">-Select-</mat-option>
+                        <mat-option *ngFor="let list of transporterNames"
+                          [value]="list.bp_Id">{{list.bp_name}}</mat-option>
+                      </mat-select></div>
+                    <div class="label_col">
+
+                      <!-- <select formControlName="vehicletype" class="form-control" type="text">
+                   
+                     <option *ngFor="let list of vehicleTypeList" [value]="list.vehtype_code">{{list.vehtype_name}}</option>              
+                  </select> -->
+
+                      <mat-select formControlName="vehicletype" class="form-control">
+
+                        <mat-option *ngFor="let list of vehicleTypeList"
+                          [value]="list.vehtype_code">{{list.vehtype_name}}</mat-option>
+                      </mat-select>
+
+                    </div>
+                    <div class="label_col">
+                      <mat-select formControlName="vehicleno" class="form-control" disabled>
+
+                        <mat-option *ngFor="let list of vehicleNoList"
+                          [value]="list.vehicle_id">{{list.vehicle_no}}</mat-option>
+                      </mat-select>
+                      <!--
+                      <mat-select-autocomplete class="form-control ats "  
+                      [options]="vehicleNoList"
+                      [display]="'vehicle_no'"
+                      [value]="'vehicle_id'"
+                      [multiple]='false'
+                      ngDefaultControl
+                      [formControlName] = "'vehicleno'">
+                    </mat-select-autocomplete>
+-->
+                    </div>
+                    <div class="label_col"><input type="text" formControlName="ewaybillno" class="form-control" /></div>
+                    <div class="label_col"><input type="date" formControlName="ewaybilldate" class="form-control" />
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="btm_btn_content" *ngIf="action == 'update'">
+                <button type="button" class="btn btn-success" (click)="addTransporter()">Add</button>
+                <div class="clr"></div>
+              </div>
+            </mat-tab>
+
+            <mat-tab label="Delivery Information">
+              <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                <fieldset>
+                  <legend>Ship To</legend>
+
+                  <div formGroupName="sales_credit_note_shipment_dtls">
+                    <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <mat-select-autocomplete class="form-control ats i_nam"  
+                      [options]="customerDelvAddList"
+                      [display]="'b_unit_name'"
+                      [value]="'b_unit_name'"
+                      [multiple]='false'
+                      ngDefaultControl
+                      [formControl]="sales_credit_note_shipment_dtls.controls['shipaddr']"
+                      (selectionChange)="onChangeShipToAddId($event)">
+                    </mat-select-autocomplete>
+                    </div>
+                  </div> -->
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div class="form-group">
+                        <mat-label>Address Id</mat-label>
+                        <mat-select class="form-control" formControlName="shipaddr"
+                          (selectionChange)="GetDeliveryBuisnessUnit($event.value)">
+                          <mat-option *ngFor="let list of customerDelvAddList"
+                            [value]="list.b_unit_name">{{list.b_unit_name}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div class="form-group">
+                        <textarea class="form-control" formControlName="shipdtls" type="text"
+                          style="height: 65px;"></textarea>
+                      </div>
+                    </div>
+
+                  </div>
+                </fieldset>
+              </div>
+              <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                <fieldset>
+                  <legend>Pay To</legend>
+                  <div formGroupName="sales_credit_note_shipment_dtls">
+
+                    <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <mat-label>Address Id</mat-label>
+                      <mat-select-autocomplete class="form-control ats" 
+                      [options]="businesslists"
+                      [display]="'businessunit_name'"
+                      [value]="'businessunit_id'"
+                      [multiple]='false'
+                      ngDefaultControl
+                      [formControl]="sales_credit_note_shipment_dtls.controls['paytoaddr']"
+                      (selectionChange)="onChangePayToFromAddId($event)">
+                      </mat-select-autocomplete>
+                    </div>
+                  </div> -->
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div class="form-group">
+                        <mat-label>Address Id</mat-label>
+                        <mat-select class="form-control" formControlName="paytoaddr"
+                          [disabled]="_deliveryTerm == 'Ex Factory'">
+                          <mat-option *ngFor="let list of PartyAllList"
+                            [value]="list.cp_Id">{{list.cp_name}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div class="form-group">
+                        <textarea class="form-control" formControlName="paytodtls" type="text"
+                          style="height: 65px;"></textarea>
+                      </div>
+                    </div>
+
+                  </div>
+                </fieldset>
+
+              </div>
+            </mat-tab>
+
+
+            <mat-tab label="Business Partner Details">
+              <div formGroupName="sales_credit_note_bp_dtls">
+                <fieldset class="dnmk">
+                  <legend>Customer Information</legend>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Name</mat-label>
+                          <mat-select type="text" formControlName="sp_name"
+                            (selectionChange)="onChangePartyInfoName($event.value)" class="form-control">
+                            <mat-option *ngFor="let List of contAddrs"
+                              [value]="List.contact_person">{{List.contact_person}}</mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+
+
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Phone No.</mat-label>
+                          <input type="number" min="0" class="form-control" formControlName="sp_phone">
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Fax</mat-label>
+                          <input type="text" min="0" class="form-control" formControlName="sp_fax">
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>E-Mail</mat-label>
+                          <input type="email" class="form-control" formControlName="sp_email">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="form-group" style="height: auto;">
+                          <mat-label>Address</mat-label>
+                          <textarea class="form-control" formControlName="sp_address" rows="1"
+                            style="height: 108px;"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+
+                <fieldset class="dnmk">
+                  <legend>Contact Person Information</legend>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="row">
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Name</mat-label>
+                          <mat-select type="text" formControlName="cp_name" class="form-control"
+                            (selectionChange)="onChangeContInfoName($event.value)">
+                            <mat-option *ngFor="let cp_name of delvAddrs"
+                              [value]="cp_name.b_unit_name">{{cp_name.b_unit_name}}</mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Designation</mat-label>
+                          <input type="text" formControlName="cp_designation" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Phone No.</mat-label>
+                          <input type="number" formControlName="cp_phone" min="0" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Fax</mat-label>
+                          <input type="number" formControlName="cp_fax" min="0" class="form-control">
+                        </div>
+                      </div>
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>E-Mail</mat-label>
+                          <input type="email" formControlName="cp_email" class="form-control">
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="form-group">
+                          <mat-label>Address</mat-label>
+                          <textarea class="form-control" formControlName="cp_address" rows="1"
+                            style="height: 108px;"></textarea>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+
+
+              <fieldset class="dnmk">
+                <legend>Payment Details</legend>
+                <div formGroupName="sales_credit_note_payment_dtls">
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Advance Payment</mat-label>
+                      <input type="number" class="form-control" formControlName="adv_payment">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Mode of Payment</mat-label>
+                      <mat-select class="form-control" (selectionChange)="onChangePaymentMode($event.value)"
+                        formControlName="mode_of_payment" type="text">
+                        <mat-option value="0">-Select Payment Mode-</mat-option>
+                        <mat-option value="Cash">Cash</mat-option>
+                        <mat-option value="Cheque">Cheque</mat-option>
+                        <mat-option value="DD">DD</mat-option>
+                        <mat-option value="NEFT">NEFT</mat-option>
+                        <mat-option value="RTGS">RTGS</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Bank Name</mat-label>
+                      <mat-select class="form-control" (selectionChange)="onChangeBankName($event.value)"
+                        formControlName="bank_name" [disabled]="!isBankNameDisabled">
+                        <mat-option value="0">-Select-</mat-option>
+                        <mat-option *ngFor="let bank_name of bank_names"
+                          [value]="bank_name.ledgerid">{{bank_name.ledgername}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12" *ngIf="isChecked">
+                    <div class="form-group">
+                      <mat-label>Account Holder Name</mat-label>
+                      <input type="text" class="form-control" formControlName="account_name">
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12" *ngIf="isChecked">
+                    <div class="form-group">
+                      <mat-label>Account No</mat-label>
+                      <input type="number" min="0" class="form-control" formControlName="account_no">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12" *ngIf="isChecked">
+                    <div class="form-group">
+                      <mat-label>Branch</mat-label>
+                      <input type="text" class="form-control" formControlName="branch">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12" *ngIf="isChecked">
+                    <div class="form-group">
+                      <mat-label>IBAN</mat-label>
+                      <input type="text" class="form-control" formControlName="iban">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12" *ngIf="isChecked">
+                    <div class="form-group">
+                      <mat-label>IFSC Code</mat-label>
+                      <input type="text" formControlName="ifsc_code" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12" *ngIf="isChecked">
+                    <div class="form-group">
+                      <mat-label>Mobile</mat-label>
+                      <input type="text" formControlName="mobile" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12" *ngIf="isChecked">
+                    <div class="form-group">
+                      <mat-label>BIC/SWIFT Code</mat-label>
+                      <input type="text" class="form-control" formControlName="bic_swift_code">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12" *ngIf="isChecked1">
+                    <div class="form-group">
+                      <mat-label>Cash Limit</mat-label>
+                      <input type="number" formControlName="cash_limit" class="form-control" readonly>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Payment Terms</mat-label>
+                      <mat-select class="form-control" formControlName="payment_term">
+                        <mat-option *ngFor="let list of payTerms" [value]="list.payterm_id">{{list.payterm_desc}}
+                        </mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </mat-tab>
+
+            <mat-tab label="Remarks">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Remarks</mat-label>
+                  <textarea class="form-control" formControlName="remarks" [(ngModel)]="model.remarks"></textarea>
+                </div>
+              </div>
+            </mat-tab>
+            <mat-tab label="Document Attachment">
+              <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+                <div class="dyn_table_conent" style="float:left;">
+                  <div class="dyn_table_header">
+                    <label class="label_col">
+                      <h3>Action</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Document Name</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="wdt_220">Document Upload</h3>
+                    </label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="sales_credit_note_docs">
+                    <div class="dyn_table" *ngFor="let item of sales_credit_note_docs.controls; let pointIndex=index"
+                      [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action"
+                          (click)="deleteDocument(pointIndex)"></i></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="doc_name" /></div>
+                      <div class="label_col"><input class="form-control wdt_215" type="file" /></div>
+                    </div>
+                  </div>
+                </div>
+
+                <div class="btm_btn_content" *ngIf="action == 'update'">
+                  <button type="button" class="btn btn-success" (click)="addDocument()">Add </button>
+                </div>
+              </div>
+              <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                <fieldset style="padding-bottom: 0px;">
+                  <legend>Document List</legend>
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-group" style="height: auto;">
+                      <textarea class="form-control" rows="1" style="height: 100px;"></textarea>
+                    </div>
+                  </div>
+                </fieldset>
+              </div>
+            </mat-tab>
+
+
+          </mat-tab-group>
+        </div>
+      </div>
+
+      <div class="clr"></div>
+
+
+      <div class="row" *ngIf="isHidden==true">
+        <div class="table_container">
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th style="width: 50px;">Srl No</th>
+                  <th>Description</th>
+                  <th style="width: 150px;">Amount</th>
+                  <th>GL Ac</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>Item Total</td>
+                  <td><input class="form-control" formControlName="item_total" [(ngModel)]="model.item_total"
+                      type="number" placeholder="0.00" readonly /></td>
+                  <td>
+                    <mat-select-autocomplete class="form-control" [options]="ledgerNames" [display]="'ledgername'"
+                      disabled="true" [value]="'ledgerid'" [multiple]='false' ngDefaultControl
+                      [formControl]="userForm.controls['item_total_gl_ac']" [labelCount]="2">
+                    </mat-select-autocomplete>
+
+                  </td>
+                  <td></td>
+                </tr>
+                <tr>
+
+                <tr>
+                  <td>2</td>
+                  <td>Discount</td>
+                  <td><input class="form-control" formControlName="discount" [(ngModel)]="model.discount" type="number"
+                      placeholder="0.00" readonly /></td>
+                  <td>
+                    <mat-select-autocomplete class="form-control" [options]="ledgerNames" [display]="'ledgername'"
+                      disabled="true" [value]="'ledgerid'" [multiple]='false' ngDefaultControl
+                      [formControl]="userForm.controls['discount_gl_ac']" [labelCount]="2">
+                    </mat-select-autocomplete>
+
+                  </td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td>3</td>
+                  <td>Tax Total</td>
+                  <td><input class="form-control" formControlName="tax_total" [(ngModel)]="model.tax_total"
+                      type="number" placeholder="0.00" readonly /></td>
+                  <td>
+                    <mat-select-autocomplete class="form-control" [options]="ledgerNames" [display]="'ledgername'"
+                      disabled="true" [value]="'ledgerid'" [multiple]='false' ngDefaultControl
+                      [formControl]="userForm.controls['tax_total_gl_ac']" [labelCount]="2">
+                    </mat-select-autocomplete>
+
+                  </td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td>4</td>
+                  <td>Applicable Charge</td>
+                  <td><input class="form-control" formControlName="applicable_amt" [(ngModel)]="model.applicable_amt"
+                      type="number" value={{defaultValue}} (keyup)="getApplicableCharges($event)" /></td>
+                  <td>
+                    <mat-select-autocomplete class="form-control" [options]="ledgerNames" [display]="'ledgername'"
+                      disabled="true" [value]="'ledgerid'" [multiple]='false' ngDefaultControl
+                      [formControl]="userForm.controls['applicable_gl_ac']" [labelCount]="2">
+                    </mat-select-autocomplete>
+
+                  </td>
+                  <td style="text-align: left;"><i class="fa fa-external-link tax_insert_icon" aria-hidden="true"></i>
+                  </td>
+                </tr>
+
+                <tr>
+                  <td>5</td>
+                  <td>Adj (+)</td>
+                  <td><input class="form-control" formControlName="adj1_amt" [(ngModel)]="model.adj1_amt" type="number"
+                      value={{defaultValue}} (keyup)="getAdj1($event)" /></td>
+                  <td>
+                    <mat-select-autocomplete class="form-control" [options]="ledgerNames" [display]="'ledgername'"
+                      disabled="true" [value]="'ledgerid'" [multiple]='false' ngDefaultControl
+                      [formControl]="userForm.controls['adj1_gl_ac']" [labelCount]="2">
+                    </mat-select-autocomplete>
+
+                  </td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td>6</td>
+                  <td>Adj (-)</td>
+                  <td><input class="form-control" formControlName="adj2_amt" [(ngModel)]="model.adj2_amt" type="number"
+                      value={{defaultValue}} (keyup)="getAdj2($event)" /></td>
+                  <td>
+                    <mat-select-autocomplete class="form-control" [options]="ledgerNames" [display]="'ledgername'"
+                      disabled="true" [value]="'ledgerid'" [multiple]='false' ngDefaultControl
+                      [formControl]="userForm.controls['adj2_gl_ac']" [labelCount]="2">
+                    </mat-select-autocomplete>
+                  </td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td>7</td>
+                  <td>RoundOff</td>
+                  <td><input class="form-control" formControlName="roundoff_amt" [(ngModel)]="model.roundoff_amt"
+                      type="number" placeholder="0.00" /></td>
+                  <td>
+                    <mat-select-autocomplete class="form-control" [options]="ledgerNames" [display]="'ledgername'"
+                      [value]="'ledgerid'" [multiple]='false' ngDefaultControl
+                      [formControl]="userForm.controls['roundoff_gl_ac']" [labelCount]="2">
+                    </mat-select-autocomplete>
+                  </td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td>8</td>
+                  <td>TCS(+)</td>
+                  <td><input class="form-control" readonly formControlName="tcsamt" [(ngModel)]="model.tcsamt"
+                      type="number" value={{defaultValue}} (keyup)="getTcs($event)" /></td>
+                  <td>
+                    <mat-select-autocomplete class="form-control" [options]="ledgerNames" [display]="'ledgername'"
+                      disabled="true" [value]="'ledgerid'" [multiple]='false' ngDefaultControl
+                      [formControl]="userForm.controls['tcsglac']" [labelCount]="2">
+                    </mat-select-autocomplete>
+                  </td>
+                  <td></td>
+                </tr>
+
+                <tr>
+                  <td>9</td>
+                  <td>Payable Amount</td>
+                  <td><input class="form-control" formControlName="payable_amt" [(ngModel)]="model.payable_amt"
+                      type="number" placeholder="0.00" readonly /></td>
+                  <td>
+                    <mat-select-autocomplete class="form-control" [options]="ledgerNames" [display]="'ledgername'"
+                      disabled="true" [value]="'ledgerid'" [multiple]='false' ngDefaultControl
+                      [formControl]="userForm.controls['payable_amt_gl_ac']" [labelCount]="2">
+                    </mat-select-autocomplete>
+                  </td>
+                  <td></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- <div class="row" *ngIf="isHidden==true">
+                <div class="table_container">
+                  <div class="table_content">
+                    <table class="table table-bordered">
+                      <thead>
+                        <tr>
+                          <th style="width: 50px;">Srl No</th>
+                          <th>Description</th>
+                          <th style="width: 150px;">Amount</th>
+                          <th>GL Ac</th>
+                          <th>Details</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr>
+                          <td>1</td>
+                          <td>Item Total</td>
+                          <td><input class="form-control" formControlName="item_total" [(ngModel)]="model.item_total" type="number" placeholder="0.00" readonly/></td>
+                         <td>
+                              <mat-select-autocomplete class="form-control"  
+                              [options]="ledgerNames"
+                              [display]="'ledgername'"
+                              [value]="'ledgerid'"
+                              [multiple]='false'
+                              ngDefaultControl
+                              [formControl]="userForm.controls['item_total_gl_ac']"
+                              [labelCount]="2">
+                            </mat-select-autocomplete>
+                          
+                        </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+
+                          <tr>
+                            <td>2</td>
+                            <td>Discount</td>
+                            <td><input class="form-control" formControlName="discount" [(ngModel)]="model.discount" type="number" placeholder="0.00" readonly/></td>
+                           <td>
+                                <mat-select-autocomplete class="form-control"  
+                                [options]="ledgerNames"
+                                [display]="'ledgername'"
+                                [value]="'ledgerid'"
+                                [multiple]='false'
+                                ngDefaultControl
+                                [formControl]="userForm.controls['discount_gl_ac']"
+                                [labelCount]="2">
+                              </mat-select-autocomplete>
+                            
+                          </td>
+                            <td></td>
+                          </tr>
+
+                          <tr>
+                            <td>3</td>
+                            <td>Net Total</td>
+                            <td><input class="form-control" formControlName="net_total" [(ngModel)]="model.net_total" type="number" placeholder="0.00" readonly/></td>
+                           <td>
+                                <mat-select-autocomplete class="form-control"  
+                                [options]="ledgerNames"
+                                [display]="'ledgername'"
+                                [value]="'ledgerid'"
+                                [multiple]='false'
+                                ngDefaultControl
+                                [formControl]="userForm.controls['net_total_gl_ac']"
+                                [labelCount]="2">
+                              </mat-select-autocomplete>
+                            
+                          </td>
+                            <td></td>
+                          </tr>
+                        <tr>
+                          <td>4</td>
+                          <td>Tax Total</td>
+                          <td><input class="form-control" formControlName="tax_total" [(ngModel)]="model.tax_total" type="number" placeholder="0.00" readonly/></td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="userForm.controls['tax_total_gl_ac']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                        
+                      </td>
+                          <td></td>
+                        </tr>
+                        <tr>
+                          <td>5</td>
+                          <td>Total Bill Amount</td>
+                          <td><input class="form-control" formControlName="total_bill_amt" [(ngModel)]="model.total_bill_amt" type="number" placeholder="0.00" readonly/></td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="userForm.controls['total_bill_amt_gl_ac']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                        
+                      </td>
+                          <td></td>
+                        </tr>
+                      
+                        <tr>
+                          <td>6</td>
+                          <td>Applicable Charge</td>
+                          <td><input class="form-control" formControlName="applicable_amt" [(ngModel)]="model.applicable_amt" type="number"  value={{defaultValue}} (keyup)="getApplicableChgAmt($event)"/></td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="userForm.controls['applicable_gl_ac']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                        
+                      </td>
+                          <td style="text-align: left;"><i class="fa fa-external-link tax_insert_icon" aria-hidden="true"></i></td>
+                        </tr>
+
+                        <tr>
+                          <td>7</td>
+                          <td>Adj (+)</td>
+                          <td><input class="form-control" formControlName="adj1_amt" [(ngModel)]="model.adj1_amt" type="number" value={{defaultValue}} (keyup)="getAddAmt($event)"/></td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="userForm.controls['adj1_gl_ac']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                        
+                         </td>
+                          <td></td>
+                        </tr>
+
+                        <tr>
+                          <td>8</td>
+                          <td>Adj (-)</td>
+                          <td><input class="form-control" formControlName="adj2_amt" [(ngModel)]="model.adj2_amt" type="number" value={{defaultValue}} (keyup)="getSubAmt($event)"/></td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="userForm.controls['adj2_gl_ac']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>                        
+                      </td>
+                          <td></td>
+                        </tr>
+
+                        <tr>
+                          <td>9</td>
+                          <td>RoundOff</td>
+                          <td><input class="form-control" formControlName="roundoff_amt" [(ngModel)]="model.roundoff_amt" type="number" placeholder="0.00" readonly/></td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="userForm.controls['roundoff_gl_ac']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>                        
+                      </td>
+                          <td></td>
+                        </tr>
+
+                        <tr>
+                          <td>10</td>
+                          <td>Final Bill Amount</td>
+                          <td><input class="form-control" formControlName="final_bill_amt" [(ngModel)]="model.final_bill_amt" type="number" placeholder="0.00" readonly/></td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="userForm.controls['final_bill_amt_gl_ac']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>  
+                      </td>
+                          <td></td>
+                        </tr>
+
+                        <tr>
+                          <td>11</td>
+                          <td>TCS(+)</td>
+                          <td><input class="form-control" formControlName="tcsamt" [(ngModel)]="model.tcsamt" type="number"  value={{defaultValue}} (keyup)="getTcsAmt($event)"/></td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="userForm.controls['tcsglac']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>
+                        
+                      </td>
+                          <td></td>
+                        </tr>
+                       
+                        <tr>
+                          <td>12</td>
+                          <td>Payable Amount</td>
+                          <td><input class="form-control" formControlName="payable_amt" [(ngModel)]="model.payable_amt" type="number" placeholder="0.00" readonly/></td>
+                          <td>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerNames"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="userForm.controls['payable_amt_gl_ac']"
+                            [labelCount]="2">
+                          </mat-select-autocomplete>                
+                      </td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </div>
+              </div> -->
+
+      <div class="col-lg-12" *ngIf="action == 'update'">
+        <div class="form-group">
+          <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="creditnotesave">Submit</button>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+<div class="master_container_box" *ngIf="isHidden==false">
+
+  <form [formGroup]="userForm1">
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Credit Note No.</mat-label>
+        <input type="text" formControlName="order1_no" class="form-control" />
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date" class="form-control" formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label>
+        <input type="date" class="form-control" formControlName="todate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Party List</mat-label>
+        <mat-select-autocomplete class="form-control ats"  
+        [options]="partyNameList"
+        [display]="'cp_name'"
+        [value]="'cp_Id'"
+        [multiple]='false'
+        ngDefaultControl
+        [formControl]="userForm1.controls['party1']">
+      </mat-select-autocomplete>
+      </div>
+    </div>
+
+    <div class="col-lg-12">
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()">Search</button>
+      </div>
+    </div>
+  </form>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Credit Note List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Sales Return Note No</th>
+                  <th>Credit Note Inv No</th>
+                  <th>Credit Note Inv Date</th>
+                  <th>Party Name</th>
+
+                  <th>Amount</th>
+                  <th colspan="10">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+
+                  <tr *ngFor="let CreditNote of listCreditNote">
+                    <td>{{CreditNote.salesorderno}}</td>
+                    <td>{{CreditNote.creditnoteno}}</td>
+                    <td>{{CreditNote.creditnotedate}}</td>
+                    <td>{{CreditNote.partyname}}</td>
+                    <td>{{CreditNote.payable_amt | number:'1.2-2'}}</td>
+                    <td><button class="btn btn-success" (click)="onUpdate(CreditNote.id, CreditNote.creditnoteid,CreditNote.business_unit, 'view')" *ngIf="creditnoteview">View</button></td>
+                    <td><button class="btn btn-info" (click)="onUpdate(CreditNote.id, CreditNote.creditnoteid,CreditNote.business_unit, 'update')" *ngIf="creditnoteupdate">Update</button></td>  
+                    <td><button class="btn btn-danger" (click)="onDelete(CreditNote.id)" *ngIf="creditnotedelete">Delete</button></td>                 
+                    <td  *ngIf="CreditNote.export == 0;else elseBlockposting">
+                      <button class="btn btn-warning" (click)="accountpostingpopup(CreditNote.id,CreditNote.creditnoteid,CreditNote.invoice_type)" >Posting</button>
+                    </td>       
+                    <ng-template #elseBlockposting>
+                      <td><button class="btn btn-success" (click)="accountpostingundo(CreditNote.id,CreditNote.creditnoteid)">Undo Posting</button></td>
+                    </ng-template>
+
+                    <td *ngIf="(CreditNote.e_invoice_no?.length) && (CreditNote.invoice_type =='INV00002' || CreditNote.invoice_type == 'INV00003' || CreditNote.invoice_type == 'INV00004')">
+                      <div *ngIf="CreditNote.create_einvoice==0 ">
+                        <button class="btn btn-info" (click)="creditNoteEinvoiceGeneration(CreditNote.id,CreditNote.creditnoteid,CreditNote.party)" 
+                        [disabled]="CreditNote.create_einvoice">E-invoice Create</button>
+                      </div>
+                    </td> 
+ 
+                    <td *ngIf="CreditNote.e_invoice_no?.length ">
+                      <div *ngIf="CreditNote.create_einvoice==1 ">
+                        <button class="btn btn-danger" (click)="creditnoteEinvoiceCancel(CreditNote.creditnoteid,CreditNote.id)"
+                          [disabled]="CreditNote.cencel_einvoice">E-invoice Cancel</button>
+                      </div>
+                    </td>
+                    <!-- <td *ngIf="CreditNote.waybill?.length && (CreditNote.invoice_type =='INV00002' || CreditNote.invoice_type == 'INV00004')">
+                      <div *ngIf="CreditNote.create_ewaybill==0 && CreditNote.create_einvoice==1">
+                        <button class="btn btn-info"
+                          (click)="creditnoteEwaybillCreate(CreditNote.creditnoteid,CreditNote.id,CreditNote.creditnotedate)"
+                          [disabled]="CreditNote.create_ewaybill">E-Way bill create</button>
+                      </div>
+                    </td> -->
+                    <td *ngIf="CreditNote.waybill?.length && (CreditNote.invoice_type =='INV00002' || CreditNote.invoice_type == 'INV00004')">
+                      <div *ngIf="CreditNote.create_ewaybill==1 || CreditNote.create_ewaybill_wo_invoice ==1">
+                        <button class="btn btn-danger" (click)="creditnoteEwaybillCancel(CreditNote.creditnoteid,CreditNote.id)"
+                          [disabled]="CreditNote.cencel_ewaybill">E-Way bill Cancel</button>
+                      </div>
+                    </td>
+                    <td *ngIf="(CreditNote.grand_total>=50000) && (CreditNote.waybill?.length) && (CreditNote.invoice_type =='INV00002' || CreditNote.invoice_type == 'INV00004')">
+                      <div *ngIf="CreditNote.create_ewaybill_wo_invoice ==0 ">
+                        <button class="btn btn-info"
+                          (click)="creditnoteEwaybillWOinvoiceCreate(CreditNote.id,CreditNote.creditnoteid,CreditNote.party,CreditNote.business_unit)"
+                          [disabled]="CreditNote.create_ewaybill_wo_invoice">Create E-way Bill</button>
+                      </div>
+                    </td>
+
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

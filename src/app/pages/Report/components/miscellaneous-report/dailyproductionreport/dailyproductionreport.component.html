@@ -1,0 +1,352 @@
+
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <fieldset>
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          <fieldset>
+            <legend>Details of Daily Production</legend>
+
+            <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+              <mat-label>Date</mat-label>
+              <input type="date" [(ngModel)]="currentDate" formControlName="date" class="form-control" >
+              </div>
+            </div>
+        
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit<span class="red">*</span></mat-label>
+                <mat-select class="form-control" [(ngModel)]="BuUnit"  formControlName="business_unit" (selectionChange)="getShopfloorName($event.value)">
+                  <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Shop Floor<span class="red">*</span></mat-label>
+                <mat-select class="form-control"  formControlName="shopfloor">
+                  <mat-option *ngFor="let shop_floor of shopfloorlist" [value]="shop_floor.shop_floor_id">{{shop_floor.shop_floor_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+           
+
+                <div class="col-lg-12">
+                  <div class="dyn_table_conent">
+
+                    <div class="dyn_table_header">
+                      <label class="label_col"><h3>-</h3></label>
+                      <label class="label_col"><h3 class="srln">-</h3> </label>
+                      <label class="label_col"><h3 class="i_nam">-</h3></label>
+                      <label class="label_col"><h2>08-10</h2></label>
+                      <label class="label_col"><h2>10-12</h2></label>
+                      <label class="label_col"><h2>12-14</h2></label>
+                      <label class="label_col"><h2>14-16</h2></label>
+                      <label class="label_col"><h2>16-18</h2></label>
+                      <label class="label_col"><h2>18-20</h2></label>
+                      <label class="label_col"><h2>20-22</h2></label>
+                      <label class="label_col"><h2>22-24</h2></label>
+                      <label class="label_col"><h2>00-02</h2></label>
+                      <label class="label_col"><h2>02-04</h2></label>
+                      <label class="label_col"><h2>04-06</h2></label>
+                      <label class="label_col"><h2>06-08</h2></label>
+                      <label class="label_col"><h2>Total</h2></label>
+                    
+                    </div>
+                    
+                    <div class="dyn_table_header">
+                      <label class="label_col"><h3>Action</h3></label>
+                      <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                      <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label>
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label> 
+                      <label class="label_col"><h3>Bag</h3></label>
+                      <label class="label_col"><h3>Quantity</h3></label>
+                      <label class="label_col"><h3>%</h3></label> 
+                    
+                    </div>
+                    <div class="dyn_table_data_cont" formArrayName="dailyproduction_Dtls">
+                      <div class="dyn_table" *ngFor="let item of dailyproduction_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                        <div class="label_col"><input formControlName="slno" class="form-control srln" type="text" readonly/></div>
+                        
+                        <div class="label_col">
+                          <mat-select-autocomplete class="form-control i_nam"  
+                          [options]="itemList"
+                          [display]="'item_name'"
+                          [value]="'item_id'"
+                          [multiple]='false'
+                          [selectedOptions]="selectedItemName[pointIndex]"
+                          (selectionChange)="onchangeItemName(pointIndex, $event)"
+
+                          ngDefaultControl
+                          [formControlName] = "'item_code'">
+                        </mat-select-autocomplete>
+                        </div>
+
+                        
+                        <div class="label_col"><input formControlName="eight_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="eight_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="eight_percen" class="form-control" type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="ten_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="ten_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="ten_percen" class="form-control" type="text" readonly/></div>
+                        
+                        <div class="label_col"><input formControlName="twelve_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="twelve_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="twelve_percen" class="form-control" type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="forteen_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="forteen_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="forteen_percen" class="form-control" type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="sixteen_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="sixteen_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="sixteen_percen" class="form-control" type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="eighteen_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="eighteen_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="eighteen_percen" class="form-control" type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="twenty_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="twenty_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="twenty_percen" class="form-control" type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="twentytwo_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="twentytwo_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="twentytwo_percen" class="form-control" type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="zero_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="zero_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="zero_percen" class="form-control" type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="two_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="two_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="two_percen" class="form-control" type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="four_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"></div> 
+                        <div class="label_col"><input formControlName="four_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="four_percen" class="form-control" type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="six_bag" class="form-control" type="text" (focusout)="getCalculation($event, pointIndex)"/></div> 
+                        <div class="label_col"><input formControlName="six_quantity" class="form-control" type="text" (focusout)="looseCalculation($event, pointIndex)"></div>
+                        <div class="label_col"><input formControlName="six_percen" class="form-control" type="text" readonly/></div>
+
+
+                        <div class="label_col"><input formControlName="total" class="form-control" type="text" readonly /></div>
+                        <div class="label_col"><input formControlName="total_quantity" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="total_percen" class="form-control" type="text" readonly/></div>
+                        
+                        <div class="label_col" style="display: none;"><input formControlName="capacity" class="form-control" type="text"/></div>
+                        
+                      </div>
+                    </div>
+
+
+                    <div class="dyn_table_data_cont" formArrayName="dailyproduction_Dtls_One">
+                      <div class="dyn_table" *ngFor="let item of dailyproduction_Dtls_One.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      
+                        <div class="label_col"><i class="fa fa-trash form-control action" ></i></div>
+                        <div class="label_col"><input  class="form-control srln" type="text" readonly/></div>
+                        <div class="label_col"><input  class="form-control i_nam" type="text" value="Total Bags" readonly/></div>
+
+                        <div class="label_col"><input formControlName="eight_bag_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="eight_quantity_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input  formControlName="eight_percen_total" class="form-control" type="text" readonly/></div>
+                        
+                        <div class="label_col"><input formControlName="ten_bag_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="ten_quantity_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input  formControlName="ten_percen_total" class="form-control"  type="text" readonly/></div>
+                        
+                        <div class="label_col"><input formControlName="twelve_bag_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="twelve_quantity_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="twelve_percen_total" class="form-control"  type="text" readonly/></div>
+                        
+                        <div class="label_col"><input formControlName="forteen_bag_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="forteen_quantity_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="forteen_percen_total" class="form-control"  type="text" readonly/></div>
+                       
+                        <div class="label_col"><input formControlName="sixteen_bag_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="sixteen_quantity_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="sixteen_percen_total" class="form-control"  type="text" readonly/></div>
+                        
+                        <div class="label_col"><input formControlName="eighteen_bag_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="eighteen_quantity_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="eighteen_percen_total" class="form-control"  type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="twenty_bag_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="twenty_quantity_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="twenty_percen_total" class="form-control"  type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="twentytwo_bag_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="twentytwo_quantity_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="twentytwo_percen_total" class="form-control"  type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="zero_bag_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="zero_quantity_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="zero_percen_total" class="form-control"  type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="two_bag_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="two_quantity_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="two_percen_total" class="form-control"  type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="four_bag_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="four_quantity_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="four_percen_total" class="form-control"  type="text" readonly/></div>
+
+                        <div class="label_col"><input formControlName="six_bag_total" class="form-control" type="text" readonly/></div>
+                        <div class="label_col"><input formControlName="six_quantity_total" class="form-control" type="text" readonly></div> 
+                        <div class="label_col"><input formControlName="six_percen_total" class="form-control"  type="text" readonly/></div> 
+
+                        <div class="label_col"><input formControlName="total_bag_total" class="form-control" type="text" readonly/></div> 
+                        <div class="label_col"><input formControlName="total_quantity_total" class="form-control" type="text" readonly></div>
+                        <div class="label_col"><input formControlName="total_percen_total" class="form-control"  type="text" readonly/></div>
+
+
+                      </div>
+                    </div>
+
+
+                 </div>
+              </div>
+               <div class="btm_btn_content">
+                <button type="button" class="btn btn-success"  (click)="addItems()" >Add Row </button>
+              </div> 
+ 
+          </fieldset>
+          <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+            <mat-label>Remarks</mat-label>
+              <textarea class="form-control" formControlName="remarks"  ></textarea>
+            </div>
+          </div>
+
+          <div class="col-lg-12" >
+            <div class="form-group">
+              <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="dailyproductionsave">Submit</button>
+            </div>
+          </div>
+        </div>
+       </div>
+
+    </div>
+  </fieldset>
+  </section>
+</form>
+
+
+<div class="container-fluid" *ngIf="isHidden==false">
+      
+  <form [formGroup]="userForm1">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label> 
+        <input type="date"  class="form-control"  formControlName="todate">
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()"  >Search</button>
+      </div>
+    </div>
+  </form> 
+
+ <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Daily Production Report List</legend>
+        <div class="table_content">
+          <table class="table table-bordered" >
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Bussiness Unit</th>
+                <th>Shop Floor</th>
+                <th colspan="4">Action</th>       
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let dailyproduction of dailyproductionlist">
+                    <td>{{dailyproduction.date}}</td>
+                    <td>{{dailyproduction.business_unitname}}</td>
+                    <td>{{dailyproduction.shopfloor_name}}</td>
+                    <td><button class="btn btn-success" (click)="onUpdate(dailyproduction.id, 'view')" >View</button></td>
+                    <td><button class="btn btn-info" (click)="onUpdate(dailyproduction.id, 'update')" >Update</button></td>  
+                    <td><button class="btn btn-danger" (click)="onDelete(dailyproduction.id)" >Delete</button></td>
+                    <td><button class="btn btn-success" (click)="print(dailyproduction.dailyproductionid,dailyproduction.date,dailyproduction.business_unitname,dailyproduction.remarks,dailyproduction.shopfloor_name)" >Print</button></td>
+                  
+                  </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      </fieldset>
+    </div>
+  </div> 
+</div>

@@ -1,0 +1,158 @@
+<section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="button_row">
+            <ul>
+              <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+              <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+            </ul>   
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+</div> 
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+     <section class="master_container">
+        <fieldset>
+            <div class="col-lg-12">
+            <fieldset>
+                <legend>Bin Report </legend>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                        <mat-label>Date</mat-label>
+                        <input  formControlName="date"  [(ngModel)]="currentDate" type="date" class="form-control">
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                            <mat-label>Business Unit<span class="red">*</span></mat-label>
+                            <mat-select class="form-control"  [(ngModel)]="BuUnit" formControlName="business_unit" (selectionChange)="getBinperBusinessunit($event.value)">
+                                <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Approved By</mat-label>
+                          <mat-select class="form-control" formControlName="approvedby">
+                            <mat-option *ngFor="let emplist of employeelist" [value]="emplist.emp_id">{{emplist.emp_name}}</mat-option>
+                          </mat-select>
+                        </div>
+                      </div>
+                </fieldset>
+            <fieldset>
+                <legend>Bin Report  Details</legend>
+                        <div class="col-lg-12">
+                            <div class="dyn_table_conent">
+                                <div class="dyn_table_header">
+                                    <label class="label_col"><h3 class="i_nam">Bin Group Name<span class="red">*</span></h3></label>
+                                    <label class="label_col"><h3 class="i_nam">Bin Name<span class="red">*</span></h3></label>
+                                    <label class="label_col"><h3>Prev. Dip</h3></label>
+                                    <label class="label_col"><h3>Prev. MT TOTAL</h3></label>
+                                    <label class="label_col"><h3>Dip</h3></label>
+                                    <label class="label_col"><h3>MT TOTAL</h3></label>
+                                   
+                                </div>
+                                <div class="dyn_table_data_cont" formArrayName="binreportdetails">
+                                    <div class="dyn_table" *ngFor="let bin of binreportdetails.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                    <div class="label_col">
+                                    <!-- <mat-select-autocomplete class="form-control ats i_nam"  
+                                        [options]="bingrouplist"
+                                        [display]="'bingroupname'"
+                                        [value]="'bingroupid'"
+                                        [multiple]='false'
+                                        ngDefaultControl
+                                        [selectedOptions]="selectedgroup"
+                                        [formControlName] = "'bingroupid'" >
+                                    </mat-select-autocomplete> -->
+                                    
+                                        <!-- <mat-select class="form-control ats i_nam"   formControlName="bingroupid" (selectionChange)="getBinpergrouplist($event.value)"> -->
+                                       <mat-select class="form-control ats i_nam"   formControlName="bingroupid" >   
+                                            <mat-option *ngFor="let list of bingrouplist" [value]="list.bingroupid">{{list.bingroupname}}</mat-option>
+                                        </mat-select>
+                                    </div>
+                                    
+                                    <div class="label_col">
+                                        <!-- <mat-select-autocomplete class="form-control ats i_nam"  
+                                        [options]="binlist"
+                                        [display]="'bin_description'"
+                                        [value]="'bin_code'"
+                                        [multiple]='false'
+                                        ngDefaultControl
+                                        [selectedOptions]="selectedbin"
+                                        [formControlName] = "'binid'" >
+                                    </mat-select-autocomplete> -->
+
+                                    <mat-select class="form-control ats i_nam"   formControlName="binid" (selectionChange)="getBin($event.value,pointIndex)">
+                                        <mat-option *ngFor="let list of binlist" [value]="list.bin_code">{{list.bin_description}}</mat-option>
+                                    </mat-select>
+                                    </div>
+                                    <div class="label_col"><input formControlName="prevdip" class="form-control" type="text" readonly/></div>
+                                    <div class="label_col"><input formControlName="prevmt" class="form-control" type="text" readonly/></div>
+                                    <div class="label_col"><input formControlName="dip" class="form-control" type="text" (keyup)="getMatWt($event, pointIndex)" /></div>
+                                    <div class="label_col"><input formControlName="mt" class="form-control" type="text" /></div>
+                                  
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="btm_btn_content" >
+                                <button type="button" class="btn btn-success"  (click)="addbindetails()">Add Row </button>
+                            </div>
+                        </div>
+
+                         
+            </fieldset>
+
+              <div class="col-lg-12" >
+                <div class="form-group">
+                  <button type="submit" (click)="send()" class="btn btn-primary" >Submit</button>
+                </div>
+              </div>
+            </div>
+        </fieldset>
+     </section>
+</form>
+
+<div class="container-fluid" *ngIf="isHidden==false">
+    <div class="row">
+        <div class="col-lg-12">
+          <fieldset class="table_container">
+            <legend>Bill Report List</legend>
+            <div class="table_content">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Date</th>
+                    <th>Bussiness Unit</th>
+                    <th colspan="4">Action</th>       
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let bill of billreportlist">
+                        <td>{{bill.date}}</td>
+                        <td>{{bill.business_unitname}}</td>
+                       
+                        <td><button class="btn btn-success" (click)="onUpdate(bill.id, 'view')"         >View</button></td>
+                        <td><button class="btn btn-info"    (click)="onUpdate(bill.id, 'update')"       >Update</button></td>  
+                        <td><button class="btn btn-danger"  (click)="onDelete(bill.id)"                 >Delete</button></td>
+                        <td><button class="btn btn-info"    (click)="onPrint(bill.id,bill.binreportid)" >Print</button></td>
+                      </tr>
+                </tbody>
+              </table>
+             
+            </div>
+          </fieldset>
+        </div>
+      </div> 
+
+
+</div>

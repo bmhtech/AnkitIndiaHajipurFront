@@ -1,0 +1,95 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm1">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Show List</legend>
+            <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Select</h3></label>
+                <label class="label_col" style="display: none;"><h3>Sl No</h3></label>
+                <label class="label_col"><h3 style="width: 248px;">Shift Time</h3></label>
+                <label class="label_col"><h3>Packing Quantity</h3></label>
+                <label class="label_col"><h3>Item Quantity</h3></label>
+               
+                <!-- <label class="label_col"><h3>Item Ctategory</h3></label>
+                <label class="label_col"><h3>Stock Unit</h3></label> -->       
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="prod_output_details"  *ngIf="packingdis;else packingdisable">
+                  <div class="dyn_table" *ngFor="let item of prod_output_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><mat-checkbox class="form-control" formControlName="checkbox"></mat-checkbox></div>
+                    <div class="label_col" style="display: none;"> <input class="form-control" type="number" formControlName="sl_no" readonly/></div>
+                    <div class="label_col"> <input class="form-control" type="text" style="width: 245PX;"  formControlName="shifttime" readonly/></div>
+                    
+                    <!-- <div class="label_col" *ngIf="uom_basedon=='Packing_Uom'"> <input class="form-control"  type="text" formControlName="packingqty" (keyup)="setOnItemQty($event, pointIndex)"/></div>
+                    <div class="label_col" *ngIf="uom_basedon=='Item_Uom'"> 
+                      <input class="form-control" type="text" formControlName="itemqty" (keyup)="setOnPackingQty($event, pointIndex)"/>
+                    </div>
+                    <div class="label_col" *ngIf="uom_basedon=='Item_Uom'"> <input class="form-control" type="text" formControlName="packingqty" readonly /></div>
+
+                    <div class="label_col" *ngIf="uom_basedon=='Packing_Uom'"> 
+                      <input class="form-control" type="text" formControlName="itemqty" readonly/>
+                    </div> -->
+                    <div class="label_col"> 
+                       <input class="form-control"  type="text" formControlName="packingqty"  readonly/> 
+                      <!-- <input class="form-control"  type="text" formControlName="packingqty"  style="background: red" (keyup)="setOnItemQty($event, pointIndex)" /> -->
+                    </div>
+                 
+                   
+                    <div class="label_col"> 
+                      <input class="form-control" type="text" formControlName="itemqty" (keyup)="setOnPackingQty($event, pointIndex)"/>
+                    </div> 
+
+                  </div>
+                </div> 
+                  <ng-template #packingdisable>
+                <div class="dyn_table_data_cont" formArrayName="prod_output_details">
+                  <div class="dyn_table" *ngFor="let item of prod_output_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><mat-checkbox class="form-control" formControlName="checkbox"></mat-checkbox></div>
+                    <div class="label_col" style="display: none;"> <input class="form-control" type="number" formControlName="sl_no" readonly/></div>
+                    <div class="label_col"> <input class="form-control" type="text" style="width: 245PX;"  formControlName="shifttime" readonly/></div>
+                    
+                    <!-- <div class="label_col" *ngIf="uom_basedon=='Packing_Uom'"> <input class="form-control"  type="text" formControlName="packingqty" (keyup)="setOnItemQty($event, pointIndex)"/></div>
+                    <div class="label_col" *ngIf="uom_basedon=='Item_Uom'"> 
+                      <input class="form-control" type="text" formControlName="itemqty" (keyup)="setOnPackingQty($event, pointIndex)"/>
+                    </div>
+                    <div class="label_col" *ngIf="uom_basedon=='Item_Uom'"> <input class="form-control" type="text" formControlName="packingqty" readonly /></div>
+
+                    <div class="label_col" *ngIf="uom_basedon=='Packing_Uom'"> 
+                      <input class="form-control" type="text" formControlName="itemqty" readonly/>
+                    </div> -->
+                    <div class="label_col"> 
+                      <input class="form-control"  type="text" formControlName="packingqty" (keyup)="setOnItemQty($event, pointIndex)" />
+                    </div>
+                 
+                   
+                    <div class="label_col"> 
+                       <input class="form-control" type="text" formControlName="itemqty"  readonly/> 
+                      <!-- <input class="form-control" type="text" formControlName="itemqty"  style="background: red" (keyup)="setOnPackingQty($event, pointIndex)"/> -->
+                    </div> 
+
+                  </div>
+                </div>
+              </ng-template>
+              </div>
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <mat-dialog-actions align="end">
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+        </mat-dialog-actions>
+  </form>
+</div>
+  
+  
+  
+  

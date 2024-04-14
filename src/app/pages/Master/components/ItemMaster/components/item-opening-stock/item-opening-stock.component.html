@@ -1,0 +1,188 @@
+
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>  
+
+<form [formGroup]="userForm" autocomplete="off" >
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Basic Information</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Transe Id</mat-label>
+                <input type="text" class="form-control" formControlName="transe_id" [(ngModel)]="model.transe_id">
+              </div>
+            </div>
+           
+           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Date</mat-label>
+              <input type="date" formControlName="tdate" [(ngModel)]="currentDate" class="form-control">
+            </div>
+          </div>
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+              <mat-label >Bussiness Unit</mat-label>
+              <mat-select-autocomplete class="form-control ats"  
+              [options]="bussiness_unit_list"
+              [display]="'businessunit_name'"
+              [value]="'businessunit_id'"
+              [multiple]='false'
+              (selectionChange)="onChangeBuUnit($event)"
+              ngDefaultControl
+              [formControl]="userForm.controls['businessunit']"
+              [labelCount]="2">
+            </mat-select-autocomplete>
+              </div>
+          </div>    -->
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label >Bussiness Unit</mat-label>
+              <mat-select formControlName="business_unit" [(ngModel)]="model.business_unit" class="form-control">
+                <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Item Type</mat-label>
+              <mat-select-autocomplete class="form-control ats"  
+              [options]="itemtypes"
+              [display]="'item_name'"
+              [value]="'item_name'"
+              [multiple]='false'
+              ngDefaultControl
+              [formControl]="userForm.controls['item_type']"
+              [labelCount]="2">
+            </mat-select-autocomplete>
+            </div>
+          </div>
+
+          <div class="col-lg-12" >
+            <div class="form-group">
+              <button type="submit" (click)="onClickItamType()" class="btn btn-primary">Search</button>
+            </div>
+          </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+      <!--  Dynamic Start-->
+    <div class="weigh_n">
+      <div class="dyn_table_conent" style="border: none;">
+        <mat-tab-group animationDuration="1000ms">
+          <mat-tab label="Item Details">
+            <div class="dyn_table_conent" style="border: none;">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3 class="act">Action</h3></label>
+                <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                <label class="label_col"><h3>Item Gross Qty</h3></label>
+                <label class="label_col"><h3>Item Uom</h3></label>   
+                <label class="label_col" style="display: none;"><h3>Pack Details</h3></label>   
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="item_opening_stk_dtls">
+                <div class="dyn_table" *ngFor="let item of item_opening_stk_dtls.controls; let pointIndex=index"  [formGroupName]="pointIndex">
+                  <div class="label_col"><mat-checkbox class="form-control" formControlName="checkbox" (change)="onChangeCheckbox($event,pointIndex)"></mat-checkbox></div>
+            
+                  <!-- <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"  
+                    [options]="item_codes"
+                    [display]="'item_name'"
+                    [value]="'item_id'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedItemName[pointIndex]"
+                    ngDefaultControl
+                    [formControlName] = "'item_id'">
+                  </mat-select-autocomplete>
+                  </div>  -->
+
+                  <div class="label_col"><mat-select formControlName="item_id" class="form-control i_nam"><mat-option *ngFor="let item_code of item_codes" [value]="item_code.item_id">{{item_code.item_name}}</mat-option></mat-select></div>
+        
+              
+                  <div class="label_col"><input formControlName="open_item_gr_qty" class="form-control" type="number" /></div>                 
+                 
+                 <div class="label_col"><mat-select disabled="true" formControlName="item_uom" class="form-control">
+                   <mat-option value="0">Select</mat-option>  
+                   <mat-option *ngFor="let List of ItemUomList" [value]="List.customuom_id">{{List.description}}</mat-option>  
+                  </mat-select>
+                </div>
+                <div class="label_col" style="display: none;"><input formControlName="pack_dtls" class="form-control" type="text" readonly/></div>                 
+
+                </div>
+              </div>
+            </div>
+            <!-- <div class="btm_btn_content" >
+              <button type="button" class="btn btn-success" (click)="addItem()">Add Row</button>
+            </div> -->
+            <!-- <div class="clr"></div> -->
+          </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+
+      <div class="col-lg-12" >
+        <div class="form-group">
+          <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+      <!--  Dynamic End-->
+    </div>
+  </section>
+</form>
+
+<div class="master_containerr">
+  <div class="container-fluid">
+    <div class="row">
+        <div class="col-lg-12">
+          <fieldset class="table_container">
+            <legend>Item Opening Stock List</legend>
+              <div class="table_content">
+                <!-- <input [(ngModel)]="searchText" placeholder="Search.." class="search"> -->
+                <table class="table table-bordered">
+                    <thead>
+                        <tr>
+                            <th>Transe ID</th>
+                            <th>Business Unit</th>     
+                            <th>Item name</th>
+                            <th>Date</th>
+                            <th>Item Type</th>
+                            <th>Opening Item Qty</th>
+                            <th>Curr Item Qty</th>
+                            <th>Sold Item Qty</th>
+                            <th>Uom</th>
+                            <!-- <th>Action</th> -->
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let ItemStock of listItemOpeningStock">
+                              <td>{{ItemStock.transe_id}}</td> 
+                              <td>{{ItemStock.business_unitname}}</td>
+                              <td>{{ItemStock.item_name}}</td>
+                              <td>{{ItemStock.tdate}}</td>
+                              <td>{{ItemStock.item_type}}</td>
+
+                              <td>{{ItemStock.open_item_gr_qty}}</td>
+                              <td>{{ItemStock.curr_item_gr_qty}}</td>
+                              <td>{{ItemStock.sold_gr_qty}}</td>
+                              <td>{{ItemStock.item_uomname}}</td>
+                              <!-- <td><button class="btn btn-info" (click)="onUpdate(Item_group_master.id,Item_group_master.item_group_id)">Update</button></td>          -->
+                            </tr>
+                  </tbody>
+            </table>
+          </div>
+        </fieldset>
+    </div>
+  </div>
+</div>
+</div>

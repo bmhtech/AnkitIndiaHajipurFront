@@ -1,0 +1,146 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <fieldset>
+            <legend>Gate Pass Check List</legend>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Vehicle List</mat-label>
+                <select  formControlName="vechileid"  class="form-control" (change)="onChangeVechileNo()">
+                  <option *ngFor="let veh_no of veh_nos" [value]="veh_no.vechileid">{{veh_no.vechile_no}}</option>  
+              </select>
+
+              </div>
+            </div>
+          
+           
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Approve By</mat-label>
+                <mat-select  class="form-control"  formControlName="confirmed_by" >
+                  <mat-option *ngFor="let confirmedBy of employeeNames" [value]="confirmedBy.emp_id"> {{confirmedBy.emp_name}}</mat-option> 
+                </mat-select>
+
+              </div>
+            </div>
+
+           
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Remarks</mat-label>
+               
+                <textarea class="form-control"   formControlName="remarks" style="height: 110px;"></textarea>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>GatePass Approve By</mat-label>
+                <mat-select  class="form-control"  formControlName="gatepass_confirmed_by" >
+                  <mat-option *ngFor="let confirmedBy of employeeNames" [value]="confirmedBy.emp_id"> {{confirmedBy.emp_name}}</mat-option> 
+                </mat-select>
+
+              </div>
+            </div>
+
+          </fieldset>
+        <fieldset>
+              <legend> Check List Details</legend>
+
+            <div class="dyn_table_conent" style="border: none;">
+              <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3 class="srln">select</h3></label>
+                  <label class="label_col"><h3 class="srln">Srl No</h3></label>
+                  <label class="label_col"><h3 class="i_nam">Check In<span class="red">*</span></h3></label>
+                  <label class="label_col"><h3 class="i_nam">Description</h3></label>
+                 
+                </div>
+               
+                <div class="dyn_table_data_cont" formArrayName="gatepassGateout_details">
+                  <div class="dyn_table" *ngFor="let item of gatepassGateout_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col" style="width: 53px;" ><mat-checkbox class="form-control srln" formControlName="checkbox"></mat-checkbox></div>
+                    <div class="label_col"><input class="form-control srln"  formControlName="sl_no" /></div>
+                    <div class="label_col"><input type="text" class="form-control i_nam"  formControlName="checkin" /></div>
+                    <div class="label_col"><input class="form-control i_nam"  formControlName="description"/></div>
+                  </div>
+                </div>
+              </div>
+             
+            </div>
+
+          </fieldset>
+           
+            <div class="col-lg-12" *ngIf="action == 'save'">
+              <div class="form-group">
+                <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+              </div>
+            </div> 
+
+         
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+<div class="master_containerr" *ngIf="isHidden==false">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <fieldset class="table_container">
+              <legend>Gate Pass Gate Out List</legend>
+              <div class="table_content">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Vehicle List</th>
+                      <th>Approve By</th>
+                      <th>Remarks</th>
+                      <th colspan="2">Action</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let gateout of list_gateout">
+                      <td>{{gateout.vechile_no}}</td>
+                      <td>{{gateout.Confirmed_by_name}}</td>
+                      <td>{{gateout.remarks}}</td>
+                      <td><button class="btn btn-success" (click)="onUpdate(gateout.id, gateout.gp_go_id,'view')" >View</button></td>   
+                      <!-- <td><button class="btn btn-info" (click)="onUpdate(gateout.id, gateout.gp_go_id,'update')" >Update</button></td>               -->
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+</div>
+
+

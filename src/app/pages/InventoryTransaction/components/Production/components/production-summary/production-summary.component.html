@@ -1,0 +1,182 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader"> <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner></div>
+</div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Production Summary</legend>
+           
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" hidden>
+              <div class="form-group">
+                <mat-label>Prod Summary Code<span class="red">*</span></mat-label>
+                <input type="text" formControlName="prod_sum_id" class="form-control" [(ngModel)]="seq_no" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Production Date</mat-label>
+                <input type="date" class="form-control" formControlName="date" (change)="onChangeDate($event)" >
+              </div>
+            </div>
+
+
+           
+          </fieldset>
+        </div>
+      </div>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <fieldset>
+                  <legend>Production Summary Details</legend>
+                    <div class="col-lg-12">
+                      <div class="dyn_table_conent" >
+                        <div class="dyn_table_header">
+                            <!-- <label class="label_col"><h3 class="act">Action</h3></label> -->
+                            <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                            <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                            <label class="label_col"><h3 class="i_nam">Packing Name</h3></label>
+                            <label class="label_col"><h3>Bags</h3></label>
+                            <label class="label_col"><h3>Packing UOM</h3></label>
+                            <label class="label_col"><h3>Quantity</h3></label>
+                            <label class="label_col"><h3>Production UOM</h3></label>
+                            <label class="label_col"><h3>Rate</h3></label>
+                            <label class="label_col"><h3>Amount</h3></label>
+                            <!-- <label class="label_col"><h3 class="i_nam">Remarks</h3></label> -->
+                        </div>
+      
+                        <div class="dyn_table_data_cont" formArrayName="prod_summary_dtls">
+                          <div class="dyn_table" *ngFor="let item of prod_summary_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <!-- <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteSummaryItem(pointIndex)"></i></div> -->
+                            
+                            <div class="label_col">
+                              <input class="form-control srln" formControlName="sl_no"  type="number" readonly/>
+                            </div>
+                            <div class="label_col"><input class="form-control ats i_nam" formControlName="item_name" type="text" readonly/></div>
+                            <div class="label_col"><input class="form-control ats i_nam" formControlName="packing_name" type="text" readonly/></div>
+                            <div class="label_col"><input class="form-control " formControlName="packing_qty" type="text" (focusout)="getProdPackingQty($event, pointIndex)" (keyup)="balanceWt()" readonly/></div>
+                            <div class="label_col"><input class="form-control " formControlName="packing_uom" type="text" readonly/></div>
+                            <div class="label_col"><input class="form-control" formControlName="production_qty" type="text" (focusout)="getProdItemQty($event, pointIndex)" (keyup)="balanceWt()" readonly/></div>
+                            <div class="label_col"><input class="form-control " formControlName="production_uom" type="text" readonly/></div>
+                            <div class="label_col"><input class="form-control" formControlName="rate" type="number" (keyup)="balanceWt()" readonly/></div>
+                            <div class="label_col"><input type="number" class="form-control" formControlName="amount" (keyup)="balanceWt()" readonly></div>
+                            <!-- <div class="label_col"><input class="form-control ats i_nam" formControlName="remarks" type="text" /></div> -->
+
+                            <div class="label_col" style="display: none;"><input class="form-control " formControlName="uom_basedon" type="text" /></div>
+                            <div class="label_col" style="display: none;"><input class="form-control " formControlName="capacity" type="text" /></div>
+                            <div class="label_col" style="display: none;"><input class="form-control " formControlName="empty_big_wt" type="text" /></div>
+                            <div class="label_col" style="display: none;"><input class="form-control " formControlName="empbagwt_based_on" type="text" /></div>
+
+                          </div>
+
+                        
+          
+                        </div>
+                     </div>
+                     <!-- <div class="btm_btn_content">
+                      <button type="button" class="btn btn-success" (click)="add(pointIndex)" *ngIf="summaryadd">Add</button>
+                      <button mat-raised-button (click)="exportAsXLSX()" color="primary" *ngIf="summaryexcel">Export To Excel</button>
+                    </div> -->
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Total Bags</mat-label>
+                      <input type="text" class="form-control" formControlName="totalbags" readonly>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Total Qty</mat-label>
+                      <input type="text" class="form-control" formControlName="totalqty" readonly>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Total Rate</mat-label>
+                      <input type="text" class="form-control" formControlName="totalrate" readonly>
+                    </div>
+                  </div>
+      
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Total Amount</mat-label>
+                      <input type="text" class="form-control" formControlName="totalamount" readonly>
+                    </div>
+                  </div>
+                
+                </fieldset>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <button type="submit" (click)="send()" class="btn btn-primary"  *ngIf="summarysave">Submit</button>
+                </div>
+              </div>
+            </div>
+
+    </div>
+  </section>
+</form>
+
+<div class="master_container_box" *ngIf="isHidden==false">
+    
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Summary List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Summary Code</th>
+                  <th>Date</th>
+                  <th colspan="4">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let sum of summaryList">
+                  <td>{{sum.prod_sum_id}}</td>
+                  <td>{{sum.date}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(sum.id,sum.prod_sum_id,'view')" >View</button></td>
+                  <td><button class="btn btn-info" (click)="onUpdate(sum.id,sum.prod_sum_id,'update')">Update</button></td> 
+                  <td><button class="btn btn-danger" (click)="onDelete(sum.id)">Delete</button></td>
+                  <td *ngIf="sum.export == 0;else elseBlock " ><button class="btn btn-warning" (click)="posting(sum.id,'Posting')" >Posting</button></td>  
+                  <ng-template #elseBlock>
+                    <td><button class="btn btn-success" (click)="posting(sum.id,'Undo')">Undo</button></td>  
+                  </ng-template>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    
+  </div>
+</div>

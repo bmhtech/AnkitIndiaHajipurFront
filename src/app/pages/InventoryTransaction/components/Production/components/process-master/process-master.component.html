@@ -1,0 +1,402 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+ <div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+
+<form [formGroup]="userForm" *ngIf="isHidden==true" >
+  <section class="master_containerr">
+    <div class="container-fluid">       
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+              <legend>Process Details</legend>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                   <mat-label>Process No<span class="red">*</span></mat-label>
+                      <!-- <input type="text" class="form-control" formControlName="process_no" [(ngModel)]="model.process_no" value={{seq_no}} readonly> -->
+                      <input type="text" class="form-control" formControlName="process_no" [(ngModel)]="seq_no" readonly>
+                </div>
+              </div>
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit</mat-label>
+                   <mat-select formControlName="business_unit" [(ngModel)]="model.business_unit" class="form-control">
+                   <mat-option *ngFor="let business_unit of bussiness_unit_list" [value]="business_unit.businessunit_id">{{business_unit.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div> -->
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Bussiness Unit<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="bussiness_unit_list"
+                [display]="'businessunit_name'"
+                [value]="'businessunit_id'"
+                [multiple]='false'
+                (selectionChange)="onChangeBusinessUnit($event)"
+                ngDefaultControl
+                [formControl]="userForm.controls['business_unit']"
+                [labelCount]="2">
+                </mat-select-autocomplete>
+              </div>
+            </div>  
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Shop Floor<span class="red">*</span></mat-label>
+                <mat-select formControlName="shop_floor"  [(ngModel)]="model.shop_floor" class="form-control"> 
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let shop_floor of ShopFloorList" [value]="shop_floor.shop_floor_id">{{shop_floor.shop_floor_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-8 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Process Name<span class="red">*</span></mat-label>
+                <input type="text" class="form-control" formControlName="process_desc" [(ngModel)]="model.process_desc">
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Process Style<span class="red">*</span></mat-label>
+                 <mat-select formControlName="process_type" [(ngModel)]="model.process_type" class="form-control" (selectionChange)="onChangeProcesstype($event.value)">
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option value="Regular">Regular</mat-option>
+                    <mat-option value="Special">Special</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Process Frequency<span class="red">*</span></mat-label>
+                 <mat-select formControlName="process_freq" [(ngModel)]="model.process_freq" class="form-control" (selectionChange)="onChangeProcessFrequency($event.value)">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let list of Processfrequency" [value]="list">{{list}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-8 col-sm-6 col-12" *ngIf="isPeriod==true" >
+              <div class="form-group">
+                <mat-label>Periodic Days<span class="red">*</span></mat-label>
+                <input type="number" formControlName="perd_day" [(ngModel)]="model.perd_day" class="form-control" (keyup)="onInputPeriodDays($event)">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="isspecial==true" >
+              <div class="form-group">
+                <mat-label>Process Maintenance(in shift)<span class="red">*</span></mat-label>
+                <mat-select formControlName="process_mntnce" [(ngModel)]="model.process_mntnce" class="form-control" (selectionChange)="onChangeProcessShift($event.value)">              
+                    <mat-option value="Yes">Yes</mat-option>
+                    <mat-option value="No">No</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Process Type<span class="red">*</span></mat-label>
+                 <mat-select formControlName="process_type1" [(ngModel)]="model.process_type1" class="form-control" (selectionChange)="onChangeProcesstype1($event.value)">
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option value="Stock Transfer">Stock Transfer</mat-option>
+                    <mat-option value="Production">Production</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-8 col-sm-6 col-12"  *ngIf="isShift==true" >
+              <div class="form-group">
+                <mat-label>No of Shift<span class="red">*</span></mat-label>
+                <input type="Number" min="1" formControlName="shift_no" [(ngModel)]="model.shift_no" class="form-control" (keyup)="onInputNoofShift($event)">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-8 col-sm-6 col-12" *ngIf="isShift==true">
+              <div class="form-group">
+                <mat-label>Shift Maintain(in hours)<span class="red">*</span></mat-label>
+                <input type="number" formControlName="shift_mntnce" [(ngModel)]="model.shift_mntnce" class="form-control" (keyup)="onkeyupshiftmaintn($event)" >
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-8 col-sm-6 col-12" *ngIf="isShift==true" >
+              <div class="form-group">
+                <mat-label>Shift Start Time<span class="red">*</span></mat-label>
+                <!-- <matInput  type="datetime-local"  formControlName="shift_start_time" [(ngModel)]="model.shift_start_time" class="form-control" (change)="onChangeEvent($event)"></matInput> -->
+                <input type="datetime-local" matinput formControlName="shift_start_time" [ngModel]="model.shift_start_time" class="form-control" (change)="onChangeEvent($event)"/>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-8 col-sm-6 col-12"  *ngIf="isShift==true">
+              <div class="form-group">
+                <mat-label>Shift End Time<span class="red">*</span></mat-label>
+                <input type="datetime-local" formControlName="shift_end_time" readonly [(ngModel)]="model.shift_end_time" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-8 col-sm-6 col-12" *ngIf="isShift==true">
+              <div class="form-group">
+                <mat-label>Total Shift Hours<span class="red">*</span></mat-label>
+                <input type="number" readonly formControlName="tot_shift_hrs" [(ngModel)]="model.tot_shift_hrs" class="form-control">
+              </div>
+            </div>
+            
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>Item Group<span class="red">*</span> </mat-label>
+                  <mat-select-autocomplete class="form-control ats"  
+                  [options]="itemGroups"
+                  [display]="'group_name'"
+                  [value]="'item_group_id'"
+                  [multiple]='true'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['item_group']"
+                  (selectionChange)="getItemGroupUom($event)">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox formControlName="process_active" [(ngModel)]="model.process_active" >Active</mat-checkbox> 
+              </div>
+            </div>
+
+           
+
+            </fieldset>
+        </div>
+    </div>
+
+    <!-- <div class="col-lg-12">
+      <div class="dyn_table_conent" style="border: none;">
+      <mat-tab-group animationDuration="1000ms">
+
+        </mat-tab-group>
+      </div>
+    </div> -->
+
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset>
+          <legend>Document Attachment</legend>
+          <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+            <div class="dyn_table_conent">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3>Action</h3></label>
+                <label class="label_col"><h3>Document Name</h3></label>
+                <label class="label_col"><h3 class="wdt_215">Document Upload</h3></label>
+              </div>           
+              <div class="dyn_table_data_cont" formArrayName="process_master_doc">
+                <div class="dyn_table" *ngFor="let item of process_master_doc.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteDocument(pointIndex)"></i></div>      
+                  <div class="label_col"><input formControlName="doc_name" class="form-control" type="text" /></div>
+                  <div class="label_col"><input  class="form-control  wdt_220_s"   (change)="onFileSelected($event,pointIndex,process_master_doc.controls)" #myFileInput   type="file" /></div>
+                  <!-- <div class="label_col"> <button type="button" class="btn btn-success " (click)="viewpdf(pointIndex,process_master_doc.controls)">view </button></div>  -->
+                </div>
+              </div>
+            </div>
+                          
+            <div class="btm_btn_content" >
+              <button type="button" class="btn btn-success" (click)="addDocument(pointIndex)">Add </button>
+            </div>
+          </div>
+
+          <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+            <fieldset>
+              <legend>Document List</legend>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                 
+                      <div class="dyn_table_conent">
+                        <div class="dyn_table_header">
+                          
+                          <label class="label_col"><h3 class="wdt_215">Document Name</h3></label>
+                          <label class="label_col"><h3 > Download</h3></label>
+                          <label class="label_col"><h3> Action</h3></label>
+                        </div>           
+                        <div class="dyn_table_data_cont" formArrayName="process_master_doc_list">
+                          <div class="dyn_table" *ngFor="let item of process_master_doc_list.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            
+                            <div class="label_col"><input  formControlName="doc_name" class="form-control wdt_215 " type="text" /></div>
+                            <div class="label_col"><button type="button" class="fa fa-download " (click)="viewpdf(pointIndex,process_master_doc_list.controls)">Download </button></div> 
+                            <div class="label_col"><i class="fa fa-trash form-control action wdt_215" (click)="deletepdf(pointIndex,process_master_doc_list.controls)"></i></div>  
+                         
+                         
+                          </div>
+                        </div>
+                      </div>
+              </div>
+            </fieldset>
+          </div> 
+        </fieldset>
+      </div>
+    </div>
+
+    <div class="row" hidden>
+      <div class="col-lg-12">
+        <fieldset>
+          <legend>Shift Tab</legend>
+          <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+            <div class="dyn_table_conent">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3>Action</h3></label>
+                <label class="label_col"><h3>Shift No</h3></label>
+              </div>           
+              <div class="dyn_table_data_cont" formArrayName="process_master_shift_details">
+                <div class="dyn_table" *ngFor="let item of process_master_shift_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action"></i></div>      
+                  <div class="label_col"><input formControlName="shiftno" class="form-control" type="number" /></div>
+                </div>
+              </div>
+            </div>
+                          
+            <!-- <div class="btm_btn_content" >
+              <button type="button" class="btn btn-success">Add </button>
+            </div> -->
+          </div>
+       
+        </fieldset>
+      </div>
+    </div>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="processmastersave">Submit</button>
+                </div>
+              </div>
+            </div>
+
+      </div>
+    </section>
+  </form>
+
+<!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Process Master List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Process No</th>
+                  <th>Process Name</th>
+                  <th>Business Unit Name</th>
+                  <th>Shop Floor</th>
+                  <th>Process Type</th>
+                  <!-- <th>Process Start time</th>
+                  <th>Process End time</th> -->
+
+                  <th colspan="2">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Process_master of listProcess_master">
+                  <td>{{Process_master.process_no}}</td>
+                  <td>{{Process_master.process_desc}}</td>
+                  <td>{{Process_master.business_unitname}}</td>
+                  <td>{{Process_master.shop_floorname}}</td>
+                  <td>{{Process_master.process_type}}</td>
+                  <td><button class="btn btn-info" (click)="onUpdate(Process_master.id, Process_master.process_id)" *ngIf="processmasterupdate">Update</button></td> 
+                  <td *ngIf="Process_master.status == 0;else elseBlock">
+                    <button class="btn btn-danger" (click)="onDelete(Process_master.id,Process_master.item_group)">Delete</button>
+                  </td>  
+                  <ng-template #elseBlock>
+                    <td><button class="btn btn-danger" disabled>Delete</button></td>  
+                  </ng-template> 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- <div class="master_containerr" *ngIf="isHidden==false" >
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Process Master List</legend>
+            <div class="table_content">
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+                </div>
+              </div>
+              
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    
+                    <th>Process No</th>
+                    <th>Process Description</th>
+                    <th>Business Unit</th>
+                    <th>Shop Floor</th>
+                    <th>Process Type</th>
+                    <th>Process Start time</th>
+                    <th>Process End time</th>
+                    <th>Action</th>
+                  </tr>
+                </thead> 
+                <tbody>
+                 |searchPipe: {category_id: searchText, catagory_code: searchText, catagory_name: searchText,item_type: searchText};
+                  <tr *ngFor="let Item_category_master of listItem_category_master|searchPipe: {category_id: searchText, catagory_code: searchText, catagory_name: searchText,item_type: searchText};">
+                     <td>{{Item_category_master.catagory_id}}</td> 
+                    <td>{{Item_category_master.catagory_code}}</td>
+                    <td>{{Item_category_master.catagory_name}}</td>
+                    <td>{{Item_category_master.item_type}}</td>
+                    <td><button class="btn btn-info" (click)="onUpdate(Item_category_master.id)">Update</button></td>         
+                  </tr>
+                  <tr>
+                    <td>PRCS000001</td>
+                    <td>Wheat Katai</td>
+                    <td>Ankit India</td>
+                    <td>Ankit floor1</td>
+                    <td>Regular</td>
+                    <td>06:30</td>
+                    <td>09:30</td>
+                    <td><button class="btn btn-info" (click)="onUpdate(Item_category_master.id)">Update</button></td>
+
+                  </tr>
+
+
+                </tbody>
+              </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div> -->

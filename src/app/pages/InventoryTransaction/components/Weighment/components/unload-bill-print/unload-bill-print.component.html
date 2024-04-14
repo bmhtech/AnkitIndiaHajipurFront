@@ -1,0 +1,516 @@
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <div class="modal_main_content">
+        <div id="print-section" class="print ">
+          <div class="container-fluid">
+            <div class="main_content inv">
+
+              <div class="section1">
+                <div class="main_header">
+                  <h1 class="uc">{{company_name}} ({{BusinessUnit}})</h1>
+                  <span style="font-size: 20px;">UnLoading Advice</span>
+                  <div class="rule_act">Office Copy</div>
+                </div>
+                <div class="box_table">
+                  <div class="bxx-top">
+                    <table class="table table-bordered">
+                      <tbody>
+
+                        <tr>
+                          <td style="width: 15%;">Advice No:</td>
+                          <td style="width: 20%;">{{advice_no}}</td>
+                          <td style="width: 10%;">Date:</td>
+                          <td style="width: 10%;">{{currentdate}}</td>
+                          <td style="width: 10%;">Time:</td>
+                          <td style="width: 40%;"> {{todayDate | date:'shortTime'}}</td>
+                          <!--<td style="font-size:13px; width: 10%;"><strong>Gate Sl_No:</strong></td>
+                        <td style="width: 10%;"><strong></strong></td>-->
+                        </tr>
+
+
+                        <tr>
+                          <td style="width: 15%;" *ngIf="nameswitch;else elseBlock ">Supplier Name:</td>
+                          <ng-template #elseBlock>
+                            <td style="width: 15%;">Customer Name:</td>
+                          </ng-template>
+
+                          <td colspan="2">{{suppliername}}</td>
+                          <td>District:</td>
+                          <td colspan="3">{{dist}}</td>
+                        </tr>
+                        <tr>
+                          <!--<td><strong>Challan No:</strong></td>
+                        <td>{{challanno}}</td>-->
+                          <td style="font-size:170%;width: 20%;"><strong>Vehicle No</strong></td>
+                          <td style="font-size:170%;text-align:center;width: 50%;" colspan="2">
+                            <strong>{{vehicleno}}</strong>
+                          </td>
+                          <td style="font-size:170%;height:30px;width: 30%;"><b>Gate Serial No</b></td>
+                          <td style="font-size:170%;" colspan="2"><b></b></td>
+                          <!--<td style="width: 10%;"><strong>Date:</strong></td>
+                        <td style="width: 20%;"><strong>{{purchase_order_date}}</strong></td>-->
+
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="bxx" *ngIf="billPacking; else elseBlockRaw ">
+                    <table class="table table-bordered" style="padding: 15px;">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 6%">SL.</th>
+                          <!-- <th scope="col" style="width: 22%;">Particular</th> -->
+                          <th scope="col" style="width: 15%;">Grade</th>
+                          <th scope="col" style="width: 12%;">Packing</th>
+                          <th scope="col" style="width: 8%;">Bags</th>
+                          <th scope="col" style="width: 8%;">Weight</th>
+                          <th scope="col" style="width: 8%;">Units</th>
+                          <!-- <th scope="col" style="width: 20%;">Remarks</th> -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let i of purchaseitemList; let poinIndex = index">
+                          <td>{{poinIndex+1}}</td>
+                          <td>{{i.item_name}}</td>
+                          <!-- <td>{{i.}}</td> -->
+                          <td>{{i.packing_name}}</td>
+                          <td>{{i.quantity}}</td>
+                          <td>{{i.s_qty}}</td>
+                          <td>{{i.uom}}</td>
+                          <!-- <td>{{i.}}</td> -->
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                  </div>
+
+                  <ng-template #elseBlockRaw>
+                    <div class="bxx">
+                      <table class="table table-bordered" style="padding: 5px;"
+                        *ngIf="jobworkstatus; else elseBlockNormal ">
+                        <thead>
+                          <tr>
+                            <th scope="col" style="width: 6%">SL.</th>
+                            <th scope="col" style="width: 15%;">Grade</th>
+                            <th scope="col" style="width: 12%;">Packing</th>
+                            <th scope="col" style="width: 8%;">Bags</th>
+                            <th scope="col" style="width: 8%;">Weight</th>
+                            <th scope="col" style="width: 8%;">Units</th>
+                            <th scope="col" style="width: 20%;">Remarks</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let i of purchaseitemList; let poinIndex = index">
+                            <td>{{poinIndex+1}}</td>
+                            <td>{{i.job_item_name}}</td>
+                            <td>{{i.job_packing_name}}</td>
+                            <td>{{i.pack_qty}}</td>
+                            <td>{{i.item_qty | number:'1.3-3'}}</td>
+                            <td>{{i.pack_uom}}</td>
+                            <td></td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+
+                      <ng-template #elseBlockNormal>
+                        <table class="table table-bordered" style="padding: 15px;">
+                          <thead>
+                            <tr>
+                              <th scope="col" style="width: 6%">SL.</th>
+                              <!-- <th scope="col" style="width: 22%;">Particular</th> -->
+                              <th scope="col" style="width: 15%;">Grade</th>
+                              <th scope="col" style="width: 12%;">Packing</th>
+                              <th scope="col" style="width: 8%;">Bags</th>
+                              <th scope="col" style="width: 8%;">Weight</th>
+                              <th scope="col" style="width: 8%;">Units</th>
+                              <!-- <th scope="col" style="width: 20%;">Remarks</th> -->
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let i of purchaseitemList; let poinIndex = index">
+                              <td>{{poinIndex+1}}</td>
+                              <td>{{i.item_name}}</td>
+                              <!-- <td>{{i.}}</td> -->
+                              <td>{{i.packing_name}}</td>
+                              <td>{{i.s_qty}}</td>
+                              <td>{{i.quantity}}</td>
+                              <td>{{i.uom}}</td>
+                              <!-- <td>{{i.}}</td> -->
+                            </tr>
+
+                          </tbody>
+                        </table>
+                      </ng-template>
+
+                    </div>
+                  </ng-template>
+
+                </div>
+
+
+
+
+
+
+
+                <!-- <div class="bxx-toppest">
+                <ul>
+                  <li>Un-loader</li>
+                  <li>Weighment Incharge</li>
+                  <li>Security Guard</li>
+                  <li>Godown Incharge</li>
+                  <li>Office Incharge</li>
+                </ul>     
+              </div> -->
+                <br /><br />
+                <div class="bxx-toppest">
+                  <b style="float: left;">Un-loader</b>
+                  <b style="padding: 2%;">Weighment Incharge</b>
+                  <b style="padding: 5%;">Security Guard</b>
+                  <b style="padding: 2%">Godown Incharge</b>
+                  <b style="float: right;">Office Incharge</b>
+                </div>
+
+
+
+              </div>
+
+
+              <div class="section2">
+
+
+
+                <div class="main_header">
+                  <h1 class="uc">{{company_name}} ({{BusinessUnit}})</h1>
+                  <span style="font-size: 20px;">UnLoading Advice</span>
+                  <div class="rule_act">W.Bridge Copy</div>
+                </div>
+                <div class="box_table">
+                  <div class="bxx-top">
+                    <table class="table table-bordered">
+                      <tbody>
+
+                        <tr>
+                          <td style="width: 15%;">Advice No:</td>
+                          <td style="width: 20%;">{{advice_no}}</td>
+                          <td style="width: 10%;">Date:</td>
+                          <td style="width: 10%;">{{currentdate}}</td>
+                          <td style="width: 10%;">Time:</td>
+                          <td style="width: 40%;"> {{todayDate | date:'shortTime'}}</td>
+                          <!--<td style="font-size:13px; width: 10%;"><strong>Gate Sl_No:</strong></td>
+                        <td style="width: 10%;"><strong></strong></td>-->
+                        </tr>
+
+
+                        <tr>
+                          <td style="width: 15%;" *ngIf="nameswitch;else elseBlock ">Supplier Name:</td>
+                          <ng-template #elseBlock>
+                            <td style="width: 15%;">Customer Name:</td>
+                          </ng-template>
+                          <td colspan="2">{{suppliername}}</td>
+                          <td>District:</td>
+                          <td colspan="3">{{dist}}</td>
+                        </tr>
+                        <tr>
+                          <!--<td><strong>Challan No:</strong></td>
+                        <td>{{challanno}}</td>-->
+                          <td style="font-size:170%;width: 20%;"><strong>Vehicle No</strong></td>
+                          <td style="font-size:170%;text-align:center;width: 50%;" colspan="2">
+                            <strong>{{vehicleno}}</strong>
+                          </td>
+                          <td style="font-size:170%;height:30px;width: 30%;"><b>Gate Serial No</b></td>
+                          <td style="font-size:170%;" colspan="2"><b></b></td>
+                          <!--<td style="width: 10%;"><strong>Date:</strong></td>
+                        <td style="width: 20%;"><strong>{{purchase_order_date}}</strong></td>-->
+
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="bxx" *ngIf="billPacking; else elseBlockRaw ">
+                    <table class="table table-bordered" style="padding: 15px;">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 6%">SL.</th>
+                          <!-- <th scope="col" style="width: 22%;">Particular</th> -->
+                          <th scope="col" style="width: 15%;">Grade</th>
+                          <th scope="col" style="width: 12%;">Packing</th>
+                          <th scope="col" style="width: 8%;">Bags</th>
+                          <th scope="col" style="width: 8%;">Weight</th>
+                          <th scope="col" style="width: 8%;">Units</th>
+                          <!-- <th scope="col" style="width: 20%;">Remarks</th> -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let i of purchaseitemList; let poinIndex = index">
+                          <td>{{poinIndex+1}}</td>
+                          <td>{{i.item_name}}</td>
+                          <!-- <td>{{i.}}</td> -->
+                          <td>{{i.packing_name}}</td>
+                          <td>{{i.quantity}}</td>
+                          <td>{{i.s_qty}}</td>
+                          <td>{{i.uom}}</td>
+                          <!-- <td>{{i.}}</td> -->
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                  </div>
+
+                  <ng-template #elseBlockRaw>
+                    <div class="bxx">
+                      <table class="table table-bordered" style="padding: 5px;"
+                        *ngIf="jobworkstatus; else elseBlockNormal ">
+                        <thead>
+                          <tr>
+                            <th scope="col" style="width: 6%">SL.</th>
+                            <th scope="col" style="width: 15%;">Grade</th>
+                            <th scope="col" style="width: 12%;">Packing</th>
+                            <th scope="col" style="width: 8%;">Bags</th>
+                            <th scope="col" style="width: 8%;">Weight</th>
+                            <th scope="col" style="width: 8%;">Units</th>
+                            <th scope="col" style="width: 20%;">Remarks</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let i of purchaseitemList; let poinIndex = index">
+                            <td>{{poinIndex+1}}</td>
+                            <td>{{i.job_item_name}}</td>
+                            <td>{{i.job_packing_name}}</td>
+                            <td>{{i.pack_qty}}</td>
+                            <td>{{i.item_qty | number:'1.3-3'}}</td>
+                            <td>{{i.pack_uom}}</td>
+                            <td></td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+
+                      <ng-template #elseBlockNormal>
+                        <table class="table table-bordered" style="padding: 15px;">
+                          <thead>
+                            <tr>
+                              <th scope="col" style="width: 6%">SL.</th>
+                              <!-- <th scope="col" style="width: 22%;">Particular</th> -->
+                              <th scope="col" style="width: 15%;">Grade</th>
+                              <th scope="col" style="width: 12%;">Packing</th>
+                              <th scope="col" style="width: 8%;">Bags</th>
+                              <th scope="col" style="width: 8%;">Weight</th>
+                              <th scope="col" style="width: 8%;">Units</th>
+                              <!-- <th scope="col" style="width: 20%;">Remarks</th> -->
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let i of purchaseitemList; let poinIndex = index">
+                              <td>{{poinIndex+1}}</td>
+                              <td>{{i.item_name}}</td>
+                              <!-- <td>{{i.}}</td> -->
+                              <td>{{i.packing_name}}</td>
+                              <td>{{i.s_qty}}</td>
+                              <td>{{i.quantity}}</td>
+                              <td>{{i.uom}}</td>
+                              <!-- <td>{{i.}}</td> -->
+                            </tr>
+
+                          </tbody>
+                        </table>
+                      </ng-template>
+
+                    </div>
+                  </ng-template>
+
+                </div>
+
+
+
+
+                <br /><br />
+                <div class="bxx-toppest">
+                  <b style="float: left;">Un-loader</b>
+                  <b style="padding: 2%;">Weighment Incharge</b>
+                  <b style="padding: 5%;">Security Guard</b>
+                  <b style="padding: 2%">Godown Incharge</b>
+                  <b style="float: right;">Office Incharge</b>
+                </div>
+                <br>
+                <br>
+
+              </div>
+
+              <div class="section3">
+
+
+
+
+
+                <div class="main_header">
+                  <h1 class="uc">{{company_name}} ({{BusinessUnit}})</h1>
+                  <span style="font-size: 20px;">UnLoading Advice</span>
+                  <div class="rule_act">Godown Copy</div>
+                </div>
+                <div class="box_table">
+                  <div class="bxx-top">
+                    <table class="table table-bordered">
+                      <tbody>
+
+                        <tr>
+                          <td style="width: 15%;">Advice No:</td>
+                          <td style="width: 20%;">{{advice_no}}</td>
+                          <td style="width: 10%;">Date:</td>
+                          <td style="width: 10%;">{{currentdate}}</td>
+                          <td style="width: 10%;">Time:</td>
+                          <td style="width: 40%;"> {{todayDate | date:'shortTime'}}</td>
+                          <!--<td style="font-size:13px; width: 10%;"><strong>Gate Sl_No:</strong></td>
+                        <td style="width: 10%;"><strong></strong></td>-->
+                        </tr>
+
+
+                        <tr>
+                          <td style="width: 15%;" *ngIf="nameswitch;else elseBlock ">Supplier Name:</td>
+                          <ng-template #elseBlock>
+                            <td style="width: 15%;">Customer Name:</td>
+                          </ng-template>
+                          <td colspan="2">{{suppliername}}</td>
+                          <td>District:</td>
+                          <td colspan="3">{{dist}}</td>
+                        </tr>
+                        <tr>
+                          <!--<td><strong>Challan No:</strong></td>
+                        <td>{{challanno}}</td>-->
+                          <td style="font-size:170%;width: 20%;"><strong>Vehicle No</strong></td>
+                          <td style="font-size:170%;text-align:center;width: 50%;" colspan="2">
+                            <strong>{{vehicleno}}</strong>
+                          </td>
+                          <td style="font-size:170%;height:30px;width: 30%;"><b>Gate Serial No</b></td>
+                          <td style="font-size:170%;" colspan="2"><b></b></td>
+                          <!--<td style="width: 10%;"><strong>Date:</strong></td>
+                        <td style="width: 20%;"><strong>{{purchase_order_date}}</strong></td>-->
+
+                        </tr>
+
+                      </tbody>
+                    </table>
+                  </div>
+                  <div class="bxx" *ngIf="billPacking; else elseBlockRaw ">
+                    <table class="table table-bordered" style="padding: 15px;">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 6%">SL.</th>
+                          <!-- <th scope="col" style="width: 22%;">Particular</th> -->
+                          <th scope="col" style="width: 15%;">Grade</th>
+                          <th scope="col" style="width: 12%;">Packing</th>
+                          <th scope="col" style="width: 8%;">Bags</th>
+                          <th scope="col" style="width: 8%;">Weight</th>
+                          <th scope="col" style="width: 8%;">Units</th>
+                          <!-- <th scope="col" style="width: 20%;">Remarks</th> -->
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr *ngFor="let i of purchaseitemList; let poinIndex = index">
+                          <td>{{poinIndex+1}}</td>
+                          <td>{{i.item_name}}</td>
+                          <!-- <td>{{i.}}</td> -->
+                          <td>{{i.packing_name}}</td>
+                          <td>{{i.quantity}}</td>
+                          <td>{{i.s_qty}}</td>
+                          <td>{{i.uom}}</td>
+                          <!-- <td>{{i.}}</td> -->
+                        </tr>
+
+                      </tbody>
+                    </table>
+
+                  </div>
+
+                  <ng-template #elseBlockRaw>
+                    <div class="bxx">
+                      <table class="table table-bordered" style="padding: 5px;"
+                        *ngIf="jobworkstatus; else elseBlockNormal ">
+                        <thead>
+                          <tr>
+                            <th scope="col" style="width: 6%">SL.</th>
+                            <th scope="col" style="width: 15%;">Grade</th>
+                            <th scope="col" style="width: 12%;">Packing</th>
+                            <th scope="col" style="width: 8%;">Bags</th>
+                            <th scope="col" style="width: 8%;">Weight</th>
+                            <th scope="col" style="width: 8%;">Units</th>
+                            <th scope="col" style="width: 20%;">Remarks</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                          <tr *ngFor="let i of purchaseitemList; let poinIndex = index">
+                            <td>{{poinIndex+1}}</td>
+                            <td>{{i.job_item_name}}</td>
+                            <td>{{i.job_packing_name}}</td>
+                            <td>{{i.pack_qty}}</td>
+                            <td>{{i.item_qty | number:'1.3-3'}}</td>
+                            <td>{{i.pack_uom}}</td>
+                            <td></td>
+                          </tr>
+
+                        </tbody>
+                      </table>
+
+                      <ng-template #elseBlockNormal>
+                        <table class="table table-bordered" style="padding: 15px;">
+                          <thead>
+                            <tr>
+                              <th scope="col" style="width: 6%">SL.</th>
+                              <!-- <th scope="col" style="width: 22%;">Particular</th> -->
+                              <th scope="col" style="width: 15%;">Grade</th>
+                              <th scope="col" style="width: 12%;">Packing</th>
+                              <th scope="col" style="width: 8%;">Bags</th>
+                              <th scope="col" style="width: 8%;">Weight</th>
+                              <th scope="col" style="width: 8%;">Units</th>
+                              <!-- <th scope="col" style="width: 20%;">Remarks</th> -->
+                            </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let i of purchaseitemList; let poinIndex = index">
+                              <td>{{poinIndex+1}}</td>
+                              <td>{{i.item_name}}</td>
+                              <!-- <td>{{i.}}</td> -->
+                              <td>{{i.packing_name}}</td>
+                              <td>{{i.s_qty}}</td>
+                              <td>{{i.quantity}}</td>
+                              <td>{{i.uom}}</td>
+                              <!-- <td>{{i.}}</td> -->
+                            </tr>
+
+                          </tbody>
+                        </table>
+                      </ng-template>
+
+                    </div>
+                  </ng-template>
+                </div>
+                <br /><br />
+                <div class="bxx-toppest">
+                  <b style="float: left;">Un-loader</b>
+                  <b style="padding: 2%;">Weighment Incharge</b>
+                  <b style="padding: 5%;">Security Guard</b>
+                  <b style="padding: 2%">Godown Incharge</b>
+                  <b style="float: right;">Office Incharge</b>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    <!-- <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+      <button class="btn btn-info" mat-button [mat-dialog-close]="true" cdkFocusInitial>Save</button>
+    </mat-dialog-actions> -->
+    <mat-dialog-actions align="end">
+      <button [useExistingCss]="true" printSectionId="print-section" ngxPrint>print</button>
+    </mat-dialog-actions>
+  </div>
+</div>

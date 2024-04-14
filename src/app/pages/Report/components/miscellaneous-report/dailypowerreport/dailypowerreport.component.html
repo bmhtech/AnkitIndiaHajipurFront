@@ -1,0 +1,272 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          <fieldset>
+            <legend>Basic Information</legend>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Business Unit<span class="red">*</span></mat-label>
+                    <mat-select class="form-control"  [(ngModel)]="BuUnit" formControlName="business_unit">
+                      <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Date</mat-label>
+                    <input type="date" [(ngModel)]="currentDate" formControlName="date" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Time</mat-label>
+                    <input type="time" [(ngModel)]="currentTime" formControlName="time" class="form-control" (change)="onChangeampm($event)">
+                  </div>
+                </div>
+
+                
+                <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>A.M/P.M</mat-label>
+                    <input  formControlName="am_pm" type="text" class="form-control" readonly>
+                  </div>
+                </div>
+
+                <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>MWH</mat-label>
+                    <input  formControlName="mwh" type="number" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>MVAH</mat-label>
+                    <input  formControlName="mvah" type="number" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Difference MWH</mat-label>
+                    <input  formControlName="differencemwh" type="number" class="form-control">
+                  </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Difference MVAH</mat-label>
+                    <input  formControlName="differencemvah" type="number" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>PF</mat-label>
+                    <input  formControlName="unit" type="number" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-12" >
+                  <div class="form-group">
+                    <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="daliypowersave">Submit</button>
+                  </div>
+                </div>
+                
+          </fieldset>
+        </div>
+       </div>
+    </div>
+  </section>
+</form>
+
+
+
+
+<div class="master_container_box" *ngIf="isHidden==false">
+  <form [formGroup]="userForm1">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="todate">
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
+      </div>
+    </div>
+  </form>
+ 
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+
+          <div class="col-lg-12" style="float: right;">
+            <div  class="form-group">
+                <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+                <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+            </div>
+           </div>
+
+          <legend>Daily Power Report List</legend>
+          <div class="table_content">
+            <table class="table table-bordered" >
+              <thead>
+                <tr>
+                 
+                  <th>Business Unit Name</th>
+                  <th>Power Date</th>
+                  <th>Power Time</th>
+                  <th>A.M/P.M</th>
+                  <th>MWH</th>
+                  <th>MVAH</th>
+                  <th>Diff MWH</th>
+                  <th>Diff MVAH</th>
+                  <th>PF</th>
+                  <th colspan="3">Action</th>       
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let power of daliypowerlist">
+                      
+                      <td>{{power.business_unitname}}</td>
+                      <td>{{power.date}}</td>
+                      <td>{{power.time}}</td>
+                      <td>{{power.am_pm}}</td>
+                      <td>{{power.mwh}}</td>
+                      <td>{{power.mvah}}</td>
+                      <td>{{power.differencemwh}}</td>
+                      <td>{{power.differencemvah}}</td>
+                      <td>{{power.unit}}</td>
+                      <td><button class="btn btn-success" (click)="onUpdate(power.id,  'view')" >View</button></td>
+                      <td><button class="btn btn-info" (click)="onUpdate(power.id,  'update')" >Update</button></td>  
+                      <td><button class="btn btn-danger" (click)="onDelete(power.id)" >Delete</button></td>
+                    
+                    </tr>
+              </tbody>
+            </table>
+            <table class="table table-bordered" id="dynamictable" hidden>
+              <thead>
+                <tr>
+                 
+                  <th>Business Unit Name</th>
+                  <th>Power Date</th>
+                  <th>Power Time</th>
+                  <th>MWH</th>
+                  <th>MVAH</th>
+                  <th>Diff MWH</th>
+                  <th>Diff MVAH</th>
+                  <th>PF</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let power of daliypowerlist">
+
+                    <td>{{power.business_unitname}}</td>
+                    <td>{{power.date}}</td>
+                    <td>{{power.time}}</td>
+                    <td>{{power.mwh}}</td>
+                    <td>{{power.mvah}}</td>
+                    <td>{{power.differencemwh}}</td>
+                    <td>{{power.differencemvah}}</td>
+                    <td>{{power.unit}}</td>
+                     
+                    </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+
+      <div  id="print-section" class="print " hidden>
+        <h3 class="uc" style="text-align: center;">{{company}}</h3>
+        <h5 class="uc"  style="text-align: center;">Daily Power Report</h5>
+        <div>
+            <table class="table table-bordered" >
+                <thead>
+                    <tr>
+                      <th>Business Unit Name</th>
+                  <th>Power Date</th>
+                  <th>Power Time</th>
+                  <th>MWH</th>
+                  <th>MVAH</th>
+                  <th>Diff MWH</th>
+                  <th>Diff MVAH</th>
+                  <th>PF</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let power of daliypowerlist">
+
+                    <td>{{power.business_unitname}}</td>
+                    <td>{{power.date}}</td>
+                    <td>{{power.time}}</td>
+                    <td>{{power.mwh}}</td>
+                    <td>{{power.mvah}}</td>
+                    <td>{{power.differencemwh}}</td>
+                    <td>{{power.differencemvah}}</td>
+                    <td>{{power.unit}}</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+    </div>
+    
+    <!-- <div  class="col-lg-12">
+      <div class="form-group">
+          <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+       </div>
+   </div> -->
+    </div>
+  </div>
+</div>
+
+
+
+                
+
+
+               
+                  
+
+                  
+                  
+
+

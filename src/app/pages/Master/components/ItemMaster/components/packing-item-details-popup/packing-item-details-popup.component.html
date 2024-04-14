@@ -1,0 +1,54 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Item List</legend>
+            <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                <!-- <label class="label_col"><h3>Select</h3></label> -->
+                <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                <label class="label_col"><h3 class="i_nam">Packing Name</h3></label>              
+                <label class="label_col"><h3>Packing Qty</h3></label>
+                <label class="label_col"><h3>Packing Uom</h3></label>
+                <label class="label_col"><h3>Item Qty</h3></label>
+                <label class="label_col"><h3>Item Uom</h3></label>
+                <label class="label_col"><h3>Tolerance</h3></label>
+                <label class="label_col"><h3>Capacity</h3></label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="item_opening_stk_pack_dtls">
+                  <div class="dyn_table" *ngFor="let item of item_opening_stk_pack_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <!-- <div class="label_col"><mat-checkbox class="form-control" formControlName="checkbox" ></mat-checkbox></div> -->
+                    <div class="label_col"><mat-select disabled="true" formControlName="item_id" class="form-control i_nam"><mat-option *ngFor="let item_code of item_codes" [value]="item_code.item_id">{{item_code.item_name}}</mat-option></mat-select></div>
+                    <div class="label_col"><mat-select disabled="true" formControlName="packing_id" class="form-control i_nam"><mat-option *ngFor="let item_code of PackingList" [value]="item_code.item_code">{{item_code.item_name}}</mat-option></mat-select></div>
+                   
+                    <div class="label_col"><input class="form-control" type="number" (keyup)="getPackingQty($event, pointIndex)" formControlName="open_packing_qty" /></div> 
+                    <div class="label_col"><input readonly class="form-control" type="text" formControlName="packing_uom" /></div> 
+                    <div class="label_col"><input class="form-control" type="number" on-focusout="onchangeItemQty($event, pointIndex)" formControlName="open_item_qty" /></div> 
+                    <div class="label_col"><input readonly class="form-control" type="text" formControlName="item_uom" /></div> 
+                    <div class="label_col"><input class="form-control" type="number" formControlName="tolerance" readonly/></div> 
+                    <div class="label_col"><input readonly class="form-control" type="number" formControlName="capacity" /></div> 
+                  </div>
+                </div>  
+              </div>
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <mat-dialog-actions align="end">
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+        </mat-dialog-actions>
+  </form>
+</div>
+  
+  
+  
+  

@@ -1,0 +1,173 @@
+
+<section class="master_container">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-lg-12">
+            <div class="button_row">
+              <ul>
+                <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+                <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+              </ul>   
+            </div>
+          </div>
+        </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+
+    <form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+        <section class="master_container">
+            <div class="container-fluid">
+      <div class="row">
+          <div class="col-lg-12">
+        <!-- <form [formGroup]="acc_group_master_form" (ngSubmit)="send()"> -->
+            <fieldset>
+              <!-- {{userForm.value | json}} -->
+                <legend>Account Group Info</legend>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                          <label for="AGroup code">AGroup code</label>
+                          <input type="text" [(ngModel)]="model.group_code"  formControlName="group_code" class="form-control" >
+                          <!-- <small *ngIf="group_code.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label for="AGroup name">AGroup name</label>
+                        <input type="text" [(ngModel)]="model.group_name" formControlName="group_name" class="form-control" >
+                        <!-- <small *ngIf="group_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                    </div>
+                  </div>
+                    
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <!-- <div class="form-group">
+                        <label for="AGroup Classification">AGroup Classification</label>
+                      <select  [(ngModel)]="model.group_class" formControlName="group_class" class="form-control" >
+                        <option value="Classification">-AGroup Classification-</option></select>
+                          <small *ngIf="group_class.invalid" class="form-text text-danger">Validation mag</small>
+                    </div> -->
+                      <div class="form-group">
+                        <label for="AGroup Classification">AGroup Classification</label>
+                          <mat-select type="text" [(ngModel)]="model.group_class" formControlName="group_class" class="form-control">
+                            <mat-option value="0">-Select Broker Group-</mat-option>
+                            <mat-option *ngFor="let group_class of groupClassification" [value]="group_class">{{group_class}}</mat-option>  
+                          </mat-select>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="AGroup Under Category">AGroup Under Category</label>
+                      <input type="text"  [(ngModel)]="model.group_under_cat" formControlName="group_under_cat" class="form-control" >
+                      <!-- <small *ngIf="group_under_cat.invalid" class="form-text text-danger">Validation mag</small> -->
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="AGroup Printing Text">AGroup Printing Text</label>
+                      <input type="text"  [(ngModel)]="model.group_print" formControlName="group_print" class="form-control" >
+                      <!-- <small *ngIf="group_print.invalid" class="form-text text-danger">Validation mag</small> -->
+                    </div>
+                  </div>
+                
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <!-- <div class="form-group">
+                        <label for="Business Unit Code">Business Unit Code</label>
+                        <select  [(ngModel)]="model.businessunit_code" formControlName="businessunit_code" class="form-control" >
+                            <option value="null">-Business Unit Code-</option></select>
+                            <small *ngIf="businessunit_code.invalid" class="form-text text-danger">Validation mag</small> 
+                    </div> -->
+                    <div class="form-group">
+                      <mat-label>Business Unit Code</mat-label>
+                        <mat-select class="form-control" [(ngModel)]="model.businessunit_code" formControlName="businessunit_code" (selectionChange)="onchangeBUnitName($event.value)">
+                          <mat-option>~Select Business Unit Code~</mat-option>
+                          <mat-option *ngFor="let businessunit_code of bUnitCodes" [value]="businessunit_code.businessunit_code">{{businessunit_code.businessunit_code}}</mat-option>
+                        </mat-select>
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="Business Unit Name">Business Unit Name</label>
+                      <input type="text"  [(ngModel)]="model.businessunit_name" formControlName="businessunit_name" class="form-control" [value]="businessunit_name" >
+                        <!-- <small *ngIf="businessunit_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="Opening Balance Amount">Opening Balance Amount</label>
+                      <input type="number" min="0" [(ngModel)]="model.open_bal_amt" formControlName="open_bal_amt" class="form-control" >
+                        <!-- <small *ngIf="open_bal_amt.invalid" class="form-text text-danger">Validation mag</small> -->
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="Current Balance Amount">Current Balance Amount</label>
+                      <input type="number" min="0" [(ngModel)]="model.curr_bal_amt" formControlName="curr_bal_amt" class="form-control" >
+                      <!-- <small *ngIf="curr_bal_amt.invalid" class="form-text text-danger">Validation mag</small> -->
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group chk_tp_pad">
+                        <mat-checkbox  [(ngModel)]="model.group_active" formControlName="group_active">AGroup active</mat-checkbox> 
+                        <!-- <input class="checkbox checkbox-primary" [(ngModel)]="acc_group.group_active" type="checkbox" id="color-checkbox1"  formControlName="group_active"   checked>
+                        <label class="check-label" for="color-checkbox1"> AGroup active</label> -->
+                        <!-- <small *ngIf="group_active.invalid" class="form-text text-danger">Validation mag</small> -->
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group chk_tp_pad">
+                        <mat-checkbox  [(ngModel)]="model.ledger_details" formControlName="ledger_details">Ledger Details</mat-checkbox> 
+                        <!-- <input class="checkbox checkbox-primary" [(ngModel)]="acc_group.ledger_details" type="checkbox" id="color-checkbox2"  formControlName="ledger_details"  checked>
+                        <label class="check-label" for="color-checkbox2"> Ledger Details </label> -->
+                        <!-- <small *ngIf="ledger_details.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                  </div>
+                  <div class="col-lg-12">
+                    <div class="form-group">
+                      <button type="submit"  (click)="send()" class="btn btn-primary">Submit</button>
+                    </div>
+                </div>
+             </fieldset>
+         </div>
+      </div>
+    </div>
+  </section> 
+    </form> 
+
+
+
+
+<!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+              <fieldset class="table_container">
+                <legend>Account Group Master List</legend>
+                  <div class="table_content">
+                    <table class="table table-bordered">
+                        <thead>
+                            <tr>
+                                <th>AGroup name</th>
+                                <th>AGroup Classification</th>
+                                <th>AGroup Under Category</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let model of listacc_group">
+                                <td>{{model.group_name}}</td>
+                                <td>{{model.group_class}}</td>
+                                <td>{{model.group_under_cat}}</td>
+                            </tr>
+                      </tbody>
+                   </table>
+                </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+  </div>

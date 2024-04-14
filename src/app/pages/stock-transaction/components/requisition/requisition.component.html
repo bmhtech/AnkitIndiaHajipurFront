@@ -1,0 +1,255 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i  class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i  class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader">  <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div>
+  <form [formGroup]="userForm"  autocomplete="off" *ngIf="isHidden==true">
+    <section class="master_containerr">
+      <div class="container-fluid">       
+        <div class="row">
+          <div class="col-lg-12">
+            <fieldset>
+                <legend>Requisition</legend>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Business Unit<span class="red">*</span></mat-label>
+                        <mat-select class="form-control" (selectionChange)="onChangeBuUnit($event.value)" [(ngModel)]="BuUnit" formControlName="business_unit" [disabled]="pageblock">
+                          <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+  
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Requested By<span class="red">*</span></mat-label>
+                            <mat-select formControlName="requestedby"   class="form-control" [disabled]="pageblock"> 
+                                <mat-option *ngFor="let employee of employeeNames" [value]="employee.emp_id">{{employee.emp_name}}</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+  
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Shop Floor<span class="red">*</span></mat-label>
+                            <mat-select formControlName="shop_floor"   class="form-control" [disabled]="pageblock"> 
+                                <mat-option *ngFor="let shop_floor of ShopFloorList" [value]="shop_floor.shop_floor_id">{{shop_floor.shop_floor_name}}</mat-option>
+                            </mat-select>
+                        </div>
+                    </div>
+  
+                    <div class="col-lg-3 col-md-8 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Requisition No.<span class="red">*</span></mat-label>
+                        <input type="text" class="form-control" formControlName="requisitionno" readonly>
+                      </div>
+                    </div>
+  
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+                      <div class="form-group">
+                        <mat-label> Request Date</mat-label>
+                        <input type="text" formControlName="requesteddate"  class="form-control" [(ngModel)]="currentDate" [readonly]="pageblock">
+                      </div>
+                    </div>
+              </fieldset>
+              <fieldset>
+                <legend>Requisition Details</legend>
+                
+                    <div class="dyn_table_conent" style="border: none;">
+                      <div class="dyn_table_header">
+                        <label class="label_col"><h3 class="act">Action</h3></label>
+                        <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                        <label class="label_col"><h3 class="i_nam">Item Name<span class="red">*</span></h3></label>
+                        <label class="label_col"><h3 class="i_nam">Packing Item<span class="red">*</span></h3></label>
+                        <label class="label_col"><h3>Packing Qty.<span class="red">*</span></h3></label>
+                        <label class="label_col"><h3>Packing Uom</h3></label>
+                        <label class="label_col"><h3>Item Qty.<span class="red">*</span></h3></label>
+                        <label class="label_col"><h3>Item Uom</h3></label>
+                       
+                        <label class="label_col"><h3>Priority</h3></label>
+                        <label class="label_col"><h3>Purpose</h3></label>
+                        <label class="label_col"><h3>Where to be used</h3></label>
+                        <label class="label_col"><h3>Item Quality</h3></label>
+                        <label class="label_col"><h3>Remarks</h3></label>
+                        
+                      </div>
+                      <div class="dyn_table_data_cont" formArrayName="requisition_Item_Dtls">
+                        <div class="dyn_table" *ngFor="let item of requisition_Item_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                          <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteItems(pointIndex)"></i></div>
+                          <div class="label_col"><input class="form-control srln" formControlName="slno" type="number" readonly/></div>
+                        
+                          <div class="label_col">
+                            <mat-select-autocomplete class="form-control ats i_nam"  
+                            [options]="item_codes"
+                            [display]="'item_name'"
+                            [value]="'item_id'"
+                            [multiple]='false'
+                            (selectionChange)="onChangeItemName(pointIndex, $event)"
+                            [selectedOptions]="selectedItemName[pointIndex]"
+                            ngDefaultControl
+                            [formControlName] = "'item_code'" [disabled]="pageblock">
+                          </mat-select-autocomplete>
+                          </div>
+                          <div class="label_col">
+                            <mat-select-autocomplete class="form-control ats i_nam"  
+                            [options]="packingItem[pointIndex]"
+                            [display]="'item_name'"
+                            [value]="'item_code'"
+                            [multiple]='false'
+                            [selectedOptions]="selectedPackingItem[pointIndex]"
+                            (selectionChange)="onChangePackingItem(pointIndex, $event)"
+                            ngDefaultControl
+                            [formControlName]="'packing'" [disabled]="pageblock">
+                          </mat-select-autocomplete>
+                          </div>
+                        
+                          <div class="label_col"  *ngIf="pageblock;else elseBlock1">
+                            <input class="form-control" formControlName="packingqty" type="number" readonly />
+                          </div>
+                          <ng-template #elseBlock1>
+                                <div class="label_col"  >
+                                  <input class="form-control" formControlName="packingqty" type="number" (focusout)="getPackingQty($event, pointIndex)" />
+                                 
+                                </div>
+                          </ng-template>
+                          <div class="label_col"><input class="form-control" formControlName="packinguom" type="text" readonly/></div>
+                          
+                          <div class="label_col"  *ngIf="pageblock;else elseBlock2">
+                            <input class="form-control" formControlName="itemqty" type="number" readonly />
+                          </div>
+                          <ng-template #elseBlock2>
+                              <div class="label_col"  >
+                                <input class="form-control" formControlName="itemqty" type="number" (focusout)="getItemQty($event, pointIndex)" />
+                               
+                              </div>
+                          </ng-template>
+                          <div class="label_col"><input class="form-control" formControlName="itemuom" type="text" readonly/></div>
+                          
+                          <div class="label_col">
+                            <mat-select class="form-control " formControlName="priority" [disabled]="pageblock">
+                                <mat-option value="Low">Low</mat-option>
+                                <mat-option value="Medium">Medium</mat-option>       
+                                <mat-option value="High">High</mat-option>   
+                            </mat-select>
+                          </div>
+                          <div class="label_col"><input type="text" class="form-control" formControlName="purpose" [readonly]="pageblock"/></div>
+                          <div class="label_col"><input type="text" class="form-control" formControlName="wheretouse" [readonly]="pageblock"></div>
+                          <div class="label_col"><input type="text" class="form-control" formControlName="itemquality" [readonly]="pageblock"/></div>
+                          <div class="label_col"><input type="text" class="form-control" formControlName="remarks" [readonly]="pageblock"></div>
+                        
+                        </div>
+                      </div>
+                    </div>
+                    <div class="btm_btn_content" >
+                      <button type="button" class="btn btn-success"  (click)="addItems()" [disabled]="pageblock">Add Row </button>
+                    </div>
+                    
+
+              </fieldset>
+          </div>
+      </div>
+  
+      </div>
+  
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="showsubmit">Submit</button>
+          </div>
+        </div>
+      </div>
+  
+       
+      </section>
+    </form>
+
+    <div class="master_container_box" *ngIf="isHidden==false">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12">
+            <fieldset class="table_container">
+              <legend>Requisition List</legend>
+              <div class="table_content">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th>Requested By</th>
+                      <th>Shop Floor</th>
+                      <th>Requisition No.</th>
+                      <th>Request Date</th>
+                      <th>Approved By</th>
+                      <th>Status</th>
+                      <th>Reject</th>
+                       <th colspan="3" *ngIf="pageblock;else elseapprove" >Action</th><!-- //view//approve//reject -->
+                      <ng-template #elseapprove>
+                         <th colspan="3" >Action</th><!--//view//update//delete -->
+                      </ng-template>   
+                    </tr>
+                  </thead>
+                  <tbody *ngIf="pageblock;else elseapprovelist">
+                      <tr *ngFor="let requisition of listRequisition" >
+                          <td>{{requisition.requestedbyname}}</td>
+                          <td>{{requisition.shop_floorname}}</td>
+                          <td>{{requisition.requisitionno}}</td>
+                          <td>{{requisition.requesteddate}}</td>
+                          <td>{{requisition.approvedbyname}}</td>
+                          <td>{{requisition.reject}}</td>
+                          <td>{{requisition.response}}</td>
+                          <td><button class="btn btn-success" (click)="onUpdate(requisition.id,requisition.requisitionno,'view')" >View</button></td> 
+                          <td *ngIf="requisition.approvestatus;else elseupdate1"><button class="btn btn-info" disabled >Approve</button></td> 
+                          <ng-template #elseupdate1>
+                            <td><button class="btn btn-info" (click)="onapprove(requisition.id)" >Approve</button></td> 
+                          </ng-template>
+    
+                          <td *ngIf="requisition.approvestatus;else elsedelete1"><button class="btn btn-info"  disabled>Reject</button></td>    
+                          <ng-template #elsedelete1>
+                            <td><button class="btn btn-danger" (click)="onreject(requisition.id,requisition.requisitionno)" >Reject</button></td>    
+                          </ng-template>
+                        </tr>
+                        
+                  </tbody>
+                  <ng-template #elseapprovelist>
+                  <tbody>
+                    <tr *ngFor="let requisition of listRequisition" >
+                      <td>{{requisition.requestedbyname}}</td>
+                      <td>{{requisition.shop_floorname}}</td>
+                      <td>{{requisition.requisitionno}}</td>
+                      <td>{{requisition.requesteddate}}</td>
+                      <td>{{requisition.approvedbyname}}</td>
+                      <td>{{requisition.reject}}</td>
+                      <td>{{requisition.response}}</td>
+                      <td><button class="btn btn-success" (click)="onUpdate(requisition.id,requisition.requisitionno,'view')" >View</button></td> 
+                      <td *ngIf="requisition.approvestatus;else elseupdate"><button class="btn btn-info" disabled >Update</button></td> 
+                      <ng-template #elseupdate>
+                        <td><button class="btn btn-info" (click)="onUpdate(requisition.id,requisition.requisitionno,'update')" >Update</button></td> 
+                      </ng-template>
+
+                      <td *ngIf="requisition.approvestatus;else elsedelete"><button class="btn btn-danger" disabled >Delete</button></td>    
+                      <ng-template #elsedelete>
+                        <td><button class="btn btn-danger" (click)="onDelete(requisition.id)" >Delete</button></td>    
+                      </ng-template>
+
+
+                    </tr>
+                  </tbody>
+                 </ng-template>   
+                </table>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+    </div>
+  

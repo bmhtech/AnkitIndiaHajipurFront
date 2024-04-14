@@ -1,0 +1,142 @@
+
+ <div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+ <form [formGroup]="userForm" >
+  <div class="container-fluid modal_box">
+    <div class="row">
+      <mat-dialog-content class="mat-typography">
+        <fieldset>
+          <legend>Add New Vehicle</legend>
+          <div class="modal_main_content" style="width: 60vw;">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="row">
+
+                
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Vehicle_no">Vehicle No.<span class="red">*</span></label>
+                    <input type="text" [(ngModel)]="Vehicle.vehicle_no" formControlName="vehicle_no" class="form-control" (focusout)="onFocusoutCheckUnique($event)">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Vechile Type<span class="red">*</span></mat-label>
+                    <mat-select class="form-control" [(ngModel)]="Vehicle.vehtype_code" formControlName="vehtype_code">
+                       <mat-option value="0">Select Vehtype type Name</mat-option>
+                       <mat-option *ngFor="let vehicles of vehicleCodes" [value]="vehicles.vehtype_code">{{vehicles.vehtype_name}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Transporter Name</mat-label>
+                    <mat-select class="form-control" [(ngModel)]="TransporterCode" formControlName="transporter">
+                       <mat-option value="0">~Select Transporter~</mat-option>
+                       <mat-option *ngFor="let list of transporterList" [value]="list.bp_Id">{{list.bp_name}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Vehicle_aliasno">Vehicle Alias No.</label>
+                    <input type="text" [(ngModel)]="Vehicle.vehicle_aliasno" formControlName="vehicle_aliasno" class="form-control" id="vehicle_aliasno">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Vehicle_ChassisNo">Vehicle Chassis No.</label>
+                    <input type="text" [(ngModel)]="Vehicle.vehicle_chassisno" formControlName="vehicle_chassisno" class="form-control" id="vehicle_chassisno">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="TareWeight_Qty">Tare Weight Qty</label>
+                    <input type="number" [(ngModel)]="Vehicle.tareweight_qty" formControlName="tareweight_qty" class="form-control" min="0">
+                  </div>
+                </div>
+
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="TareWeight Uom">TareWeight Uom</label>
+                    <mat-select type="text" formControlName="tareweight_uom" [(ngModel)]="Vehicle.tareweight_uom" class="form-control">
+                       <!-- <mat-option value="0">-Select TareWeight Uom-</mat-option> -->
+                       <mat-option *ngFor="let TareWeight of customUOMs" [value]="TareWeight.customuom_id">{{TareWeight.description}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                      <label for="Load_Capacity">Load Capacity</label>
+                      <input type="number" [(ngModel)]="Vehicle.load_capacity" formControlName="load_capacity" class="form-control" min="0">
+                   </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Load Capacity Uom">Load Capacity Uom</label>
+                    <mat-select type="text" formControlName="loadcapacity_uom" [(ngModel)]="Vehicle.loadcapacity_uom" class="form-control">
+                      <mat-option value="0">-Select Load Capacity Uom-</mat-option>
+                      <mat-option *ngFor="let loadcapacity of customUOMs" [value]="loadcapacity.customuom_id">{{loadcapacity.description}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Onwer_Name">Owner Name</label>
+                    <input type="text" [(ngModel)]="Vehicle.onwer_name" formControlName="onwer_name" class="form-control" id="onwer_name">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Onwer_Address">Owner Address</label>
+                    <input type="text" [(ngModel)]="Vehicle.onwer_address" formControlName="onwer_address" class="form-control" id="onwer_address">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Onwer_phoneNo">Owner Phone No.</label>
+                    <input type="number" [(ngModel)]="Vehicle.onwer_phoneno" formControlName="onwer_phoneno" class="form-control" min="0">
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group chk_tp_pad">
+                    <mat-checkbox [(ngModel)]="Vehicle.vehicle_active" formControlName="vehicle_active">Vehicle Active</mat-checkbox>
+                  </div>
+                </div>
+
+               
+
+            </div>
+            </div>
+          </div>
+
+          <div *ngIf="errorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>
+        </fieldset>
+      </mat-dialog-content>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+      <!-- <mat-dialog-actions align="end" *ngIf="Vehicle.onwer_phoneno != null && Vehicle.onwer_phoneno != '' && Vehicle.onwer_address != null &&
+      Vehicle.onwer_address != '' && Vehicle.onwer_name != null && Vehicle.onwer_name != '' && Vehicle.loadcapacity_uom != null &&
+      Vehicle.loadcapacity_uom != '' && Vehicle.load_capacity != null && Vehicle.load_capacity != '' && Vehicle.tareweight_uom != null &&
+      Vehicle.tareweight_uom != '' && Vehicle.tareweight_qty != null && Vehicle.tareweight_qty != '' && Vehicle.vehicle_chassisno != null &&
+      Vehicle.vehicle_chassisno != '' && Vehicle.vehicle_aliasno != null && Vehicle.vehicle_aliasno != '' && Vehicle.vehtype_code != null &&
+      Vehicle.vehtype_code != '' && Vehicle.vehicle_no != null && Vehicle.vehicle_no != '' && Vehicle.transporter != null && Vehicle.transporter != ''
+      ">-->
+        <!-- <button mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>  -->
+        <button class="btn btn-primary" (click)="SendDataToDifferentComponenet()" cdkFocusInitial>Save</button>
+      <!-- </mat-dialog-actions>  -->
+    </div>
+  </div>
+  </form>

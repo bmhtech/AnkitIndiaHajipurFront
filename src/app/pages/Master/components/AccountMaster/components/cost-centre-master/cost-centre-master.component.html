@@ -1,0 +1,195 @@
+<section class="master_container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+              <div class="button_row">
+                <ul>
+                  <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+                  <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+                </ul>   
+              </div>
+            </div>
+          </div>
+    </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+
+      <form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+          <section class="master_container">
+              <div class="container-fluid">   
+       <div class="row">
+          <div class="col-lg-12">
+             <fieldset>
+               <legend>Cost Centre Master Info</legend>
+                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                     <div class="form-group">
+                         <label for="CostCentre code">Cost Centrer code</label>
+                         <input type="text" [(ngModel)]="model.costcentre_code" formControlName="costcentre_code" class="form-control" required>
+                      <!-- <small *ngIf="costcentre_code.invalid" class="form-text text-danger">Validation mag</small> -->
+                     </div>
+                 </div>
+                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                     <div class="form-group">
+                       <label for="Cost Centrer name">Cost Centre name</label>
+                       <input type="text" [(ngModel)]="model.costcentre_name" formControlName="costcentre_name" class="form-control" required>
+                      <!-- <small *ngIf="costcentre_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                   </div>
+                </div>
+                   
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                      <mat-label>Cost Category Code</mat-label>
+                        <mat-select class="form-control" [(ngModel)]="model.costcat_code" formControlName="costcat_code" (selectionChange)="onchangeCostCatagoryName($event.value)">
+                          <mat-option value="0">~Select Cost Category Code~</mat-option>
+                          <mat-option *ngFor="let costcat_code of costCatagoryCodes" [value]="costcat_code.costcat_code">{{costcat_code.costcat_code}}</mat-option>
+                        </mat-select>
+                      </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="Cost Category name">Cost Category Name</label>
+                      <input type="text" [(ngModel)]="model.costcat_name" formControlName="costcat_name" class="form-control" [value]="costcat_name" required>
+                      <!-- <small *ngIf="costcat_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                      <mat-label>Under Cost Centre</mat-label>
+                        <mat-select class="form-control" [(ngModel)]="model.under_costcentre" formControlName="under_costcentre">
+                          <mat-option value="0">~Select Under Cost Centre~</mat-option>
+                          <mat-option *ngFor="let under_costcentre of userCostCenters" [value]="under_costcentre.costcentre_name">{{under_costcentre.costcentre_name}}</mat-option>
+                        </mat-select>
+                      </div>
+                </div>
+                  
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-label>Business Unit Code</mat-label>
+                          <mat-select class="form-control" [(ngModel)]="model.businessunit_code" formControlName="businessunit_code" (selectionChange)="onchangeBUnitName($event.value)">
+                            <mat-option value="0">~Select Business Unit Code~</mat-option>
+                            <mat-option *ngFor="let businessunit_code of bUnitCodes" [value]="businessunit_code.businessunit_code">{{businessunit_code.businessunit_code}}</mat-option>
+                          </mat-select>
+                        </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Business Unit Name">Business Unit Name</label>
+                    <input type="text" [(ngModel)]="model.businessunit_name" formControlName="businessunit_name" class="form-control" [value]="businessunit_name" required>
+                      <!-- <small *ngIf="businessunit_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+                </div>
+                  
+                <div class="clr"></div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-checkbox [(ngModel)]="model.costcentre_active" formControlName="costcentre_active">Cost Centrer Active</mat-checkbox> 
+                        <!-- <input class="checkbox checkbox-primary" [(ngModel)]="acc_cost_centre.costcentre_active" formControlName="costcentre_active" type="checkbox" id="color-checkbox1"    required checked>
+                        <label class="check-label" for="color-checkbox1"> Cost Centrer Active</label> -->
+                        <!-- <small *ngIf="costcentre_active.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                  </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-checkbox [(ngModel)]="model.job_cost" formControlName="job_cost">Use For Job Cost</mat-checkbox> 
+                        <!-- <input class="checkbox checkbox-primary" [(ngModel)]="acc_cost_centre.job_cost" type="checkbox" id="color-checkbox1"  formControlName="job_cost"  required checked>
+                        <label class="check-label" for="color-checkbox1"> Use For Job Cost</label> -->
+                        <!-- <small *ngIf="job_cost.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-checkbox [(ngModel)]="model.pro_bank_dts" formControlName="pro_bank_dts">Provide Bank Details</mat-checkbox> 
+                        <!-- <small *ngIf="pro_bank_dts.invalid" class="form-text text-danger">Validation mag</small> -->
+                        </div>
+                    </div>
+             
+                 
+           </fieldset>
+
+           <fieldset>
+              <legend>Bank Details</legend>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                      <label for="Transaction Type">Transaction Type</label>
+                      <select  [(ngModel)]="model.transaction_type" formControlName="transaction_type" class="form-control" required>
+                          <option value="null">-Select Transaction Type-</option>
+                          <option *ngFor="let transaction_type of transactiontypeList" [value]="transaction_type">{{transaction_type}}</option>
+                      </select>
+                          <!-- <small *ngIf="transaction_type.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <label for="CostCentre code">Account Number</label>
+                        <input type="number" min="0" [(ngModel)]="model.acc_number" formControlName="acc_number" class="form-control" required>
+                      <!-- <small *ngIf="acc_number.invalid" class="form-text text-danger">Validation mag</small> -->
+                    </div>
+               </div>
+               <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                      <label for="CostCentre code">Bank Name</label>
+                      <input type="text" [(ngModel)]="model.bank_name" formControlName="bank_name" class="form-control" required>
+                      <!-- <small *ngIf="bank_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+             </div>
+             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <label for="CostCentre code">IFSC Code</label>
+                    <input type="text" [(ngModel)]="model.ifsc_code" formControlName="ifsc_code" class="form-control" required>
+                      <!-- <small *ngIf="bank_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                </div>
+           </div>
+               </fieldset>
+              
+          
+             <div class="col-lg-12">
+                 <div class="form-group">
+                    <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+                 </div>
+             </div>
+           </div>
+           </div>
+          </div>
+        </section>
+       </form>
+   
+
+
+    <!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Cost Centre List</legend>
+            <div class="table_content">
+              <table class="table table-bordered">
+                  <thead>
+                      <tr>
+                          <th>Cost Centre name</th>
+                          <th>Cost Category Name</th>
+                          <th>Bank Name</th>
+                          <th>Cost Centrer code</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let acc_cost_centre of listacc_cost_centre">
+                          <td>{{acc_cost_centre.costcentre_name}}</td>
+                          <td>{{acc_cost_centre.costcat_name}}</td>
+                          <td>{{acc_cost_centre.bank_name}}</td>
+                          <td>{{acc_cost_centre.costcentre_code}}</td>
+                      </tr>
+                  </tbody>
+              </table>
+           </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

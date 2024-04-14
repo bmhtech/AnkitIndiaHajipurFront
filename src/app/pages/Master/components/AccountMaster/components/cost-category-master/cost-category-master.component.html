@@ -1,0 +1,128 @@
+<section class="master_container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+              <div class="button_row">
+                <ul>
+                  <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+                  <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+                </ul>   
+              </div>
+            </div>
+          </div>
+    </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+        <!-- <form [formGroup]="acc_cost_cat_master_form" (ngSubmit)="send()">  -->
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">  
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Cost Category Info</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Cost Category code">Cost Category code</label>
+                <input type="text" [(ngModel)]="model.costcat_code" formControlName="costcat_code" class="form-control" required>
+                  <!-- <small *ngIf="costcat_code.invalid" class="form-text text-danger">Validation mag</small> -->
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Cost Category name">Cost Category name</label>
+                <input type="text" [(ngModel)]="model.costcat_name" formControlName="costcat_name" class="form-control" required>
+                              <!-- <small *ngIf="costcat_name.invalid" class="form-text text-danger">Validation mag</small> -->
+              </div>
+            </div> 
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit Code</mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.businessunit_code" formControlName="businessunit_code" (selectionChange)="onchangeBUnitName($event.value)">
+                  <mat-option value="0">~Select Business Unit Code~</mat-option>
+                  <mat-option *ngFor="let businessunit_code of bUnitCodes" [value]="businessunit_code.businessunit_code">{{businessunit_code.businessunit_code}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Business Unit Name">Business Unit Name</label>
+                <input type="text" [(ngModel)]="model.businessunit_name" formControlName="businessunit_name" class="form-control" [value]="businessunit_name" required>
+                <!-- <small *ngIf="businessunit_name.invalid" class="form-text text-danger">Validation mag</small> -->
+              </div>
+            </div>
+                    
+            <div class="clr"></div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-checkbox [(ngModel)]="model.costcat_active" formControlName="costcat_active">Cost Category Active</mat-checkbox> 
+                              <!-- <input class="checkbox checkbox-primary" [(ngModel)]="acc_cost_category.costcat_active" type="checkbox" id="color-checkbox1"  formControlName="costcat_active"  required checked>
+                              <label class="check-label" for="color-checkbox1"> Cost Category Active</label> -->
+                              <!-- <small *ngIf="costcat_active.invalid" class="form-text text-danger">Validation mag</small> -->
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-checkbox [(ngModel)]="model.allo_rev_items" formControlName="allo_rev_items">Allocate Revenue Items</mat-checkbox> 
+                              <!-- <input class="checkbox checkbox-primary" [(ngModel)]="acc_cost_category.allo_rev_items" type="checkbox" id="color-checkbox1"  formControlName="allo_rev_items"  required checked>
+                              <label class="check-label" for="color-checkbox1"> Allocate Revenue Items</label> -->
+                              <!-- <small *ngIf="allo_rev_items.invalid" class="form-text text-danger">Validation mag</small> -->
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-checkbox [(ngModel)]="model.allo_non_rev_items" formControlName="allo_non_rev_items">Allocate Revenue Items</mat-checkbox> 
+                                <!-- <input class="checkbox checkbox-primary" [(ngModel)]="acc_cost_category.allo_non_rev_items" type="checkbox" id="color-checkbox1"  formControlName="allo_non_rev_items"  required checked>
+                              <label class="check-label" for="color-checkbox1"> Allocate Non-Revenue Items</label> -->
+                              <!-- <small *ngIf="allo_non_rev_items.invalid" class="form-text text-danger">Validation mag</small> -->
+              </div>
+            </div>
+         </fieldset>
+                
+                    <div class="col-lg-12">
+                        <div class="form-group">
+                            <button type="submit"(click)="send()" class="btn btn-primary">Submit</button>
+                        </div>
+                    </div>
+                 </div> 
+              </div>
+            </div>
+  </section> 
+</form>
+ 
+
+   <!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+              <fieldset class="table_container">
+                <legend>Cost Category List</legend>
+                <div class="table_content">
+                  <table class="table table-bordered">
+                      <thead>
+                          <tr>
+                              <th>Cost Category name</th>
+                              <th>Allocate Revenue Items</th>
+                              <th>Cost Category code</th>
+                          </tr>
+                      </thead>
+                    <tbody>
+                          <tr *ngFor="let model of listacc_cost_category">
+                              <td>{{model.costcat_name}}</td>
+                              <td>{{model.allo_rev_items}}</td>
+                              <td>{{model.costcat_code}}</td>
+                          </tr>
+                  </tbody>
+                </table>
+              </div>
+            </fieldset>
+          </div>
+        </div>
+      </div>
+  </div>

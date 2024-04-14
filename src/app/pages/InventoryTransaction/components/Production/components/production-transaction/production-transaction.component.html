@@ -1,0 +1,1036 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+            
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <fieldset>
+            <legend>Basic Information</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+              <div class="form-group">
+                <mat-label>Date</mat-label>
+                <input  type="date" formControlName="prod_trans_date" [(ngModel)]="currentDate" class="form-control" >
+               </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Business Unit<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"
+                [options]="bussiness_unit_list"
+                [display]="'businessunit_name'"
+                [value]="'businessunit_id'"
+                [multiple]='false'
+                (selectionChange)="onChangeBusinessUnit($event)"
+                ngDefaultControl
+                [formControl]="userForm.controls['business_unit']"
+                [labelCount]="2">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Shop Floor<span class="red">*</span></mat-label>
+                <mat-select formControlName="shop_floor" (selectionChange)="onChangeShopFloor($event.value)" [(ngModel)]="model.shop_floor" class="form-control">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let shop_floor of ShopFloorList" [value]="shop_floor.shop_floor_id">{{shop_floor.shop_floor_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+              <div class="form-group">
+                <mat-label>Production Transaction Code</mat-label>
+                <input type="text" formControlName="prod_trans_code" [(ngModel)]="model.prod_trans_code" value={{seq_no}} readonly class="form-control" >
+              </div>
+            </div>
+
+
+            <div class="col-lg-6 col-md-4 col-sm-6 col-12">
+              <div class="form-group" *ngIf="action == 'insert';else elseBlock123">
+                <mat-label>Shift Id<span class="red">*</span></mat-label>
+                <mat-select formControlName="prod_process" (selectionChange)="onChangeProcess($event.value)" [(ngModel)]="model.prod_process" class="form-control">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let processd of processlist" [value]="processd.pp_shiftid">{{processd.pp_shiftid}}</mat-option>
+                </mat-select>
+              </div>
+              <ng-template #elseBlock123>
+                <mat-label>Shift Id<span class="red">*</span></mat-label>
+                <input type="text" formControlName="prod_process" readonly class="form-control" >
+              </ng-template>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+              <div class="form-group">
+                <mat-label>Production Date</mat-label>
+                <input type="text" formControlName="prod_shift_date" [(ngModel)]="model.prod_shift_date" class="form-control" readonly>
+              </div>
+            </div>
+
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Process</mat-label>
+                <mat-select  [(ngModel)]="process1" class="form-control" name="unit" type="text" multiple #unit [ngModelOptions]="{standalone: true}">
+                  <mat-option [value]="0">-Select-</mat-option>
+                     <mat-option *ngFor="let processd of processlist1" [value]="processd.process_no">{{processd.process_desc}}</mat-option>
+                </mat-select>
+              </div>
+            </div> -->
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Production Description</mat-label>
+                <input type="text" formControlName="prod_description" [(ngModel)]="model.prod_description" class="form-control" readonly>
+              </div>
+            </div>
+
+            <!-- (selectionChange)="onChangeProductionType($event.value)" -->
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Production Type<span class="red">*</span></mat-label>
+                <mat-select formControlName="prod_type" [(ngModel)]="model.prod_type" class="form-control" disabled="true">
+                      <mat-option value="0">-Select-</mat-option>
+                    <mat-option value="Fixed">Fixed</mat-option>
+                    <mat-option value="Variable">Variable</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Entry Mode<span class="red">*</span></mat-label>
+                <mat-select formControlName="entry_mode" [(ngModel)]="model.entry_mode" class="form-control" disabled="true" >
+                      <mat-option value="0">-Select-</mat-option>
+                    <mat-option value="Input">Input Mode</mat-option>
+                    <mat-option value="Output">Output Mode</mat-option>
+                    <mat-option value="Both">Both</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Ratio</mat-label>
+                <input type="text" formControlName="io_ratio" [(ngModel)]="model.io_ratio" class="form-control" >
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Deviation %</mat-label>
+                <input type="text" formControlName="dev_percent" [(ngModel)]="model.dev_percent" class="form-control" >
+              </div>
+            </div>
+            </fieldset>
+            </div>
+        </div>
+
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12">
+              <div class="button_row" align="center">
+                <ul>
+                  <li> <span style=" height: 20px;width: 20px;border-radius: 50%;display: inline-block;background-color: red;"></span> NOT INSERTED</li>
+                  <li> <span style=" height: 20px;width: 20px;border-radius: 50%;display: inline-block;background-color: skyblue;"></span> INSERTED</li>
+                
+                </ul>
+              </div>
+            </div>
+          </div>
+        </div>
+
+<div class="col-lg-12">
+  <div class="dyn_table_conent" style="border: none;">
+  <mat-tab-group animationDuration="1000ms">
+  <mat-tab label="Input Details">
+
+    <div class="dyn_table_conent" *ngIf="entrymodeboth;else entryModeBoth"><!-- entrymodeboth true means both mode -->
+      <div class="dyn_table_header">
+        <label class="label_col"><h3>Action</h3></label>
+        <label class="label_col"><h3>SRL NO both input</h3></label>
+        <label class="label_col"><h3 class="i_nam">Item<span class="red">*</span></h3></label>
+        <label class="label_col"><h3 class="i_nam">Packing<span class="red">*</span></h3></label>
+        <label class="label_col"><h3>Packing Qty<span class="red">*</span></h3></label>
+        <label class="label_col"><h3>Packing Uom</h3></label>
+        <label class="label_col"><h3>Item Qty<span class="red">*</span></h3></label>
+        <label class="label_col"><h3>Item Uom</h3></label>
+        <label class="label_col"><h3>Production Qty</h3></label>
+        <label class="label_col"><h3>Production Uom</h3></label>
+        <label class="label_col" ><h3>Coversion factor</h3></label>
+        <label class="label_col" style="display: none;"><h3>Uom Based On</h3></label>
+        <label class="label_col" *ngIf="inputratio"><h3>Input Inner Ratio</h3></label>
+        <label class="label_col" *ngIf="inputdaviation"><h3>Deviation(%)</h3></label>
+        <label class="label_col"><h3>Scrap Packing</h3></label>
+
+      </div>
+
+       <div class="dyn_table_data_cont" formArrayName="production_transaction_input_details">
+        <div class="dyn_table" *ngFor="let item of production_transaction_input_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+          <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteInput(pointIndex)"></i></div>
+          <div class="label_col"><input formControlName="sl_no" class="form-control" type="text" readonly/></div>
+          <!-- <div class="label_col"><mat-select  class="form-control i_nam" (selectionChange)="onChangeItemName(pointIndex, $event.value)" formControlName="item"><mat-option *ngFor="let list of item_codes1" [value]="list.item">{{list.item_name}}</mat-option></mat-select></div> -->
+
+          <div class="label_col">
+            <mat-select-autocomplete class="form-control i_nam"
+              [options]="item_codes1"
+              [display]="'item_name'"
+              [value]="'item'"
+              [multiple]='false'
+              [selectedOptions]="selectedItemName[pointIndex]"
+              (selectionChange)="onChangeItemName(pointIndex, $event)"
+              ngDefaultControl
+              [formControlName]= "'item'">
+             >
+            </mat-select-autocomplete>
+            </div>
+
+          <div class="label_col"><mat-select class="form-control i_nam" formControlName="packing" (selectionChange)="onChangePackingName(pointIndex, $event.value)"><mat-option *ngFor="let list of packingItem1[pointIndex]" [value]="list.item_code">{{list.item_name}}</mat-option></mat-select></div>
+          <!-- <div class="label_col"><input type="number" class="form-control" formControlName="packing_qty" [readonly]="itemuom[pointIndex]"></div> -->
+          
+          
+          <div class="label_col" *ngIf="inputshiftreqswtichuomitem[pointIndex]; else elseinputpacking">
+            
+                <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcalforshiftno($event, pointIndex)" readonly   *ngIf="inputshiftreq[pointIndex]; else elseshiftyesbothpack1">
+                <ng-template #elseshiftyesbothpack1>
+                      <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcalforshiftno($event, pointIndex)"  style="background: skyblue"  >
+                </ng-template>
+          </div>
+          <ng-template #elseinputpacking>
+            <div class="label_col">
+            
+                <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcalforshiftno($event, pointIndex)"  readonly  *ngIf="inputshiftreq[pointIndex]; else elseshiftyesbothpack2">
+                <ng-template #elseshiftyesbothpack2>
+
+                  <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcalforshiftno($event, pointIndex)"  style="background: red"  >
+                </ng-template>
+            </div>
+          </ng-template>
+          
+          <div class="label_col"><input  type="text" class="form-control" formControlName="packing_uom" readonly></div>
+          <!-- <div class="label_col"><input  type="number" class="form-control" formControlName="item_qty" [readonly]="packinguom[pointIndex]"></div> -->
+          
+          <div class="label_col" *ngIf="inputshiftreqswtichuompacking[pointIndex]; else elseputpacking">
+            
+            <input  type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcalforshiftno($event, pointIndex)" readonly *ngIf="inputshiftreq[pointIndex]; else elseshiftyesbothitem1">
+            <ng-template #elseshiftyesbothitem1>
+              <input  type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcalforshiftno($event, pointIndex)" style="background: skyblue" >
+            </ng-template>
+          </div>
+
+          <ng-template #elseputpacking>
+            <div class="label_col">
+            
+              <input type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcalforshiftno($event, pointIndex)"  readonly *ngIf="inputshiftreq[pointIndex]; else elseshiftyesbothitem2">
+              <ng-template #elseshiftyesbothitem2>
+                <input type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcalforshiftno($event, pointIndex)"  style="background: red" >
+              </ng-template>
+            </div>
+          </ng-template>
+
+          <div class="label_col"><input  type="text" class="form-control" formControlName="item_uom" readonly></div>
+          <!-- <div class="label_col"><input type="text" class="form-control" formControlName="production_qty" (focusout)="storeconsumptionboth(pointIndex, $event)" readonly></div>(focusout)="onOutputDeviation( pointIndex,$event)" -->
+          <div class="label_col"><input type="text" class="form-control" formControlName="production_qty" (focusout)="onInputDeviation( pointIndex,$event)" readonly></div>
+ 
+          <div class="label_col"><mat-select  formControlName="production_uom" class="form-control" disabled><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let produm of productionlist" [value]="produm.customuom_id">{{produm.description}}</mat-option></mat-select></div>
+          <div class="label_col" ><input  formControlName="con_factor" class="form-control" type="text" readonly/></div>
+          <div class="label_col" style="display: none;"><mat-select formControlName="uom_basedon" class="form-control" disabled> <mat-option value="0">Select</mat-option><mat-option value="Packing_Uom">Packing Uom</mat-option><mat-option value="Item_Uom">Item Uom</mat-option></mat-select></div>
+          <div class="label_col" *ngIf="inputratio"><input  formControlName="ratio" class="form-control" type="number" readonly/></div>
+          <div class="label_col" *ngIf="inputdaviation"><input  formControlName="deviation" class="form-control" type="number" readonly /></div>
+          <div class="label_col">
+            <mat-select  class="form-control" formControlName="scrap_packing" disabled>
+            <mat-option *ngFor="let list of scrap_packing_list" [value]="list.item_id">{{list.item_name}}</mat-option>
+          </mat-select></div>
+
+          <div class="label_col" style="border-top:1px solid #ccc;" *ngIf="inputshiftreq[pointIndex];else elseshowpopupbutton">
+            <button type="button" class="btn btn-success" (click)="showpopup(pointIndex)" style="margin-right: 5px;">Show</button>
+          </div>
+          <ng-template #entryModeBoth>
+            <div class="label_col" style="border-top:1px solid #ccc;">
+
+            </div>
+          </ng-template>
+
+        </div>
+      </div>
+      <div class="dyn_table">
+        <div class="label_col"><input  class="fa fa-trash form-control action" type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control" type="text" readonly value="Total" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+        <!-- <div class="label_col"><input  class="form-control " type="text" readonly     [(ngModel)]="packingqtytotalqty"/></div> -->
+        <div class="label_col"><input  class="form-control " type="text" readonly value="{{packingqtytotalqty}}" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <!-- <div class="label_col"><input  class="form-control " type="text" readonly [(ngModel)]="itemqtytotalqty"/></div> -->
+        <div class="label_col"><input  class="form-control " type="text" readonly value="{{itemqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly value="{{prodqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control "  style="display: none;" type="text" readonly/></div>
+        <div class="label_col" *ngIf="inputratio"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col" *ngIf="inputdaviation"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+      </div>
+
+
+    </div>
+
+    <ng-template #entryModeBoth><!-- entrymodeboth false  means  Fixed and variable mode -->
+      <div class="dyn_table_conent">
+        <div class="dyn_table_header">
+          <label class="label_col"><h3>Action</h3></label>
+          <label class="label_col"><h3>SRL NO 1</h3></label>
+          <label class="label_col"><h3 class="i_nam">Item<span class="red">*</span></h3></label>
+          <label class="label_col"><h3 class="i_nam">Packing<span class="red">*</span></h3></label>
+          <label class="label_col"><h3>Packing Qty<span class="red">*</span></h3></label>
+          <label class="label_col"><h3>Packing Uom</h3></label>
+          <label class="label_col"><h3>Item Qty<span class="red">*</span></h3></label>
+          <label class="label_col"><h3>Item Uom</h3></label>
+          <label class="label_col"><h3>Production Qty</h3></label>
+          <label class="label_col"><h3>Production Uom</h3></label>
+          <label class="label_col" ><h3>Coversion factor</h3></label>
+          <label class="label_col" style="display: none;"><h3>Uom Based On</h3></label>
+          <label class="label_col" *ngIf="inputratio"><h3>Input Inner Ratio</h3></label>
+          <label class="label_col" *ngIf="inputdaviation"><h3>Deviation(%)</h3></label>
+          <label class="label_col"><h3>Scrap Packing</h3></label>
+
+        </div>
+
+         <div class="dyn_table_data_cont" formArrayName="production_transaction_input_details" *ngIf="productiontype;else shiftType"> <!--for fixed input-->
+          <div class="dyn_table" *ngFor="let item of production_transaction_input_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+            <div class="label_col"><i class="fa fa-trash form-control action"></i></div>
+            <div class="label_col"><input formControlName="sl_no" class="form-control" type="text" readonly/></div>
+            <!-- <div class="label_col"><mat-select  class="form-control i_nam" (selectionChange)="onChangeItemName(pointIndex, $event.value)" formControlName="item"><mat-option *ngFor="let list of item_codes1" [value]="list.item">{{list.item_name}}</mat-option></mat-select></div> -->
+            <div class="label_col">
+              <mat-select-autocomplete class="form-control i_nam"
+                [options]="item_codes1"
+                [display]="'item_name'"
+                [value]="'item'"
+                [multiple]='false'
+                [selectedOptions]="selectedItemName[pointIndex]"
+                (selectionChange)="onChangeItemName(pointIndex, $event)"
+                ngDefaultControl
+                [formControlName]= "'item'">
+               >
+              </mat-select-autocomplete>
+              </div>
+
+            <div class="label_col"><mat-select class="form-control i_nam" formControlName="packing" (selectionChange)="onChangePackingName(pointIndex, $event.value)"><mat-option *ngFor="let list of packingItem1[pointIndex]" [value]="list.item_code">{{list.item_name}}</mat-option></mat-select></div>
+           
+            <!-- <div class="label_col">
+              <input type="number" class="form-control" formControlName="packing_qty" [readonly]="inputshiftreqswtichuompacking[pointIndex]" (focusout)="itemcalforshiftno($event, pointIndex)">
+            </div> -->
+            
+            <div class="label_col" *ngIf="inputshiftreqswtichuomitem[pointIndex]; else elseinputpackingfixed">
+            
+              <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcalforshiftno($event, pointIndex)" readonly   *ngIf="inputshiftreq[pointIndex]; else elseshiftyesfixedpackfixed1input">
+              <ng-template #elseshiftyesfixedpackfixed1input>
+                    <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcalforshiftno($event, pointIndex)"  style="background: skyblue"  >
+              </ng-template>
+            </div>
+            <ng-template #elseinputpackingfixed>
+              <div class="label_col">
+              
+                  <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcalforshiftno($event, pointIndex)"  readonly  *ngIf="inputshiftreq[pointIndex]; else elseshiftyesfixedpack2input">
+                  <ng-template #elseshiftyesfixedpack2input>
+
+                    <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcalforshiftno($event, pointIndex)"  style="background: red"  >
+                  </ng-template>
+              </div>
+            </ng-template>
+            
+
+            <div class="label_col"><input  type="text" class="form-control" formControlName="packing_uom" readonly></div>
+           
+            <!-- <div class="label_col">
+              <input  type="number" class="form-control" formControlName="item_qty" [readonly]="inputshiftreqswtichuomitem[pointIndex]" (focusout)="packingcalforshiftno($event, pointIndex)">
+            </div> -->
+
+              <div class="label_col" *ngIf="inputshiftreqswtichuompacking[pointIndex]; else elseputpackingfixed">
+              
+                <input  type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcalforshiftno($event, pointIndex)" readonly *ngIf="inputshiftreq[pointIndex]; else elseshiftyesfixeditem1inputitem">
+                <ng-template #elseshiftyesfixeditem1inputitem>
+                  <input  type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcalforshiftno($event, pointIndex)" style="background: skyblue" >
+                </ng-template>
+              </div>
+              <ng-template #elseputpackingfixed>
+                <div class="label_col">
+                
+                  <input type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcalforshiftno($event, pointIndex)"  readonly *ngIf="inputshiftreq[pointIndex]; else elseshiftyesfixeditem2">
+                  <ng-template #elseshiftyesfixeditem2>
+                    <input type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcalforshiftno($event, pointIndex)"  style="background: red">
+                  </ng-template>
+                </div>
+              </ng-template>
+
+
+            <div class="label_col"><input  type="text" class="form-control" formControlName="item_uom" readonly></div>
+            <div class="label_col"><input type="text" class="form-control" formControlName="production_qty" readonly></div>
+            <div class="label_col"><mat-select  formControlName="production_uom" class="form-control" disabled><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let produm of productionlist" [value]="produm.customuom_id">{{produm.description}}</mat-option></mat-select></div>
+            <div class="label_col" ><input  formControlName="con_factor" class="form-control" type="text" readonly/></div>
+            <div class="label_col" style="display: none;" ><mat-select disabled formControlName="uom_basedon" class="form-control"> <mat-option value="0">Select</mat-option><mat-option value="Packing_Uom">Packing Uom</mat-option><mat-option value="Item_Uom">Item Uom</mat-option></mat-select></div>
+            <div class="label_col" *ngIf="inputratio"><input  formControlName="ratio" class="form-control" type="number" readonly/></div>
+            <div class="label_col" *ngIf="inputdaviation"><input  formControlName="deviation" class="form-control" type="number" readonly/></div>
+            <div class="label_col">
+              <mat-select  class="form-control" formControlName="scrap_packing" disabled>
+              <mat-option *ngFor="let list of scrap_packing_list" [value]="list.item_id">{{list.item_name}}</mat-option>
+            </mat-select></div>
+            <div class="label_col" style="border-top:1px solid #ccc;" *ngIf="fixedinputpopup"><button type="button" class="btn btn-success" (click)="showpopup(pointIndex)" style="margin-right: 5px;" *ngIf="inputshiftreq[pointIndex]" >Show</button></div>
+             <div class="label_col" ><input type="text" value="1st"></div> 
+
+          </div>
+        </div>
+        <div class="dyn_table" *ngIf="productiontype">
+          <div class="label_col"><input  class="fa fa-trash form-control action" type="text" readonly/></div>
+          <div class="label_col"><input  class="form-control" type="text" readonly value="Total" style="font-weight:bold"/></div>
+          <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+          <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+          <!-- <div class="label_col"><input  class="form-control " type="text" readonly     [(ngModel)]="packingqtytotalqty"/></div> -->
+          <div class="label_col"><input  class="form-control " type="text" readonly value="{{packingqtytotalqty}}" style="font-weight:bold"/></div>
+          <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+          <!-- <div class="label_col"><input  class="form-control " type="text" readonly [(ngModel)]="itemqtytotalqty"/></div> -->
+          <div class="label_col"><input  class="form-control " type="text" readonly value="{{itemqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+          <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+          <div class="label_col"><input  class="form-control " type="text" readonly value="{{prodqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+          <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+          <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+          <div class="label_col"><input  class="form-control "  style="display: none;" type="text" readonly/></div>
+          <div class="label_col" *ngIf="inputratio"><input  class="form-control " type="text" readonly/></div>
+          <div class="label_col" *ngIf="inputdaviation"><input  class="form-control " type="text" readonly/></div>
+          <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        </div>
+
+
+        <ng-template #shiftType><!--variable  here output mode was set has to freeze input-->
+          <div class="dyn_table_data_cont" formArrayName="production_transaction_input_details">
+            <div class="dyn_table" *ngFor="let item of production_transaction_input_details.controls; let pointIndex=index" [formGroupName]="pointIndex"> <!--for variable input and output-->
+              <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteInput(pointIndex)"></i></div>
+              <div class="label_col"><input formControlName="sl_no" class="form-control" type="text" readonly/></div>
+              <!-- <div class="label_col"><mat-select  class="form-control i_nam" (selectionChange)="onChangeItemName(pointIndex, $event.value)" formControlName="item"><mat-option *ngFor="let list of item_codes1" [value]="list.item">{{list.item_name}}</mat-option></mat-select></div> -->
+              <div class="label_col">
+                <mat-select-autocomplete class="form-control i_nam"
+                  [options]="item_codes1"
+                  [display]="'item_name'"
+                  [value]="'item'"
+                  [multiple]='false'
+                  [selectedOptions]="selectedItemName[pointIndex]"
+                  (selectionChange)="onChangeItemName(pointIndex, $event)"
+                  ngDefaultControl
+                  [formControlName]= "'item'"
+                  disabled
+                  >
+                 
+                </mat-select-autocomplete>
+                </div>
+              <div class="label_col"><mat-select class="form-control i_nam" formControlName="packing" (selectionChange)="onChangePackingName(pointIndex, $event.value)" disabled><mat-option *ngFor="let list of packingItem1[pointIndex]" [value]="list.item_code">{{list.item_name}}</mat-option></mat-select></div>
+              <div class="label_col"><input type="number" class="form-control" formControlName="packing_qty" readonly ></div>
+              <div class="label_col"><input type="text" class="form-control" formControlName="packing_uom" readonly></div>
+              <div class="label_col"><input type="number" class="form-control" formControlName="item_qty" readonly></div>
+              <div class="label_col"><input type="text" class="form-control" formControlName="item_uom" readonly></div>
+
+                <div class="label_col" ><input type="text" class="form-control" formControlName="production_qty" readonly ></div>
+             
+
+              <div class="label_col"><mat-select formControlName="production_uom" class="form-control" disabled><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let produm of productionlist" [value]="produm.customuom_id">{{produm.description}}</mat-option></mat-select></div>
+              <div class="label_col" ><input formControlName="con_factor" class="form-control" type="text" readonly/></div>
+              <div class="label_col" style="display: none;"><mat-select formControlName="uom_basedon" class="form-control" disabled> <mat-option value="0">Select</mat-option><mat-option value="Packing_Uom">Packing Uom</mat-option><mat-option value="Item_Uom">Item Uom</mat-option></mat-select></div>
+              <div class="label_col" *ngIf="inputratio"><input formControlName="ratio" class="form-control" type="number" readonly/></div>
+              <div class="label_col" *ngIf="inputdaviation"><input  formControlName="deviation" class="form-control" type="number" readonly/></div>
+              <div class="label_col">
+                <mat-select class="form-control" formControlName="scrap_packing" disabled>
+                <mat-option *ngFor="let list of scrap_packing_list" [value]="list.item_id">{{list.item_name}}</mat-option>
+              </mat-select></div>
+              <div class="label_col" style="border-top:1px solid #ccc;" *ngIf="variableinputpopup"><button type="button" class="btn btn-success" (click)="showpopup(pointIndex)" style="margin-right: 5px;"  *ngIf="inputshiftreq[pointIndex]">Show</button></div>
+              <div class="label_col" ><input type="text" value="2nd"></div>
+
+            </div>
+
+          </div>
+          <div class="dyn_table">
+            <div class="label_col"><input  class="fa fa-trash form-control action" type="text" readonly/></div>
+            <div class="label_col"><input  class="form-control" type="text" readonly value="Total update in" style="font-weight:bold"/></div>
+            <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+            <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+            <!-- <div class="label_col"><input  class="form-control " type="text" readonly     [(ngModel)]="packingqtytotalqty"/></div> -->
+            <div class="label_col"><input  class="form-control " type="text" readonly value="{{packingqtytotalqty}}" style="font-weight:bold"/></div>
+            <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+            <!-- <div class="label_col"><input  class="form-control " type="text" readonly [(ngModel)]="itemqtytotalqty"/></div> -->
+            <div class="label_col"><input  class="form-control " type="text" readonly value="{{itemqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+            <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+            <div class="label_col"><input  class="form-control " type="text" readonly value="{{prodqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+            <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+            <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+            <div class="label_col"><input  class="form-control "  style="display: none;" type="text" readonly/></div>
+            <div class="label_col" *ngIf="inputratio"><input  class="form-control " type="text" readonly/></div>
+            <div class="label_col" *ngIf="inputdaviation"><input  class="form-control " type="text" readonly/></div>
+            <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        
+          </div>
+
+        </ng-template>
+
+
+      </div>
+
+    </ng-template>
+
+
+    <div class="btm_btn_content" *ngIf="Input == true">
+      <button type="button" (click)="addInput(pointIndex)" class="btn btn-success">Add Row
+      </button>
+      <div class="clr"></div>
+    </div>
+  </mat-tab>
+
+  <mat-tab label="Output Details">
+    <div class="dyn_table_conent"  *ngIf="entrymodeboth;else entryModeBothOutput"> <!-- entrymodeboth true means both mode -->
+      <div class="dyn_table_header">
+        <label class="label_col"><h3>Action</h3></label>
+        <label class="label_col"><h3>SRL NO both</h3></label>
+        <label class="label_col"><h3 class="i_nam">Item<span class="red">*</span></h3></label>
+        <label class="label_col"><h3 class="i_nam">Packing<span class="red">*</span></h3></label>
+        <label class="label_col"><h3>Packing Qty<span class="red">*</span></h3></label>
+        <label class="label_col"><h3>Packing Uom</h3></label>
+        <label class="label_col"><h3>Item Qty<span class="red">*</span></h3></label>
+        <label class="label_col"><h3>Item Uom</h3></label>
+        <label class="label_col"><h3>Production Qty</h3></label>
+        <label class="label_col"><h3>Production Uom</h3></label>
+        <label class="label_col" ><h3>Coversion factor</h3></label>
+        <label class="label_col" style="display: none;"><h3>Uom Based On</h3></label>
+        <label class="label_col" *ngIf="outputratio"><h3>Output Inner Ratio</h3></label>
+        <label class="label_col" *ngIf="outputdaviation"><h3>Deviation(%)</h3></label>
+
+      </div>
+      <div class="dyn_table_data_cont"  formArrayName="production_transaction_output_details">
+        <div class="dyn_table" *ngFor="let item of production_transaction_output_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+          <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteOutput(pointIndex)"></i></div>
+          <div class="label_col"><input readonly formControlName="sl_no" class="form-control" type="text"/></div>
+          <!-- <div class="label_col"><mat-select  class="form-control i_nam" (selectionChange)="onChangeItemNameoutput(pointIndex, $event.value)" formControlName="item"><mat-option *ngFor="let list of item_codes" [value]="list.item">{{list.item_name}}</mat-option></mat-select></div> -->
+          <div class="label_col">
+            <mat-select-autocomplete class="form-control i_nam"
+              [options]="item_codes"
+              [display]="'item_name'"
+              [value]="'item'"
+              [multiple]='false'
+              [selectedOptions]="selectedItemName1[pointIndex]"
+              (selectionChange)="onChangeItemNameoutput(pointIndex, $event)"
+              ngDefaultControl
+              [formControlName]= "'item'">
+             >
+            </mat-select-autocomplete>
+            </div>
+
+          <div class="label_col"><mat-select class="form-control i_nam" formControlName="packing" (selectionChange)="onChangePackingNameoutput(pointIndex, $event.value)"><mat-option *ngFor="let list of packingItem[pointIndex]" [value]="list.item_code">{{list.item_name}}</mat-option></mat-select></div>
+         
+          <!-- <div class="label_col">
+            <input type="text" class="form-control" formControlName="packing_qty"  (focusout)="itemcaloutputforshiftno($event,pointIndex)">
+          </div> -->
+          
+          <div class="label_col" *ngIf="outputshiftreqswtichuomitem[pointIndex]; else elseoutputpackingboth">
+           
+            <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcaloutputforshiftno($event, pointIndex)" readonly   *ngIf="outputshiftreq[pointIndex]; else elseshiftyesbothpackout1">
+            <ng-template #elseshiftyesbothpackout1>
+                  <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcaloutputforshiftno($event, pointIndex)"  style="background: skyblue"  >
+            </ng-template>
+          </div>
+          <ng-template #elseoutputpackingboth>
+            <div class="label_col">
+            
+                <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcaloutputforshiftno($event, pointIndex)"  readonly  *ngIf="outputshiftreq[pointIndex]; else elseshiftyesbothpackout2">
+                <ng-template #elseshiftyesbothpackout2>
+
+                  <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcaloutputforshiftno($event, pointIndex)"  style="background: red"  >
+                </ng-template>
+            </div>
+          </ng-template>
+          
+
+
+          <div class="label_col"><input type="text" formControlName="packing_uom" class="form-control" readonly></div>
+          
+          <!-- <div class="label_col">
+            <input type="text" class="form-control" formControlName="item_qty"  (focusout)="packingcaloutputforshiftno( $event,pointIndex)">
+          </div> -->
+
+          <div class="label_col" *ngIf="outputshiftreqswtichuompacking[pointIndex]; else elseputpackingbothout">
+              
+            <input  type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcaloutputforshiftno($event, pointIndex)" readonly *ngIf="outputshiftreq[pointIndex]; else elseshiftyesbothitem1output">
+            <ng-template #elseshiftyesbothitem1output>
+              <input  type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcaloutputforshiftno($event, pointIndex)" style="background: skyblue" >
+            </ng-template>
+          </div>
+          <ng-template #elseputpackingbothout>
+            <div class="label_col">
+            
+              <input type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcaloutputforshiftno($event, pointIndex)"  readonly *ngIf="outputshiftreq[pointIndex]; else elseshiftyesbothitem2output">
+              <ng-template #elseshiftyesbothitem2output>
+                <input type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcaloutputforshiftno($event, pointIndex)"  style="background: red">
+              </ng-template>
+            </div>
+          </ng-template>
+          
+          <div class="label_col"><input type="text" formControlName="item_uom" class="form-control" readonly></div>
+          <!-- <div class="label_col"><input type="text" class="form-control" formControlName="production_qty" readonly></div> -->
+          <div class="label_col"><input type="text" class="form-control" formControlName="production_qty"   (focusout)="onOutputDeviation( pointIndex,$event)" readonly></div>
+          <div class="label_col"><mat-select formControlName="production_uom" class="form-control" disabled><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let produm of productionlist" [value]="produm.customuom_id">{{produm.description}}</mat-option></mat-select></div>
+          <div class="label_col" ><input formControlName="con_factor" class="form-control" type="text" readonly /></div>
+          <div class="label_col" style="display: none;"><mat-select disabled="editable1" formControlName="uom_basedon" class="form-control"> <mat-option value="0">Select</mat-option><mat-option value="Packing_Uom">Packing Uom</mat-option><mat-option value="Item_Uom">Item Uom</mat-option></mat-select></div>
+          <div class="label_col" *ngIf="outputratio"><input readonly formControlName="ratio" class="form-control" type="number" readonly /></div>
+          <div class="label_col" *ngIf="outputdaviation"><input readonly formControlName="deviation" class="form-control" type="number" readonly /></div>
+
+
+          <div class="label_col" style="border-top:1px solid #ccc;" *ngIf="outputshiftreq[pointIndex];else elseshowpopupbuttonoutput">
+            <button type="button" class="btn btn-success" (click)="showpopup1(pointIndex)" style="margin-right: 5px;">Show</button>
+          </div>
+          <ng-template #elseshowpopupbuttonoutput>
+            <div class="label_col" style="border-top:1px solid #ccc;" >
+              
+            </div>
+          </ng-template>
+
+        </div>
+      </div>
+      <div class="dyn_table">
+        <div class="label_col"><input  class="fa fa-trash form-control action" type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control" type="text" readonly value="Total" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+        <!-- <div class="label_col"><input  class="form-control " type="text" readonly     [(ngModel)]="packingqtytotalqty"/></div> -->
+        <div class="label_col"><input  class="form-control " type="text" readonly value="{{outpackingqtytotalqty}}" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <!-- <div class="label_col"><input  class="form-control " type="text" readonly [(ngModel)]="itemqtytotalqty"/></div> -->
+        <div class="label_col"><input  class="form-control " type="text" readonly value="{{outitemqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly value="{{outprodqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control "  style="display: none;" type="text" readonly/></div>
+        <div class="label_col" *ngIf="inputratio"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col" *ngIf="inputdaviation"><input  class="form-control " type="text" readonly/></div>
+        <!--<div class="label_col"><input  class="form-control " type="text" readonly/></div>-->
+      </div>
+
+    </div>
+
+    <ng-template #entryModeBothOutput><!-- entrymodeboth false means fixed and variable  mode -->
+      <div class="dyn_table_conent">
+      <div class="dyn_table_header">
+        <label class="label_col"><h3>Action</h3></label>
+        <label class="label_col"><h3>SRL NO Here</h3></label>
+        <label class="label_col"><h3 class="i_nam">Item<span class="red">*</span></h3></label>
+        <label class="label_col"><h3 class="i_nam">Packing<span class="red">*</span></h3></label>
+        <label class="label_col"><h3>Packing Qty<span class="red">*</span></h3></label>
+        <label class="label_col"><h3>Packing Uom</h3></label>
+        <label class="label_col"><h3>Item Qty<span class="red">*</span></h3></label>
+        <label class="label_col"><h3>Item Uom</h3></label>
+        <label class="label_col"><h3>Production Qty</h3></label>
+        <label class="label_col"><h3>Production Uom</h3></label>
+        <label class="label_col" ><h3>Coversion factor</h3></label>
+        <label class="label_col" style="display: none;"><h3>Uom Based On</h3></label>
+        <label class="label_col" *ngIf="outputratio"><h3>Output Inner Ratio</h3></label>
+        <label class="label_col" *ngIf="outputdaviation"><h3>Deviation(%)</h3></label>
+
+      </div>
+      <div class="dyn_table_data_cont"  formArrayName="production_transaction_output_details" *ngIf="entrymode;else entrymodeInput"> <!--variable output  true means entry mode input all freeze-->
+        <div class="dyn_table" *ngFor="let item of production_transaction_output_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+          <div class="label_col"><i class="fa fa-trash form-control action" ></i></div>
+          <div class="label_col"><input readonly formControlName="sl_no" class="form-control" type="text" readonly/></div>
+       
+          <div class="label_col">
+            <mat-select-autocomplete class="form-control i_nam"
+              [options]="item_codes"
+              [display]="'item_name'"
+              [value]="'item'"
+              [multiple]='false'
+              [selectedOptions]="selectedItemName1[pointIndex]"
+              (selectionChange)="onChangeItemNameoutput(pointIndex, $event)"
+              ngDefaultControl
+              [formControlName]= "'item'"
+              disabled>
+             >
+            </mat-select-autocomplete>
+            </div>
+            
+          <div class="label_col"><mat-select class="form-control i_nam" formControlName="packing" disabled><mat-option *ngFor="let list of packingItem[pointIndex]" [value]="list.item_code">{{list.item_name}}</mat-option></mat-select></div>
+          <div class="label_col"><input type="text" class="form-control" formControlName="packing_qty" readonly></div>
+          <div class="label_col"><input type="text" formControlName="packing_uom" class="form-control" readonly></div>
+          <div class="label_col"><input type="text" class="form-control" formControlName="item_qty" readonly></div>
+          <div class="label_col"><input type="text" formControlName="item_uom" class="form-control" readonly></div>
+
+          <div class="label_col" ><input type="text" class="form-control" formControlName="production_qty"  (focusout)="onOutputDeviation(pointIndex, $event)" readonly></div>
+
+          <div class="label_col"><mat-select formControlName="production_uom" class="form-control" disabled><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let produm of productionlist" [value]="produm.customuom_id">{{produm.description}}</mat-option></mat-select></div>
+          <div class="label_col" ><input formControlName="con_factor" class="form-control" type="text" readonly /></div>
+          <div class="label_col" style="display: none;"><mat-select disabled="editable1" formControlName="uom_basedon" class="form-control"> <mat-option value="0">Select</mat-option><mat-option value="Packing_Uom">Packing Uom</mat-option><mat-option value="Item_Uom">Item Uom</mat-option></mat-select></div>
+          <div class="label_col" *ngIf="outputratio"><input formControlName="ratio" class="form-control" type="number" readonly/></div>
+          <div class="label_col" *ngIf="outputdaviation"><input formControlName="deviation" class="form-control" type="number" readonly/></div>
+          
+
+        </div>
+      </div>
+      <div class="dyn_table"  *ngIf="entrymode">
+        <div class="label_col"><input  class="fa fa-trash form-control action" type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control" type="text" readonly value="Total" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+        <!-- <div class="label_col"><input  class="form-control " type="text" readonly     [(ngModel)]="packingqtytotalqty"/></div> -->
+        <div class="label_col"><input  class="form-control " type="text" readonly value="{{outpackingqtytotalqty}}" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <!-- <div class="label_col"><input  class="form-control " type="text" readonly [(ngModel)]="itemqtytotalqty"/></div> -->
+        <div class="label_col"><input  class="form-control " type="text" readonly value="{{outitemqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly value="{{outprodqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control "  style="display: none;" type="text" readonly/></div>
+        <div class="label_col" *ngIf="inputratio"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col" *ngIf="inputdaviation"><input  class="form-control " type="text" readonly/></div>
+        <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+      </div>
+   
+      <ng-template #entrymodeInput><!--  flase means output-->
+      <div class="dyn_table_data_cont"  formArrayName="production_transaction_output_details">
+        <div class="dyn_table" *ngFor="let item of production_transaction_output_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+          <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteOutput(pointIndex)"></i></div>
+          <div class="label_col"><input formControlName="sl_no" class="form-control" type="text" readonly/></div>
+        
+          <div class="label_col">
+            <mat-select-autocomplete class="form-control i_nam"
+              [options]="item_codes"
+              [display]="'item_name'"
+              [value]="'item'"
+              [multiple]='false'
+              [selectedOptions]="selectedItemName1[pointIndex]"
+              (selectionChange)="onChangeItemNameoutput(pointIndex, $event)"
+              ngDefaultControl
+              [formControlName]= "'item'">
+             >
+            </mat-select-autocomplete>
+            </div>
+          <div class="label_col"><mat-select class="form-control i_nam" formControlName="packing" (selectionChange)="onChangePackingNameoutput(pointIndex, $event.value)"><mat-option *ngFor="let list of packingItem[pointIndex]" [value]="list.item_code">{{list.item_name}}</mat-option></mat-select></div>
+        
+          <!-- <div class="label_col">
+            <input type="text" class="form-control" formControlName="packing_qty" [readonly]="outputshiftreqswtichuompacking[pointIndex]"  (focusout)="itemcaloutputforshiftno($event,pointIndex)">
+           </div> -->
+         
+           <div class="label_col" *ngIf="outputshiftreqswtichuomitem[pointIndex]; else elseoutputpackingvariable">
+           
+            <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcaloutputforshiftno($event, pointIndex)" readonly   *ngIf="outputshiftreq[pointIndex]; else elseshiftyesbothpackout1">
+            <ng-template #elseshiftyesbothpackout1>
+                  <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcaloutputforshiftno($event, pointIndex)"  style="background: skyblue"  >
+            </ng-template>
+          </div>
+          <ng-template #elseoutputpackingvariable>
+            <div class="label_col">
+            
+                <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcaloutputforshiftno($event, pointIndex)"  readonly  *ngIf="outputshiftreq[pointIndex]; else elseshiftyesbothpackout2">
+                <ng-template #elseshiftyesbothpackout2>
+
+                  <input type="number" class="form-control" formControlName="packing_qty"  (focusout)="itemcaloutputforshiftno($event, pointIndex)"  style="background: red"  >
+                </ng-template>
+            </div>
+          </ng-template>
+          
+
+         
+          <div class="label_col"><input  type="text" formControlName="packing_uom" class="form-control" readonly></div>
+          
+          <!-- <div class="label_col">
+            <input type="text" class="form-control" formControlName="item_qty" [readonly]="outputshiftreqswtichuomitem[pointIndex]"  (focusout)="packingcaloutputforshiftno( $event,pointIndex)">
+          </div> -->
+
+          <div class="label_col" *ngIf="outputshiftreqswtichuompacking[pointIndex]; else elseputpackingvariableout">
+              
+            <input  type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcaloutputforshiftno($event, pointIndex)" readonly *ngIf="outputshiftreq[pointIndex]; else elseshiftyesvariableitem1output">
+            <ng-template #elseshiftyesvariableitem1output>
+              <input  type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcaloutputforshiftno($event, pointIndex)" style="background: skyblue" >
+            </ng-template>
+          </div>
+          <ng-template #elseputpackingvariableout>
+            <div class="label_col">
+            
+              <input type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcaloutputforshiftno($event, pointIndex)"  readonly *ngIf="outputshiftreq[pointIndex]; else elseshiftyesvariableitem2output">
+              <ng-template #elseshiftyesvariableitem2output>
+                <input type="number" class="form-control" formControlName="item_qty"  (focusout)="packingcaloutputforshiftno($event, pointIndex)"  style="background: red">
+              </ng-template>
+            </div>
+          </ng-template>
+
+          <div class="label_col"><input readonly type="text" formControlName="item_uom" class="form-control"></div>
+          <div class="label_col"><input type="text" class="form-control" formControlName="production_qty" readonly></div> <!--for variable output and input-->
+          <div class="label_col"><mat-select disabled formControlName="production_uom" class="form-control" ><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let produm of productionlist" [value]="produm.customuom_id">{{produm.description}}</mat-option></mat-select></div>
+          <div class="label_col" ><input readonly formControlName="con_factor" class="form-control" type="text"  /></div>
+          <div class="label_col" style="display: none;"><mat-select disabled="editable1" formControlName="uom_basedon" class="form-control"> <mat-option value="0">Select</mat-option><mat-option value="Packing_Uom">Packing Uom</mat-option><mat-option value="Item_Uom">Item Uom</mat-option></mat-select></div>
+          <div class="label_col" *ngIf="outputratio"><input readonly formControlName="ratio" class="form-control" type="number"  /></div>
+          <div class="label_col" *ngIf="outputdaviation"><input readonly formControlName="deviation" class="form-control" type="number"  /></div>
+         
+
+
+          <div class="label_col" style="border-top:1px solid #ccc;"><button type="button" class="btn btn-success" (click)="showpopup1(pointIndex)" style="margin-right: 5px;" *ngIf="outputshiftreq[pointIndex]">Show</button></div>
+
+        </div>
+
+        <div class="dyn_table">
+          <div class="label_col"><input  class="fa fa-trash form-control action" type="text" readonly/></div>
+          <div class="label_col"><input  class="form-control" type="text" readonly value="Total update" style="font-weight:bold"/></div>
+          <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+          <div class="label_col"><input  class="form-control i_nam" type="text" readonly/></div>
+          <!-- <div class="label_col"><input  class="form-control " type="text" readonly     [(ngModel)]="packingqtytotalqty"/></div> -->
+          <div class="label_col"><input  class="form-control " type="text" readonly value="{{outpackingqtytotalqty}}"  style="font-weight:bold"/></div>
+          <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+          <!-- <div class="label_col"><input  class="form-control " type="text" readonly [(ngModel)]="itemqtytotalqty"/></div> -->
+          <div class="label_col"><input  class="form-control " type="text" readonly value="{{outitemqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+          <div class="label_col"><input  class="form-control " type="text" readonly/></div>
+          <div class="label_col"><input  class="form-control " type="text" readonly value="{{outprodqtytotalqty | number:'0.3-3'}}" style="font-weight:bold"/></div>
+          <div class="label_col"><input  class="form-control " type="text" readonly/></div> 
+          <!--<div class="label_col"><input  class="form-control " type="text" readonly/></div>-->
+          <div class="label_col"><input  class="form-control "  style="display: none;" type="text" readonly/></div>
+          <div class="label_col" *ngIf="inputratio"><input  class="form-control " type="text" readonly/></div>
+          <div class="label_col" *ngIf="inputdaviation"><input  class="form-control " type="text" readonly/></div>
+          <!--<div class="label_col"><input  class="form-control " type="text" readonly/></div>-->
+        </div>
+      </div>
+    </ng-template>
+    </div>
+    </ng-template>
+    <div class="btm_btn_content" *ngIf="Output == true">
+      <button type="button" (click)="addOutput(pointIndex)" class="btn btn-success">Add Row
+      </button>
+      <div class="clr"></div>
+    </div>
+  </mat-tab>
+
+    <mat-tab label="Store Consumption">
+
+            <div class="dyn_table_conent" style="border: none;" >
+              <div class="dyn_table_header">
+                <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                <label class="label_col"><h3 class="i_nam">Packing Item</h3></label>
+
+                <label class="label_col"><h3>Opening Packing Qty.</h3></label>
+                <label class="label_col"><h3>Packing Uom</h3></label>
+                <label class="label_col"><h3>Opening Item Qty.</h3></label>
+                <label class="label_col"><h3>Item Uom</h3></label>
+
+                <label class="label_col"><h3>Production Packing Qty.</h3></label>
+                <label class="label_col"><h3>Production Item Qty.</h3></label>
+
+                <label class="label_col"><h3>Closing Packing Qty.</h3></label>
+                <label class="label_col"><h3>Closing Item Qty.</h3></label>
+
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="storeconsumption_Item_Dtls">
+                <div class="dyn_table" *ngFor="let item of storeconsumption_Item_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"
+                    [options]="item_codestores"
+                    [display]="'item_name'"
+                    [value]="'item_id'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedItemNamestore[pointIndex]"
+                    ngDefaultControl
+                    [formControlName] = "'item_code'"
+                    [disabled]="true">
+                  </mat-select-autocomplete>
+                  </div>
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"
+                    [options]="packingItemstore[pointIndex]"
+                    [display]="'item_name'"
+                    [value]="'item_code'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedPackingItemstore[pointIndex]"
+                    ngDefaultControl
+                    [formControlName]="'packing'"
+                    [disabled]="disabledropdown">
+                  </mat-select-autocomplete>
+                  </div>
+
+                  <div class="label_col"><input class="form-control" formControlName="openingpackingqty" type="number" readonly /></div>
+                  <div class="label_col"><input class="form-control" formControlName="packinguom" type="text" readonly/></div>
+                  <div class="label_col"><input class="form-control" formControlName="openingitemqty" type="number" readonly /></div>
+                  <div class="label_col"><input class="form-control" formControlName="itemuom" type="text" readonly/></div>
+
+                  <div class="label_col"><input class="form-control" formControlName="productionpackingqty" type="number" readonly  style="color: red!important;"/></div>
+                  <div class="label_col"><input class="form-control" formControlName="productionitemqty" type="number" readonly style="color: red!important;"/></div>
+
+                  <div class="label_col"><input class="form-control" formControlName="closingpackingqty" type="number" readonly /></div>
+                  <div class="label_col"><input class="form-control" formControlName="closingitemqty" type="number" readonly /></div>
+
+                </div>
+              </div>
+            </div>
+
+
+    </mat-tab>
+  </mat-tab-group>
+  </div>
+</div>
+
+
+
+<div class="row">
+  <div class="col-lg-12">
+   <div class="form-group">
+     <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="productiontransactionregsave">Submit</button>
+   </div>
+ </div>
+</div>
+</div>
+</section>
+</form>
+
+
+<div class="master_container_box" *ngIf="isHidden==false">
+
+  <form [formGroup]="userForm1">
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label >Business Unit<span class="red">*</span></mat-label>
+        <mat-select-autocomplete class="form-control ats"
+        [options]="bussiness_unit_list"
+        [display]="'businessunit_name'"
+        [value]="'businessunit_id'"
+        [multiple]='false'
+        (selectionChange)="onChangeBusinessUnit($event)"
+        ngDefaultControl
+        [formControl]="userForm1.controls['business_unit1']"
+        >
+        </mat-select-autocomplete>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>Shop Floor<span class="red">*</span></mat-label>
+      <mat-select-autocomplete class="form-control ats"  
+      [options]="ShopFloorList"
+      [display]="'shop_floor_name'"
+      [value]="'shop_floor_id'"
+      [multiple]='true'
+      ngDefaultControl
+      [formControl]="userForm1.controls['shop_floor1']">
+    </mat-select-autocomplete>
+  </div>
+</div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>From Date<span class="red">*</span></mat-label>
+      <input type="date"  class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>To Date<span class="red">*</span></mat-label>
+      <input type="date"  class="form-control"  formControlName="todate">
+      </div>
+    </div>
+
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()">Search</button>
+      </div>
+    </div>
+    </form>
+
+<!-- <div class="master_containerr" *ngIf="isHidden==false"> -->
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Production Transaction List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Business Unit Name</th>
+                  <th>Shop Floor</th>
+                  <th>Shift Id</th>
+                  <!--<th>Process</th>
+                   <th>Process Start time</th>
+                  <th>Process End time</th> -->
+                  <th colspan="3">Action</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ProductionTransaction of listProductionTransaction">
+                  <td>{{ProductionTransaction.prod_trans_date}}</td>
+                  <th>{{ProductionTransaction.business_unitname}}</th>
+                  <th>{{ProductionTransaction.shop_floorname}}</th>
+                  <th>{{ProductionTransaction.prod_process}}</th>
+                   <td><button class="btn btn-info" (click)="onUpdate(ProductionTransaction.id, ProductionTransaction.prod_trans_id,'update')" *ngIf="productiontransactionregupdate">Update</button></td>
+                   <td><button class="btn btn-danger" (click)="onDelete(ProductionTransaction.id)">Delete</button></td>
+                   <td><button class="btn btn-sucess" (click)="accountpostingproductionreg(ProductionTransaction.id)">Posting</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

@@ -1,0 +1,135 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" > <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner> </div>
+  </div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Channel Partner Rules</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Code">Code</label>
+                <input type="text" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Name">Name</label>
+                <input type="text" class="form-control" [(ngModel)]="model.channel_name" formControlName="channel_name">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Channel Partner">Channel Partner</label>
+                <mat-select class="form-control" [(ngModel)]="model.channel_partner" formControlName="channel_partner">
+                  <mat-option value="Channel Partner">-Channel Partner-</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox [(ngModel)]="model.channel_active" formControlName="channel_active">Active</mat-checkbox>
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset style="padding: 10px;">
+            <legend>Business Partner - Details Information</legend>
+            <div class="row dyn_cont_area">
+              <div class="col-lg-12">
+                <div class="dyn_table_conent">
+                  <div class="dyn_table_header">
+                    <label class="label_col"><h3>Action</h3></label>
+                    <label class="label_col"><h3>Srl No</h3></label>
+                    <label class="label_col"><h3 class="wdt_130">Channel Partner Name</h3></label>
+                    <label class="label_col"><h3>Active</h3></label>
+                    <label class="label_col"><h3>Remarks</h3></label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="channel_partner_details">
+                    <div class="dyn_table" *ngFor="let item of channel_partner_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                      <div class="label_col"><input min="0" class="form-control" type="number" formControlName="sl_no" readonly/></div>
+                      <div class="label_col"><input class="form-control wdt_form_130" type="text" formControlName="cp_name" /></div>
+                      <div class="label_col"><input class="form-control" type="checkbox" formControlName="cp_active" /> </div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="cp_remarks" />
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="btm_btn_content">
+                    <button type="button" (click)="add()" class="btn btn-success">Add</button>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+
+
+<!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Channel Partner Master List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Channel Partner Name</th>
+                  <th>Channel Partner</th>
+                  <th>Channel Active</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let model of listChannelPartner">
+                  <td>{{model.channel_name}}</td>
+                  <td>{{model.channel_partner}}</td>
+                  <td>{{model.channel_active}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

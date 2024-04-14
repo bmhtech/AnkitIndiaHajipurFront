@@ -1,0 +1,83 @@
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm1">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <fieldset>
+
+          <legend>Transporter List</legend>
+
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            <div style="margin-bottom: 20px;">
+              <label style="font-weight: normal; padding-right: 15px; display: inline-block; width: 176px;"><strong>Transporter Group</strong></label>  
+              <mat-select style=" display: inline-block; width: 150px;" class="form-control" formControlName="group_type" [(ngModel)]="model.group_type" (selectionChange)="onChangeTransporter($event.value)">  
+                <mat-option value="0">~Select Group~</mat-option>
+                <mat-option *ngFor="let group of transGroup" [value]="group.bp_trans_id">{{group.bp_grp_name}}</mat-option>
+              </mat-select>
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="font-weight: normal; padding-right: 15px; display: inline-block; width: 176px;"><strong>Customer Id</strong></label>  
+              <input type="text" style=" display: inline-block; width: 150px;" class="form-control" formControlName="bp_Id" [(ngModel)]="model.bp_Id" value={{customer_id}} readonly/>  
+            </div>
+
+            <div style="margin-bottom: 20px;">
+              <label style="font-weight: normal; padding-right: 15px; display: inline-block; width: 176px;"><strong>Transporter Id</strong></label>  
+              <input type="text" style=" display: inline-block; width: 150px;" class="form-control" formControlName="transporter_id" [(ngModel)]="model.transporter_id" readonly/>  
+            </div>
+
+
+            <div class="dyn_table_conent">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3>Select</h3></label>
+                <!-- <label class="label_col"><h3>Sl No</h3></label> -->
+                <label class="label_col"><h3>Transporter Id</h3></label>
+                <label class="label_col"><h3 style="width: 295px;">Transporter Name</h3></label>
+                <label class="label_col"><h3 style="width: 295px;">Transporter Group</h3></label>
+              </div>
+              
+              <div class="dyn_table_data_cont" formArrayName="transporter_list">
+                <div class="dyn_table"  *ngFor="let item of transporter_list.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <div class="label_col"><mat-checkbox  formControlName="checkbox" class="form-control wdt_ag" (change)=" check($event, pointIndex)"></mat-checkbox></div>
+                  <!-- <div class="label_col"><input type="text" formControlName="sl_no" class="form-control wdt_ag" readonly /></div> -->
+                  <div class="label_col"><input type="text" style="width: 115px;" formControlName="bp_Id" class="form-control wdt_ag"  readonly /></div>
+                  <div class="label_col"><input type="text" style="width: 287px !important;" formControlName="bp_name" class="form-control wdt_ag"  readonly /></div>
+                  <div class="label_col"><input type="text" style="width: 287px !important;" formControlName="group_type" class="form-control wdt_ag"  readonly /></div>
+                </div>
+              </div>  
+            </div> 
+
+            <!-- <div class="table_content">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">&nbsp;</th>
+                    <th>Sl No.</th>
+                    <th>Transporter Id</th>
+                    <th>Transporter Name</th>
+                    <th>Transporter Group</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let i of listTransBussinessPartner; let poinIndex = index">
+                  <td><mat-checkbox (change)="check1($event, i , listTransBussinessPartner)"></mat-checkbox></td>
+                  <td>{{poinIndex+1}}</td>
+                  <td>{{i.bp_Id}}</td>
+                  <td>{{i.bp_name}}</td>
+                  <td>{{i.group_type}}</td>
+                </tr> 
+              </tbody>
+            </table>
+          </div> -->
+
+
+        </div>
+      </fieldset>
+    </div>
+
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+    <mat-dialog-actions align="end">
+        <button class="btn btn-info" mat-button [mat-dialog-close]="true" (click)="SendDataToDifferentComponenet()">Submit</button>
+      </mat-dialog-actions>
+  </form>
+</div>

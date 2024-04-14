@@ -1,0 +1,758 @@
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div> 
+<div class="master_container_box" >
+    <form [formGroup]="userForm">
+        <fieldset>
+            <legend>Daily Gate Wheat Inward Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                <mat-label>From Date</mat-label>
+                <input type="date"  class="form-control"  formControlName="unloaddate">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                <mat-label>To Date</mat-label>
+                <input type="date"  class="form-control"  formControlName="unloadtodate">
+                </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Type<span class="red">*</span></mat-label>
+                  <mat-select class="form-control" formControlName="wei_type" (selectionChange)="weighmenttype()">
+                    <mat-option value="Weighment">Weighment</mat-option>
+                    <mat-option value="Other">Other Weighment</mat-option>
+                  </mat-select>
+               </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12" *ngIf="kata">
+                <div class="form-group">
+                    <mat-label>Order<span class="red">*</span></mat-label>
+                    <mat-select class="form-control" formControlName="order_type" (selectionChange)="onChangeOrder($event.value)">
+                        <mat-option value="0">Select</mat-option>
+                        <mat-option value="Purchase">Purchase</mat-option>
+                        <mat-option value="Sale">Sale</mat-option>
+                    </mat-select>
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="salesShow">
+                <div class="form-group">
+                  <mat-label>Customer List</mat-label>
+                  <mat-select-autocomplete class="form-control ats"  
+                  [options]="partyList"
+                  [display]="'cp_name'"
+                  [value]="'cp_Id'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['customer']">
+                </mat-select-autocomplete>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="purchaseShow">
+                <div class="form-group">
+                  <mat-label>Supplier List<span class="red">*</span></mat-label>
+                  <mat-select-autocomplete class="form-control ats"  
+                  [options]="supplierNames"
+                  [display]="'bp_name'"
+                  [value]="'bp_Id'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['supplier']">
+                </mat-select-autocomplete>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="otherkata">
+                <div class="form-group">
+                  <mat-label>Party List</mat-label>
+                  <mat-select-autocomplete class="form-control ats"  
+                  [options]="partylist1"
+                  [display]="'nopartyname'"
+                  [value]="'nopartyid'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['party_name']">
+                </mat-select-autocomplete>
+                </div>
+              </div>
+            <div class="col-lg-12" >
+                <div class="form-group">
+                <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
+                </div>
+            </div>
+            
+            <fieldset class="table_container">
+            <div *ngIf="kata"> 
+                <div class="col-lg-12" style="float: right;">
+                    <div  class="form-group">
+                        <button [useExistingCss]="true" printSectionId="print-section1" mat-button ngxPrint class="btn btn-info">print</button>
+                        <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+                    </div>
+                </div>
+
+            <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable" >
+                    <thead>
+                        <tr>
+                            
+                            <th>Gate Sl No.</th>
+                            <th>Advice No.</th>
+                            <th>Purchase Order No.</th>
+                            <th>Name of Party</th>
+                            <th>Vehicle No.</th>
+                            <th>Bill/Challan No.</th>
+                            <th>Description of Goods</th>
+                            <th>Bags</th>
+                            <th>Party Slip No</th>
+                            <th>Weighment Date</th>
+                            <th>Gross Date</th>
+                            <th>Time in</th>
+                            <th>Tare Date</th>
+                            <th>Time out</th>
+                            <th>Gross Wt.</th>
+                            <th>Gross Remark</th>
+                            <th>Tare Wt.</th>
+                            <th>Tare Remark</th>
+                            <th>Net Wt.</th>
+                            <th>Digital Wt.1</th>
+                            <th>Digital Wt.2</th>
+                            <th>Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let inward of inwardlist; let pointIndex=index">
+                            <td>{{pointIndex+1}}</td>
+                            <td>{{inward.advicenumber}}</td>
+                            <td>{{inward.pur_order_no}}</td>
+                            <td>{{inward.partyname}}</td>
+                            <td>{{inward.vehicleno}}</td>
+                            <td>{{inward.supp_ref_docno}}</td>
+                            <td>{{inward.description}}</td>
+                            <td>{{inward.tarebags}}</td>
+                            <td>{{inward.slipnumber}}</td>
+                            <td>{{inward.weighmentdate}}</td>
+                            <td>{{inward.gw_date}}</td>
+                            <td>{{inward.timein}}</td>
+                            <td>{{inward.tw_date}}</td>
+                            <td>{{inward.timeout}}</td>
+                            <td>{{inward.grossweight}}</td>
+                            <td>{{inward.gw_remarks}}</td>
+                            <td>{{inward.tareweight}}</td>
+                            <td>{{inward.tw_remarks}}</td>
+                            <td>{{inward.netweight}}</td> 
+                            <td>{{inward.digital_weight}}</td>
+                            <td>{{inward.digital_weight1}}</td>
+                            <td>{{inward.remarks}}</td>
+                            
+                        </tr>
+                    </tbody>
+                    </table>
+                    </div>
+                   
+                    
+                <div  id="print-section1" class="print " hidden>
+                    <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+                    <h5 class="uc"  style="text-align: center;">W.B. IN WARD REPORT (FINISHED GOODS)</h5>
+                    <div>
+                        <table class="table table-bordered" >
+                            <thead>
+                                <tr>
+                                    <th>Gate Sl No.</th>
+                                    <th>Advice No.</th>
+                                    <th>Name of Party</th>
+                                    <th>Vehicle No.</th>
+                                    <th>Bill/Challan No.</th>
+                                    <th>Description of Goods</th>
+                                    <th>Bags</th>
+                                    <th>Party Slip No</th>
+                                    <th>Weighment Date</th>
+                                    <th>Time in</th>
+                                    <th>Time out</th>
+                                    <th>Gross Wt.</th>
+                                    <th>Tare Wt.</th>
+                                    <th>Net Wt.</th>
+                                    <th>Driver Name</th>
+                                
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let inward of inwardlist; let pointIndex=index">
+                                    <td>{{pointIndex+1}}</td>
+                                    <td>{{inward.advicenumber}}</td>
+                                    <td>{{inward.partyname}}</td>
+                                    <td>{{inward.vehicleno}}</td>
+                                    <td>{{inward.supp_ref_docno}}</td>
+                                    <td>{{inward.description}}</td>
+                                    <td>{{inward.tarebags}}</td>
+                                    <td>{{inward.slipnumber}}</td>
+                                    <td>{{inward.tw_date}}</td>
+                                    <td>{{inward.timein}}</td>
+                                    <td>{{inward.timeout}}</td>
+                                    <td>{{inward.grossweight}}</td>
+                                    <td>{{inward.tareweight}}</td>
+                                    <td>{{inward.netweight}}</td>
+                                    <td>{{inward.drivername}}</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> 
+                </div>
+            </div>
+            <div *ngIf="otherkata"> 
+                <div class="col-lg-12" style="float: right;">
+                    <div  class="form-group">
+                        <button [useExistingCss]="true" printSectionId="print-sectionOther" mat-button ngxPrint class="btn btn-info">Print</button>
+                        <button mat-raised-button (click)="exportAsXLSXOther()" color="primary" >Export To Excel</button>
+                    </div>
+                </div>
+
+            <div class="table_content">
+                    <table class="table table-bordered" id="otherkataexport" >
+                    <thead>
+                        <tr>
+                            <th>Gate Sl No.</th>
+                            <th>Weighment For</th>
+                            <th>Party Name</th>
+                            <th>Item Name</th>
+                            <th>Weighment No</th>
+                            <th>Vehicle No.</th>
+                            <th>Bags</th>
+                            <th>Weighment Date</th>
+                            <th>Time in</th>
+                            <th>Time out</th>
+                            <th>Gross Wt.</th>
+                            <th>Tare Wt.</th>
+                            <th>Net Wt.</th>
+                            <th>Digital Wt.1</th>
+                            <th>Digital Wt.2</th>       
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let other of otherkatalist; let pointIndex=index">
+                            <td>{{pointIndex+1}}</td>
+                            <td>{{other.wgment_for}}</td>
+                            <td>{{other.nopartyname}}</td>
+                            <td>{{other.noitemname}}</td>
+                            <td>{{other.wgmentno}}</td>
+                            <td>{{other.vehicle_no}}</td>
+                            <td>{{other.tarebags}}</td>
+                            <td>{{other.wgment_date}}</td>
+                            <td>{{other.gw_time}}</td>
+                            <td>{{other.tw_time}}</td>
+                            <td>{{other.gross_weight}}</td>
+                            <td>{{other.tare_weight}}</td>
+                            <td>{{other.net_weight}}</td>
+                            <td>{{other.digital_weight}}</td>
+                            <td>{{other.digital_weight1}}</td> 
+                            
+                        </tr>
+                    </tbody>
+                    </table>
+                    </div>
+                   
+                    
+                <div  id="print-sectionOther" class="print " hidden>
+                    <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+                    <h5 class="uc"  style="text-align: center;">Other Kata Report</h5>
+                    <div>
+                        <table class="table table-bordered" >
+                            <thead>
+                                <tr>
+                                    <th>Gate Sl No.</th>
+                                    <th>Weighment For</th>
+                                    <th>Party Name</th>
+                                    <th>Item Name</th>
+                                    <th>Weighment No</th>
+                                    <th>Vehicle No.</th>
+                                    <th>Bags</th>
+                                    <th>Weighment Date</th>
+                                    <th>Time in</th>
+                                    <th>Time out</th>
+                                    <th>Gross Wt.</th>
+                                    <th>Tare Wt.</th>
+                                    <th>Net Wt.</th>
+                                    <th>Digital Wt.1</th>
+                                    <th>Digital Wt.2</th> 
+                                
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let other of otherkatalist; let pointIndex=index">
+                                    <td>{{pointIndex+1}}</td>
+                                    <td>{{other.wgment_for}}</td>
+                                    <td>{{other.nopartyname}}</td>
+                                    <td>{{other.noitemname}}</td>
+                                    <td>{{other.wgmentno}}</td>
+                                    <td>{{other.vehicle_no}}</td>
+                                    <td>{{other.tarebags}}</td>
+                                    <td>{{other.wgment_date}}</td>
+                                    <td>{{other.gw_time}}</td>
+                                    <td>{{other.tw_time}}</td>
+                                    <td>{{other.gross_weight}}</td>
+                                    <td>{{other.tare_weight}}</td>
+                                    <td>{{other.net_weight}}</td>
+                                    <td>{{other.digital_weight}}</td>
+                                    <td>{{other.digital_weight1}}</td> 
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div> 
+                </div>
+            </div>
+                <!-- <div  class="col-lg-12">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+                    </div>
+                </div>  -->
+
+            </fieldset>
+        </fieldset>
+    </form>
+    
+ </div>
+
+ <div class="master_container_box" >
+    <form [formGroup]="userForm3">
+        <fieldset>
+            <legend>Daily Jobwork Weighment Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                <mat-label>From Date</mat-label>
+                <input type="date"  class="form-control"  formControlName="loadfromdate">
+                </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                <mat-label>To Date</mat-label>
+                <input type="date"  class="form-control"  formControlName="load2date">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Party List</mat-label>
+                  <mat-select-autocomplete class="form-control ats"  
+                  [options]="partyList"
+                  [display]="'cp_name'"
+                  [value]="'cp_Id'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm3.controls['party']">
+                </mat-select-autocomplete>
+                </div>
+              </div>
+            <!-- <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Type<span class="red">*</span></mat-label>
+                  <mat-select class="form-control" formControlName="wei_type" (selectionChange)="weighmenttype()">
+                    <mat-option value="Weighment">Weighment</mat-option>
+                    <mat-option value="Other">Other Weighment</mat-option>
+                  </mat-select>
+               </div>
+            </div>
+
+            <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>Order<span class="red">*</span></mat-label>
+                    <mat-select class="form-control" formControlName="order_type">
+                        <mat-option value="Purchase">Purchase</mat-option>
+                        <mat-option value="Sale">Sale</mat-option>
+                    </mat-select>
+                </div>
+            </div> -->
+
+            <div class="col-lg-12" >
+                <div class="form-group">
+                <button type="submit" class="btn btn-primary" (click)="search3()" >Search</button>
+                </div>
+            </div>
+            
+            <fieldset class="table_container">
+            <div> 
+                <div class="col-lg-12" style="float: right;">
+                    <div  class="form-group">
+                        <!-- <button [useExistingCss]="true" printSectionId="print-section1" mat-button ngxPrint class="btn btn-info">print</button> -->
+                        <button mat-raised-button (click)="exportAsXLSX1()" color="primary" >Export To Excel</button>
+                    </div>
+                </div>
+
+            <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable1" >
+                    <thead>
+                        <tr>
+                            
+                            <th>Sl No.</th>
+                            <th>Advice No.</th>
+                            <th>Sales Order No.</th>
+                            <th>Sales Bill No.</th>
+                            <th>Name of Party</th>
+                            <th>Vehicle No.</th>
+                            <th>Bill/Challan No.</th>
+                            <th>Description of Goods</th>
+                            <th>Bags</th>
+                            <th>Party Slip No</th>
+                            <th>Weighment Date</th>
+                            <th>Gross Date</th>
+                            <th>Time in</th>
+                            <th>Tare Date</th>
+                            <th>Time out</th>
+                            <th>Gross Wt.</th>
+                            <th>Gross Remark</th>
+                            <th>Tare Wt.</th>
+                            <th>Tare Remark</th>
+                            <th>Net Wt.</th>
+                            <th>Digital Wt.1</th>
+                            <th>Digital Wt.2</th>
+                            <th>Remarks</th> 
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let jobwork of jobworkwgtlist; let pointIndex=index">
+                            <td>{{pointIndex+1}}</td>
+                            <td>{{jobwork.advicenumber}}</td>
+                            <td>{{jobwork.pur_order_no}}</td>
+                            <td>{{jobwork.invoice_no}}</td>
+                            <td>{{jobwork.partyname}}</td>
+                            <td>{{jobwork.vehicleno}}</td>
+                            <td>{{jobwork.supp_ref_docno}}</td>
+                            <td>{{jobwork.description}}</td>
+                            <td>{{jobwork.tarebags}}</td>
+                            <td>{{jobwork.slipnumber}}</td>
+                            <td>{{jobwork.weighmentdate}}</td>
+                            <td>{{jobwork.gw_date}}</td>
+                            <td>{{jobwork.timein}}</td>
+                            <td>{{jobwork.tw_date}}</td>
+                            <td>{{jobwork.timeout}}</td>
+                            <td>{{jobwork.grossweight}}</td>
+                            <td>{{jobwork.gw_remarks}}</td>
+                            <td>{{jobwork.tareweight}}</td>
+                            <td>{{jobwork.tw_remarks}}</td>
+                            <td>{{jobwork.netweight}}</td> 
+                            <td>{{jobwork.digital_weight}}</td>
+                            <td>{{jobwork.digital_weight1}}</td>
+                            <td>{{jobwork.remarks}}</td> 
+                        </tr>
+                    </tbody>
+                    </table>
+                    </div>
+            </div>
+
+            </fieldset>
+        </fieldset>
+    </form>
+    
+ </div>
+      
+ <div>
+    <form [formGroup]="userForm1">
+        <fieldset>
+            <legend>Finished Outward Report</legend>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-label>From Date</mat-label>
+                        <input type="date"  class="form-control"  formControlName="fromdate">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-label>To Date</mat-label>
+                        <input type="date"  class="form-control"  formControlName="todate">
+                    </div>
+                </div>
+                <div class="col-lg-12" >
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" (click)="search1()" >Search</button>
+                    </div>
+                </div>
+                <fieldset class="table_container">
+                    
+                    <div class="col-lg-12" style="float: right;">
+                        <div  class="form-group">
+                            <!-- <button [useExistingCss]="true" printSelectionId="print-section" mat-button ngxPrint class="btn btn-info">Print</button> -->
+                            <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+                            <button mat-raised-button (click)="exportAsXLSX2()" color="primary" >Export To Excel</button>
+                        </div>
+
+                    </div>
+
+                    <div class="table_content">
+                <table class="table table-bordered" id="dynamictable2">
+                    <thead>
+                        <tr>
+                            <th style="width:70px">Date</th>
+                            <th>Advice No.</th>
+                            <th>Party Name</th>
+                            <th>Item</th>
+                        
+                            <th>Pck Qty</th>
+                            <th>Pack UOM</th>
+                            <th>Item Qty</th>
+                            <th>Item UOM</th>
+
+                            <th>Wbslno</th>
+                            <th>Truck No</th>
+                            <th>Time In</th>
+                            <th>Time Out</th>
+                            <th>Tr Wt</th>
+                            <th>Gr Wt</th>
+                            <th>Nt Wt</th>
+                            <th>Diff</th>
+                    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let outward of outwardlist; let pointIndex=index">
+                            <td>{{outward.wgmentdate}}</td>
+                            <td>{{outward.updated_by}}</td>
+
+                            <td>{{outward.partyname}}</td>
+                            <td>{{outward.advice_no}}</td>
+
+                            <td>{{outward.inserted_by}}</td>
+                            <td>{{outward.gw_unit}}</td>
+                            <td>{{outward.deleted_by}}</td>
+                            <td>{{outward.tw_unit}}</td>
+
+                            <td>{{outward.wgment_no}}</td>
+                            <td>{{outward.vehicle_no}}</td>
+                            <td>{{outward.tw_time}}</td>
+                            <td>{{outward.gw_time}}</td>
+                            <td>{{outward.tare_weight | number:'1.3-3'}}</td>
+                            <td>{{outward.gross_weight | number:'1.3-3'}}</td>
+                            <td>{{outward.net_weight | number:'1.3-3'}}</td>
+                            <td>{{outward.company_id | number:'1.3-3'}}</td>
+                            </tr>
+                    </tbody>
+                </table>
+                
+
+                <!-- <div  class="col-lg-12">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX2()" color="primary" >Export To Excel</button>
+                    </div>
+                </div> -->
+            </div>
+            <div  id="print-section" class="print " hidden>
+                <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+                <h5 class="uc"  style="text-align: center;">W.B. OUT WARD REPORT (FINISHED GOODS)</h5>
+                <div>
+                    <table class="table table-bordered" >
+                        <thead>
+                            <tr>
+                                <th style="width:70px">Date</th>
+                                <th>Advice No.</th>
+                                <th>Party Name</th>
+                                <th>Item</th>
+                            
+                                <th>Pck Qty</th>
+                                <th>Pack UOM</th>
+                                <th>Item Qty</th>
+                                <th>Item UOM</th>
+
+                                <th>Wbslno</th>
+                                <th>Truck No</th>
+                                <th>Time In</th>
+                                <th>Time Out</th>
+                                <th>Tr Wt</th>
+                                <th>Gr Wt</th>
+                                <th>Nt Wt</th>
+                                <th>Diff</th>
+                            
+                                </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let outward of outwardlist; let pointIndex=index">
+                                <td>{{outward.wgmentdate}}</td>
+                                <td>{{outward.updated_by}}</td>
+                                
+                                <td>{{outward.partyname}}</td>
+                                <td>{{outward.advice_no}}</td>
+
+                                <td>{{outward.inserted_by}}</td>
+                                <td>{{outward.gw_unit}}</td>
+                                <td>{{outward.deleted_by}}</td>
+                                <td>{{outward.tw_unit}}</td>
+
+                                <td>{{outward.wgment_no}}</td>
+                                <td>{{outward.vehicle_no}}</td>
+                                <td>{{outward.tw_time}}</td>
+                                <td>{{outward.gw_time}}</td>
+                                <td>{{outward.tare_weight | number:'1.3-3'}}</td>
+                                <td>{{outward.gross_weight | number:'1.3-3'}}</td>
+                                <td>{{outward.net_weight | number:'1.3-3'}}</td>
+                                <td>{{outward.company_id | number:'1.3-3'}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> 
+            </div>
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm2">
+        <fieldset>
+            <legend>Challan Per Transport Report</legend>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-label>From Date</mat-label>
+                        <input type="date"  class="form-control"  formControlName="chfromdate">
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-label>To Date</mat-label>
+                        <input type="date"  class="form-control"  formControlName="chtodate">
+                    </div>
+                </div>
+                <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Transport Borne By</mat-label>
+                      <mat-select class="form-control" formControlName="trans_borne_by">
+                        <mat-option value="1">Own Account</mat-option>
+                        <mat-option value="2">Party Account</mat-option>
+                      </mat-select>
+                   </div>
+                  </div>
+                <div class="col-lg-12" >
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" (click)="searchChallan()" >Search</button>
+                    </div>
+                </div>
+                <fieldset class="table_container">
+                    
+                    <div class="col-lg-12" style="float: right;">
+                        <div  class="form-group">
+                            <!-- <button [useExistingCss]="true" printSelectionId="print-section" mat-button ngxPrint class="btn btn-info">Print</button> -->
+                            <button [useExistingCss]="true" printSectionId="print-section2" mat-button ngxPrint class="btn btn-info">print</button>
+                            <button mat-raised-button (click)="exportAsXLSX3()" color="primary" >Export To Excel</button>
+                        </div>
+
+                    </div>
+
+                    <div class="table_content">
+                <table class="table table-bordered" id="dynamictable3">
+                    <thead>
+                        <tr>
+                            <th style="width:70px">Date</th>
+                            <th>Challan No.</th>
+                            <th>Party Name</th>
+                            <th>Packing Qty.</th>
+                            <th>Item Qty</th>
+                            <th>Gross Wt.</th>
+                            <th>Tare Wt.</th>
+                            <th>Net Wt.</th>
+                            <th>Net Wt in KGs</th>
+                            <th>Delivery By</th>
+                            <th>Transport Mode</th>
+                            <th>Transporter Name</th>
+                            <th>Vehicle No</th>
+                            <th>Freight Amount</th>
+                            <th>Advance paid</th>
+                           
+                           
+                    
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let challan of challanlist; let pointIndex=index">
+                            <td>{{challan.challan_date}}</td>
+                            <td>{{challan.challan_no}}</td>
+                            <td>{{challan.partyname}}</td>
+                            <td>{{challan.squantity}}</td>
+                            <td>{{challan.quantity}}</td>
+                            <td>{{challan.own_gross}}</td>
+                            <td>{{challan.own_tare}}</td>
+                            <td>{{challan.own_net}}</td>
+                            <td>{{challan.kg}}</td>
+                            <td>{{challan.trans_borne_by}}</td>
+                            <td>{{challan.mode_of_trans}}</td>
+                            <td>{{challan.transname}}</td>
+                            <td>{{challan.vehicle_no}}</td>
+                            <td>{{challan.freight_amt}}</td>
+                            <td>{{challan.adv_paid}}</td>
+                            </tr>
+                    </tbody>
+                </table>
+                
+
+                <!-- <div  class="col-lg-12">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX2()" color="primary" >Export To Excel</button>
+                    </div>
+                </div> -->
+            </div>
+            <div  id="print-section2" class="print " hidden>
+                <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+                <h5 class="uc"  style="text-align: center;">Challan Per Transport Report</h5>
+                <div>
+                    <table class="table table-bordered" >
+                        <thead>
+                            <tr>
+                                <th style="width:70px">Date</th>
+                            <th>Challan No.</th>
+                            <th>Party Name</th>
+                            <th>Packing Qty.</th>
+                            <th>Item Qty</th>
+                            <th>Gross Wt.</th>
+                            <th>Tare Wt.</th>
+                            <th>Net Wt.</th>
+                            <th>Net Wt in KGs</th>
+                            <th>Delivery By</th>
+                            <th>Transport Mode</th>
+                            <th>Transporter Name</th>
+                            <th>Vehicle No</th>
+                            <th>Freight Amount</th>
+                            <th>Advance paid</th>
+                            
+                                </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let challan of challanlist; let pointIndex=index">
+                                <td>{{challan.challan_date}}</td>
+                                <td>{{challan.challan_no}}</td>
+                                <td>{{challan.partyname}}</td>
+                                <td>{{challan.squantity}}</td>
+                                <td>{{challan.quantity}}</td>
+                                <td>{{challan.own_gross}}</td>
+                                <td>{{challan.own_tare}}</td>
+                                <td>{{challan.own_net}}</td>
+                                <td>{{challan.kg}}</td>
+                                <td>{{challan.trans_borne_by}}</td>
+                                <td>{{challan.mode_of_trans}}</td>
+                                <td>{{challan.transname}}</td>
+                                <td>{{challan.vehicle_no}}</td>
+                                <td>{{challan.freight_amt}}</td>
+                                <td>{{challan.adv_paid}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div> 
+            </div>
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+  
+  
+                  
+  
+  
+                 
+                    
+  
+                    
+                    
+  
+  
+  

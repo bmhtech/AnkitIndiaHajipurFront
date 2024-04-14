@@ -1,0 +1,110 @@
+<!-- <div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> -->
+<div class="container-fluid modal_box">
+  <form>
+    <div class="row">
+      <div id="print-section" class="print ">
+      <div class="col-lg-12">
+        <div class="pop_div">
+          <fieldset class="table_container pop_table">
+
+
+
+            <h4 class="ac">{{LedgerName}}</h4>
+            <h6 class="ac">{{FromDate}} - {{ToDate}}</h6>
+            <div class="clr"></div>
+            <!-- <div class="table_content table_head_fixed">
+              <table class="table table-bordered fixed_head">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">Sl No.</th>
+                    <th style="width: 180px;">Date</th>
+                    <th style="width: 400px;">Particulars</th>
+                    <th style="width: 180px;">Credit</th>
+                    <th style="width: 180px;">Debit</th>           
+                  </tr>  
+                </thead>
+              </table>
+            </div> -->
+
+            <div class="table_content table_pop">
+             
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">Sl No.</th>
+                    <th style="width: 180px;">Date</th>
+                    <th style="width: 400px;">Particulars</th>
+                    <th style="width: 100px;">Credit</th>
+                    <th style="width: 100px;">Debit</th>  
+                  </tr>
+                </thead>
+                <tbody>
+
+                    <tr *ngFor="let Item of PartyLedgerList">
+                     <td> {{ Item.slno }}</td> 
+
+                     <td *ngIf="DueDate != Item.entrydate;else elseBlock "> {{ Item.entrydate }}</td>  
+                      <ng-template #elseBlock><td><span class="red"> {{ Item.entrydate }} </span></td></ng-template>
+
+                      <td>{{ Item.vouchernumber }}</td>
+                      
+                      <td>{{ Item.credit }}</td>
+
+                      <!-- <td *ngIf="Debit != Item.debit;else elseBlock1 "> {{ Item.debit }}</td>  
+                      <ng-template #elseBlock1><td><span class="red"> {{ Item.debit }} </span></td></ng-template> -->
+
+                      <td>{{ Item.debit }}</td>
+                    </tr>
+
+                    <!-- <tr>
+                      <td>2</td>
+                      <td>20.04.2021</td>
+                      <td>xxxx</td>
+                      <td>500.00</td>
+                      <td>800.00</td>
+                    </tr> -->
+                    
+                    <!-- <tr>
+                      <td colspan="5">&nbsp;</td>
+                    </tr> -->
+                    <!-- <tr class="red">
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>Total Due Amount as on 20.03.02021</td>
+                      <td>&nbsp;</td>
+                      <td>800.00</td>
+                    </tr> -->
+                    <!-- <tr>
+                      <td colspan="5">&nbsp;</td>
+                    </tr>
+                    <tr style="font-weight: bold;">
+                      <td>&nbsp;</td>
+                      <td>&nbsp;</td>
+                      <td>Total</td>
+                      <td>25000.00</td>
+                      <td>25000.00</td>
+                    </tr> -->
+                </tbody>
+              </table>
+            </div>
+          </fieldset>
+      </div>
+      <button class="close_btn ac" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    
+    
+    </div>
+  </div>
+  </div>
+      <mat-dialog-actions align="center">
+        <button [useExistingCss]="true" printSectionId="print-section" ngxPrint>print</button>
+        </mat-dialog-actions>
+  </form>
+</div>
+  
+  
+  
+  

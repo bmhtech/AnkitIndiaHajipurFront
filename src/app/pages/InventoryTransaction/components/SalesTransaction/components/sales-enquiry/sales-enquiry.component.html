@@ -1,0 +1,391 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Basic Information</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                 <mat-label>Enquiry Type</mat-label>
+                  <mat-select class="form-control" formControlName="enq_type" [(ngModel)]="model.enq_type" (selectionChange)="onChangeEnquiryType($event.value)">
+                 <mat-option *ngFor="let enq_type of enqTpes" [value]="enq_type">{{enq_type}}</mat-option>
+               </mat-select>
+             </div>
+           </div>
+           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Enquiry Date</mat-label>
+              <input type="date" formControlName="enq_date" [(ngModel)]="currentDate" (change)="onChangeEnquiryDate($event)" class="form-control">
+            </div>
+          </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Enquiry No.</mat-label>
+                <input type="text" formControlName="enquiry_no" [(ngModel)]="seq_no" class="form-control" readonly/>
+                <div hidden><input type="text" formControlName="id" [(ngModel)]="model.id" class="form-control" readonly/>
+                <input type="text" formControlName="enquiry_id" [(ngModel)]="model.enquiry_id" class="form-control" readonly/></div>
+              </div>
+            </div>
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Enquiry Date</mat-label>
+                <input type="date" formControlName="enq_date" [(ngModel)]="currentDate" (change)="onChangeEnquiryDate($event)" class="form-control">
+              </div>
+            </div> -->
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="model.enq_type == 'FORMAL' && action == 'update'">
+            <div class="form-group">
+              <label style="width: 100%;">&nbsp;</label>
+              <button class="btn btn-info" (click)=" openDialog()">Show </button>
+            </div>
+          </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Mode Of Enquiry</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                  [options]="options"
+                  [display]="'display'"
+                  [value]="'value'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['mode_of_enq']"
+                  [labelCount]="2">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Sales Person</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="empNames"
+                [display]="'emp_name'"
+                [value]="'emp_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['sales_person']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Predicted Closing (Days)</mat-label>
+                <input type="number" class="form-control" formControlName="pre_closing" [(ngModel)]="model.pre_closing">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Approx. Deal Value</mat-label>
+                <input type="number" class="form-control" formControlName="app_deal_val" [(ngModel)]="model.app_deal_val">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Referred By</mat-label>
+                <input type="text" class="form-control" formControlName="referred_by" [(ngModel)]="model.referred_by">
+              </div>
+            </div>
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+              <mat-label >Bussiness Unit</mat-label>
+              <mat-select-autocomplete class="form-control ats"  
+              [options]="bussiness_unit_list"
+              [display]="'businessunit_name'"
+              [value]="'businessunit_id'"
+              [multiple]='false'
+              (selectionChange)="onChangeBuUnit($event)"
+              ngDefaultControl
+              [formControl]="userForm.controls['businessunit']"
+              [labelCount]="2">
+            </mat-select-autocomplete>
+              </div>
+          </div>    -->
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label >Bussiness Unit</mat-label>
+              <mat-select formControlName="businessunit" [(ngModel)]="model.businessunit" class="form-control" (selectionChange)="onChangeBuUnit($event.value)">
+                <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Enquiry Status</mat-label>
+                <mat-select class="form-control" formControlName="enq_status" [(ngModel)]="model.enq_status">
+                  <mat-option value="CLOSE">CLOSE</mat-option>
+                  <mat-option value="OPEN">OPEN</mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <!--  Dynamic Start-->
+    <div class="weigh_n">
+      <div class="dyn_table_conent" style="border: none;">
+        <mat-tab-group animationDuration="1000ms">
+          <mat-tab label="Item Details">
+            <div class="dyn_table_conent" style="border: none;">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3 class="act">Action</h3></label>
+                <label class="label_col"> <h3 class="srln">Srl No</h3> </label>
+                <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                <label class="label_col"><h3 class="i_nam">Packing Item</h3></label>
+                <label class="label_col"><h3>Packing Quantity</h3></label>
+                <label class="label_col"><h3>Packing Uom</h3></label>
+                <label class="label_col"><h3>Item Quantity</h3></label>
+                <label class="label_col"><h3>Item Uom</h3></label>   
+                <label class="label_col"><h3>QC Norms</h3></label>                                          
+                <label class="label_col"><h3>Remarks</h3></label> 
+                <!-- -------hidden field------------>
+                <label class="label_col" style="display: none;"><h3>Mat wt</h3></label> 
+                <label class="label_col" style="display: none;"><h3>Price</h3></label>   
+                <label class="label_col" style="display: none;"><h3>Tax code</h3></label>                                          
+                <label class="label_col" style="display: none;"><h3>Tax Rate</h3></label> 
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="sales_Enquiry_Item_Dtls">
+                <div class="dyn_table" *ngFor="let item of sales_Enquiry_Item_Dtls.controls; let pointIndex=index"  [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action ats" (click)="deleteItem(pointIndex)"></i></div>
+                  <div class="label_col"><input formControlName="slno" class="form-control  srln" type="number" /></div>
+                 
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"  
+                    [options]="item_codes"
+                    [display]="'item_name'"
+                    [value]="'item_id'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedItemName[pointIndex]"
+                    (selectionChange)="onchangeItemName(pointIndex, $event)"
+                   
+                    ngDefaultControl
+                    [formControlName] = "'item_code'">
+                  </mat-select-autocomplete>
+                  </div>
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"  
+                    [options]="packingItem[pointIndex]"
+                    [display]="'item_name'"
+                    [value]="'item_code'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedPackingItem[pointIndex]"
+                    (selectionChange)="onchangePackingItem(pointIndex, $event)"
+                    ngDefaultControl
+                    [formControlName]="'packing_item'">
+                  </mat-select-autocomplete>
+                  </div>
+
+                  <div class="label_col"><input formControlName="packing_quantity" class="form-control" type="number" (keyup)="calItemQty($event, pointIndex)" /></div>
+                  <div class="label_col"><input formControlName="packing_uom" class="form-control"  type="text"></div>
+                  <div class="label_col"><input formControlName="quantity" class="form-control" type="number" /></div>
+                  <div class="label_col"><input formControlName="uom" class="form-control"  type="text"></div>                                                  
+                  <div class="label_col"><input class="form-control" type="text" formControlName="qc_norms" /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp2(pointIndex)" aria-hidden="true"></i></div>
+                  <div class="label_col"><input formControlName="remarks" class="form-control" type="text" /></div>
+                  <!-- ------------------Hidden field------------------- -->
+                  <div class="label_col" style="display: none;"><input formControlName="mat_wt" class="form-control" type="text"/></div>
+                  <div class="label_col" style="display: none;"><input formControlName="price" class="form-control" type="text"/></div>
+                  <div class="label_col" style="display: none;"><input formControlName="tax_code" class="form-control" type="text"/></div>
+                  <div class="label_col" style="display: none;"><input formControlName="tax_rate" class="form-control" type="text"/></div>
+                </div>
+              </div>
+            </div>
+            <div class="btm_btn_content" *ngIf="action == 'update'">
+              <button type="button" class="btn btn-success" (click)="addItem()">Add Row </button>
+            </div>
+            <div class="clr"></div>
+          </mat-tab>
+          <mat-tab label="Party Details">
+            <div class="dyn_table_conent" style="border: none;">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3 class="act">Action</h3></label>
+                <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                <label class="label_col"><h3 class="i_nam">Party Name</h3></label>
+                <label class="label_col"><h3 class="i_nam">Contact Person Name</h3></label>
+                <label class="label_col"><h3>Contact Number</h3></label>
+                <label class="label_col"><h3>Tcs Applicable</h3></label>
+                <label class="label_col"><h3>Tcs Rate</h3></label>
+                <label class="label_col"><h3>Mode of Enquiry</h3></label>
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="sales_Enquiry_Party_Dtls">
+                <div class="dyn_table" *ngFor="let item of sales_Enquiry_Party_Dtls.controls; let pointIndex=index"  [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteParty(pointIndex)"></i></div>
+                  <div class="label_col"><input formControlName="sl_no" class="form-control srln" type="number" readonly/></div> 
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"  
+                    [options]="partyNameList"
+                    [display]="'cp_name'"
+                    [value]="'cp_Id'"
+                    [multiple]='false'
+                    (selectionChange)="onChangePartyName($event, pointIndex)"
+                    [selectedOptions]="selectedPartyName[pointIndex]"
+                    ngDefaultControl
+                    [formControlName] = "'p_code'">
+                  </mat-select-autocomplete>
+                  </div>
+                  <!-- <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_man"  
+                    [options]="packingItem[pointIndex]"
+                    [display]="'contact_person'"
+                    [value]="'contact_person'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedContactName[pointIndex]"
+                    (selectionChange)="onchangeContactName($event, pointIndex)"
+                    ngDefaultControl
+                    [formControlName]="'cp_name'">
+                  </mat-select-autocomplete>
+                  </div> -->
+
+                  <!-- <div class="label_col"><mat-select formControlName="p_code" class="form-control" (selectionChange)="onChangePartyName($event.value, pointIndex)"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let list of partyNameList" [value]="list.cp_Id">{{list.cp_name}}</mat-option></mat-select></div> -->
+                  <div class="label_col"> <select formControlName="cp_name" class="form-control i_nam" (change)="onchangeContactName(pointIndex,$event)"><option value="0">-Select-</option><option *ngFor="let name of contNameList[pointIndex]" [value]="name.contact_person">{{name.contact_person}}</option></select> </div>
+                  <div class="label_col"><input formControlName="cp_contact" class="form-control" type="number" /></div>
+                  <div class="label_col"><input formControlName="tcs_applicable" class="form-control" type="text"></div>
+                  <div class="label_col"><input formControlName="tcs_rate" class="form-control" type="number"></div>
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats"  
+                    [options]="options"
+                    [display]="'display'"
+                    [value]="'value'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedPartyModeOfEnq[pointIndex]"
+                    (selectionChange)="onchangePartyModeOfEnq($event, pointIndex)"
+                    ngDefaultControl
+                    [formControlName]="'mode_of_enq'">
+                  </mat-select-autocomplete>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="btm_btn_content" *ngIf="model.enq_type != 'FORMAL' && action == 'update'">
+              <button type="button" class="btn btn-success" (click)="addParty()">Add</button>
+            </div>
+            <div class="clr"></div>
+          </mat-tab>
+           
+          <mat-tab label="Remarks">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="form-group">
+                <mat-label>Remarks</mat-label>
+                <textarea class="form-control" formControlName="remarks" [(ngModel)]="model.remarks"></textarea>
+              </div>
+            </div>     
+          </mat-tab>   
+         
+          <mat-tab label="Document Attachment">
+            <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+              <div class="dyn_table_conent" style="float:left;">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Action</h3></label>
+                  <label class="label_col"><h3>Document Name</h3></label>
+                  <label class="label_col"><h3 class="wdt_220">Document Upload</h3></label>
+                </div>           
+                <div class="dyn_table_data_cont" formArrayName="sales_Enquiry_Docs">
+                  <div class="dyn_table" *ngFor="let item of sales_Enquiry_Docs.controls; let pointIndex=index"  [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteDocument(pointIndex)"></i></div>   
+                    <div class="label_col"><input formControlName="doc_name" class="form-control" type="text" /></div>
+                    <div class="label_col"><input class="form-control wdt_215" type="file" /></div>
+                  </div>
+                </div>
+              </div>
+                            
+              <div class="btm_btn_content" *ngIf="action == 'update'">
+                <button type="button" class="btn btn-success"  (click)="addDocument(pointIndex)">Add </button>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <fieldset style="padding-bottom: 0px;">
+                <legend>Document List</legend>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                  <div class="form-group" style="height: auto;">
+                    <textarea class="form-control" rows="1" style="height: 100px;"></textarea>
+                  </div>
+                </div>
+              </fieldset>
+            </div>     
+        </mat-tab>
+        </mat-tab-group>
+      </div>
+    </div>
+
+      <div class="col-lg-12" *ngIf="action == 'update'">
+        <div class="form-group">
+          <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="salesenquirysave">Submit</button>
+        </div>
+      </div>
+      <!--  Dynamic End-->
+    </div>
+  </section>
+</form>
+
+
+<div class="master_container_box" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Sales Enquiry List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Sales Enquiry Date</th>
+                  <th>Sales Enquiry No.</th>
+                  <th>Sales Person Name</th>
+                  <th>Sales Enquiry Type</th>
+                  <th>Mode Of Enquiry</th>
+                  <th>Bussiness Unit</th>
+                  <th>Enquiry Status</th>
+                  <th colspan="2">Action</th>
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let SalesEnq of listSalesEnq">
+                  <td>{{SalesEnq.enq_date}}</td>
+                  <td>{{SalesEnq.enquiry_no}}</td>
+                  <td>{{SalesEnq.sales_person}}</td>
+                  <td>{{SalesEnq.enq_type}}</td>
+                  <td>{{SalesEnq.mode_of_enq}}</td>
+                  <td>{{SalesEnq.businessunit}}</td>
+                  <td>{{SalesEnq.enq_status}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(SalesEnq.id, SalesEnq.enquiry_id, 'view')" *ngIf="salesenquiryview">View</button></td>
+                  <td><button class="btn btn-info" (click)="onUpdate(SalesEnq.id, SalesEnq.enquiry_id, 'update')" *ngIf="salesenquiryupdate">Update</button></td>  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

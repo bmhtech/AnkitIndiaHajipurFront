@@ -1,0 +1,197 @@
+
+<mat-dialog-content>
+  <button class="close_btn" mat-button mat-dialog-close ><i class="fa fa-close icon"></i></button>
+<div class="container-fluid" >
+  <div class="row" id="print-section" class="print ">
+    <div class="col-lg-12">
+   
+        <!--<legend>Daily Production Report Print</legend>-->
+        <div style="padding:10px;">
+          <table border="1" style="padding:10px;" >
+            <thead>
+              <tr>
+                <td colspan="40" style="text-align: center;"><b>{{company_name}}</b></td>
+             </tr>
+              <tr>
+                <td colspan="40" style="text-align: center;"><b>Daily Production Report</b></td>
+             </tr>
+
+              <tr>
+                 
+                 <td colspan="7"><b> Date :</b> {{ date}}</td>
+                 <td colspan="10"><b> Bussiness Unit :</b> {{ business_unit}}</td>
+                 <td colspan="11"><b>Shop Floor:</b> {{shopfloor}}</td>
+              </tr>
+              <tr>
+                <td></td>
+                 <td colspan="3" style="text-align: center;"><b>(08-10)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(10-12)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(12-14)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(14-16)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(16-18)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(18-20)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(20-22)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(22-24)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(00-02)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(02-04)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(04-06)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>(06-08)</b></td>
+                 <td colspan="3" style="text-align: center;"><b>Total</b></td>
+              </tr>
+             
+             
+              <tr>
+                <td style="padding-left: 10px;text-align: center;">Item Name</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+                <td style="padding-left: 10px;text-align: center;">BAGS</td>
+                <td style="padding-left: 10px;text-align: center;">Quantity</td>
+                <td style="padding-left: 10px;text-align: center;">%</td>
+              </tr>
+              
+            </thead>
+            <tbody>
+                <tr *ngFor="let dailyproduction of dailyproductionlist">
+                    <td  style="text-align: center;">{{dailyproduction.item_name}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.eight_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.eight_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.eight_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.ten_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.ten_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.ten_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.twelve_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.twelve_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.twelve_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.forteen_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.forteen_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.forteen_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.sixteen_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.sixteen_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.sixteen_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.eighteen_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.eighteen_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.eighteen_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.twenty_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.twenty_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.twenty_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.twentytwo_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.twentytwo_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.twentytwo_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.zero_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.zero_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.zero_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.two_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.two_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.two_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.four_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.four_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.four_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.six_bag}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.six_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.six_percen}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.total}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.total_quantity}}</td>
+                    <td  style="text-align: center;">{{dailyproduction.total_percen}}</td>
+                   
+                  </tr>
+
+                  <tr *ngFor="let dailyproduction1 of dailyproductionlist1">
+                    <td   style="text-align: center;">Total Bags</td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.eight_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.eight_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.ten_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.ten_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.twelve_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.twelve_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.forteen_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.forteen_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.sixteen_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.sixteen_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.eighteen_bag_total}}</b></td>
+                     <td style="text-align: center;"><b>{{dailyproduction1.eighteen_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.twenty_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.twenty_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.twentytwo_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.twentytwo_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.zero_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.zero_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.two_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.two_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.four_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.four_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.six_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.six_quantity_total}}</b></td>
+                     <td></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.total_bag_total}}</b></td>
+                     <td  style="text-align: center;"><b>{{dailyproduction1.total_quantity_total}}</b></td>
+                     <td></td>
+                     
+                  </tr>
+
+                  <tr>
+                    <td><b>Remarks:</b></td>
+                    <td colspan="26">{{remarks}}</td>
+                  </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      
+
+    </div>
+  </div> 
+</div>
+</mat-dialog-content>
+<div  class="col-lg-12">
+  <div class="form-group">
+      <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+   </div>
+
+ 
+</div>

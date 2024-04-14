@@ -1,0 +1,200 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true" >  
+  <section class="master_container">
+    <div class="container-fluid">  
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Tax Code Master</legend>
+
+            <!-- tax code was commented bcz it need to be unique as earlier it was same as tax id  -->
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Code">Tax Code<span class="red">*</span></label>
+                <input [(ngModel)]="model.tax_code" formControlName="tax_code" type="text" class="form-control" readonly>
+              </div>
+            </div> -->
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Description">Description<span class="red">*</span></label>
+                <input [(ngModel)]="model.tax_description" formControlName="tax_description" type="text" class="form-control">
+              </div>
+            </div>                                 
+          </fieldset>
+
+
+          
+      <!--  Dynamic Tab start -->
+      
+      
+          <fieldset>
+            <legend>TCM Details</legend>
+            <div class="col-lg-12">
+              <div class="dyn_table_conent" style="border: none;">
+                <div  class="dyn_table_header">
+                  <label class="label_col"><h3>Action</h3></label>
+                  <label class="label_col"><h3>Sl no</h3></label>
+                  <label class="label_col"><h3>Tax Id</h3></label>
+                  <label class="label_col"><h3 class="i_nam">Tax Name<span class="red">*</span></h3></label>
+                  <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                  <label class="label_col"><h3>CESS</h3></label>  
+                  <label class="label_col"><h3>CGST(%)</h3></label>
+                  <label class="label_col"><h3>Act. Val .</h3></label>
+                  <label class="label_col"><h3>SGST(%)</h3></label>
+                  <label class="label_col"><h3>Act. Val .</h3></label>
+                  <label class="label_col"><h3>IGST(%)</h3></label>
+                  
+                  <label class="label_col"><h3>Sgst Input Ledger</h3></label>
+                  <label class="label_col"><h3>Sgst Output Ledger</h3></label>
+                  <label class="label_col"><h3>CGST Input Ledger</h3></label>
+                  <label class="label_col"><h3>CGST Output Ledger</h3></label>
+                  <label class="label_col"><h3>IGST Input Ledger</h3></label>
+                  <label class="label_col"><h3>IGST Output Ledger</h3></label>
+
+                  
+                  
+                  <label class="label_col"><h3>Act. Val .</h3></label> 
+                  <label class="label_col"><h3>&nbsp;</h3></label>                                                                           
+                </div>
+                            
+                <div class="dyn_table_data_cont" formArrayName="tax_code_details" >
+                  <div class="dyn_table" *ngFor="let item of tax_code_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                    <div class="label_col"><input class="form-control" min="0" type="number" formControlName="srno" /></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="tax_id" readonly/></div>
+                    <!-- <div class="label_col"><input class="form-control" type="text" formControlName="tax_name" /></div> -->
+                   
+                    <div class="label_col">
+                      <mat-select-autocomplete class="form-control ats i_nam"  
+                      [options]="taxtypelist"
+                      [display]="'taxtype_name'"
+                      [value]="'taxtype_code'"
+                      [multiple]='false'
+                      [selectedOptions]="selectedtaxName[pointIndex]"
+                      (selectionChange)="onchangetaxName(pointIndex, $event)"
+                      ngDefaultControl
+                      [formControlName] = "'tax_name'">
+                    </mat-select-autocomplete>
+                    </div>
+
+
+
+                    <div class="label_col"><input class="form-control" min="0" max="100" type="number" formControlName="tax_rate" /></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="cess" /></div>
+                    <div class="label_col" ><input class="form-control" min="0" type="number" formControlName="cgst" (keyup)="calCgstActVal($event, pointIndex, 'cgstData')"/></div>
+                    <div class="label_col" ><input class="form-control" min="0" type="number" formControlName="cgst_act_val" /></div>
+                    <div class="label_col"><input class="form-control" formControlName="sgst" min="0" type="number"  (keyup)="calCgstActVal($event, pointIndex, 'sgstData')"/></div>
+                    <div class="label_col"><input class="form-control" min="0" type="number" formControlName="sgst_act_val" /></div>
+                    <div class="label_col"><input class="form-control" formControlName="igst" min="0" type="number"  (keyup)="calCgstActVal($event, pointIndex, 'igstData')"/></div>
+                  
+
+                    <!-- <div class="label_col">
+                      <mat-select class="form-control"  formControlName="input_ledger" disabled>
+                             <mat-option *ngFor="let ledger of accLedgerNames" [value]="ledger.ledgerid">{{ledger.ledgername}}</mat-option>
+                    </mat-select> 
+                  </div>-->
+                    <div class="label_col"> <mat-select class="form-control"  formControlName="input_ledger" disabled>
+                      <mat-option *ngFor="let list of ledgerNames" [value]="list.ledgerid">{{list.ledgername}}</mat-option>
+                    </mat-select></div>
+
+                  
+                    <div class="label_col"><mat-select class="form-control" (selectionChange)="onChangeSgstOp($event.value, pointIndex)" formControlName="output_ledger" disabled>
+                      <mat-option *ngFor="let list of ledgerNames" [value]="list.ledgerid">{{list.ledgername}}</mat-option>
+                    </mat-select></div>
+
+                    <div class="label_col"><mat-select class="form-control" (selectionChange)="onChangeCgstIp($event.value, pointIndex)" formControlName="cgst_input_ledger" disabled>
+                      <mat-option *ngFor="let list of ledgerNames" [value]="list.ledgerid">{{list.ledgername}}</mat-option>
+                    </mat-select></div>
+
+                    <div class="label_col"><mat-select class="form-control" (selectionChange)="onChangeCgstOp($event.value, pointIndex)" formControlName="cgst_output_ledger" disabled>
+                      <mat-option *ngFor="let list of ledgerNames" [value]="list.ledgerid">{{list.ledgername}}</mat-option>
+                    </mat-select></div>
+
+                    <div class="label_col"><mat-select class="form-control" (selectionChange)="onChangeIgstIp($event.value, pointIndex)" formControlName="igst_input_ledger" disabled>
+                      <mat-option *ngFor="let list of ledgerNames" [value]="list.ledgerid">{{list.ledgername}}</mat-option>
+                    </mat-select></div>
+
+                    <div class="label_col"><mat-select class="form-control" (selectionChange)="onChangeIgstOp($event.value, pointIndex)" formControlName="igst_output_ledger" disabled>
+                      <mat-option *ngFor="let list of ledgerNames" [value]="list.ledgerid">{{list.ledgername}}</mat-option>
+                    </mat-select></div>
+
+                  
+                    <div class="label_col"><input class="form-control" min="0" type="number" formControlName="igst_act_val" /></div>
+                    <div class="label_col"><i class="fa fa-refresh form-control wdt_form_107" (click)="resetRecord(pointIndex)"></i></div>
+                  </div>
+                  </div>
+                </div>
+              <div class="btm_btn_content">
+                <button type="button" class="btn btn-success"  (click)="add()">Add </button>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+      <div class="row"> 
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="taxcodemastersave">Submit</button>
+          </div>
+        </div>
+       </div>
+    </div>
+  </section>
+</form>
+   
+  
+<div class="master_container_box" *ngIf="isHidden==false">
+  <div class="container-fluid">   
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>TCM Master List</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Tax Code</th>
+                  <th>Description</th>
+                  <th colspan="3">Action</th>
+                </tr>  
+              </thead>
+              <tbody>
+                <tr *ngFor="let TaxCode of listTaxCode">
+                  <td>{{TaxCode.tax_code}}</td>
+                  <td>{{TaxCode.tax_description}}</td> 
+                  <td><button class="btn btn-success" (click)="onUpdate(TaxCode.id,TaxCode.tax_id,'view')" *ngIf="taxcodemasterview">View</button></td>                 
+                  <td><button class="btn btn-info" (click)="onUpdate(TaxCode.id,TaxCode.tax_id,'update')" *ngIf="taxcodemasterupdate">Update</button></td>                 
+                  <td><button class="btn btn-danger" (click)="onDelete(TaxCode.id,TaxCode.tax_id)" *ngIf="taxcodemasterdelete">Delete</button></td>                 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+   </div>
+</div>

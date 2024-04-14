@@ -1,0 +1,135 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_containerr">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Quality Check Rules</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="QC Code">QC Code</label>
+                <input type="text" formControlName="qc_code" [(ngModel)]="seq_no" readonly class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="QC Name">QC Name<span class="red">*</span></label>
+                <input type="text" formControlName="qc_name" [(ngModel)]="model.qc_name" class="form-control">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Remarks">Remarks</label>
+                <input type="text" formControlName="remarks" [(ngModel)]="model.remarks" class="form-control">
+              </div>
+            </div>  
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox formControlName="qc_active" [(ngModel)]="model.qc_active">Active</mat-checkbox>
+              </div>
+            </div> 
+                               
+         </fieldset>
+        </div>
+        
+         <div class="col-lg-12 col-md-12 col-sm-12 col-12"> 
+            <div class="dyn_table_conent"> 
+              <div class="dyn_table_header">
+                <label class="label_col"><h3>Action</h3></label>
+                <label class="label_col"><h3> Select All</h3></label>
+                <label class="label_col"><h3>QC Parameter<span class="red">*</span></h3></label>
+                <label class="label_col"><h3 class="wdt_144">Calculation Basis<span class="red">*</span></h3></label>
+                <label class="label_col"><h3>Basis Amount UoM</h3></label>
+                <label class="label_col"><h3>Min</h3></label>
+                <label class="label_col"><h3>Max</h3></label>
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="qc_rules_setup_dtls">
+                <div class="dyn_table" *ngFor="let item of qc_rules_setup_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                  <div class="label_col"><input class="form-control" formControlName="qty_chkbox" type="checkbox" ></div>
+                  <div class="label_col"><input class="form-control" formControlName="qc_param" type="text" value="QC Para 1" ></div>
+                  <!-- <div class="label_col"><select class="form-control wdt_form_144" formControlName="cal_basis"><option>-Select-</option></select></div> -->
+                  <div class="label_col"><select formControlName="cal_basis" class="form-control wdt_form_144"><option value="0">-Select-</option><option *ngFor="let cal_basis of basislist" [value]="cal_basis">{{cal_basis}}</option></select></div>
+                  <div class="label_col"><input class="form-control" formControlName="basis_amt_UoM" min="0" type="number" ></div>
+                  <div class="label_col"><input class="form-control" formControlName="min" min="0" type="number" value="0.000" ></div>
+                  <div class="label_col"><input class="form-control" formControlName="max" min="0" type="number" value="0.000"></div>
+                </div>
+              </div>
+   
+               <div class="btm_btn_content" style="margin-top: 20px;">
+                  <button type="button" (click)="add(pointIndex)" class="btn btn-success">Add </button>
+                  <div class="clr"></div>
+              </div> 
+            </div>
+          </div> 
+
+          <div class="col-lg-12">
+            <div class="form-group">
+              <!-- <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="qcrulessave">Submit</button> -->
+              <button type="submit" class="btn btn-primary" (click)="send()" >Submit</button>
+            </div>
+          </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid"> 
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Quality Check Rules Master</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>QC code</th>
+                  <th>QC Name</th>
+                  <th>Remarks</th>   
+                  <th colspan="3">Action</th>   
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Qc_rules_setup of listQc_rules_setup">
+                  <td>{{Qc_rules_setup.qc_code}}</td>
+                  <td>{{Qc_rules_setup.qc_name}}</td>
+                  <td>{{Qc_rules_setup.remarks}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(Qc_rules_setup.id,Qc_rules_setup.qc_code,'view')" *ngIf="qcrulesview">View</button></td>                 
+                  <td><button class="btn btn-info" (click)="onUpdate(Qc_rules_setup.id,Qc_rules_setup.qc_code,'update')" *ngIf="qcrulesupdate">Update</button></td>                 
+                  <td><button class="btn btn-danger" (click)="onDelete(Qc_rules_setup.id,Qc_rules_setup.qc_code)" *ngIf="qcrulesdelete">Delete</button></td>                 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

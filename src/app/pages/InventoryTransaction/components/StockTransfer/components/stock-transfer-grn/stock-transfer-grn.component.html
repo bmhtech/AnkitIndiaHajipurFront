@@ -1,0 +1,742 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader"> 
+    <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Stock Transfer GRN Information</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group ">
+                <mat-label>Vehicle No<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="vehicle_id"  (selectionChange)="onChangeVechileNo()">
+                 
+                  <mat-option *ngFor="let list of newVehicleList" [value]="list.vehicle_id">{{list.vehicle_no}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+             <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Vehicle No<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="newVehicleList"
+                [display]="'vehicle_no'"
+                [value]="'vehicle_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['vehicle_id']" 
+                (selectionChange)="onChangeVechileNo()"
+                [disabled]="stocktransfergrnsave==false">
+              </mat-select-autocomplete>
+              </div>
+          </div>  -->
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group ">
+                <mat-label>Stock Transfer GRN Date</mat-label>
+                <input type="date" [(ngModel)]="currentDate" formControlName="stk_grn_date" (change)="OnChangeStkDate($event.value, 'create')" class="form-control" >
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Sending Bussiness Unit<span class="red">*</span></mat-label>
+                <mat-select formControlName="b_unit" [(ngModel)]="model.b_unit" class="form-control" (selectionChange)="onChangeBussinessUnit($event.value, 'create')" [disabled]="true">
+                  <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Recieving Bussiness Unit<span class="red">*</span></mat-label>
+                <mat-select formControlName="rec_b_unit" [(ngModel)]="model.rec_b_unit" class="form-control" (selectionChange)="onChangeBussinessUnit($event.value, 'create')" [disabled]="true">
+                  <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Stock Transfer GRN No</mat-label>
+                <input type="text" [(ngModel)]="seq_no" formControlName="stk_grn_no" class="form-control" readonly>
+              </div>
+            </div>
+            
+           
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Passing Weight<span class="red">*</span></mat-label>
+                <mat-select formControlName="receipt_criteria" [(ngModel)]="model.receipt_criteria" class="form-control" [disabled]="true">
+                  <mat-option value="Supplied WT">Supplied WT</mat-option>
+                  <mat-option value="Receiving WT">Receiving WT</mat-option>
+                  <mat-option value="Lower of Both">Lower of Both</mat-option>
+                </mat-select>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+        <div class="col-lg-12">
+          <div class="dyn_table_conent" style="border: none;">
+            <mat-tab-group animationDuration="1000ms">
+              <mat-tab label="Service / Item Details">
+                <div class="dyn_table_conent">
+                  <div class="dyn_table_header">
+                    <label class="label_col"><h3>Action</h3></label>
+                    <label class="label_col"><h3 class="srln">Srl No</h3></label>
+                    <label class="label_col"><h3 class="i_nam">Adv Item Name<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3 class="i_nam">Adv Packing Item<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Adv Packing Qty<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Adv Packing Uom</h3></label>
+                    <label class="label_col"><h3>Adv Item Qty<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Adv Mat Wt</h3></label>
+                    <label class="label_col"><h3>Adv Item Uom</h3></label>
+                    <label class="label_col"><h3>Rcv Packing Qty<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Rcv Packing Uom</h3></label>
+                    <label class="label_col"><h3>Rcv Item Qty<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Rcv Mat Wt</h3></label>
+                    <label class="label_col"><h3>Rcv Item Uom</h3></label>
+                    <label class="label_col"><h3>Pssd Packing Qty<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Pssd Packing Uom</h3></label>
+                    <label class="label_col"><h3>Pssd Item Qty<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Pssd Mat Wt</h3></label>
+                    <label class="label_col"><h3>Pssd Item Uom</h3></label>
+                    <label class="label_col"><h3>Unit Rate<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Price Based On<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>Amount</h3></label>
+                    <label class="label_col"><h3>Disocunt</h3></label>
+                    <label class="label_col"><h3>Discount Based On</h3></label>
+                    <label class="label_col"><h3>Disocunt Amount</h3></label>
+                    <label class="label_col"><h3>Net Amount</h3></label>
+                    <label class="label_col"><h3>Qc Deduction</h3></label>
+                    <label class="label_col"><h3>Net Amt After Qc</h3></label>
+                    <label class="label_col"><h3>Tax Code</h3></label>
+                    <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                    <label class="label_col"><h3>Tax Amount</h3></label>
+                    <label class="label_col"><h3>Gross Amount</h3></label>
+                    <label class="label_col"><h3>Qc Norms</h3></label>
+                    <label class="label_col"><h3>WearHouse Name</h3></label>
+                    <label class="label_col"><h3>Stack / Rack No</h3> </label>
+                    <label class="label_col"><h3>Stack Uom</h3> </label>
+                    <label class="label_col"><h3>Stack Qty</h3> </label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="stk_transfer_grn_item_details">
+                    <div class="dyn_table"
+                      *ngFor="let item of stk_transfer_grn_item_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action"(click)="deleteItem(pointIndex)"></i></div>
+                      <div class="label_col"><input class="form-control srln" type="number" min="0" formControlName="slno"  /></div>
+                      <div class="label_col"><select formControlName="adv_item_code" class="form-control i_nam" (change)="onchangeItemName(pointIndex, $event)"><option value="0">-Select-</option> <option *ngFor="let item_code of item_codes" [value]="item_code.item_id">{{item_code.item_name}}</option></select></div>                    
+                      <div class="label_col"><select formControlName="adv_packing" class="form-control i_nam" (change)="onchangePackingItem(pointIndex, $event)"><option value="0">-Select-</option> <option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">{{packingitm.item_name}}</option></select></div>                      
+                      <div class="label_col"><input class="form-control" type="number" min="0" formControlName="adv_pack_qty" (keyup)="getAdvPackingQty($event, pointIndex)"/></div>
+                      <div class="label_col"><input class="form-control" formControlName="adv_pack_uom"  /></div>                     
+                      <div class="label_col"><input class="form-control" type="number" formControlName="adv_item_qty" (keyup)="getAdvItemQty($event, pointIndex)"/></div>
+                      <div class="label_col"><input class="form-control" formControlName="adv_mat_wt"  /></div>
+                      <div class="label_col"><input class="form-control" formControlName="adv_item_uom"  /></div>
+                      <div class="label_col"><input class="form-control" type="number" min="0" formControlName="rcv_pack_qty" (keyup)="getRcvPackingQty($event, pointIndex)"/></div>
+                      <div class="label_col"><input class="form-control" formControlName="rcv_pack_uom"  /></div>                     
+                      <div class="label_col"><input class="form-control" type="number" formControlName="rcv_item_qty" (keyup)="getRcvItemQty($event, pointIndex)"/></div>
+                      <div class="label_col"><input class="form-control" formControlName="rcv_mat_wt"  /></div>
+                      <div class="label_col"><input class="form-control" formControlName="rcv_item_uom"  /></div>
+                      <div class="label_col"><input class="form-control" type="number" min="0" formControlName="pssd_pack_qty" (keyup)="getPssdPackingQty($event, pointIndex)"/></div>
+                      <div class="label_col"><input class="form-control" formControlName="pssd_pack_uom"  /></div>                     
+                      <div class="label_col"><input class="form-control" type="number" formControlName="pssd_item_qty" (keyup)="getPssdItemQty($event, pointIndex)"/></div>
+                      <div class="label_col"><input class="form-control" formControlName="pssd_mat_wt"  /></div>
+                      <div class="label_col"><input class="form-control" formControlName="pssd_item_uom"  /></div>
+                      <div class="label_col"><input class="form-control" type="number" min="0" formControlName="unit_rate" (keyup)="getUnitRate($event, pointIndex)"/></div>
+                      <div class="label_col"><select class="form-control" formControlName="price_based_on" (change)="getPriceBasedOn($event, pointIndex)">
+                        <!-- <option value="0">-Select-</option>
+                        <optgroup label="Packing">
+                          <option value="Packing">Packing</option>
+                        </optgroup>
+                        <optgroup label="Item">
+                          <option value="With Packing">ItemWithPacking</option>
+                          <option value="Without Packing">ItemWithoutPacking</option>
+                        </optgroup> -->
+                        <option value="Packing">Packing</option><option value="Item">Item</option>
+                    </select></div>
+
+                      <div class="label_col"><input class="form-control" type="number" formControlName="amount"  /></div>
+                      <div class="label_col"><input class="form-control" type="number" formControlName="discount" (keyup)="getdiscount($event, pointIndex)"/></div>
+                      <div class="label_col">
+                        <mat-select class="form-control" formControlName="discount_based_on" (selectionChange)="getDiscountBasedOn($event.value, pointIndex)">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option value="Uom">Uom</mat-option>
+                          <mat-option value="%">%</mat-option>
+                        </mat-select>
+                      </div>
+                      <div class="label_col"><input class="form-control" type="number" formControlName="discount_amt"  /></div>
+                      <div class="label_col"><input class="form-control" type="number" formControlName="net_amt"  /></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="qc_deduction" (keyup)="getqcDeduction($event, pointIndex)"/></div>
+                      <div class="label_col"><input class="form-control" type="number" formControlName="net_amt_after_qc"  /></div>
+                      <!-- <div class="label_col"><input class="form-control" type="text" formControlName="tax_code" /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp1(pointIndex)" aria-hidden="true"></i></div> -->
+                      <div class="label_col"><input class="form-control" type="text" formControlName="tax_code" readonly/></div>
+                      <div class="label_col"><input class="form-control" type="number" formControlName="tax_rate" readonly/></div>
+                      <div class="label_col"><input class="form-control" type="number" formControlName="tax_amt" readonly/></div>
+                      <div class="label_col"><input class="form-control" type="number" formControlName="gross_amt"  /></div>
+                     <div class="label_col"><input class="form-control" type="text" formControlName="qc_norms" /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp2(pointIndex)" aria-hidden="true"></i></div>
+                     <div class="label_col"><mat-select class="form-control" formControlName="warehouse" (selectionChange)="onChangeWarehouse($event.value, pointIndex)"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.warehouse_code">{{warehouse.warehouse_name}}</mat-option></mat-select></div>
+                      <div class="label_col"><select class="form-control wdt_115_s" type="text" formControlName="rack"><option value="0">-select-</option><option *ngFor="let stack of stackList[pointIndex]" [value]="stack.bin_code">{{stack.bin_description}}</option></select></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="stack_uom" /></div>
+                      <div class="label_col"><input class="form-control" type="number" formControlName="stack_qty" /></div>
+                    </div>
+                  </div>
+                </div>
+                <div class="btm_btn_content">
+                  <button type="button" class="btn btn-success" (click)="addItem()">Add</button>
+                  <div class="clr"></div>
+                </div>
+              </mat-tab>
+              <mat-tab label="Other Information">
+                <div formGroupName="stk_transfer_grn_other_info">
+                  <fieldset class="dnmk">
+                    <legend>Party Weighment</legend>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Gross Wt.</mat-label>
+                        <input formControlName="pty_gross_wt" type="number" min="0" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>UOM</mat-label>
+                        <mat-select formControlName="pty_gross_uom" class="form-control">
+                          <mat-option value="0">-Select UOM-</mat-option>
+                          <mat-option *ngFor="let ptyUom of customUOMDyns" [value]="ptyUom.customuom_id">{{ptyUom.description}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+                   
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                       <mat-label>Tare Wt.</mat-label>
+                        <input formControlName="pty_tare_wt" type="number" min="0" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>UOM</mat-label>
+                        <mat-select formControlName="pty_tare_uom" class="form-control">
+                          <mat-option value="0">-Select UOM-</mat-option>
+                          <mat-option *ngFor="let ptyUom of customUOMDyns" [value]="ptyUom.customuom_id">{{ptyUom.description}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                         <mat-label>Net Wt.</mat-label>
+                        <input formControlName="pty_net_wt" type="number" min="0" class="form-control"  />
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>UOM</mat-label>
+                        <mat-select formControlName="pty_net_uom" class="form-control">
+                          <mat-option value="0">-Select UOM-</mat-option>
+                          <mat-option *ngFor="let ptyUom of customUOMDyns" [value]="ptyUom.customuom_id">{{ptyUom.description}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Weigh Bridge Name</mat-label>
+                        <input formControlName="pty_weigh_bridge_name" type="text" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Slip No.</mat-label>
+                        <input formControlName="pty_weigh_slip_no" type="text" class="form-control">
+                      </div>
+                    </div>
+                    
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                      <div class="form-group">
+                        <mat-label>Date</mat-label>
+                        <input formControlName="pty_weigh_date" type="date" class="form-control">
+                      </div>
+                    </div>
+                   
+                  </fieldset>
+
+                  <fieldset class="dnmk">
+                    <legend>Own Weighment</legend>
+                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Gross Wt</mat-label>
+                        <input formControlName="own_gross_wt" type="number" min="0" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>UOM</mat-label>
+                        <mat-select type="text" formControlName="own_gross_uom" class="form-control">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option *ngFor="let ptyUom of customUOMDyns" [value]="ptyUom.customuom_id">{{ptyUom.description}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Tare Wt</mat-label>
+                        <input formControlName="own_tare_wt" type="number" min="0" class="form-control" (keyup)="getOwnTareWt($event)">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>UOM</mat-label>
+                        <mat-select type="text" formControlName="own_tare_uom" class="form-control">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option *ngFor="let ptyUom of customUOMDyns" [value]="ptyUom.customuom_id">{{ptyUom.description}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Net</mat-label>
+                        <input formControlName="own_net_wt" type="number" min="0" class="form-control">
+                      </div>
+                    </div>
+
+                     <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>UOM</mat-label>
+                        <mat-select type="text" formControlName="own_net_uom" class="form-control">
+                          <mat-option value="0">-Select-</mat-option>  
+                          <mat-option *ngFor="let ptyUom of customUOMDyns" [value]="ptyUom.customuom_id">{{ptyUom.description}}</mat-option>                
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Weigh Bridge Name</mat-label>
+                        <input formControlName="own_weigh_bridge_name" type="text" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Slip No.</mat-label>
+                        <input formControlName="own_weigh_slip_no" type="text" class="form-control">
+                      </div>
+                    </div>
+
+                     <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                      <div class="form-group">
+                        <mat-label>Date</mat-label>
+                        <input formControlName="own_weigh_date" type="date" class="form-control">
+                      </div>
+                    </div>
+                  </fieldset>
+
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Adviced Freight</mat-label>
+                      <input formControlName="adv_freight_charge" type="number" min="0" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Freight Paid Amt.</mat-label>
+                      <input formControlName="freight_paid_amt" type="number" min="0" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>DC/C.M No.</mat-label>
+                      <input formControlName="dc_no" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>DC/C.M Date</mat-label>
+                      <input formControlName="dc_date" type="date" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>C.N/R.R No.</mat-label>
+                      <input formControlName="cn_no" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>C.N/R.R Date</mat-label>
+                      <input formControlName="cn_date" type="date" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Arg.Tax Dtl.</mat-label>
+                      <input formControlName="arg_tax_dtl" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Arg.Tax Amt.</mat-label>
+                      <input formControlName="arg_tax_amt" type="number" min="0" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Vehicle No</mat-label>
+                       <mat-select class="form-control" formControlName="vehicle_id" [(ngModel)]="model.vehicle_id">
+                        <mat-option value="0">-Select-</mat-option>
+                        <mat-option *ngFor="let list of vehicleList" [value]="list.vehicle_id">{{list.vehicle_no}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Bill Amt.</mat-label>
+                      <input formControlName="bill_amt" type="number" min="0" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Checkpost Name</mat-label>
+                      <input formControlName="checkpost_name" type="text" class="form-control">
+                    </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Entry Date</mat-label>
+                      <input formControlName="entry_date" type="date" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                    <div class="form-group">
+                      <mat-label>Remarks</mat-label>
+                      <textarea formControlName="remarks" class="form-control" rows="1"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Transport Information">
+                <div formGroupName="stk_transfer_grn_trans_info">
+                  <fieldset class="dnmk">
+                    <legend>Transport Information</legend>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Transport Borne By</mat-label>
+                        <mat-select class="form-control" formControlName="trans_borne_by">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option *ngFor="let trans_borne_by of transBrone" [value]="trans_borne_by"> {{trans_borne_by}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Transporter Name</mat-label>
+                        <mat-select type="text"  formControlName="transporter_code" class="form-control">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option *ngFor="let trans_code of trans_codes" [value]="trans_code.bp_Id">{{trans_code.bp_name}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Mode Of Transport</mat-label>
+                        <mat-select class="form-control" formControlName="mode_of_trans">
+                          <mat-option value="0">-Select Mode Of Transport-</mat-option>
+                          <mat-option *ngFor="let mode_of_trans of modeOfTransport" [value]="mode_of_trans">{{mode_of_trans}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Transportation Rate</mat-label>
+                        <mat-select class="form-control" formControlName="transportation_rate">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option *ngFor="let transpotatn_rate of transRate" [value]="transpotatn_rate"> {{transpotatn_rate}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+                  </fieldset>
+
+                  <fieldset class="dnmk">
+                    <legend>Payment</legend>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Payment Mode</mat-label>
+                        <mat-select class="form-control" formControlName="payment_mode">
+                          <mat-option value="0">-Select Payment Mode-</mat-option>
+                          <mat-option *ngFor="let payment_mode of payModes" [value]="payment_mode">{{payment_mode}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-12" >
+                      <div class="form-group">
+                        <mat-label>Cash Amt.</mat-label>
+                        <input type="number" min="0" class="form-control" formControlName="cash_limit">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Payment Terms</mat-label>
+                        <mat-select class="form-control" formControlName="payment_term">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option *ngFor="let payTerm of payTerms" [value]="payTerm.payterm_id">{{payTerm.payterm_desc}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Bank Name</mat-label>
+                        <input formControlName="bank_name" type="text" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Account Name</mat-label>
+                        <input formControlName="acc_name" type="text" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Account No</mat-label>
+                        <input formControlName="acc_no" type="number" min="0" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Branch</mat-label>
+                        <input formControlName="branch" type="text" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>IBAN</mat-label>
+                        <input formControlName="iban" type="text" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>BIC/SWIFT Code</mat-label>
+                        <input formControlName="bic_swift_code" type="text" class="form-control">
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Business Unit Details">
+                <div formGroupName="stk_transfer_grn_bu_dtls">
+                  <fieldset>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="row">
+                        
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">            
+                          <mat-label>Business Unit Name</mat-label>
+                          <input type="text" formControlName="businessunit_name"  class="form-control" />
+                        </div>
+                      </div>
+                         
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Mobile No</mat-label>
+                          <input type="number" min="0" class="form-control" formControlName="mobile_no" />
+                        </div>
+                      </div>
+                      
+                      <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>E-Mail</mat-label>
+                          <input type="email" class="form-control" formControlName="email_id" />
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                    <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                      <div class="row">
+                      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                        <div class="form-group" style="height: auto;">
+                          <mat-label> Work Address</mat-label>
+                          <textarea class="form-control" formControlName="work_address" rows="1" style="height: 108px;" ></textarea>
+                        </div>
+                      </div>
+                    </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Resource Cost">
+                <fieldset>
+                  <legend>Applicable Charges</legend>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label for="Payment Mode">Applicable Charges</mat-label>
+                      <mat-select class="form-control" formControlName="applicable_charges_id" [(ngModel)]="model.applicable_charges_id" (selectionChange)="onChangeApplicableCharges($event.value)" [disabled]="true">
+                        <mat-option value="0">-Select-</mat-option>
+                        <mat-option *ngFor="let list of chargesIdList" [value]="list.charge_id">{{list.charge_desc}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                  
+                  <div class="col-lg-12">
+                      <div class="dyn_table_conent">
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3 class="wdt_fst">Charges Name</h3></label>
+                          <label class="label_col"><h3 class="wdt_130">Rate Calculation Method</h3></label>
+                          <label class="label_col"><h3>Amount</h3></label>
+                          <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                          <label class="label_col"><h3>Tax Amt</h3></label>
+                          <label class="label_col"><h3>Gross Amt</h3></label>
+                        </div>
+      
+                        <div class="dyn_table_data_cont" formArrayName="stk_transfer_grn_resource_cost">
+                          <div class="dyn_table" *ngFor="let item of stk_transfer_grn_resource_cost.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <div class="label_col"><input formControlName="charge_name" class="form-control" type="text"/></div>
+                            <div class="label_col"><input type="text" class="form-control wdt_form_130" formControlName="rate_cal_method"></div>
+                            <div class="label_col"><input  type="number" class="form-control" formControlName="amount" min="0" /></div>
+                            <div class="label_col"><input type="number" class="form-control" formControlName="tax_rate"></div>
+                            <div class="label_col"><input  type="number" class="form-control" formControlName="tax_amt" /></div>
+                            <div class="label_col"><input  type="number" class="form-control" formControlName="gross_amt"/></div>
+                           
+                          </div>
+                        </div>
+                     </div>
+                  </div>
+                </fieldset>
+              </mat-tab>
+              <mat-tab label="Remarks">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                  <div class="form-group">
+                    <mat-label>Remarks</mat-label>
+                    <textarea [(ngModel)]="model.remarks" formControlName="remarks" class="form-control" rows="1"></textarea>
+                  </div>
+                </div>
+              </mat-tab>
+
+              <mat-tab label="Document Attachment">
+                <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+                  <div class="dyn_table_conent">
+                    <div class="dyn_table_header">
+                      <label class="label_col"><h3>Action</h3></label>
+                      <label class="label_col"><h3>Document Name</h3></label>
+                      <label class="label_col"><h3>Document <br>Upload</h3></label>
+                    </div>
+                    <div class="dyn_table_data_cont" formArrayName="stk_transfer_grn_docs">
+                      <div class="dyn_table" *ngFor="let item of stk_transfer_grn_docs.controls; let pointIndex=index"  [formGroupName]="pointIndex">
+                        <div class="label_col"><i class="fa fa-trash form-control action"  (click)="deleteDocument(pointIndex)"></i></div>
+                        <div class="label_col"><input formControlName="doc_name" class="form-control" type="text" /> </div>
+                        <div class="label_col"><input class="form-control" type="file" /></div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <div class="btm_btn_content">
+                    <button type="button" class="btn btn-success" (click)="addDocument(pointIndex)">Add </button>
+                  </div>
+                </div>
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                  <fieldset>
+                    <legend>Document List</legend>
+                    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                      <div class="form-group">
+                        <textarea class="form-control" rows="1"></textarea>
+                      </div>
+                    </div>
+                  </fieldset>
+                </div>
+              </mat-tab>
+
+            </mat-tab-group>
+          </div>
+        </div>
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="stocktransfergrnsave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+
+<div class="master_container_box" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Stock Transfer GRN List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Stock Transfer GRN No</th>
+                  <th>Stock Transfer GRN Date</th>
+                  <th>Business Unit</th>
+                  <th>Vehcle No</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let StockTransferGrn of listStockTransferGrn">
+                  <td>{{StockTransferGrn.stk_grn_no}}</td>
+                  <td>{{StockTransferGrn.stk_grn_date}}</td>
+                  <td>{{StockTransferGrn.b_unitname}}</td>
+                  <td>{{StockTransferGrn.vehicle_no}}</td>
+                   <td><button class="btn btn-success" (click)="onUpdate(StockTransferGrn.id, StockTransferGrn.stk_grn_id, 'view')" *ngIf="stocktransfergrnview">View</button></td>
+                   <td *ngIf="StockTransferGrn.stk_pur_inv_status =='0';else elseBlock "><button class="btn btn-danger" (click)="onDelete(StockTransferGrn.id)" *ngIf="stocktransfergrndelete">Delete</button></td> 
+                    <ng-template #elseBlock>
+                      <td><button class="btn btn-danger"  [disabled] ="true">Delete</button></td>  
+                    </ng-template>
+
+                    <td><button class="btn btn-success" (click)="onclickprint(StockTransferGrn.id, StockTransferGrn.stk_grn_id,StockTransferGrn.b_unit,StockTransferGrn.reference_status,StockTransferGrn.reference_id)" *ngIf="stocktransfergrnprint">Print</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

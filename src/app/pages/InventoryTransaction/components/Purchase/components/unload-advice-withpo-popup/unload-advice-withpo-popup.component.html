@@ -1,0 +1,113 @@
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm">
+    <div class="row">
+      <div class="col-lg-8 col-md-12 col-sm-12 col-12 col-lg-offset-2">
+        <mat-dialog-content class="mat-typography">
+          <fieldset style="padding: 0 10px;">
+            <legend>Document List</legend>
+            <div class="table_content" style="padding-left:0; padding-right:0; margin-left:0; margin-right:0;">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th style="width: 50px;">&nbsp;</th>
+                    <th>Sl No.</th>
+                    <th>Unload Advice No</th>
+                    <th>Unload Advice Date</th> 
+                    <th>Vehicle No</th> 
+                    <!-- <th>Imserted By</th>   -->
+                  </tr>  
+                </thead>
+                <tbody>
+                  <tr *ngFor="let i of UnloadAdviceDocsList; let poinIndex = index">
+                    <!-- <td><mat-radio-button (change)="check1(i)"></mat-radio-button></td> -->
+                    <td *ngIf="showbutton;else elseBlockupdate">
+                      <mat-radio-button (change)="check1(i)"></mat-radio-button></td>
+
+                      <ng-template #elseBlockupdate>
+                       <td >
+                         <mat-radio-button  [checked] ="true" [disabled]="true"></mat-radio-button>
+                       </td>
+                      </ng-template>
+
+                    <td>{{poinIndex+1}}</td>
+                    <td>{{i.unadviceno}}</td>
+                    <td>{{i.ula_date}}</td>
+                    <td>{{i.vehicle_no}}</td>
+                    
+                      <!-- <td>{{i.inserted_by}}</td>    -->
+                  </tr>
+                </tbody>
+              </table>
+            </div>         
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset style="padding: 0 10px;">
+            <legend>Document List</legend>
+            <div class="dyn_table_conent" style="margin: 15px;">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3>Select</h3></label>
+                <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                <label class="label_col"><h3 class="i_nam">Packing Item</h3></label>
+                <label class="label_col"><h3>Packing Quantity</h3></label>
+                <label class="label_col"><h3>Packing Uom</h3></label>
+                <label class="label_col"><h3>Item Quantity</h3></label>
+                <label class="label_col"><h3>Item Uom</h3></label>
+                <label class="label_col"><h3>Mat.Wt</h3></label>
+                <label class="label_col"><h3>QC Norms</h3></label>
+                <!-- <label class="label_col"><h3>Warehouse</h3></label>
+                <label class="label_col"><h3>Stack / Rack</h3></label> -->
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="wm_unload_advice_item_dtls">
+                <div class="dyn_table" *ngFor="let item of wm_unload_advice_item_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <!-- <div class="label_col"><mat-checkbox class="form-control" formControlName="checkbox"></mat-checkbox></div> -->
+                  <div class="label_col" *ngIf="showbutton;else elseBlockupdatedynamic"><mat-checkbox class="form-control" formControlName="checkbox"></mat-checkbox></div>
+                    
+                    <ng-template #elseBlockupdatedynamic>
+                      <div class="label_col" ><mat-checkbox class="form-control" style="width: 53px;" formControlName="checkbox" [disabled] ="true"></mat-checkbox></div>
+                   </ng-template>
+                  <!-- <div class="label_col"><input formControlName="item_code" class="form-control i_nam" readonly/></div>                
+                  <div class="label_col"><input formControlName="packing" class="form-control i_nam" readonly/></div>                 -->
+                  <div class="label_col"><input formControlName="item_name" class="form-control i_nam" readonly/></div>                
+                  <div class="label_col"><input formControlName="packing_name" class="form-control i_nam" readonly/></div>
+                  <div class="label_col"><input formControlName="s_qty" class="form-control" readonly/></div>                
+                  <div class="label_col"><input formControlName="s_uom" class="form-control" readonly/></div>                
+                  <div class="label_col"><input formControlName="quantity" class="form-control" readonly/></div>                
+                  <div class="label_col"><input formControlName="uom" class="form-control" readonly/></div>                
+                  <div class="label_col"><input formControlName="mat_wt" class="form-control" readonly/></div>                
+                  <div class="label_col"><input formControlName="qc_norms" class="form-control" readonly/></div>                
+                  <!-- <div class="label_col"><input formControlName="wearhouse" class="form-control" readonly/></div>                
+                  <div class="label_col"><input formControlName="rack" class="form-control" readonly/></div> -->
+                </div>
+              </div>  
+            </div>
+              <!-- <div class="btm_btn_content">
+                <button type="button" class="btn btn-success" (click)="add()">Add Row </button>
+                <div class="clr"></div> -->
+              <!-- </div> -->
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+    <mat-dialog-actions align="end" *ngIf="showbutton">
+      <!-- <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button> -->
+      <button class="btn btn-info" (click)="SendDataToDifferentComponenet()">Submit</button>
+    </mat-dialog-actions>
+  </form>
+</div>
+  
+  
+  
+  
+  

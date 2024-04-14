@@ -1,0 +1,209 @@
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <div class="modal_main_content">
+        <div id="print-section" class="print ">
+        <div class="container-fluid">
+          <div class="main_content inv">
+            <div class="section1">
+              <div class="main_header">
+              <div class="top_div">
+                   
+                </div>
+
+
+                
+                <h1 class="uc">{{company_name1}} ({{businessUnit}})</h1>
+                <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock ">(FRN : {{cin_no}})<br>
+                  <!-- 14A, 5th floor, FMC FORTUNA<br>
+                  234/3A A.J.C Bose Road, Kolkata 700020</div> -->
+                  {{work_address}}<br>
+                  {{state_name}},{{city_name}},{{pin_no}}</div>
+                  <ng-template #elseBlock>
+                  <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <!-- 14A, 5th floor, FMC FORTUNA<br>
+                    234/3A A.J.C Bose Road, Kolkata 700020</div> -->
+                    {{work_address}}<br>
+                    {{state_name}},{{city_name}},{{pin_no}}</div>
+                  </ng-template>
+                <h1 class="uc">CREDIT SALES VOUCHER</h1>
+              </div>
+              <div class="box_table">
+                <div class="bxx-top">
+                 
+                  <br/>
+                  <div class="bxx" *ngIf="statename =='BIHAR';else elseBlocktax" >
+                    <table class="table table-bordered" style="padding: 5px;">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 10px">SL.</th>
+                          <th scope="col" style="width: 400px">Particular</th>
+                          <th scope="col" style="width: 50px">Debit Amount</th>
+                          <th scope="col" style="width: 50px;" >Credit Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr>
+                              <td>{{customerSlNo}}</td>
+                              <td>{{customer_name}}</td>
+                              <td></td>
+                              <td  style="text-align: right!important;">{{customer_amount | number:'1.2-2'}}</td>
+                              
+                          </tr>
+                        <tr *ngFor="let SalesItem of listSalesItem"> 
+                          <td>{{SalesItem.slno}}</td>
+                          <td>{{SalesItem.item_name}}</td>
+                          <td style="text-align: right!important;">{{SalesItem.amount | number:'1.2-2'}}</td>
+                          <td></td>
+                          
+                        </tr> 
+                        <tr *ngIf="roundoff_gl_acstatus">
+                          <td>{{rounldoffslno}}</td>
+                          <td>{{roundoff}}</td>
+                          
+                          <td  style="text-align: right!important;">{{roundoff_amount_dr}}</td>
+                          <td  style="text-align: right!important;">{{roundoff_amount_cr}}</td>
+                        </tr>
+                     
+                              <tr *ngFor="let taxledger of TaxSummAllData">
+                                <td *ngIf="taxledger.cgst>0">{{taxledger.id}}</td>
+                                <td *ngIf="taxledger.cgst>0">{{taxledger.cgstledgerid}}</td>
+                                <td style="text-align: right!important;" *ngIf="taxledger.cgst>0">{{taxledger.cgst}}</td>
+                                <td *ngIf="taxledger.cgst>0"></td>
+                               
+                              </tr>
+                              <tr *ngFor="let taxledger of TaxSummAllData">
+                                <td *ngIf="taxledger.sgst>0">{{taxledger.inserted_by}}</td>
+                                <td *ngIf="taxledger.sgst>0">{{taxledger.sgstledgerid}}</td>
+                                <td style="text-align: right!important;" *ngIf="taxledger.sgst>0">{{taxledger.sgst}}</td>
+                                <td *ngIf="taxledger.sgst>0"></td>
+                               
+                              </tr>
+                          
+                        
+                        
+                         
+                        
+                          <tr *ngIf="addplus">
+                            <td>{{this.addplus_slno}}</td>
+                            <td>{{addplusac}}</td>
+                            <td></td>
+                            <td  style="text-align: right!important;">{{addplusamount| number:'1.2-2'}}</td>
+                          </tr>
+                          <tr *ngIf="addminus">
+                            <td>{{addminus_slno}}</td>
+                            <td>{{addminusac}}</td>
+                            <td></td>
+                            <td  style="text-align: right!important;">{{addminusamount| number:'1.2-2'}}</td>
+                          </tr>
+                          <tr> 
+                          <td></td>
+                          <td><b>Total Amount</b></td>
+                          <td  style="text-align: right!important;"><b>{{totalglobalamount_dr | number:'1.2-2'}}</b></td>
+                          <td  style="text-align: right!important;"><b>{{totalglobalamount_cr | number:'1.2-2'}}</b></td>
+                        </tr>
+                        
+                      </tbody>
+                    </table>
+                  </div>
+                  <ng-template #elseBlocktax>
+
+
+                    <div class="bxx">
+                      <table class="table table-bordered" style="padding: 5px;">
+                        <thead>
+                          <tr>
+                            <th scope="col" style="width: 10px">SL.</th>
+                            <th scope="col" style="width: 400px">Particular</th>
+                            <th scope="col" style="width: 50px">Debit Amount</th>
+                            <th scope="col" style="width: 50px;" >Credit Amount</th>
+                          </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>{{customerSlNo}}</td>
+                                <td>{{customer_name}}</td>
+                               
+                                <td></td>
+                                <td  style="text-align: right!important;">{{customer_amount | number:'1.2-2'}}</td>
+                                
+                            </tr>
+                          <tr *ngFor="let SalesItem of listSalesItem">
+                            <td>{{SalesItem.slno}}</td>
+                            <td>{{SalesItem.item_name}}</td>
+                            <td style="text-align: right!important;">{{SalesItem.amount | number:'1.2-2'}}</td>
+                            <td></td>
+                           
+                          </tr> 
+
+                          <tr *ngIf="roundoff_gl_acstatus">
+                            <td>{{rounldoffslno}}</td>
+                            <td>{{roundoff}}</td>
+                            
+                            <td  style="text-align: right!important;">{{roundoff_amount_dr}}</td>
+                            <td  style="text-align: right!important;">{{roundoff_amount_cr}}</td>
+                          </tr>
+                        
+                            <tr *ngFor="let taxledger of TaxSummAllData">
+                              <td *ngIf="taxledger.igst>0">{{taxledger.id}}</td>
+                              <td *ngIf="taxledger.igst>0">{{taxledger.igstledgerid}}</td>
+                              <td style="text-align: right!important;" *ngIf="taxledger.igst>0">{{taxledger.igst}}</td>
+                              <td *ngIf="taxledger.igst>0"></td>
+                             
+                            </tr>
+                            <tr *ngIf="addplus">
+                              <td>{{this.addplus_slno}}</td>
+                              <td>{{addplusac}}</td>
+                              <td></td>
+                              <td  style="text-align: right!important;">{{addplusamount| number:'1.2-2'}}</td>
+                            </tr>
+                            <tr *ngIf="addminus">
+                              <td>{{addminus_slno}}</td>
+                              <td>{{addminusac}}</td>
+                              <td></td>
+                              <td  style="text-align: right!important;">{{addminusamount| number:'1.2-2'}}</td>
+                            </tr>
+                           
+                          <tr>
+                            <td></td>
+                            <td><b>Total Amount</b></td>
+                            <td  style="text-align: right!important;"><b>{{totalglobalamount_dr | number:'1.2-2'}}</b></td>
+                            <td  style="text-align: right!important;"><b>{{totalglobalamount_cr | number:'1.2-2'}}</b></td>
+                          </tr>
+                          
+                        </tbody>
+                      </table>
+                    </div>
+
+                  </ng-template>
+
+
+                  <br/>
+                  <br/><br/>
+
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+   
+    <mat-dialog-actions align="end">
+      
+      <button style='margin-right: 20px;'  (click)="accountpostingFinal()" mat-button mat-dialog-close class="btn btn-warning" *ngIf="billPosting">Posting</button>
+
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+    </mat-dialog-actions>
+
+  </div>
+</div>
+
+
+
+
+
+
+

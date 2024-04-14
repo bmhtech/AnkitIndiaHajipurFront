@@ -1,0 +1,120 @@
+
+
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+  
+  <form [formGroup]="userForm">
+    <section class="master_container">
+      <div class="container-fluid">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            <fieldset>
+              <legend>Sales Registration</legend>
+                 
+           
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Sales Report</mat-label>
+               
+                  <mat-select class="form-control" [(ngModel)]="model.sales_report" formControlName="sales_report" (selectionChange)="onChangeGroup($event.value)">
+                  <mat-option *ngFor="let list of sales_reportlists" [value]="list.sales_report">{{list.sales_report}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Report Fields</mat-label>
+                  <mat-select multiple class="form-control" [(ngModel)]="model.concat_multi" formControlName="concat_multi" >
+                    <mat-option *ngFor="let list of reportfieldslists" [value]="list.reportfields">{{list.reportfields}}</mat-option>
+                  </mat-select>
+
+                </div>
+              </div>
+
+<!-- --------------------------
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Report Fields</mat-label>
+                  <ng-multiselect-dropdown formControlName="multi" 
+                  name="reportfields"
+                  [settings]="dropdownsettings"
+                  [data]="reportfieldslists"
+                  (onSelect)="onItemSelect($event)"
+                  [(ngModel)]="selected"
+                  >
+                  </ng-multiselect-dropdown>
+                  </div>
+              </div>
+     ------------------------------ -->        
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                <div class="form-group">
+                  <mat-label>Report Name</mat-label>
+                  <input type="text" formControlName="reportname" [(ngModel)]="model.reportname" class="form-control" />
+                </div>
+              </div>
+             
+
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <button type="submit" (click)="send()" class="btn btn-info">Submit</button>
+                </div>
+              </div>
+
+
+            </fieldset>
+
+           
+           
+           
+
+          </div>
+        </div> 
+      </div>
+    </section> 
+  </form>
+  
+   <!-- -------------------------- testing start------------------------------ -->
+   <div class="master_container_box" >
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset class="table_container">
+            <legend>Sales Registration List</legend>
+            <div class="table_content">
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Sales Report</th>  
+                    <th>Report Name</th>
+                    <th>Action</th>
+                 
+                    
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let SalesReport of listSalesRegistration">
+                      <td>{{SalesReport.sales_report}}</td>
+                      <td>{{SalesReport.reportname}}</td>
+                      <td><button class="btn btn-info" (click)="onUpdate(SalesReport.id)">Update</button></td>
+                   
+                      
+                      
+                    </tr>
+                </tbody>
+              </table>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+
+<!-- -------------------------- testing ends------------------------------ -->
+  
+        
+  

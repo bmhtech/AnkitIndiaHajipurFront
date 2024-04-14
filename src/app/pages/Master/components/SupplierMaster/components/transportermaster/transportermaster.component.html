@@ -1,0 +1,948 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+
+<form [formGroup]="userForm" autocomplete="off"  *ngIf="isHidden==true">
+  <section class="master_container">
+      
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Business Partner - Basic Information</legend>
+            <div class="madate">(<span class="red"> * </span> fields are mandatory)</div>
+            <div class="clr"></div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Type<span class="red">*</span></mat-label>
+                <mat-select class="form-control" [(ngModel)]="bp_type1" formControlName="bp_type">
+                  <mat-option value="TRANSPORTER">TRANSPORTER</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Code</mat-label>
+                <input type="text" class="form-control" [(ngModel)]="seq_no" #iCodeInput (blur)="chkTransporterCodeStatus($event)" readonly formControlName="bp_code" >
+               <div hidden> <input type="text" class="form-control" [(ngModel)]="model.id" readonly formControlName="id">
+                <input type="text" class="form-control" [(ngModel)]="model.bp_Id" readonly formControlName="bp_Id"></div>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Name<span class="red">*</span></mat-label>
+                <input type="text" class="form-control" [(ngModel)]="model.bp_name" formControlName="bp_name" (blur)="onFocusoutCheckUnique($event)">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Alt. Name</mat-label>
+                <input type="text" class="form-control" [(ngModel)]="model.alt_name" formControlName="alt_name">
+              </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Group<span class="red">*</span></mat-label>
+                <mat-select class="form-control" [(ngModel)]="group_type1" formControlName="group_type" (selectionChange)="onchangeBrokerParentGroup($event.value)">
+                  <mat-option *ngFor="let grouptype of userParentGroups" [value]="grouptype.bp_trans_id">{{grouptype.bp_grp_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Parent Group</mat-label>
+                  <input type="text" class="form-control" [(ngModel)]="model.sub_group_type" formControlName="sub_group_type" value="{{staticpGroup}}">
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Trans. Currency</mat-label>
+                <mat-select class="form-control" [(ngModel)]="trans_currency1" formControlName="trans_currency">
+                 
+                  <mat-option value="INR">INR</mat-option>
+                </mat-select>
+              </div>
+             </div>
+
+             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Constitution<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="constitution" [(ngModel)]="Constitution"  > <mat-option value="0" >Choose an Option</mat-option> <mat-option value="INDIVIDUAL" >INDIVIDUAL</mat-option> <mat-option value="PROPORITERSIP">PROPORITERSIP</mat-option><mat-option value="PARTNERSHIP">PARTNERSHIP</mat-option><mat-option value="PVT LIMITED COMPANY">PVT LIMITED COMPANY</mat-option><mat-option value="LIMITED COMPANY">LIMITED COMPANY</mat-option><mat-option value="OTHERS">OTHERS</mat-option></mat-select>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>SSI Applicable</mat-label>
+                <mat-select class="form-control" formControlName="ssi_app" [(ngModel)]="Ssi_App"  (selectionChange)="selectssiapp($event.value)"> <mat-option value="0" >Choose an Option</mat-option><mat-option value="YES">YES</mat-option><mat-option value="NO">NO</mat-option></mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12"  *ngIf="isRegister==true">
+              <div class="form-group">
+                <mat-label> SSI Registration No</mat-label>
+                <input type="text" class="form-control" [(ngModel)]="model.ssi_regno" formControlName="ssi_regno"/>
+              </div>
+            </div>
+             
+             <!-- <div [hidden]="!isChecked5" class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Reason</mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.reason" formControlName="reason">
+                  <option value="null">Reason</option>
+                </mat-select>
+              </div>
+            </div> -->
+            
+            <div class="singel">
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-checkbox [(ngModel)]="activeIsChecked" formControlName="bp_active">Active</mat-checkbox> 
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-checkbox [(ngModel)]="model.block_active" formControlName="block_active" (change)="check5($event)" [checked]="isChecked5">Block</mat-checkbox> 
+                </div>
+              </div>
+              
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-checkbox [(ngModel)]="model.pak_mat_replc" formControlName="pak_mat_replc">Packing Material Replenishment</mat-checkbox> 
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+  
+      <fieldset style="padding: 10px;">
+        <legend>Business Partner - Details Information</legend>
+        <div class="row dyn_cont_area">
+          <div class="col-lg-12">
+            <div class="dyn_table_conent">
+              <mat-tab-group animationDuration="1000ms" (selectedTabChange)="getIndexOfMatTab($event)">
+                <mat-tab label="Address">
+                  <div formGroupName="trans_bussiness_partner_address"> 
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label for="Web Site">Web Site</mat-label>
+                        <input type="text" class="form-control" formControlName="website">
+                      </div>
+                    </div>
+      
+                    <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Country<span class="red">*</span></mat-label>
+                        <mat-select class="form-control" [(ngModel)]="Country" formControlName="country" (selectionChange)="onchangeCountry($event.value)">
+                          <mat-option value="0">~Select Country~</mat-option>
+                          <mat-option *ngFor="let country of countries" [value]="country.country_name">{{country.country_name}}</mat-option>
+                        </mat-select>
+                      </div>
+                    </div>-->
+                    
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Country<span class="red">*</span></mat-label>
+                    <mat-select-autocomplete class="form-control ats"  
+                    [options]="countries"
+                    [display]="'country_name'"
+                    [value]="'country_name'"
+                    [multiple]='false'
+                    (selectionChange)="onchangeCountry($event)"
+                    ngDefaultControl
+                    [formControl]="trans_bussiness_partner_address.controls['country']">
+                  </mat-select-autocomplete>
+                  </div>
+                </div> 
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>State<span class="red">*</span></mat-label>
+                    <mat-select-autocomplete class="form-control ats"  
+                    [options]="states"
+                    [display]="'state_name'"
+                    [value]="'state_code'"
+                    [multiple]='false'
+                    (selectionChange)="onchangeState($event)"
+                    ngDefaultControl
+                    [formControl]="trans_bussiness_partner_address.controls['state_code']">
+                  </mat-select-autocomplete>
+                  </div>
+                </div> 
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>District<span class="red">*</span></mat-label>
+                    <mat-select-autocomplete class="form-control ats"  
+                    [options]="districts"
+                    [display]="'dist_name'"
+                    [value]="'dist_code'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedDist"
+                    (selectionChange)="onchangeDistrict($event)"
+                    ngDefaultControl
+                    [formControl]="trans_bussiness_partner_address.controls['dist_code']">
+                  </mat-select-autocomplete>
+                  </div>
+                </div>                   
+
+             <!--   <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>City</mat-label>
+                    <mat-select-autocomplete class="form-control ats"  
+                    [options]="cities"
+                    [display]="'city_name'"
+                    [value]="'city_code'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedCity"
+                    ngDefaultControl
+                    [formControl]="trans_bussiness_partner_address.controls['city_code']">
+                  </mat-select-autocomplete>
+                  </div>
+                </div> -->
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>city</mat-label>
+                    <input type="text" class="form-control" formControlName="city_code">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Pin Code</mat-label>
+                    <!-- <input type="number" class="form-control" formControlName="pincode" (change)="onChangePinCode($event)"> -->
+                    <input type="number" class="form-control" formControlName="pincode" >
+                  </div>
+                </div>
+                
+                <!-- (selectionChange)="onChangePostOffice($event)" -->
+              <!--  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Post Office</mat-label>
+                    <mat-select-autocomplete class="form-control ats"  
+                    [options]="PostOfficeList"
+                    [display]="'post_office'"
+                    [value]="'postid'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedPostOffice"
+                    ngDefaultControl
+                    [formControl]="trans_bussiness_partner_address.controls['postid']">
+                  </mat-select-autocomplete>
+                  </div>
+                </div> -->
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Post Office</mat-label>
+                    <input type="text" class="form-control" formControlName="post_office">
+                  </div>
+                </div> 
+
+                    <div class="clr"></div>
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Address 1</mat-label>
+                        <textarea class="form-control" formControlName="add1" rows="1"></textarea>
+                      </div>
+                    </div> 
+      
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Address 2</mat-label>
+                        <textarea class="form-control" formControlName="add2" rows="1"></textarea>
+                      </div>
+                    </div>
+      
+                    <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Address 3</mat-label>
+                        <textarea class="form-control" formControlName="add3" rows="1"></textarea>
+                      </div>
+                    </div>
+      
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Alternative</mat-label>
+                        <div class="clr"></div>
+                        <input type="button" class="btn btn-success" value="Contact Person">
+                      </div>
+                    </div>
+                  </div> 
+                  <div class="clr"></div>
+                  <div class="col-lg-12">
+                    <div class="dyn_table_conent">
+                      <div class="dyn_table_header">
+                        <label class="label_col"><h3>Action</h3></label>
+                        <label class="label_col"><h3>Contact Person</h3></label>
+                        <label class="label_col"><h3>Designation</h3></label>
+                        <label class="label_col"><h3>Telephone No.</h3></label>
+                        <label class="label_col"><h3>Mobile No.</h3></label>
+                        <label class="label_col"><h3>Fax No.</h3></label>
+                        <label class="label_col"><h3>Email</h3></label>
+                      </div>
+                                    
+                      <div class="dyn_table_data_cont" formArrayName="trans_bussiness_partner_address_dtls">
+                        <div class="dyn_table" *ngFor="let item of trans_bussiness_partner_address_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                          <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete3(pointIndex)"></i></div>
+                          <div class="label_col"><input class="form-control" formControlName="contact_person" type="text" /></div>
+                           <div class="label_col"><select formControlName="designation" class="form-control"><option value="0">-Select Designation-</option><option *ngFor="let designations of designationlists" [value]="designations.desig_id">{{designations.desig_name}}</option></select> </div>
+                          <div class="label_col"><input class="form-control" formControlName="phone" type="number" min="0" /></div>
+                          <div class="label_col"><input formControlName="mobile" class="form-control" type="number" min="0" /></div>
+                          <div class="label_col"><input formControlName="fax" class="form-control" type="number" min="0" /></div>
+                          <div class="label_col"><input formControlName="email" class="form-control" type="email" /></div>
+                        </div>
+                      </div>
+                    </div>
+                                    
+                    <div class="btm_btn_content">
+                      <button type="button" (click)="add3(pointIndex)" class="btn btn-success">Add</button>
+                    </div>
+                  </div>
+                  <div class="clr"></div>
+                </mat-tab>
+  
+                <mat-tab label="Accounting">
+                  <div formGroupName="trans_bussiness_partner_accont"> 
+                    <div class="row">
+                      
+                      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                          <!-- <div class="form-group">
+                            <mat-label>Payable Control Account</mat-label>
+                            <mat-select formControlName="pay_cont_acc" class="form-control">
+                              <mat-option>-Select Payable Control Account-</mat-option>
+                              <mat-option *ngFor="let pay_cont_acc of subGroupNames" [value]="pay_cont_acc.subgroupcode">{{pay_cont_acc.subgroupname}}</mat-option>  
+                            </mat-select>
+                          </div> -->
+                          <div class="form-group">
+                            <mat-label>Payable Control Account</mat-label>
+                            <input type="text" formControlName="pay_cont_acc" class="form-control" value="{{staticpGroup}}">
+                          </div>
+                        </div>
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>Type of Account</mat-label>
+                            <mat-select formControlName="acc_type" class="form-control" (selectionChange)="onChangeAcctype($event.value)">
+                              <mat-option value="0">-Select an option-</mat-option>
+                              <mat-option value="CURRENT">CURRENT</mat-option>
+                              <mat-option value="SAVINGS">SAVINGS</mat-option>
+                              <mat-option value="OTHERS">OTHERS</mat-option> 
+                               
+                            </mat-select>
+                          </div>
+                        </div>
+  
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="isAcctype==true">
+                          <div class="form-group">
+                            <mat-label>Remarks</mat-label>
+                            <input type="text" formControlName="acc_remarks" class="form-control">  
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>Prefered Bank Account</mat-label>
+                            <mat-select type="text" formControlName="party_bank_acc" class="form-control">            
+                              <mat-option *ngFor="let party_bankacc of ledgerbankacc" [value]=" party_bankacc.ledgerid">{{party_bankacc.ledgername}}</mat-option>  
+                            </mat-select>
+                          </div>
+                        </div> 
+
+                        <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>Prefered Bank Account</mat-label>
+                            <mat-select-autocomplete  class="form-control"  
+                            [options]="ledgerbankacc"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="trans_bussiness_partner_accont.controls['party_bank_acc']">
+                          </mat-select-autocomplete>
+                          </div>
+                        </div>  -->
+
+                       <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>Payment Term</mat-label>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="payTerms"
+                            [display]="'payterm_desc'"
+                            [value]="'payterm_id'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="trans_bussiness_partner_accont.controls['pay_term']">
+                          </mat-select-autocomplete>
+                          </div>
+                        </div> -->
+
+
+                       <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Payment Term</mat-label>
+                          <mat-select type="text" formControlName="pay_term"  class="form-control">
+                            <mat-option *ngFor="let payTerm of payTerms" [value]="payTerm.payterm_id">{{payTerm.payterm_desc}}</mat-option>  
+                          </mat-select>
+                        </div>
+                      </div> 
+
+                      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Credit Limit</mat-label>
+                          <input formControlName="credit_lim" type="number" min="0" class="form-control">
+                        </div>
+                      </div>
+                      
+                      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Mode of Payment</mat-label>
+                          <mat-select formControlName="mode_of_pay" class="form-control" (selectionChange)="selectpayment($event.value)">
+                              <mat-option value="0">Select</mat-option>
+                            <mat-option value="CASH">CASH</mat-option>
+                            <mat-option value="CHEQUE">CHEQUE</mat-option>
+                            <mat-option value="CARD">CARD</mat-option> 
+                            <mat-option value="NEFT">NEFT</mat-option> 
+                          </mat-select>
+                        </div>
+                      </div>
+      
+                      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                        <div class="form-group chk_tp_pad">
+                          <input formControlName="cash_lim_status" type="checkbox"> Cash Limit<input formControlName="cash_limit" type="number" min="0" class="form-control" >
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>TCS Applicable</mat-label>
+                          <mat-select formControlName="tcs_applicable" class="form-control" (selectionChange)="onChangeTcsApplicable($event.value)">
+                            <mat-option value="NO">NO</mat-option>
+                            <mat-option value="YES">YES</mat-option>                         
+                          </mat-select>
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="isChecked">
+                        <div class="form-group">
+                          <mat-label>TCS Rate</mat-label>
+                          <input type="number" formControlName="tcs_rate" class="form-control">  
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="isChecked">
+                        <div class="form-group">
+                          <mat-label>TCS Apllicable Date</mat-label>
+                          <input type="date" formControlName="tcs_date" class="form-control">  
+                        </div>
+                      </div>
+                   
+                      
+
+                    <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Advance Payment</mat-label>
+                        <mat-select formControlName="adv_pay" class="form-control" (selectionChange)="selectAdvancePayment($event.value)">
+                          <mat-option value="NO">NO</mat-option>
+                          <mat-option value="YES">YES</mat-option>
+                         
+                        </mat-select>
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="advancePayment == true">
+                      <div class="form-group">
+                        <mat-label>Mode of Advance Payment</mat-label>
+                        <input formControlName="mode_of_adv_pay" type="text" class="form-control">
+                      </div>
+                    </div>
+
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="advancePayment == true">
+                      <div class="form-group">
+                        <mat-label>Max Advance Per Vehicle</mat-label>
+                        <input formControlName="max_adv_vehi" type="text" class="form-control">
+                      </div>
+                    </div>
+                    
+                  </div>
+                    
+                    <div class="clr"></div>
+                    
+                    <fieldset>
+                      <legend>Bank Details</legend>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Account Holder Name</mat-label>
+                          <input type="text" formControlName="acc_holder_name" class="form-control">  
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Account Number</mat-label>
+                          <input type="number" formControlName="acc_no" min="0" class="form-control">  
+                        </div>
+                      </div>
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Bank Name</mat-label>
+                          <input type="text" formControlName="bank_name" class="form-control"> 
+                        </div>
+                      </div>
+
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>Branch</mat-label>
+                          <input type="text" class="form-control" formControlName="branch">
+                        </div>
+                      </div>
+                      
+                      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <mat-label>IFSC Code</mat-label>
+                          <input type="text" formControlName="ifsc_code"  class="form-control">
+                        </div>
+                      </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>Mobile Number</mat-label>
+                            <input type="tel" formControlName="mobile" class="form-control">
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>IBAN</mat-label>
+                            <input type="text" class="form-control"  formControlName="iban">
+                          </div>
+                        </div>
+        
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>BIC/SWIFT Code</mat-label>
+                            <input type="text" class="form-control"  formControlName="bic_swift_code">
+                          </div>
+                        </div>
+                        
+                      </fieldset>
+                    
+
+                      <fieldset>
+                        <legend>TDS</legend>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <label for="Party Nature">Party Nature</label>
+                            <mat-select class="form-control" formControlName="party_nature">
+                              <mat-option value="null">-Select-</mat-option>
+                              <mat-option value="COMPANY">COMPANY</mat-option>
+                              <mat-option value="FIRM">FIRM</mat-option>
+                              <mat-option value="INDIVIDUAL">INDIVIDUAL</mat-option>
+                            </mat-select>
+                          </div>
+                        </div>
+
+                         <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>TDS Section<span class="red">*</span></mat-label>
+                            <mat-select class="form-control"  formControlName="default_tds_nature">
+                              <mat-option value="null">-Select-</mat-option>
+                              <mat-option *ngFor="let tds of tdsList" [value]="tds.tds_id">{{tds.tds_section}}</mat-option>  
+                            </mat-select>
+                          </div>
+                        </div> 
+
+                        <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>TDS Section</mat-label>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="tdsList"
+                            [display]="'tds_section'"
+                            [value]="'tds_id'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="trans_bussiness_partner_accont.controls['default_tds_nature']">
+                          </mat-select-autocomplete>
+                          </div>
+                        </div>  -->
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                          <div class="form-group">
+                            <mat-label>TDS Rate</mat-label>
+                            <input type="text" formControlName="tds_rate" class="form-control">
+                          </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>TDS Account</mat-label>
+                            <mat-select   class="form-control" formControlName="tds_account">
+                              <mat-option *ngFor="let ledgernamebank of ledgerbankacc" [value]="ledgernamebank.ledgerid">{{ledgernamebank.ledgername}}</mat-option> 
+                            </mat-select>
+                          </div>
+                        </div> 
+
+                        <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                          <div class="form-group">
+                            <mat-label>TDS Account</mat-label>
+                            <mat-select-autocomplete class="form-control"  
+                            [options]="ledgerbankacc"
+                            [display]="'ledgername'"
+                            [value]="'ledgerid'"
+                            [multiple]='false'
+                            ngDefaultControl
+                            [formControl]="trans_bussiness_partner_accont.controls['tds_account']">
+                          </mat-select-autocomplete>
+                          </div>
+                        </div>  -->
+
+                        </fieldset>
+                      </div>
+                    </mat-tab>
+
+                    <mat-tab label="Statutory Details">
+                      <div formGroupName="trans_bussiness_partner_statutory"> 
+                        <fieldset>
+                          <legend>
+                            <div class="form-group"  style="width: 150px; margin: 0;"><mat-checkbox formControlName="registered" (change)="check2($event)">Registered</mat-checkbox></div>
+                          </legend>
+      
+                          <div class="er_msg"  *ngIf="_tcs_appl == 'Yes'" style="margin-top:15px;"><i class="fa fa-exclamation-circle" aria-hidden="true"  *ngIf="_tcs_appl == 'Yes'"></i>{{err_message}}</div> 
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <mat-label>PAN No.<span class="red">*</span></mat-label>
+                              <input formControlName="pan_no" type="text" class="form-control" (focusout)="getPanNoValid()">
+                            </div>
+                          </div>
+
+
+                         
+
+      
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <mat-label>GST No.</mat-label>
+                              <input [readonly]="!isChecked2" formControlName="gst_no" type="text" class="form-control" (focusout)="getGstNoValid()">
+                            </div>
+                          </div>
+      
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <mat-label for="PAN No.">CIN No.</mat-label>
+                              <input [readonly]="!isChecked2" formControlName="cin_no" type="text" class="form-control" >
+                            </div>
+                          </div>
+      
+                          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <mat-label>TAN No</mat-label>
+                              <input [readonly]="!isChecked2" formControlName="tan_no" type="text" class="form-control" >
+                            </div>
+                          </div>
+                        </fieldset>
+                      </div> 
+                    </mat-tab>
+  
+                    <!-- <mat-tab label="Broker Details">
+                      <div class="form-group" style="width: 150px; margin: 0;">
+                        <mat-checkbox (change)="onChangeBrokerDtlsStatus($event)" [(ngModel)]="model.broker_status" formControlName="broker_status" [checked]="isBrokerDtlsChecked">Broker Details</mat-checkbox> 
+                      </div>  
+                      <div class="clr "></div>
+                      <div class="dyn_area">
+                        <div class="dyn_table_conent">
+                          <div class="dyn_table_header">
+                            <label class="label_col"><h3>Action</h3></label>
+                            <label class="label_col"><h3>Srl No</h3></label>
+                            <label class="label_col"><h3>Broker Name</h3></label>
+                            <label class="label_col"><h3>Basis</h3></label>
+                            <label class="label_col" *ngIf="_basis == 'UOM' || _basis == '%'"><h3>Based On</h3></label>
+                            <label class="label_col"><h3>Rate</h3></label>
+                            <label class="label_col"><h3>Brokerage Account</h3> </label>
+                            <label class="label_col"><h3>TDS Rate</h3> </label>
+                            <label class="label_col"><h3>TDS Account</h3> </label>
+                            <label class="label_col"><h3 class="date_col">Effective Date</h3></label>
+                            <label class="label_col"><h3>Remarks</h3></label>
+                          </div>
+                     
+                          <div class="dyn_table_data_cont" formArrayName="trans_bussiness_partner_broker">
+                            <div class="dyn_table" *ngFor="let item of trans_bussiness_partner_broker.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                              <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete2(pointIndex)"></i></div>
+                              <div class="label_col"><input formControlName="sl_no" type="number" class="form-control" min="0" readonly/></div>
+                              <div class="label_col"><select formControlName="ven_code_name" class="form-control"><option value="0">-Select-</option><option *ngFor="let ven_code_name of brokerNames" [value]="ven_code_name.broker_Id">{{ven_code_name.name}}</option></select></div>
+                              
+                             
+                              <div class="label_col"><mat-select formControlName="basis" class="form-control" (selectionChange)="onChangeBasis($event.value, pointIndex)"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let basis of basiss" [value]="basis">{{basis}}</mat-option></mat-select></div>
+                              
+                              <div class="label_col" *ngIf="_basis == 'UOM' || _basis == '%'"><mat-select formControlName="based_on" class="form-control"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let list of basedOnList[pointIndex]" [value]="list.value">{{list.display}}</mat-option></mat-select></div>
+                              <div class="label_col"><input formControlName="rate" class="form-control" min="0" type="number"  /></div>
+                              <div class="label_col"><select formControlName="brokerage_acc" class="form-control"><option *ngFor="let brokerage_acc of ledgerName" [value]="brokerage_acc.ledgerid">{{brokerage_acc.ledgername}}</option></select></div>
+                              <div class="label_col"><input formControlName="tds_rate" class="form-control" type="number" /></div>
+                              <div class="label_col"><select formControlName="tds_acc" class="form-control"><option *ngFor="let tds_acc of ledgerName" [value]="tds_acc.ledgerid">{{tds_acc.ledgername}}</option></select></div>
+                              <div class="label_col"><input formControlName="effective_date" class="form-control date_col" type="date"  /></div>
+                              <div class="label_col"><input formControlName="remarks" class="form-control" type="text"  /></div>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="btm_btn_content">
+                          <button  (click)="add2(pointIndex)" type="button" class="btn btn-success">Add</button>
+                          <div class="clr"></div>
+                        </div>
+                      </div>
+                    </mat-tab> -->
+
+                    <mat-tab label="Document Attachment">
+                      <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+                        <div class="dyn_table_conent">
+                          <div class="dyn_table_header">
+                            <label class="label_col"><h3>Action</h3></label>
+                            <label class="label_col"><h3>Document Name</h3></label>
+                            <label class="label_col"><h3 class="width_220">Document Upload</h3></label>
+                          </div>           
+                          <div class="dyn_table_data_cont" formArrayName="trans_bussiness_partner_doc">
+                            <div class="dyn_table" *ngFor="let item of trans_bussiness_partner_doc.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                              <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete5(pointIndex)"></i></div>      
+                              <div class="label_col"><input class="form-control" formControlName="doc_name" type="text" /></div>
+                               <!-- <div class="label_col"><input class="form-control width_220_sm" type="file" /></div> -->
+                              <div class="label_col"><input  class="form-control  wdt_220_s"   (change)="onFileSelected($event,pointIndex,trans_bussiness_partner_doc.controls)" #myFileInput   type="file" /></div>
+                            </div>
+                          </div>
+                        </div>
+                                      
+                        <div class="btm_btn_content">
+                          <button type="button" class="btn btn-success" (click)="add5(pointIndex)">Add </button>
+                        </div>
+                      </div>
+                      <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                        <fieldset>
+                          <legend>Document List</legend>
+                          <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                 
+                            <div class="dyn_table_conent">
+                              <div class="dyn_table_header">
+                                
+                                <label class="label_col"><h3 class="wdt_215">Document Name</h3></label>
+                                <label class="label_col"><h3 > Download</h3></label>
+                                <label class="label_col"><h3> Action</h3></label>
+                              </div>           
+                              <div class="dyn_table_data_cont" formArrayName="trans_bussiness_partner_doc_list">
+                                <div class="dyn_table" *ngFor="let item of trans_bussiness_partner_doc_list.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                 
+                                  <div class="label_col"><input  formControlName="doc_name" class="form-control wdt_215 " type="text" /></div>
+                                  <div class="label_col"><button type="button" class="fa fa-download " (click)="viewpdf(pointIndex,trans_bussiness_partner_doc_list.controls)">Download </button></div> 
+                                  <div class="label_col"><i class="fa fa-trash form-control action wdt_215" (click)="deletepdf(pointIndex,trans_bussiness_partner_doc_list.controls)"></i></div>  
+                               
+                               
+                                </div>
+                              </div>
+                            </div>
+                    </div>
+                        </fieldset>
+                      </div>
+
+                    </mat-tab>
+              <!-- <mat-tab label="Document Attachment">
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                  <div class="form-group">
+                    <mat-label>Document List</mat-label>
+                    <textarea class="form-control" rows="1"></textarea>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                  <div class="form-group">
+                    <mat-label>Document Name</mat-label>
+                    <input type="text" class="form-control" [(ngModel)]="model.doc_name" formControlName="doc_name">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12 dnmk">
+                  <div class="form-group">
+                    <mat-label>Choose file</mat-label>
+                    <input type="file" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>&nbsp;</mat-label>
+                    <button type="button" class="btn btn-success">Upload</button>
+                  </div>
+                </div>
+              </mat-tab> -->
+                  <mat-tab label="Vehicle Details">
+                    <div class="dyn_area">
+                      <div class="dyn_table_header vehi">
+                        <label class="label_col"><h3>Action</h3></label>
+                        <label class="label_col"><h3 style="width:180px">Vehivle Type<span class="red">*</span></h3></label>
+                        <label class="label_col"><h3 class="i_nam">Vehicle No<span class="red">*</span></h3></label>
+                        <label class="label_col"><h3>Details<span class="red">*</span></h3></label>
+                       
+                      </div>
+                      <div class="dyn_table_data_cont" formArrayName="trans_bussiness_partner_vehicle_dtls">
+                        <div class="dyn_table" *ngFor="let item of trans_bussiness_partner_vehicle_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                          <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete1(pointIndex)"></i></div>
+                          <div class="label_col"><mat-select  style="width:180px" formControlName="vehicle_type" class="form-control" (selectionChange)="onchangeVehicleName(pointIndex, $event.value)"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let list of vehicleTypes" [value]="list.vehtype_code">{{list.vehtype_name}}</mat-option></mat-select></div> 
+                          <!-- <div class="label_col">
+                            <mat-select style="width:172px" formControlName="vehicle_name" class="form-control" >
+                              <mat-option value="0">-Select-</mat-option><mat-option *ngFor="let list of vehicleNames[pointIndex]" [value]="list.vehicle_id">{{list.vehicle_no}}</mat-option></mat-select>
+                            </div> -->
+                          
+                            <div class="label_col" >
+                              <mat-select-autocomplete class="form-control ats i_nam"  
+                              [options]="vehicleNames[pointIndex]"
+                              [display]="'vehicle_no'"
+                              [value]="'vehicle_id'"
+                              [multiple]='false'
+                              (selectionChange)="onChangevehicle(pointIndex, $event)"
+                              [selectedOptions]="selectedvehicle[pointIndex]"
+                              ngDefaultControl
+                              [formControlName] = "'vehicle_name'">
+                            </mat-select-autocomplete>
+                            </div>
+
+
+                          <div class="label_col"><button class="btn btn-success" type="button" (click)="showPopUp(pointIndex)" style="margin: 0 7px;">View Details</button></div>
+                        </div>
+                      </div>
+                      
+                      <div class="btm_btn_content">
+                        <button (click)="add1()" type="button" class="btn btn-success">Add</button>
+                      <div class="clr"></div>
+                      </div>
+                    </div>
+                    </mat-tab>
+
+                      <mat-tab label="Tds Details">
+                        
+                        <div formGroupName="trans_bussiness_partner_tds"> 
+                          <fieldset>
+                           
+        
+                           
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                              <div class="form-group">
+                                <mat-label>TDS Type<span class="red">*</span></mat-label>
+                              
+                                      <mat-select class="form-control"  formControlName="tds_id"   (selectionChange)="getTdschange($event.value)">
+                                        <mat-option *ngFor="let tds of tdslist" [value]="tds.tds_id">{{tds.tds_type}}</mat-option>  
+                                      </mat-select>
+
+                               
+                              </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                              <div class="form-group">
+                                <mat-label>Section<span class="red">*</span></mat-label>
+                                <input type="text" formControlName="tds_section"  class="form-control" readonly>
+                              </div>
+                            </div>
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                              <div class="form-group">
+                                <mat-label>Rate</mat-label>
+                                <input type="number" formControlName="tds_rate"  class="form-control" readonly>
+                              </div>
+                            </div>
+                
+                            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                              <div class="form-group">
+                                <mat-label>TDS Account</mat-label>
+                             
+                                <mat-select class="form-control"  formControlName="tds_acc" disabled>
+                                  <mat-option *ngFor="let tds of tdsledgerNames" [value]="tds.ledgerid">{{tds.ledgername}}</mat-option>  
+                                </mat-select>
+                              </div>
+                            </div>
+
+
+                          </fieldset>
+                        </div> 
+
+
+                      </mat-tab>
+
+                  </mat-tab-group>
+                </div>
+              </div>
+            </div> 
+          </fieldset>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="transportmastersave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>  
+</form>    
+  
+  
+  
+  <!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Transporter Master List</legend>
+          <div class="table_content">
+            
+            <div class="row" style="margin-bottom: 15px;">
+              <div class="col-sm-12 col-md-6" style="display: none;">
+                <div class="dataTables_length bs-select pull-left">
+                 <label>Show <select name="dtBasicExample_length" aria-controls="dtBasicExample" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label>
+                </div>
+               </div>
+               <div class="col-sm-12 col-md-4 col-md-offset-8"><input type="text" class="form-control" placeholder="Search.." (keydown)="search($event)"></div> 
+            </div>
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Transporter Code</th>
+                  <th style="width: 350px;">Transporter Name</th>
+                  <!-- <th>Alternate Name</th> -->
+                  <th>Group Type</th>
+                  <th colspan="4">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- |searchPipe:{bp_code: searchText,bp_name: searchText,alt_name: searchText,group_type: searchText}; -->
+                <tr *ngFor="let Trans_bussiness_partner of listTransBussinessPartner">
+                  <td>{{Trans_bussiness_partner.bp_code}}</td>
+                  <td>{{Trans_bussiness_partner.bp_name}}</td>
+                  <!-- <td>{{Trans_bussiness_partner.alt_name}}</td> -->
+                  <td>{{Trans_bussiness_partner.group_type_name}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(Trans_bussiness_partner.id,Trans_bussiness_partner.bp_id,'view')" *ngIf="transportmasterview">View</button></td>               
+                  <td *ngIf="usernamelock;else elseBlock1 " ><button class="btn btn-info" (click)="onUpdate(Trans_bussiness_partner.id,Trans_bussiness_partner.bp_id,'update')" *ngIf="transportmasterupdate">Update</button></td>
+                  <ng-template #elseBlock1>
+                    <td><button class="btn btn-warning" [disabled] ="true" >Update</button></td>  
+                  </ng-template>
+                  <!-- <td><button class="btn btn-info" (click)="onUpdate(Trans_bussiness_partner.id,Trans_bussiness_partner.bp_Id,'update')" *ngIf="transportmasterupdate">Update</button></td>   -->
+                  <td><button class="btn btn-danger" (click)="onDelete(Trans_bussiness_partner.id,Trans_bussiness_partner.bp_id)" *ngIf="transportmasterdelete">Delete</button></td>
+               
+                  <td><button class="btn btn-warning" (click)="accountposting(Trans_bussiness_partner.id)" >Posting</button></td>
+                  
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+     </div>
+    </div>
+  </div>
+</div>

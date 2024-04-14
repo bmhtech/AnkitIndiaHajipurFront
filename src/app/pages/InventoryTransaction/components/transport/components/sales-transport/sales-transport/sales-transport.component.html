@@ -1,0 +1,945 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          <fieldset>
+            <legend>Sales Transport Sortage</legend>
+              
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <button class="btn btn-success" (click)=" onClickImageShow()" type="submit">Update Image Details</button>
+              </div>
+                <p style="text-align: center;"><span class="red">INVOICE NO:{{invoiceno}}</span></p>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12"  >            
+                  <div class="form-group">
+                    <mat-label>Transport JV No.<span class="red">*</span></mat-label>
+                    <input type="text" formControlName="trans_jv_no" [(ngModel)]="seq_no" class="form-control" readonly/>
+                  </div>
+                </div> 
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>JV Date</mat-label> 
+                    <input type="date" [(ngModel)]="currentDate" formControlName="jvdate" class="form-control" (change)="onChangeJVDate($event.target.value)">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12"  >            
+                  <div class="form-group">
+                    <mat-label>Referance No.<span class="red">*</span></mat-label>
+                    <input type="text" formControlName="referance_no" class="form-control" (focusout)="onDuplicateRefNo($event.target.value)"/>
+                  </div>
+                </div> 
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Challan Date</mat-label>
+                    <!-- <input type="date" class="form-control"  formControlName="challandate" readonly> -->
+                    <input type="date" class="form-control"  formControlName="challandate"  [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Bussiness Unit</mat-label>
+                    <!-- <input type="text" class="form-control" formControlName="buname" readonly> -->
+                    <input type="text" class="form-control" formControlName="buname"  [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Party Name</mat-label>
+                    <!-- <input type="text" class="form-control"  formControlName="partyname" readonly> -->
+                    <input type="text" class="form-control"  formControlName="partyname"  [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Vehicle No</mat-label>
+                    <!-- <input type="text" class="form-control"  formControlName="vehicleno" readonly> -->
+                    <input type="text" class="form-control"  formControlName="vehicleno"  [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Own Slip No</mat-label>
+                    <!-- <input  formControlName="own_slip_no" type="text" class="form-control" readonly> -->
+                    <input  formControlName="own_slip_no" type="text" class="form-control"  [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Gross Wt</mat-label>
+                    <!-- <input  formControlName="grosswt" type="number" class="form-control" readonly> -->
+                    <input  formControlName="grosswt" type="number" class="form-control"  [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Tare Wt</mat-label>
+                    <!-- <input  formControlName="tarewt" type="number" class="form-control" readonly> -->
+                    <input  formControlName="tarewt" type="number" class="form-control"  [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Net Wt</mat-label>
+                    <!-- <input  formControlName="netwt" type="number" class="form-control" readonly> -->
+                    <input  formControlName="netwt" type="number" class="form-control" [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Party Slip No</mat-label>
+                    <input  formControlName="own_slip_nonew" type="text" class="form-control" tabindex="1">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Party Gross Wt</mat-label>
+                    <input  formControlName="grosswtnew" type="number" class="form-control" (keyup)="balanceWt()" tabindex="2">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Party Tare Wt</mat-label>
+                    <input  formControlName="tarewtnew" type="number" class="form-control" (keyup)="balanceWt()" tabindex="3">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Party Net Wt</mat-label>
+                   <!--  <input  formControlName="netwtnew" type="number" class="form-control" (keyup)="balanceWt()" readonly> -->
+                    <input  formControlName="netwtnew" type="number" class="form-control" (keyup)="balanceWt()"  [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Balance Wt</mat-label>
+                    <!-- <input  formControlName="balancewt" type="number" class="form-control" readonly> -->
+                    <input  formControlName="balancewt" type="number" class="form-control"  [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Deduction Based on</mat-label>
+                    <input  formControlName="deduction_basedon" type="text" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Allowed Shortage</mat-label>
+                    <input  formControlName="allowed_shortage" type="number" class="form-control" (keyup)="balanceWt()">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Material Price</mat-label>
+                    <input  formControlName="mat_price" type="number" class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Shortage Amount</mat-label>
+                    <!-- <input  formControlName="mat_amt" type="number" class="form-control" readonly> -->
+                    <input  formControlName="mat_amt" type="number" class="form-control" [readonly]="disabledStatus">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Transportation Mode<span class="red">*</span></mat-label>
+                    <mat-select class="form-control" formControlName="transport_rate" (selectionChange)="onChangeTrans_Mode($event.value)">
+                      <mat-option value="0">-Select Transportation Rate-</mat-option>
+                      <mat-option *ngFor="let transport_rate of transRate" [value]="transport_rate">{{transport_rate}}
+                        </mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Transportation Rate<span class="red">*</span></mat-label>
+                    <input  formControlName="price" type="number" class="form-control" (keyup)="balanceWt()" (focusout)="getFocusRate()" tabindex="5" >
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group" style="width:50%;float:left;">
+                    <mat-label>Transportation Qty<span class="red">*</span></mat-label>
+                    <input  formControlName="transportqty" type="number" class="form-control"  [readonly]="disabledStatus">
+                    <!-- <input  formControlName="transportqty" type="number" class="form-control" readonly> -->
+                  </div>
+                  <div class="form-group" style="width:35%;float:left;">
+                    <mat-label>Bags<span class="red">*</span></mat-label>
+                    <input type="text" formControlName='bags' class="form-control" [readonly]="disabledStatus">
+                    <!-- <input type="text" formControlName='bags' class="form-control" readonly> -->
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Actual Transportation Freight</mat-label>
+                    <input  formControlName="actual_amt" type="number" class="form-control"  [readonly]="disabledStatus">
+                    <!-- <input  formControlName="actual_amt" type="number" class="form-control" readonly> -->
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Transporter Name</mat-label>
+                    <input  formControlName="transname" type="text" class="form-control" tabindex="6" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Charge Id<span class="red">*</span></mat-label>
+                    <mat-select class="form-control" formControlName="app_chgs_id" (selectionChange)="onChangeReason($event.value)" >
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let list of chargesIdList" [value]="list.charge_id">{{list.charge_desc}}</mat-option>
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Remarks</mat-label>
+                    <textarea  formControlName="remarks" class="form-control" ></textarea>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Advice Date</mat-label>
+                    <input type="date" class="form-control"  formControlName="loadingdate">  <!--(change)="onChangeDate($event.target.value)"-->
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Detaintion (Reporting Date) </mat-label>
+                    <input type="date" class="form-control"  formControlName="detaintionfromdate">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Detaintion (Loading/Unloading Date)</mat-label>
+                    <input type="date" class="form-control"  formControlName="detaintiontodate">
+                  </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="bulksupplyshow">
+                  <div class="form-group">
+                    <mat-label>Bulker Return Weight</mat-label>
+                    <input type="text" class="form-control"  formControlName="ailreturnweight">
+                  </div>
+                </div>
+                
+                <div class="col-lg-12">
+                  <div class="dyn_table_conent" >
+                    <div class="dyn_table_header" >
+                      <label class="label_col"><h3>Action</h3></label>
+                      <label class="label_col"><h3 class="wdt_fst">Charges Name</h3></label>
+                      <label class="label_col"><h3>Add/Less</h3></label>
+                      <label class="label_col"><h3 class="wdt_130">Rate Calculation Method</h3></label>
+                      <label class="label_col"><h3>Rate</h3></label>
+                      <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                      <label class="label_col"><h3>Amount</h3></label>
+                    </div>
+  
+                    <div class="dyn_table_data_cont" formArrayName="salestransport_app_chgs">
+                      <div class="dyn_table" *ngFor="let item of salestransport_app_chgs.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                        <div class="label_col">
+                          <input formControlName="charges_name" class="form-control" type="text"  [readonly]="disabledStatus"/>
+                          <!-- <input formControlName="charges_name" class="form-control" type="text" readonly/> -->
+                        </div>
+
+                        <div class="label_col">
+                          <input type="text" class="form-control" formControlName="add_less" [readonly]="disabledStatus">
+                          <!-- <input type="text" class="form-control" formControlName="add_less" readonly> -->
+                        </div>
+                        <div class="label_col"><mat-select type="text" class="form-control wdt_130_s" formControlName="rate_cal_method" >
+                          <mat-option value="UOM">On UOM</mat-option>
+                          <mat-option value="%">On %</mat-option>
+                          <mat-option value="Fixed">Fixed</mat-option>
+                          </mat-select>
+                        </div>
+                        <div class="label_col"><input type="text" class="form-control" formControlName="app_rate"  ></div>
+                        <div class="label_col"><input type="text" class="form-control" formControlName="tax_rate"></div>
+                        <div class="label_col"><input class="form-control wdt_115_s" formControlName="amount" min="0" type="number" (keyup)="chargematrixcalculation()"/></div>
+                      </div>
+                    </div>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Charges Deduction</mat-label>
+                  <input  formControlName="chgs_dedu" type="number" class="form-control"  [readonly]="disabledStatus">
+                  <!-- <input  formControlName="chgs_dedu" type="number" class="form-control" readonly> -->
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Balance Amount</mat-label>
+                 <!--  <input  formControlName="balance_amt" type="number" class="form-control" readonly> -->
+                  <input  formControlName="balance_amt" type="number" class="form-control" [readonly]="disabledStatus">
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>TDS Rate</mat-label>
+                  <input  formControlName="tds_rate" type="number" class="form-control">
+                  <!-- <input  formControlName="tds_rate" type="number" class="form-control" readonly> -->
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>TDS Amt.</mat-label>
+                  <input  formControlName="tds_amt" type="number" class="form-control" (keyup)="balanceWt()">
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Amt after TDS Deduction</mat-label>
+                  <!-- <input  formControlName="tds_dedu_amt" type="number" class="form-control" readonly> -->
+                  <input  formControlName="tds_dedu_amt" type="number" class="form-control"  [readonly]="disabledStatus">
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Round Off</mat-label>
+                  <!-- <input  formControlName="round_off" type="number" class="form-control" readonly> -->
+                  <input  formControlName="round_off" type="number" class="form-control"  [readonly]="disabledStatus">
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Final Amount</mat-label>
+                  <!-- <input  formControlName="pay_amt" type="number" class="form-control" readonly> -->
+                  <input  formControlName="pay_amt" type="number" class="form-control"  [readonly]="disabledStatus">
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Advance Payment</mat-label>
+                  <input  formControlName="adv_pay" type="number" class="form-control" (keyup)="balanceWt()" tabindex="7">
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Payable Amount</mat-label>
+                  <!-- <input  formControlName="final_pay" type="number" class="form-control" readonly> -->
+                  <input  formControlName="final_pay" type="number" class="form-control"  [readonly]="disabledStatus">
+                </div>
+              </div>
+              
+                <div class="col-lg-12" >
+                  <div class="form-group">
+                    <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+                  </div>
+                </div>
+
+        
+          </fieldset>
+        </div>
+       </div>
+    </div>
+  </section>
+</form>
+
+<div class="master_container_box" *ngIf="isHidden==false">
+  <form [formGroup]="userForm1">
+      <fieldset>
+          <legend>Sales Transport</legend>
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Business Unit<span class="red">*</span></mat-label>
+              <mat-select class="form-control" [(ngModel)]="BuUnit" formControlName="business_unit" >
+                <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>From Date<span class="red">*</span></mat-label>
+              <input type="date"  class="form-control"  formControlName="fromdate">
+            </div>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>To Date<span class="red">*</span></mat-label>
+              <input type="date"  class="form-control"  [(ngModel)]="currentToDate" formControlName="todate">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Catagory<span class="red">*</span></mat-label>
+              <mat-select formControlName="catagory" class="form-control" (selectionChange)="onChangeCatagory($event.value)">
+                <mat-option value="0">-Select-</mat-option>
+                <mat-option value="Purchase">Purchase</mat-option>
+                <mat-option value="Sales">Sales</mat-option>                   
+              </mat-select>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="salesShow">
+            <div class="form-group">
+              <mat-label>Sales Type<span class="red">*</span></mat-label>
+              <mat-select-autocomplete class="form-control ats"  
+              [options]="invoiceType"
+              [display]="'invtype_name'"
+              [value]="'invtype_id'"
+              [multiple]='false'
+              ngDefaultControl
+              [formControl]="userForm1.controls['inv_type']">
+            </mat-select-autocomplete>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="purchaseShow">
+            <div class="form-group">
+              <mat-label>Purchase Type<span class="red">*</span></mat-label>
+              <mat-select-autocomplete class="form-control ats"  
+              [options]="itemtypes"
+              [display]="'item_name'"
+              [value]="'item_id'"
+              [multiple]='false'
+              ngDefaultControl
+              [formControl]="userForm1.controls['pur_inv_type']">
+            </mat-select-autocomplete>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Transport Type<span class="red">*</span></mat-label>
+              <mat-select formControlName="trans_type" class="form-control">
+                <mat-option value="0">-Select-</mat-option>
+                <mat-option value="FOR">FOR</mat-option>
+                <mat-option value="FOB">FOB</mat-option>                   
+              </mat-select>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Transporter Name</mat-label>
+              <mat-select formControlName="transporter_name" class="form-control">
+                <mat-option value="0">Select</mat-option>
+                <mat-option *ngFor="let transporterName of trans_codes" [value]="transporterName.bp_Id">{{transporterName.bp_name}}</mat-option>
+              </mat-select>
+            </div>
+          </div>
+
+          
+
+          <div class="col-lg-12" >
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" (click)="searchChallan()" >Search</button>
+            </div>
+        </div>
+        </fieldset>
+      <fieldset class="table_container">
+        <div class="table_content" *ngIf="salesShow">
+          <table class="table table-bordered">
+              <thead>
+                  <tr>
+                      <th style="width:70px">Date</th>
+                      <th>Challan No</th>
+                      <th>Party Name</th>
+                      <th>Vehicle No</th>
+                      <th>Gross Wt.</th>
+                      <th>Tare Wt.</th>
+                      <th>Net Wt.</th>
+                      <th>Transporter Name</th>
+                      <th>Advance paid</th>
+                      <th colspan="2">Action</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let challan of challanlist; let pointIndex=index">
+                      <td>{{challan.challan_date | date:'dd-MM-yy'}}</td>
+                      <td>{{challan.challan_no}}</td>
+                      <td>{{challan.partyname}}</td>
+                      <td>{{challan.vehicle_no}}</td>
+                      <td>{{challan.own_gross}}</td>
+                      <td>{{challan.own_tare}}</td>
+                      <td>{{challan.own_net}}</td>
+                      <td>{{challan.transname}}</td>
+                      <td>{{challan.adv_paid}}</td>
+    
+                      <td *ngIf="challan.id =='0';else elseBlock1"><button class="btn btn-success" (click)="onCreate(challan.id,challan.challan_date,challan.challan_no,challan.partyname,challan.vehicle_no,challan.own_gross,challan.own_tare,challan.own_net,challan.adv_paid,challan.own_slip_no,challan.bunitname,challan.squantity,challan.quantity,challan.transname,challan.referance_id,challan.delivery_cid,challan.avg_price,challan.itemqty,challan.transport_rate,challan.transportchargesadd)" >Create</button></td>
+                      <ng-template #elseBlock1>
+                        <td><button class="btn btn-success" [disabled]="true">Create</button></td>
+                      </ng-template>
+                      
+                      <!-- <td *ngIf="challan.id =='0';else elseBlock2"><button class="btn btn-info" [disabled]="true">Update</button></td>
+                      <ng-template #elseBlock2>
+                        <td><button class="btn btn-info" (click)="onUpdate(challan.id)">Update</button></td>
+                      </ng-template> -->
+                      </tr>
+              </tbody>
+          </table>
+        </div>
+        
+      <div class="table_content" *ngIf="purchaseShow">
+      <table class="table table-bordered">
+          <thead>
+              <tr>
+                  <th style="width:70px">Date</th>
+                  <th>GRN No</th>
+                  <th>Supplier Name</th>
+                  <th>Vehicle No</th>
+                  <th>Gross Wt.</th>
+                  <th>Tare Wt.</th>
+                  <th>Net Wt.</th>
+                  <th>Transporter Name</th>
+                  <th colspan="2">Action</th>
+              </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let grn of grnlist; let pointIndex=index">
+                  <td>{{grn.challan_date | date:'dd-MM-yy'}}</td>
+                  <td>{{grn.challan_no}}</td>
+                  <td>{{grn.partyname}}</td>
+                  <td>{{grn.vehicle_no}}</td>
+                  <td>{{grn.own_gross}}</td>
+                  <td>{{grn.own_tare}}</td>
+                  <td>{{grn.own_net}}</td>
+                  <td>{{grn.transname}}</td>
+
+                  <td *ngIf="grn.id =='0';else elseBlock1"><button class="btn btn-success" (click)="onCreatePur(grn.id,grn.challan_date,grn.challan_no,grn.partyname,grn.vehicle_no,grn.own_gross,grn.own_tare,grn.own_net,grn.adv_paid,grn.own_slip_no,grn.bunitname,grn.squantity,grn.quantity,grn.transname,grn.referance_id,grn.grn_id,grn.avg_price,grn.ref_doc_no,grn.gross,grn.tare)" >Create</button></td>
+                  <ng-template #elseBlock1>
+                    <td><button class="btn btn-success" [disabled]="true">Create</button></td>
+                  </ng-template>
+                  
+                  <!-- <td *ngIf="grn.id =='0';else elseBlock2"><button class="btn btn-info" [disabled]="true">Update</button></td>
+                  <ng-template #elseBlock2>
+                    <td><button class="btn btn-info" (click)="onUpdate(grn.id)">Update</button></td>
+                  </ng-template> -->
+                  </tr>
+          </tbody>
+      </table>
+    </div>  
+  </fieldset>
+ </form>
+</div>
+
+<div class="master_container_box" *ngIf="isHidden==false">
+  <form [formGroup]="userForm2">
+    <fieldset>
+    <legend>Sales Transport Report</legend>
+    
+    <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Date Search Type<span class="red">*</span></mat-label>
+        <mat-select formControlName="date_search_type" class="form-control">
+          <mat-option value="Current Date">Current Date</mat-option>
+          <mat-option value="Challan Date">Challan Date</mat-option>   
+          <mat-option value="JV Date">JV Date</mat-option>                 
+        </mat-select>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date<span class="red">*</span></mat-label>
+        <input type="date" class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date<span class="red">*</span></mat-label>
+        <input type="date"  class="form-control" [(ngModel)]="currentToDate" formControlName="todate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Sales Type<span class="red">*</span></mat-label>
+        <mat-select-autocomplete class="form-control ats"  
+        [options]="invoiceType"
+        [display]="'invtype_name'"
+        [value]="'invtype_id'"
+        [multiple]='false'
+        ngDefaultControl
+        [formControl]="userForm2.controls['inv_typenew']">
+      </mat-select-autocomplete>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Invoice No</mat-label>
+        <input type="text" class="form-control" formControlName="chlnno">
+      </div>
+    </div>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>JV No</mat-label>
+        <input type="text" class="form-control" formControlName="jvnum">
+      </div>
+    </div>
+
+   
+
+    <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Search Type</mat-label>
+        <mat-select formControlName="search_type" class="form-control" [(ngModel)]="SearchType" (selectionChange)="OnChangeSearchType($event.value)">
+          <mat-option value="Normal">Normal</mat-option>
+          <mat-option value="Checkbalance">Checkbalance</mat-option>                   
+        </mat-select>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="ShowTransporterName">
+      <div class="form-group">
+        <mat-label>Transporter Name</mat-label>
+        <mat-select formControlName="transporter_name" class="form-control">
+          <mat-option value="0">Select</mat-option>
+          <mat-option *ngFor="let transporterName of trans_codes" [value]="transporterName.bp_Id">{{transporterName.bp_name}}</mat-option>
+        </mat-select>
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="searchReport()" >Search</button>
+      </div>
+    </div>
+  
+    <fieldset class="table_container">
+  
+          <div class="col-lg-12" style="float: right;">
+            <div  class="form-group">
+                <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+                <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+            </div>
+           </div>
+          
+          <div class="table_content" *ngIf="normalsearch;else elseBlocksearch ">
+            <table class="table table-bordered" id="dynamictable">
+              <thead>
+                <tr>
+                  <th>Challan Date</th>
+                  <th>Challan No</th>
+                  <th>Trans JV Date</th>
+                  <th>Trans JV No</th>
+                  <th>Business Unit</th>
+                  <th>Party Name</th> 
+                  <th>Transporter Name</th>  
+                  <th>Vehicle No</th>
+                  <th>Transporter Name</th>
+                  <th>Own Slip No</th>
+                  <th>New Own Slip No</th>
+                  <th>Net Wt</th>
+                  <th>Party Wt</th>
+                  <th>Sortage Wt</th>
+                  <th>Bags</th>
+                  <th>Qtls</th>
+                  <th>Payments On</th>
+                  <th>Price</th>
+                  <th>Actual Amt</th>
+                  <th>Advance Voucher</th>
+                  <th>Advance Pay</th>
+                  <th>Balance Amt</th>
+                  <th>Update</th>
+                  <th>Posting</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let transport of transportList">
+                      <td>{{transport.challandate | date:'dd-MM-yy'}}</td>
+                      <td>{{transport.challanno}}</td>
+                      <td>{{transport.jvdate}}</td>   <!--  | date:'dd-MM-yy' -->
+                      <td>{{transport.trans_jv_no}}</td>
+                      <td>{{transport.buname}}</td>
+                      <td>{{transport.partyname}}</td>
+                      <td>{{transport.transname}}</td>
+                      <td>{{transport.vehicleno}}</td>
+                      <td>{{transport.transname}}</td>
+                      <td>{{transport.own_slip_no}}</td>
+                      <td>{{transport.own_slip_nonew}}</td>
+                      <td>{{transport.netwt}}</td>
+                      <td>{{transport.netwtnew}}</td>
+                      <td>{{transport.balancewt}}</td>
+                      <td>{{transport.bags}}</td>
+                      <td>{{transport.qtls}}</td>
+                      <td>{{transport.paymentson}}</td>
+                      <td>{{transport.price | number:'1.2-2'}}</td>
+                      <td>{{transport.actual_amt | number:'1.2-2'}}</td>
+                      <td>{{transport.adv_voucher_no}}</td>
+                      <td>{{transport.adv_pay | number:'1.2-2'}}</td>
+                      <td>{{transport.balance_amt | number:'1.2-2'}}</td>
+                      <td>
+                        <button class="btn btn-info" 
+                        (click)="onUpdate(transport.id)">Update
+                        </button>
+                      </td>
+                      <td>
+                        <button class="btn btn-warning" 
+                        (click)="accountpostingpopup(transport.id,transport.sales_tranport_id)">Print
+                        </button>
+                      </td>
+                    </tr>
+              </tbody>
+            </table>
+          </div>
+          <ng-template #elseBlocksearch>
+            <div class="table_content">
+              <table class="table table-bordered" id="dynamictable">
+                <thead>
+                  <tr>
+                    <th>Challan Date</th>
+                    <th>Party Name</th>
+                    <th>Transporter Name</th>
+                    <th>Challan No</th>
+                    <th>Vehicle No</th>
+                    <th>Frieght Amt</th>
+                    <th>Advance Paid</th>
+                    <th>Balance Amt</th>
+                    <th>Status</th>                                                   
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let transport of transportList">
+                        <td>{{transport.challan_date | date:'dd-MM-yy'}}</td>
+                        <td>{{transport.partyname}}</td>
+                        <td>{{transport.transporter_name}}</td>
+                        <td>{{transport.challan_no}}</td>
+                        <td>{{transport.vehicle_no}}</td>
+                        <td>{{transport.freight_amt}}</td>
+                        <td>{{transport.adv_paid}}</td>
+                        <td>{{transport.balanceamt}}</td>
+                        <td>{{transport.paidstatus}}</td>
+                      </tr>
+                </tbody>
+              </table>
+            </div>
+          </ng-template>
+       
+      <div  id="print-section" class="print " hidden>
+        <h3 class="uc" style="text-align: center;">AAYOG AGRO PVT LIMITED</h3>
+        <h5 class="uc"  style="text-align: center;">Sales Transport Report</h5>
+        <div>
+            <table class="table table-bordered" >
+                <thead>
+                    <tr>
+                      <th>Challan Date</th>
+                      <th>Challan No</th>
+                      <th>Trans JV Date</th>
+                      <th>Trans JV No</th>
+                      <th>Business Unit</th>
+                      <th>Party Name</th>   
+                      <th>Vehicle No</th>
+                      <th>Transporter Name</th>
+                      <th>Own Slip No</th>
+                      <th>New Own Slip No</th> 
+                      <th>Net Wt</th>
+                      <th>Party Wt</th>
+                      <th>Sortage Wt</th>
+                      <th>Payments On</th>
+                      <th>Price</th>
+                      <th>Actual Amt</th>
+                      <th>Advance Voucher</th>
+                      <th>Advance Pay</th>
+                      <th>Balance Amt</th>
+                      <th>Posting</th>
+                    </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let transport of transportList">
+                          <td>{{transport.challandate | date:'dd-MM-yy'}}</td>
+                          <td>{{transport.challanno}}</td>
+                          <td>{{transport.jvdate | date:'dd-MM-yy'}}</td>
+                          <td>{{transport.trans_jv_no}}</td>
+                          <td>{{transport.buname}}</td>
+                          <td>{{transport.partyname}}</td>
+                          <td>{{transport.vehicleno}}</td>
+                          <td>{{transport.transname}}</td>
+                          <td>{{transport.own_slip_no}}</td>
+                          <td>{{transport.own_slip_nonew}}</td>
+                          <td>{{transport.netwt}}</td>
+                          <td>{{transport.netwtnew}}</td>
+                          <td>{{transport.balancewt}}</td>
+                          <td>{{transport.bags}}</td>
+                          <td>{{transport.qtls}}</td>
+                          <td>{{transport.paymentson}}</td>
+                          <td>{{transport.price | number:'1.2-2'}}</td>
+                          <td>{{transport.actual_amt | number:'1.2-2'}}</td>
+                          <td>{{transport.adv_voucher_no}}</td>
+                          <td>{{transport.adv_pay | number:'1.2-2'}}</td>
+                          <td>{{transport.balance_amt | number:'1.2-2'}}</td>
+                          <td>
+                            <button class="btn btn-warning" 
+                            (click)="accountpostingpopup(transport.id,transport.sales_tranport_id)">Print
+                            </button></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div> 
+    </div>
+    
+  </fieldset>
+</fieldset>
+</form>
+</div>
+
+<div class="master_container_box">
+  <form [formGroup]="userForm3">
+    <fieldset>
+    <legend>Transportation Statement</legend>
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date<span class="red">*</span></mat-label>
+        <input type="date" class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date<span class="red">*</span></mat-label>
+        <input type="date"  class="form-control" [(ngModel)]="currentToDate" formControlName="todate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Sales Type<span class="red">*</span></mat-label>
+        <mat-select-autocomplete class="form-control ats"  
+        [options]="invoiceType"
+        [display]="'invtype_name'"
+        [value]="'invtype_id'"
+        [multiple]='false'
+        ngDefaultControl
+        [formControl]="userForm3.controls['inv_type_search']">
+      </mat-select-autocomplete>
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="searchTransportStatement()">Search</button>
+      </div>
+    </div>
+  
+    <fieldset class="table_container">
+  
+          <div class="col-lg-12" style="float: right;">
+            <div  class="form-group">
+              <button mat-raised-button (click)="exportAsXLSX1()" color="primary" >Export To Excel</button>
+            </div>
+           </div>
+          
+          <div class="table_content">
+            <table class="table table-bordered" id="dynamictable1">
+              <thead>
+                <tr>
+                  <th>JV Date</th>
+                  <th>JV No</th>
+                  <th>Challan Date</th>
+                  <th>Challan No</th>
+                  <th>Truck</th>
+                  <th>Party Name</th>   
+                  <th>Transporter Name</th>
+                  <th>Total Bags</th>
+                  <th>Tons</th>
+                  <th>Own Wt</th>
+                  <th>Party Wt</th>
+                  <th>Shortage</th>
+                  <th>Shortage Amt</th>
+                  <th>Mat Price</th>
+                  <th>Price</th>
+                  <th>Actual Amt</th>
+                  <th>Unload Date</th>
+                  <th>Truck Palced</th>
+                  <th>Balance Amt</th>
+                  <th>Adv Pay</th>
+                  <th>Balance</th>
+                  <th>Referance No</th>
+                  <th>Remarks</th>
+                  <th>Charges Deduction</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let transport of transportStatementList">
+                      <td>{{transport.jvdate}}</td>     <!-- | date:'dd-MM-yyyy' -->
+                      <td>{{transport.trans_jv_no}}</td>
+                      <td>{{transport.challandate | date:'dd-MM-yyyy'}}</td>
+                      <td>{{transport.challanno}}</td>
+                      <td>{{transport.truck}}</td>
+                      <td>{{transport.partyname}}</td>
+                      <td>{{transport.transportername}}</td>
+                      <td>{{transport.totalbags}}</td>
+                      <td>{{transport.tons | number:'1.2-3'}}</td>
+                      <td>{{transport.ownwt | number:'1.2-3'}}</td>
+                      <td>{{transport.partywt | number:'1.2-3'}}</td>
+                      <td>{{transport.shortage | number:'1.2-3'}}</td>
+                      <td>{{transport.shortageamt | number:'1.2-2'}}</td>
+                      <td>{{transport.mat_price | number:'1.2-2'}}</td>
+                      <td>{{transport.price | number:'1.2-2'}}</td>
+                      <td>{{transport.actual_amt | number:'1.2-2'}}</td>
+                      <td>{{transport.unloaddate | date:'dd-MM-yyyy'}}</td>
+                      <td>{{transport.truckpalced | date:'dd-MM-yyyy'}}</td>
+                      <td>{{transport.balance_amt | number:'1.2-2'}}</td>
+                      <td>{{transport.adv_pay | number:'1.2-2'}}</td>
+                      <td>{{transport.balance | number:'1.2-2'}}</td>
+                      <td>{{transport.referance_no}}</td>
+                      <td>{{transport.remarks}}</td>
+                      <td>{{transport.chargesdeduct | number:'1.2-2'}}</td>
+                    </tr>
+              </tbody>
+            </table>
+          </div>
+  </fieldset>
+</fieldset>
+</form>
+</div>

@@ -1,0 +1,144 @@
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+
+  <div class="master_container_box" >
+    <form [formGroup]="userForm">
+        <fieldset>
+            <legend>DETAILS OF INVERTERWISE SOLAR POWER GENERATION IN PERCENTAGE</legend>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Business Unit<span class="red">*</span></mat-label>
+                  <mat-select class="form-control" [(ngModel)]="BuUnit" formControlName="business_unit">
+                    <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                <mat-label>From Date<span class="red">*</span></mat-label>
+                <input type="date"  class="form-control" formControlName="fromdate">
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                <mat-label>To Date<span class="red">*</span></mat-label>
+                <input type="date"  class="form-control" [(ngModel)]="currentDate" formControlName="todate">
+                </div>
+              </div>
+              
+              
+              <div class="col-lg-12" >
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
+                </div>
+              </div>
+          </fieldset>
+      <fieldset class="table_container">
+        
+    <div class="table_content">
+          <div class="col-lg-12" style="float: right;">
+            <div  class="form-group">
+                <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+                <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">Print</button>
+            </div>
+          </div>
+            <table class="table table-bordered" id="dynamictable">
+              <thead>
+                <tr><td colspan="17"><b>{{headingtop}}</b></td></tr>
+                <tr><td colspan="17"><b>PERCENTAGE OF INVERTER RECORDING IN TOTAL</b></td></tr>
+                <tr>
+                  <th style="width: auto;">Entry Date</th>
+                  <th style="width: auto;">80/203(No1)</th>
+                  <th style="width: auto;">50/127(No2)</th>
+                  <th style="width: auto;">80/203(No3)</th>
+                  <th style="width: auto;">50/127(No4)</th>
+                  <th style="width: auto;">50/119(No5)</th>
+                  <th style="width: auto;">50/118(No6)</th>
+                  <th style="width: auto;">80/209(No7)</th>
+                  <th style="width: auto;">80/209(No8)</th>
+                  <th style="width: auto;">50/119(No9)</th>
+                  <th style="width: auto;">80/209(NO10)</th>
+                  <th style="width: auto;">80/209(No11)</th>
+                  <th style="width: auto;">Total</th>
+                  <th style="width: auto;">Remarks</th>
+                </tr>
+              </thead>
+               <tbody>
+                <tr *ngFor="let solar of listsolar">
+                  <td style="width: auto;text-align: left;">{{solar.solar_date | date:'dd-MM-yyyy'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_one | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_two | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_three | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_four | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_five | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_six | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_seven | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_eight | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_nine | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_ten | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_eleven | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{total}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.remarks}}</td>                
+                </tr>
+               
+              </tbody> 
+            </table>
+            </div>
+            <div  id="print-section" hidden>
+              <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+              <div>
+                  <table class="table table-bordered" >
+                      <thead>
+                        <tr><td colspan="16" style="text-align: center;"><b>{{headingtop}}</b></td></tr>
+                        <tr><td colspan="16" style="text-align: center;"><b>PERCENTAGE OF INVERTER RECORDING IN TOTAL</b></td></tr>
+                          <tr>
+                            <th style="width: auto;">Sl</th>
+                            <th style="width: auto;">Entry Date</th>
+                            <th style="width: auto;">80/203(No1)</th>
+                            <th style="width: auto;">50/127(No2)</th>
+                            <th style="width: auto;">80/203(No3)</th>
+                            <th style="width: auto;">50/127(No4)</th>
+                            <th style="width: auto;">50/119(No5)</th>
+                            <th style="width: auto;">50/118(No6)</th>
+                            <th style="width: auto;">80/209(No7)</th>
+                            <th style="width: auto;">80/209(No8)</th>
+                            <th style="width: auto;">50/119(No9)</th>
+                            <th style="width: auto;">80/209(NO10)</th>
+                            <th style="width: auto;">80/209(No11)</th>
+                            <th style="width: auto;">Total</th>
+                            <th style="width: auto;">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let solar of listsolar; let pointIndex=index">
+                            <td style="width: auto;text-align: left;">{{pointIndex+1}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.solar_date | date:'dd-MM-yyyy'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_one | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_two | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_three | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_four | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_five | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_six | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_seven | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_eight | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_nine | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_ten | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_eleven | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{total}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.remarks}}</td>
+                        </tr>
+                        
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+        </fieldset>
+      </form>
+    </div>
+  
+  

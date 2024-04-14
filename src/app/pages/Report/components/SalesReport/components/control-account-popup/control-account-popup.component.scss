@@ -1,0 +1,5 @@
+.fixed_head{position: absolute; left: 0; top: 0;  z-index: 1; height: 27px; overflow: hidden;}
+.table_head_fixed{position: relative;height: auto; width: 100%; padding: 0; margin: 0; overflow: inherit;}
+.table_content.table_pop{padding-left:0; padding-right:0; margin-left:0; margin-right:0px; padding: 0;}
+.modal_box .table_content.table_head_fixed{height: 0px !important;}
+.modal_box .table_content { height: 300px;}

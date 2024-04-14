@@ -1,0 +1,173 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+ <div class="row" >
+  <button class="close_btn" mat-button mat-dialog-close style="right: -92%;"><i class="fa fa-close icon"></i></button>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+    <fieldset class="table_container">
+      <legend>PO Orderwise Report List</legend>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="float: right;">
+          <div class="col-lg-12">
+            <div  class="form-group">
+                <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+                <button [useExistingCss]="true" printSectionId="popopup" mat-button ngxPrint class="btn btn-info">Print</button>
+            </div>
+          </div>
+      </div>
+      <div id="popopup" class="popopupc">
+      <!--<div class="table_content" id="popopup1">-->
+        
+        <table class="table table-bordered" *ngFor="let puroder of PurchaseorderList;let pointIndex=index" style="overflow: scroll; table-layout: fixed; white-space:nowrap;"> 
+          <thead>
+            <tr>
+              <th colspan="35" style="width:100%; padding: 5px; text-align: center; vertical-align: middle;">{{puroder.pur_order_no}}</th>
+            </tr>
+            </thead>
+          
+          <tbody>
+            <tr>
+            <td colspan=35>
+            <div class="scrollit">
+              <table border="2" style="table-layout: fixed; white-space:nowrap;">
+                <tr>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;">PB_No</th>
+                  <!-- <th>Pur Order No</th> -->
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;">UA_No</th>
+                  <!-- <th>Party Name</th> -->
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;">Vehicle_No</th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Grs_Wt </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Net_Wt </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Dgtl_Wt </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Dgtl_Wt1 </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Weight_Dt </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Item_Name </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Packing </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Bags </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Qtls </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Price </th>
+                  <!-- <th> Price Based On </th> -->
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Gross_Amt </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Discount </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> QC_Deduction </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Dala_Chgs_Driver </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> UP_Front_Brokerage </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> WB_Truck_Chgs_Driver </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Deduction_From_Supplier </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Freight_Adv </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Moisture </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Dala_Chgs </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> UP_Brokerage </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Quality_Claim </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> WB_Chgs </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Ofc_Exp </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> HDPE_Bag </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> TDS_194Q </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Freight_Advance </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Add_Tax </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Add (+) </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Add (-) </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> RoundOff_Amt </th>
+                  <th style="padding: 10px; text-align: center; vertical-align: middle;"> Payable_Party </th>
+            
+                </tr>
+                <ng-container *ngFor="let item of pur_order_item">
+                <tr>
+                  <ng-template [ngIf] = "item.pur_orderid ==  puroder.pur_orderid">
+                    <td style="padding: 10px;">{{item.pur_bill_no}}</td>
+                    <td style="padding: 10px;">{{item.advicenumber}}</td>
+                    <td style="padding: 10px;" >{{item.vehicleno}}</td>
+                    <td style="padding: 10px;">{{item.grossweight | number:'1.3-3'}}</td>
+                    <td style="padding: 10px;">{{item.netweight | number:'1.3-3'}}</td>
+                    <td style="padding: 10px;">{{item.digital_weight}}</td>
+                    <td style="padding: 10px;">{{item.digital_weight1}}</td>
+                    <td style="padding: 10px;">{{item.weighmentdate | date:'dd-MM-yy'}}</td>
+                    <td style="padding: 10px;">{{item.adv_item_name}}</td>
+                    <td style="padding: 10px;">{{item.adv_packing_item_name}}</td>
+                    <td style="padding: 10px;">{{item.passed_packing_qty}}</td>
+                    <td style="padding: 10px;">{{item.passed_item_qty | number:'1.3-3'}}</td>
+                    <td style="padding: 10px;">{{item.unit_rate | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.gross_amt | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.discount | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.qc_deduction | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.Dala_Charges_Driver | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.UP_Front_Brokerage | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.WB_Truck_Charges_Driver | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.Deduction_From_Supplier | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.FREIGHT_ADV | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.MOISTURE}}</td>
+                    <td style="padding: 10px;">{{item.DALA_CHARGES | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.UP_BROKERAGE | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.QUALITY_CLAIM}}</td>
+                    <td style="padding: 10px;">{{item.WB_CHARGES | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.OFFICE_EXP}}</td>
+                    <td style="padding: 10px;">{{item.HDPE_BAG}}</td>
+                    <td style="padding: 10px;">{{item.TDS_194Q | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.FREIGHT_ADVANCE | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.add_tax | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.addplus | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.addminus | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.roundoff_amt | number:'1.2-2'}}</td>
+                    <td style="padding: 10px;">{{item.payable_party | number:'1.2-2'}}</td>
+
+                  <!-- <td >{{puroder}}</td> -->
+                </ng-template>
+                
+                </tr>
+                </ng-container>
+                <tr style="font-weight:bold">
+                  <td colspan="10" style="padding: 10px; text-align: right;"> Total </td>
+                  <td style="padding: 10px;">{{bags1[pointIndex+1]}}</td>
+                  <td style="padding: 10px;">{{qty1[pointIndex+1] | number:'1.3-3'}}</td>
+                  <td style="padding: 10px;">{{price1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{gamt1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{disc1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{qcded1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{daladriv1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{upf1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{tchgs1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{deds1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{fadv1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{mois1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{dala1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{upbrok1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{qc1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{wbchrgs1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{ofcexp1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{hdpe1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{tds1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{freadv1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{tax1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{add1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{minus1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{roffamt1[pointIndex+1] | number:'1.2-2'}}</td>
+                  <td style="padding: 10px;">{{payparty1[pointIndex+1] | number:'1.2-2'}}</td>
+                </tr>
+                </table>
+                </div>
+                </td>
+                </tr>  
+          </tbody>
+
+          <tfoot style="display: table;">
+            <tr>
+              <td colspan="2" style="padding: 5px; text-align: center; vertical-align: middle;"><b>PO Qty</b></td>
+              <td style="padding: 5px; text-align: center; vertical-align: middle;">{{puroder.puritemqty}}</td>
+              <td colspan="2" style="padding: 5px; text-align: center; vertical-align: middle;"><b>Bill Qty </b></td>
+              <td style="padding: 5px; text-align: center; vertical-align: middle;">{{puroder.purbillitemqty}}</td>
+              <td colspan="2" style="padding: 5px; text-align: center; vertical-align: middle;"><b>Balance Qty</b></td>
+              <td style="padding: 5px; text-align: center; vertical-align: middle;">{{puroder.balanceqty}}</td>
+            </tr>
+          </tfoot>
+
+        </table>
+        
+       <!--</div>-->
+      </div>
+      
+    </fieldset>
+   </div>
+ </div>
+

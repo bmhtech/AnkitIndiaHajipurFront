@@ -1,0 +1,323 @@
+
+
+<mat-dialog-content>
+  <button class="close_btn" mat-button mat-dialog-close style="float: right;"><i class="fa fa-close icon"></i></button>
+<div class="container-fluid" >
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Wheat Stack Card Report List</legend>
+        <div class="table_content">
+          <table border="1" style="padding:10px; width:100%" >
+            <thead>
+              <tr>
+                <td></td>
+                <td></td>
+                 <td colspan="3"><b>OPENING Stock</b></td>
+                 <td colspan="3"><b> RECEIPT</b></td>
+              </tr>
+              <tr>
+                <td>SL NO.</td>
+                <td>Grade</td>
+                <td>BAGS</td>
+                <td>Qty</td>
+                <td>Loose</td>
+                <td>BAGS</td>
+                <td>Qty</td>
+                <td>Loose</td>
+              </tr>
+            
+            </thead>
+            <tbody>
+                <tr *ngFor="let wheatstackcard of wheatstacklist;let pointIndex=index">
+                    <td>{{pointIndex+1}}</td>
+                    <td>{{wheatstackcard.wheat_grade_name}}</td>
+                    <td>{{wheatstackcard.openingbags}}</td>
+                    <td>{{wheatstackcard.openingqty | number:'1.3-3'}}</td>
+                    <td>{{wheatstackcard.openingloose}}</td>
+                    <td>{{wheatstackcard.receiptbags}}</td>
+                    <td>{{wheatstackcard.receiptqty | number:'1.3-3'}}</td>
+                    <td>{{wheatstackcard.receiptloose}}</td>
+                   
+                  </tr>
+                  <tr>
+                    <td colspan="2"><b>Total</b></td>
+                    <td><b>{{totalopeningbags}}</b></td>
+                    <td><b>{{totalopeningqty | number:'1.3-3'}}</b></td>
+                    <td><b>{{totalopeningloose}}</b></td>
+                    <td><b>{{totalreceiptbags}}</b></td>
+                    <td><b>{{totalreceiptqty | number:'1.3-3'}}</b></td>
+                    <td><b>{{totalreceiptloose}}</b></td>
+                  </tr>
+            </tbody>
+          </table>
+          <br/>
+          <table border="1" style="padding:10px; width:100%" >
+            <thead>
+              <tr>
+                <td></td>
+                <td></td>
+                 <td colspan="3"><b>Issue TO Hopper</b></td>
+                 <td colspan="3"><b> Closing Stock</b></td>
+              </tr>
+              <tr>
+                <td>Stack</td>
+                <td>Grade</td>
+                <td>BAGS</td>
+                <td>Qty</td>
+                <td>Loose</td>
+                <td>BAGS</td>
+                <td>Qty</td>
+                <td>Loose</td>
+              </tr>
+            
+            </thead>
+            <tbody>
+                <tr *ngFor="let wheatstackcard of wheatstacklist;let pointIndex=index">
+                  <td>{{wheatstackcard.stack}}</td>
+                    <td>{{wheatstackcard.wheat_grade_name}}</td>
+                    <td>{{wheatstackcard.issuebags}}</td>
+                    <td>{{wheatstackcard.issueqty | number:'1.3-3'}}</td>
+                    <td>{{wheatstackcard.issueloose}}</td>
+                    <td>{{wheatstackcard.closingbags}}</td>
+                    <td>{{wheatstackcard.closingqty | number:'1.3-3'}}</td>
+                    <td>{{wheatstackcard.closingloose}}</td>
+                   
+                  </tr>
+                  <tr>
+                    <td colspan="2"><b>Total</b></td>
+                    <td><b>{{totalissuebags}}</b></td>
+                    <td><b>{{totalissueqty | number:'1.3-3'}}</b></td>
+                    <td><b>{{totalissueloose}}</b></td>
+                    <td><b>{{totalclosingbags}}</b></td>
+                    <td><b>{{totalclosingqty | number:'1.3-3'}}</b></td>
+                    <td><b>{{totalclosingloose}}</b></td>
+                  </tr>
+            </tbody>
+          </table>
+          <br/>
+        
+          <table border="1" style="padding:10px; width:100%" >
+            <thead>
+              <tr>
+                <td colspan="8"><b>DETAILS OF WHEAT RECEIVED</b></td>
+              </tr>
+              <tr>
+                <td>SL NO.</td>
+                <td>Truck No.</td>
+                <td>Hub</td>
+                <td>Grade</td>
+                <td>BAGS</td>
+                <td>Qty</td>
+                <td>TOTAL</td>
+                <td>Stack No.</td>
+              </tr>
+            
+            </thead>
+            <tbody>
+                <tr *ngFor="let wheatrecieve of wheatrecievelist;let pointIndex=index">
+                  <td>{{pointIndex+1}}</td>
+                    <td>{{wheatrecieve.truckno}}</td>
+                    <td>{{wheatrecieve.hub_name}}</td>
+                    <td>{{wheatrecieve.gradename}}</td>
+                    <td>{{wheatrecieve.sixtykgbags}}</td>
+                    <td>{{wheatrecieve.sixtykgqty | number:'1.3-3'}}</td>
+                    <td>{{wheatrecieve.total}}</td>
+                    <td>{{wheatrecieve.stackno}}</td>
+                  </tr>
+                 
+            </tbody>
+          </table>
+          <br/>
+          <table border="1" style="padding:10px; width:100%" >
+            <thead>
+              <tr>
+                <td colspan="4"><b>Issue Details</b></td>
+              </tr>
+              <tr>
+                <td>Grade</td>
+                <td>Stack No.</td>
+               
+                <td>BAGS</td>
+                <td>Qty</td>
+              
+              </tr>
+            
+            </thead>
+            <tbody>
+                <tr *ngFor="let wheatissue of wheatissuelist;let pointIndex=index">
+                   
+                    <td>{{wheatissue.issue_grade_name}}</td>
+                    <td>{{wheatissue.stack_no}}</td>
+                    <td>{{wheatissue.issue_bags}}</td>
+                    <td>{{wheatissue.issue_qty | number:'1.3-3'}}</td>
+                  </tr>
+            </tbody>
+          </table>
+
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div  id="print-section" class="print " hidden>
+    <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+    <h5 class="uc"  style="text-align: center;">Wheat Stock Report</h5>
+    <div class="table_content">
+      <table border="1" style="padding:10px; width:100%" >
+        <thead>
+          <tr>
+            <td></td>
+            <td></td>
+             <td colspan="3"><b>OPENING Stock</b></td>
+             <td colspan="3"><b> RECEIPT</b></td>
+          </tr>
+          <tr>
+            <td>SL NO.</td>
+            <td>Grade</td>
+            <td>BAGS</td>
+            <td>Qty</td>
+            <td>Loose</td>
+            <td>BAGS</td>
+            <td>Qty</td>
+            <td>Loose</td>
+          </tr>
+        
+        </thead>
+        <tbody>
+            <tr *ngFor="let wheatstackcard of wheatstacklist;let pointIndex=index">
+                <td>{{pointIndex+1}}</td>
+                <td>{{wheatstackcard.wheat_grade_name}}</td>
+                <td>{{wheatstackcard.openingbags}}</td>
+                <td>{{wheatstackcard.openingqty | number:'1.3-3'}}</td>
+                <td>{{wheatstackcard.openingloose}}</td>
+                <td>{{wheatstackcard.receiptbags}}</td>
+                <td>{{wheatstackcard.receiptqty | number:'1.3-3'}}</td>
+                <td>{{wheatstackcard.receiptloose}}</td>
+               
+              </tr>
+              <tr>
+                <td colspan="2"><b>Total</b></td>
+                <td><b>{{totalopeningbags}}</b></td>
+                <td><b>{{totalopeningqty | number:'1.3-3'}}</b></td>
+                <td><b>{{totalopeningloose}}</b></td>
+                <td><b>{{totalreceiptbags}}</b></td>
+                <td><b>{{totalreceiptqty | number:'1.3-3'}}</b></td>
+                <td><b>{{totalreceiptloose}}</b></td>
+              </tr>
+        </tbody>
+      </table>
+      <table border="1" style="padding:10px; width:100%" >
+        <thead>
+          <tr>
+            <td></td>
+            <td></td>
+             <td colspan="3"><b>Issue TO Hopper</b></td>
+             <td colspan="3"><b> Closing Stock</b></td>
+          </tr>
+          <tr>
+            <td>Stack</td>
+            <td>Grade</td>
+            <td>BAGS</td>
+            <td>Qty</td>
+            <td>Loose</td>
+            <td>BAGS</td>
+            <td>Qty</td>
+            <td>Loose</td>
+          </tr>
+        
+        </thead>
+        <tbody>
+            <tr *ngFor="let wheatstackcard of wheatstacklist;let pointIndex=index">
+              <td>{{wheatstackcard.stack}}</td>
+                <td>{{wheatstackcard.wheat_grade_name}}</td>
+                <td>{{wheatstackcard.issuebags}}</td>
+                <td>{{wheatstackcard.issueqty | number:'1.3-3'}}</td>
+                <td>{{wheatstackcard.issueloose}}</td>
+                <td>{{wheatstackcard.closingbags}}</td>
+                <td>{{wheatstackcard.closingqty | number:'1.3-3'}}</td>
+                <td>{{wheatstackcard.closingloose}}</td>
+               
+              </tr>
+              <tr>
+                <td colspan="2"><b>Total</b></td>
+                <td><b>{{totalissuebags}}</b></td>
+                <td><b>{{totalissueqty | number:'1.3-3'}}</b></td>
+                <td><b>{{totalissueloose}}</b></td>
+                <td><b>{{totalclosingbags}}</b></td>
+                <td><b>{{totalclosingqty | number:'1.3-3'}}</b></td>
+                <td><b>{{totalclosingloose}}</b></td>
+              </tr>
+        </tbody>
+      </table>
+     
+    
+      <table border="1" style="padding:10px; width:100%" >
+        <thead>
+          <tr>
+            <td colspan="8"><b>DETAILS OF WHEAT RECEIVED</b></td>
+          </tr>
+          <tr>
+            <td>SL NO.</td>
+            <td>Truck No.</td>
+            <td>Hub</td>
+            <td>Grade</td>
+            <td>BAGS</td>
+            <td>Qty</td>
+            <td>TOTAL</td>
+            <td>Stack No.</td>
+          </tr>
+        
+        </thead>
+        <tbody>
+            <tr *ngFor="let wheatrecieve of wheatrecievelist;let pointIndex=index">
+              <td>{{pointIndex+1}}</td>
+                <td>{{wheatrecieve.truckno}}</td>
+                <td>{{wheatrecieve.hub_name}}</td>
+                <td>{{wheatrecieve.gradename}}</td>
+                <td>{{wheatrecieve.sixtykgbags}}</td>
+                <td>{{wheatrecieve.sixtykgqty | number:'1.3-3'}}</td>
+                <td>{{wheatrecieve.total}}</td>
+                <td>{{wheatrecieve.stackno}}</td>
+              </tr>
+             
+        </tbody>
+      </table>
+      <table border="1" style="padding:10px; width:100%" >
+        <thead>
+          <tr>
+            <td colspan="4"><b>Issue Details</b></td>
+          </tr>
+          <tr>
+            <td>Grade</td>
+            <td>Stack No.</td>
+           
+            <td>BAGS</td>
+            <td>Qty</td>
+          
+          </tr>
+        
+        </thead>
+        <tbody>
+            <tr *ngFor="let wheatissue of wheatissuelist;let pointIndex=index">
+               
+                <td>{{wheatissue.issue_grade_name}}</td>
+                <td>{{wheatissue.stack_no}}</td>
+                <td>{{wheatissue.issue_bags}}</td>
+                <td>{{wheatissue.issue_qty | number:'1.3-3'}}</td>
+              </tr>
+        </tbody>
+      </table>
+
+    </div>
+</div>
+
+<div  class="col-lg-12">
+  <div class="form-group">
+      <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+   </div>
+</div>
+
+</div>
+</mat-dialog-content>

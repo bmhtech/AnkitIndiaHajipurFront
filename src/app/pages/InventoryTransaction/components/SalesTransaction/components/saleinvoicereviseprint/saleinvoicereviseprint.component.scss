@@ -1,0 +1,30 @@
+.table, .table th, .table td {
+    border: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  .table1, .table1 th, .table1 td {
+    border-left: 0px solid black;
+    border-right: 0px solid black;
+    border-top: 0px solid black;
+    border-bottom: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  .table2, .table2 th, .table2 td {
+    border-left: 1px solid black;
+    border-right: 1px solid black;
+    border-top: 0px solid black;
+    border-bottom: 1px solid black;
+    border-collapse: collapse;
+  }
+
+  .table3, .table3 th, .table3 td {
+    border-left: 0px solid black;
+    border-right: 0px solid black;
+    border-top: 0px solid black;
+    border-bottom: 0px solid black;
+    border-collapse: collapse;
+  }
+
+  

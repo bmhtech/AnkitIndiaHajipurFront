@@ -1,0 +1,164 @@
+
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+     
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Business Partner Group</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+              <div class="form-group">
+                <label>Group Code</label>
+                <input  type="text" class="form-control" formControlName="bp_group_code" #iCodeInput (blur)="chkSupplierGrpCodeStatus($event)" [(ngModel)]="seq_no" readonly>
+              </div>
+            </div>
+            
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Partner Type</mat-label>
+                <mat-select  class="form-control" formControlName="bp_type" [(ngModel)]="bp_type1">
+                  <mat-option value="SUPPLIER">SUPPLIER</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group ht_59">
+                <mat-label>Control Account</mat-label>
+                <mat-select-autocomplete class="form-control ats" 
+                [options]="subGroupNames"
+                [display]="'ledgername'"
+                [value]="'ledgerid'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['control_acc']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+                             
+            
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label>Group Name<span class="red">*</span></label>
+                <input type="text" class="form-control" formControlName="bp_grp_name" [(ngModel)]="bpgrp_name"(blur)="focusOutFunctionGroupName($event)">
+              </div>
+            </div>
+             
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group ht_59">
+                <mat-label>Parent Group</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="userParentGroups"
+                [display]="'bp_grp_name'"
+                [value]="'bp_group_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['parent_group']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+          
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox formControlName="bp_grp_active" [(ngModel)]="activeIsChecked">Active</mat-checkbox> 
+              </div>
+            </div>
+         </fieldset>
+         
+         <div class="row">
+            <div class="col-lg-12">
+              <div class="form-group">
+                <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="suppliergroupsave" >Submit</button>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+</section>
+     
+          
+     
+
+    </form>      
+
+      
+      <!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Supplier Group List</legend>
+          <div class="table_content">
+         
+            <div class="row" style="margin-bottom: 15px;">
+              <div class="col-sm-12 col-md-6" style="display: none;">
+                <div class="dataTables_length bs-select pull-left">
+                 <label>Show <select name="dtBasicExample_length" aria-controls="dtBasicExample" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label>
+                </div>
+               </div>
+               <div class="col-sm-12 col-md-4 col-md-offset-8"><input type="text" class="form-control" placeholder="Search.." (keydown)="search($event)"></div> 
+            </div>
+            
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  
+                  <th>Group Code</th>
+                  <th>Group Name</th>
+                  <th>Parent Group</th>
+                  <th>Control Account</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <!-- | searchPipe: {bp_group_code: searchText,bp_grp_name: searchText,parent_group: searchText}; -->
+                <tr *ngFor="let Supplier_group of listSupplierGroup ">
+                  
+                  <td>{{Supplier_group.bp_group_code}}</td>
+                  <td>{{Supplier_group.bp_grp_name}}</td>
+                  <td>{{Supplier_group.parent_group}}</td>
+                  <td>{{Supplier_group.control_acc}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(Supplier_group.id,'view')" *ngIf="suppliergroupview">View</button></td>  
+                  <td><button class="btn btn-info" (click)="onUpdate(Supplier_group.id,'update')" *ngIf="suppliergroupupdate">Update</button></td>  
+                  <td><button class="btn btn-danger" (click)="onDelete(Supplier_group.id,Supplier_group)"  *ngIf="suppliergroupdelete">Delete</button></td>               
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+     </div>
+   </div>
+  </div>
+</div>

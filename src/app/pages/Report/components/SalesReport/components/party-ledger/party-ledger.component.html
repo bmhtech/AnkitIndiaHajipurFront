@@ -1,0 +1,87 @@
+
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <fieldset>
+            <legend>Party Ledger</legend>
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit</mat-label>
+                <mat-select class="form-control" [(ngModel)]="model.business_unit" formControlName="business_unit">
+                  <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Customer Group<span class="red">*</span></mat-label>
+              
+                <mat-select class="form-control" [(ngModel)]="model.customer_group" formControlName="customer_group" (selectionChange)="onChangeGroup($event.value)">
+                
+                  <mat-option *ngFor="let grouptype of customerNames" [value]="grouptype.cp_code"> {{grouptype.grp_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Customer</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="CustomerList"
+                [display]="'cp_name'"
+                [value]="'cp_Id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['customer']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+         <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>From Date</mat-label>
+                <input type="date" [(ngModel)]="model.fromdate" formControlName="fromdate" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>To Date</mat-label>
+                <input type="date" [(ngModel)]="currentDate" (change)="onChangeToDate()" formControlName="todate" class="form-control">
+              </div>
+            </div>
+
+            
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12" hidden>
+              <div class="form-group">
+                <mat-label>Current Date</mat-label>
+                <input type="date" [(ngModel)]="currentDatehidden" formControlName="cdate" class="form-control">
+              </div>
+            </div>
+
+                   
+           
+          </fieldset>
+          <div class="col-lg-12">
+            <div class="form-group">
+              <button type="submit" (click)="send()" class="btn btn-primary">Search</button>
+            </div>
+          </div>
+        </div>
+      </div> 
+    </div>
+  </section> 
+</form>     
+      

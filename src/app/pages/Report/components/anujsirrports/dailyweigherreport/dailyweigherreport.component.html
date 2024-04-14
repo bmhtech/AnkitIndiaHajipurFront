@@ -1,0 +1,212 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader"> 
+    <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div> 
+
+
+<form [formGroup]="userForm" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <fieldset>
+          <legend>Daily Weigher</legend>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label >Bussiness Unit<span class="red">*</span></mat-label>
+                  <mat-select formControlName="b_unit"  class="form-control" (selectionChange)="onChangeBussinessUnit($event.value)">
+                    <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+
+              
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group ht_59">
+                  <mat-label>Machine<span class="red">*</span></mat-label>
+                  <mat-select formControlName="machine"   class="form-control" >
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option value="Machine 1">Machine 1</mat-option>
+                    <mat-option value="Machine 2">Machine 2</mat-option> 
+                    <mat-option value="Machine C-3">Machine C-3</mat-option> 
+                    <mat-option value="Machine B-4">Machine B-4</mat-option> 
+                  </mat-select>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Weigher Date</mat-label>
+                  <input type="date" formControlName="weigherdate" [(ngModel)]="currentDate" class="form-control" />
+                </div>
+              </div>
+
+              <div class="col-lg-12">
+                <div class="dyn_table_conent">
+                  <div class="dyn_table_header">
+                    <label class="label_col"><h3>Action</h3></label>
+                    <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                    <label class="label_col"><h3 class="i_nam">Item Name<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3 class="i_nam">Packing Name<span class="red">*</span></h3></label>
+                    <label class="label_col"><h3>BAGS</h3></label>
+                    <label class="label_col"><h3>KGS</h3></label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="dailyweigher_Dtls">
+                    <div class="dyn_table" *ngFor="let item of dailyweigher_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                      <div class="label_col"><input formControlName="slno" class="form-control srln" type="text" readonly/></div>
+                      <div class="label_col">
+                        
+                      <mat-select-autocomplete class="form-control ats i_nam"  
+                        [options]="itemList"
+                        [display]="'item_name'"
+                        [value]="'item_id'"
+                        [multiple]='false'
+                        [selectedOptions]="selectedItemName[pointIndex]"
+                        (selectionChange)="onchangeItemName(pointIndex, $event)"
+                        ngDefaultControl
+                        [formControlName] = "'item_code'">
+                      </mat-select-autocomplete>
+                      
+                      </div>
+
+                  
+                      <div class="label_col">
+                        <select formControlName="packing_item" class="form-control i_nam" (change)="onchangePackingItem(pointIndex, $event)" >
+                          <option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">{{packingitm.item_name}}</option>
+                        </select>
+                      </div>
+
+                      <div class="label_col"><input type="text"  formControlName="bags"   class="form-control"  (keyup)="getkgs($event, pointIndex)"/></div>
+                      <div class="label_col"><input type="text"  formControlName="kgs"    class="form-control"  /></div>
+                    
+                    </div>
+                  </div>
+              </div>
+              <div class="btm_btn_content" >
+                <button type="button" class="btn btn-success"  (click)="addItems()">Add Row </button>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12" >
+              <div class="form-group"> 
+                <mat-label>Total Bags</mat-label>
+                <input type="text" formControlName="totalbags"  class="form-control" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12" >
+              <div class="form-group"> 
+                <mat-label>Total KGS</mat-label>
+                <input type="text" formControlName="totalkgs"  class="form-control" readonly>
+              </div>
+            </div>
+            
+            
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12" >
+              <div class="form-group"> 
+                <mat-label>O/ACUM/WT</mat-label>
+                <input type="text" formControlName="oacumwt"  class="form-control" (keyup)="calculation()">
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12" >
+              <div class="form-group"> 
+                <mat-label>C/ACUM/WT</mat-label>
+                <input type="text" formControlName="cacumwt"  class="form-control" (keyup)="calculation()">
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12" >
+              <div class="form-group"> 
+                <mat-label>Difference KGS</mat-label>
+                <input type="text" formControlName="differencekgs"  class="form-control" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12" >
+              <div class="form-group"> 
+                <mat-label>O/ACUM/PCS</mat-label>
+                <input type="text" formControlName="oacumpcs"  class="form-control" (keyup)="calculation()">
+              </div>
+            </div>
+           
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12" >
+              <div class="form-group"> 
+                <mat-label>C/ACUM/PCS</mat-label>
+                <input type="text" formControlName="cacumpcs"  class="form-control" (keyup)="calculation()">
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12" >
+              <div class="form-group"> 
+                <mat-label>Difference Bags</mat-label>
+                <input type="text" formControlName="differencebags"  class="form-control" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-12" *ngIf="action == 'update'">
+              <div class="form-group">
+                <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="dailyweighersave">Submit</button>
+              </div>
+            </div>
+        </fieldset> 
+
+        <p style="text-align: center;"><span  style="color:green;font-size: large;">BAG &nbsp; <b>{{bags}}</b>&nbsp; AND KGS&nbsp;<b>{{kgs}}</b></span></p>
+      </div>
+    </div>
+  </section>
+</form> 
+
+
+<div class="container-fluid" *ngIf="isHidden==false">
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Daily Weigher List</legend>
+        <div class="table_content">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Daily Weigher</th>
+                <th>Machine</th>
+                <th colspan="4">Action</th>             
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let weigher of dailyweigherlist;let i = index">
+                <td>{{weigher.weigherdate | date:'dd-MM-yy'}}</td>
+                <td>{{weigher.machine}}</td>
+               
+                <td><button class="btn btn-success" (click)="onUpdate(weigher.id,weigher.dwg_id,weigher.b_unit, 'view')" >View</button></td>  
+                <td><button class="btn btn-info" (click)="onUpdate(weigher.id,weigher.dwg_id,weigher.b_unit, 'update')" >Update</button></td>  
+                <td><button class="btn btn-danger" (click)="onDelete(weigher.id)" >Delete</button></td> 
+                <td><button class="btn" style="background:darkturquoise ;" (click)=" openPopUp(i)" >Print</button></td> 
+                <!-- [useExistingCss]="true" printSectionId="popup" ngxPrint -->
+             </tr> 
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+ 
+</div>
+

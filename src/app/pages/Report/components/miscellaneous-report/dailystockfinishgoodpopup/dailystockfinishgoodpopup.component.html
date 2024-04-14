@@ -1,0 +1,94 @@
+<div class="row">
+  <button class="close_btn" mat-button mat-dialog-close ><i class="fa fa-close icon"></i></button>
+  <div class="col-lg-12">
+    <fieldset class="table_container" id="dynamictable">
+      <legend>Daily Stock Finish Goods List</legend>
+      <div class="table_content">
+        <table class="table table-bordered" > 
+          <thead>
+            <tr>
+             
+              <th>Sl no</th>
+              <th>Item Name</th>
+              <th>O/Stock</th>
+              <th>Production</th>
+              <th>Conversion</th>
+              <th>Sale</th>
+              <th>C/Stock</th>
+            </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let dailyreport of dailyreportlist">
+                  <td>{{dailyreport.slno}}</td>
+                  <td>{{dailyreport.itemname}}</td>
+                  <td>{{dailyreport.openingstock}}</td>
+                  <td>{{dailyreport.production}}</td>
+                  <td>{{dailyreport.conversion}}</td>
+                  <td>{{dailyreport.sale}}</td>
+                  <td>{{dailyreport.closingstock}}</td>
+                </tr>
+              <tr>
+                <td></td>
+                <td><b>Total</b></td>
+                <td><b>{{openingtotal}}</b></td>
+                <td><b>{{productiontotal}}</b></td>
+                <td><b>{{conversiontotal}}</b></td>
+                <td><b>{{saletotal}}</b></td>
+                <td><b>{{closingstocktotal}}</b></td>
+              </tr>
+          </tbody>
+        </table>
+       
+      </div>
+    </fieldset>
+  </div>
+
+  <div  id="print-section" class="print " hidden>
+    <h3 class="uc" style="text-align: center;">{{company}}</h3>
+    <h5 class="uc"  style="text-align: center;">Daily Stock Finish Goods Report</h5>
+    <div>
+        <table class="table table-bordered" >
+            <thead>
+                <tr>
+                  <th>Sl no</th>
+                  <th>Item Name</th>
+                  <th>O/Stock</th>
+                  <th>Production</th>
+                  <th>Conversion</th>
+                  <th>Sale</th>
+                  <th>C/Stock</th>
+                 
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let dailyreport of dailyreportlist">
+                  <td>{{dailyreport.slno}}</td>
+                  <td>{{dailyreport.itemname}}</td>
+                  <td>{{dailyreport.openingstock}}</td>
+                  <td>{{dailyreport.production}}</td>
+                  <td>{{dailyreport.conversion}}</td>
+                  <td>{{dailyreport.sale}}</td>
+                  <td>{{dailyreport.closingstock}}</td>
+                </tr>
+              <tr>
+                <td></td>
+                <td><b>Total</b></td>
+                <td><b>{{openingtotal}}</b></td>
+                <td><b>{{productiontotal}}</b></td>
+                <td><b>{{conversiontotal}}</b></td>
+                <td><b>{{saletotal}}</b></td>
+                <td><b>{{closingstocktotal}}</b></td>
+                </tr>
+            </tbody>
+        </table>
+    </div> 
+</div>
+
+<div  class="col-lg-12">
+  <div class="form-group">
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+      <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+   </div>
+</div>
+</div>
+ 

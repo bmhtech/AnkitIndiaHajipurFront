@@ -1,0 +1,96 @@
+<div class="row">
+  <button class="close_btn" mat-button mat-dialog-close ><i class="fa fa-close icon"></i></button>
+  <div class="col-lg-12">
+    <fieldset class="table_container" id="dynamictable">
+      <legend>Grn Register Report List</legend>
+      <div class="table_content">
+        <table class="table table-bordered" >
+          <thead>
+            <tr>
+
+              <th>GRN Date</th>
+              <th>GRN No</th>
+              <th>Bill No</th>
+              <th>Advice no</th>
+              <th>Supplier Name</th>
+              <th>Item Description</th>
+              <th>Quantity</th>
+              <th>Unit</th>
+              <th>Rate</th>
+              <th>Vehicle No</th>
+              <th>Store Serial No</th>
+
+            </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let grnregister of grnregisterlist">
+                      
+                  <td>{{grnregister.grndate}}</td>
+                  <td>{{grnregister.grnno}}</td>
+                  <td>{{grnregister.billno}}</td>
+                  <td>{{grnregister.adviceno}}</td>
+                  <td>{{grnregister.suppliername}}</td>
+                  <td>{{grnregister.itemdesc}}</td>
+                  <td>{{grnregister.quantity}}</td>
+                  <td>{{grnregister.unit}}</td>
+                  <td>{{grnregister.rate}}</td>
+                  <td>{{grnregister.vehicleno}}</td>
+                  <td>{{grnregister.storeserialno}}</td>
+                  
+                </tr>
+          </tbody>
+        </table>
+       
+      </div>
+    </fieldset>
+  </div>
+
+  <div  id="print-section" class="print " hidden>
+    <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+    <h5 class="uc"  style="text-align: center;">GRN Register Report</h5>
+    <div>
+        <table class="table table-bordered" >
+            <thead>
+                <tr>
+                  <th>GRN Date</th>
+                  <th>GRN No</th>
+                  <th>Bill No</th>
+                  <th>Advice no</th>
+                  <th>Supplier Name</th>
+                  <th>Item Description</th>
+                  <th>Quantity</th>
+                  <th>Unit</th>
+                  <th>Rate</th>
+                  <th>Vehicle No</th>
+                  <th>Store Serial No</th>
+    
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let grnregister of grnregisterlist">
+                          
+                      <td>{{grnregister.grndate}}</td>
+                      <td>{{grnregister.grnno}}</td>
+                      <td>{{grnregister.billno}}</td>
+                      <td>{{grnregister.adviceno}}</td>
+                      <td>{{grnregister.suppliername}}</td>
+                      <td>{{grnregister.itemdesc}}</td>
+                      <td>{{grnregister.quantity}}</td>
+                      <td>{{grnregister.unit}}</td>
+                      <td>{{grnregister.rate}}</td>
+                      <td>{{grnregister.vehicleno}}</td>
+                      <td>{{grnregister.storeserialno}}</td>
+                </tr>
+            </tbody>
+        </table>
+    </div> 
+</div>
+
+<div  class="col-lg-12">
+  <div class="form-group">
+      <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+   </div>
+</div>
+</div>
+ 

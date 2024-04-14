@@ -1,0 +1,74 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <fieldset>
+    <legend>Type Details</legend>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="form-group">
+          <mat-label>Business Unit<span class="red">*</span></mat-label>
+          <mat-select formControlName="business_unit" class="form-control">
+          <mat-option *ngFor="let business_unit of businesslist" 
+          [value]="business_unit.businessunit_id">{{business_unit.businessunit_name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="form-group">
+          <mat-label>Type Name<span class="red">*</span></mat-label>
+          <input type="text" formControlName="typename" class="form-control" >
+        </div>
+      </div>
+      <div class="col-lg-12">
+        <div class="form-group">
+          <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+        </div>
+      </div>
+  </fieldset>
+</form>
+
+
+<div class="container-fluid" *ngIf="isHidden==false">
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Type List</legend>
+        <div class="table_content">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Business Unit</th>  
+                <th>Type Name</th>
+                <th colspan="2">Action</th>           
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let Type of listType">
+                <td>{{Type.business_unitname}}</td>
+                <td>{{Type.typename}}</td>
+                <td><button class="btn btn-info" (click)="onUpdate(Type.id)">Update</button></td>
+                <td><button class="btn btn-danger" (click)="onDelete(Type.id)">Delete</button></td>
+              </tr> 
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>

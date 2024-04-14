@@ -1,0 +1,134 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm">
+    <div class="row">
+      <div class="col-lg-8 col-md-12 col-sm-12 col-12 col-lg-offset-2">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Document List</legend>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="table_content">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 50px;">&nbsp;</th>
+                      <th>Sl No.</th>
+                      <th>Invoice No</th>
+                      <th>Invoice Date</th>
+                      <th>Party Name</th>
+                    </tr>  
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let i of salesInvoiceList; let poinIndex = index">
+                      
+                      <td *ngIf="showbutton;else elseBlockupdate">
+                      <mat-radio-button (change)="check1(i)"></mat-radio-button></td>
+                      
+                      <ng-template #elseBlockupdate>
+                        <td >
+                          <mat-radio-button  [checked] ="true" [disabled]="true"></mat-radio-button>
+                        </td>
+                      </ng-template>
+
+                      <td>{{poinIndex+1}}</td>
+                      <td>{{i.invoice_no}}</td>
+                      <td>{{i.invoice_date}}</td>
+                      <div hidden> <td>{{i.party}}</td></div>
+                      <td>{{i.partyname}}</td>
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>           
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Document List</legend>
+            
+
+            <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Select</h3></label>
+                  <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                  <label class="label_col"><h3 class="i_nam">Packing Item</h3></label>
+                  <label class="label_col"><h3>Packing Qty.</h3></label>
+                  <label class="label_col"><h3>Packing Uom</h3></label>
+                  <label class="label_col"><h3>Item Qty.</h3></label>
+                  <label class="label_col"><h3>Item Uom</h3></label>
+                  <label class="label_col"><h3>Mat.Wt</h3></label>
+                  <label class="label_col"><h3>Price</h3></label>
+                  <label class="label_col"><h3>Price Based On</h3></label>
+                  <label class="label_col"><h3>Amount</h3></label>
+                  <label class="label_col"><h3>Discount</h3></label>
+                  <label class="label_col"><h3>Discount Type</h3></label>
+                  <label class="label_col"><h3>Discount Amt.</h3></label>
+                  <label class="label_col"><h3>Tax Code</h3></label>
+                  <label class="label_col"><h3>Tax Rate</h3></label>
+                  <label class="label_col"><h3>Tax Amt.</h3></label>
+                  <label class="label_col"><h3>Total Amt.</h3></label>
+                  <label class="label_col"><h3>Ac Norms</h3></label>
+                  <!-- --------hidden---------- -->
+                  <label class="label_col" style="display: none;"><h3>Item code</h3></label>
+                  <label class="label_col" style="display: none;"><h3>Packing</h3></label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="sales_Invoice_Item_Dtls">
+                  <div class="dyn_table" *ngFor="let item of sales_Invoice_Item_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <!-- <div class="label_col"><mat-checkbox class="form-control srln" formControlName="checkbox"></mat-checkbox></div> -->
+
+                  <div class="label_col" *ngIf="showbutton;else elseBlockupdatedynamic"><mat-checkbox class="form-control srln" style="width: 51px;" formControlName="checkbox"></mat-checkbox></div>
+                  
+                  <ng-template #elseBlockupdatedynamic>
+                          <div class="label_col" ><mat-checkbox class="form-control srln" style="width: 51px;" formControlName="checkbox"></mat-checkbox></div>
+                  </ng-template>
+
+
+                  <div class="label_col"><input class="form-control i_nam" type="text" [readonly]="editable" formControlName="item_name"   /></div>  
+                  <div class="label_col"><input formControlName="packing_name" [readonly]="editable" type="text" class="form-control i_nam"   /></div>
+                  <div class="label_col"><input class="form-control" [readonly]="PackingQty" (keyup)="getPackingQty($event, pointIndex)" formControlName="squantity" type="number"   /></div>
+                  <div class="label_col"><input type="text" class="form-control" [readonly]="editable" formControlName="suom"   /></div>
+                  <div class="label_col"><input class="form-control" [readonly]="editable" formControlName="quantity" type="number"   /></div>
+                  <div class="label_col"><input type="text" [readonly]="editable" class="form-control" formControlName="uom"   /></div>
+                  <div class="label_col"><input class="form-control" [readonly]="editable" formControlName="mat_wt" type="number"   /></div>
+                  <div class="label_col" ><input class="form-control" [readonly]="PriceReadOnly" (keyup)="getPrice($event, pointIndex)" formControlName="price" type="number"   /></div>
+                  <!-- <div class="label_col" ><input class="form-control" formControlName="price_based_on"   /></div> -->
+                  <div class="label_col"><select class="form-control" formControlName="price_based_on" (change)="onChangePriceBasedOn($event, pointIndex)" (change)="onChangePriceBasedOn($event, pointIndex)"><option value="0">-Select-</option><option value="Packing">Packing</option><option value="Item">Item</option></select></div>
+                  <div class="label_col" ><input class="form-control" [readonly]="editable" formControlName="amount" type="number"   /></div>
+                  <div class="label_col" ><input class="form-control" [readonly]="editable" formControlName="discount_rate" type="number"   /></div>
+                  <div class="label_col" ><input class="form-control" [readonly]="editable" formControlName="discount_type" type="text"   /></div>
+                  <div class="label_col" ><input class="form-control" [readonly]="editable" formControlName="discount_amt" type="number"   /></div>
+                  <div class="label_col" ><input class="form-control" [readonly]="editable" formControlName="tax_code" type="text"   /></div>
+                  <div class="label_col" ><input class="form-control" [readonly]="editable" formControlName="tax_rate" type="text"   /></div>
+                  <div class="label_col" ><input class="form-control" [readonly]="editable" formControlName="tax_amt" type="text"   /></div>
+                  <div class="label_col" ><input class="form-control" [readonly]="editable" formControlName="total_amt" type="number"   /></div>
+                  <div class="label_col" ><input class="form-control" [readonly]="editable" formControlName="acc_norms" type="text"   /></div>        
+                <!-- ---------------hidden------------- -->
+                  <div class="label_col" style="display: none;"><input class="form-control" type="text" formControlName="item_code"   /></div>  
+                  <div class="label_col"  style="display: none;"><input formControlName="packing" type="text" class="form-control"   /></div>
+                </div>
+                </div>  
+              </div>
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <!-- <mat-dialog-actions align="end" *ngIf="showbutton"> -->
+        <mat-dialog-actions align="end">
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()">Submit</button>
+        </mat-dialog-actions>
+        
+  </form>
+</div>
+  
+  
+  
+  

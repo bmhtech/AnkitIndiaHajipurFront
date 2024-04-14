@@ -1,0 +1,40 @@
+
+
+  <!-- list -->
+
+<div class="master_containerr">
+  <div class="container-fluid">   
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Accounts Ledger List</legend>
+          <div class="table_content">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+              </div>
+            </div>
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Group Name</th>
+                  <th>Sub Group Name</th>
+                  <th>Ledger Name</th>
+                  <!-- <th colspan="1">Action</th> -->
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let ledgers of listofLedgers">
+                  <td>{{ledgers.group_name}}</td>
+                  <td>{{ledgers.sub_group_name}}</td>
+                  <td>{{ledgers.ledgername}}</td>
+                  <!-- <td><button class="btn btn-info">Posting</button></td>                       -->
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

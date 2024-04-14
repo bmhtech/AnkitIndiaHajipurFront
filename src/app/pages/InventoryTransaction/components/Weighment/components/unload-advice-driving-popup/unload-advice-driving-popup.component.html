@@ -1,0 +1,119 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>  
+
+<form [formGroup]="userForm" >
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <fieldset>
+        <legend>Driver Details</legend>
+        <div class="modal_main_content" style="width: 60vw;">
+          <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+            <div class="row">
+
+              <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Search</mat-label>
+                  <input type="text" class="form-control" (focusout)="searchDriver($event)">
+                </div>
+              </div> -->
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Document Type</mat-label>
+                  <mat-select class="form-control" [(ngModel)]="documentType" formControlName="doc_type" [disabled]="true">
+                    <mat-option value="Driving Licence">Driving Licence</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Document No.<span class="red">*</span></mat-label>
+                  <input type="text" [(ngModel)]="model.doc_no" formControlName="doc_no" class="form-control" (focusout)="searchDriver($event.target.value)">
+                </div>
+              </div>
+              
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Driving Licence Expiry Date<span class="red">*</span></mat-label>
+                  <input type="date" [(ngModel)]="expDate" formControlName="exp_date" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Vehicle No.</mat-label>
+                  <mat-select formControlName="veh_no" [(ngModel)]="vehicleId" class="form-control" [disabled]="true">
+                    <mat-option value="0">-Select-</mat-option>
+                  <mat-option *ngFor="let veh_no of veh_nos" [value]="veh_no.vehicle_id">{{veh_no.vehicle_no}}</mat-option>
+                </mat-select>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Driver Name<span class="red">*</span></mat-label>
+                  <input type="text" [(ngModel)]="model.driver_name" formControlName="driver_name" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Phone no</mat-label>
+                  <input type="number" [(ngModel)]="model.phone_no" formControlName="phone_no" class="form-control">
+                </div>
+              </div>
+              
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Address</mat-label>
+                  <textarea class="form-control" [(ngModel)]="model.address" formControlName="address" style="height: 110px;"></textarea>
+                </div>
+              </div>
+              
+            </div>
+          </div>
+
+          <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+            <div class="row">
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Upload Identity</mat-label>
+                  <div class="form-control" style="min-height: 110px; border: 1px solid #ccc; border-radius: 4px;">
+                    <div class="imagePreview" *ngIf="imageURL && imageURL !== ''"> 
+                              <input type="image" [src]="imageURL">
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <input type="file" accept="image/*"  #myFileInput  (change)="onFileSelected($event)">
+                </div>
+              </div>
+              <!-- <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <button mat-button class="btn btn-info">Upload</button>
+                </div>
+              </div> -->
+            </div>
+          </div>
+          
+        </div>
+        <div *ngIf="errorMessage" class="alert alert-danger" role="alert">{{errorMessage}}</div>
+      </fieldset>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    <!-- <mat-dialog-actions align="end" *ngIf="model.address != null && model.phone_no != null && model.driver_name != null && model.doc_no != null &&
+    model.address != '' && model.phone_no != '' && model.driver_name != '' && model.doc_no != ''"> -->
+      <!-- <button mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>  -->
+      <!-- <button class="btn btn-primary" mat-button [mat-dialog-close]="true" (click)="send()" cdkFocusInitial>Save</button> -->
+      <button class="btn btn-primary"  (click)="send()" cdkFocusInitial>Save</button>
+    <!-- </mat-dialog-actions> -->
+  </div>
+</div>
+</form>

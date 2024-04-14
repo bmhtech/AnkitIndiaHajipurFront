@@ -1,0 +1,22 @@
+export class userAccess {
+    id:any;
+    reporttype:any;
+   //role_access:any;
+    item_master:any;
+    supplier_master:any;
+    cusromer_master:any;
+    broker_master:any;
+    other_partner_master:any;
+    other_master:any;
+    mislenious_master:any;
+    purchase_inventory:any;
+    weighment:any;
+    sales_transaction:any;
+    production_module:any;
+    stock_transfer:any;
+    sales_pur_report:any;
+    user_role:any;
+    parent_role_id:any
+    role_id:any;
+    name:any;
+}

@@ -1,0 +1,238 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Vehicle Master info</legend>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                 <div class="form-group">
+                <label for="Vehicle_no">Vehicle No.<span class="red">*</span></label>
+                <input type="text" [(ngModel)]="vehicle" formControlName="vehicle_no" class="form-control" (focusout)="onFocusoutCheckUnique($event)"/>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Vehicle Type<span class="red">*</span></mat-label>
+                <mat-select class="form-control" [(ngModel)]="Vehicle.vehtype_code" formControlName="vehtype_code">
+                   <mat-option value="0">-Select Vehicle Type-</mat-option>
+                   <mat-option *ngFor="let vehicles of vehicleCodes" [value]="vehicles.vehtype_code">{{vehicles.vehtype_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Transporter Name</mat-label>
+                <!-- <input type="text"  formControlName="transporter" class="form-control" /> -->
+<!-- 
+                 <mat-select-autocomplete class="form-control ats"  
+                [options]="transporterList"
+                [display]="'bp_name'"
+                [value]="'bp_Id'"
+                [multiple]='false'            
+                ngDefaultControl
+                [formControl]="userForm.controls['transporter']">
+              </mat-select-autocomplete>  -->
+
+              <mat-select class="form-control"  formControlName="transporter">
+                <mat-option value="0">~Select Transporter~</mat-option>
+                <mat-option *ngFor="let list of transporterList" [value]="list.bp_id">{{list.bp_name}}</mat-option>
+             </mat-select>
+
+              </div>
+            </div>
+           
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Vehicle_aliasno">Vehicle Alias No.</label>
+                <input type="text" [(ngModel)]="Vehicle.vehicle_aliasno" formControlName="vehicle_aliasno" class="form-control" id="vehicle_aliasno">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Vehicle_ChassisNo">Vehicle Chassis No.</label>
+                <input type="text" [(ngModel)]="Vehicle.vehicle_chassisno" formControlName="vehicle_chassisno" class="form-control" id="vehicle_chassisno">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="TareWeight_Qty">Tare Weight Qty</label>
+                <input type="number" [(ngModel)]="Vehicle.tareweight_qty" formControlName="tareweight_qty" class="form-control" min="0">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="TareWeight Uom">Tare Weight UOM</label>
+                <mat-select type="text" formControlName="tareweight_uom" [(ngModel)]="TareweightUom" class="form-control">
+                   <mat-option *ngFor="let TareWeight of customUOMs" [value]="TareWeight.customuom_id">{{TareWeight.description}}</mat-option>  
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <label for="Load_Capacity">Load Capacity</label>
+                  <input type="number" [(ngModel)]="Vehicle.load_capacity" formControlName="load_capacity" class="form-control" min="0">
+               </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Load Capacity Uom">Load Capacity UOM</label>
+                <mat-select type="text" formControlName="loadcapacity_uom" [(ngModel)]="Loadcapacity_Uom" class="form-control">     
+                  <mat-option *ngFor="let loadcapacity of customUOMs" [value]="loadcapacity.customuom_id">{{loadcapacity.description}}</mat-option>  
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Onwer_Name">Owner Name</label>
+                <input type="text" [(ngModel)]="Vehicle.onwer_name" formControlName="onwer_name" class="form-control" id="onwer_name">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Onwer_Address">Owner Address</label>
+                <input type="text" [(ngModel)]="Vehicle.onwer_address" formControlName="onwer_address" class="form-control" id="onwer_address">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Onwer_phoneNo">Owner Phone No.</label>
+                <input type="number" [(ngModel)]="Vehicle.onwer_phoneno" formControlName="onwer_phoneno" class="form-control" min="0">
+              </div>
+            </div>
+
+          
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox [(ngModel)]="Vehicle.vehicle_active" formControlName="vehicle_active">Vehicle Active</mat-checkbox> 
+              </div>
+            </div>
+
+          </fieldset>
+          <div class="row" *ngIf="isCheckedDoc">
+            <div class="col-lg-12">
+              <fieldset>
+                <legend>Document Details</legend>
+                  <div class="col-lg-12">
+                    <div class="dyn_table_conent">
+                      <div class="dyn_table_header">
+                        <label class="label_col"><h3>Action</h3></label>
+                        <label class="label_col"><h3>Sln no</h3></label>
+                        <label class="label_col"><h3>Description</h3></label>                   
+                        <label class="label_col"><h3 class="width_220">Document <br>Upload</h3></label>                
+                      </div>
+    
+                      <div class="dyn_table_data_cont" formArrayName="vehicle_master_doc_details">
+                        <div class="dyn_table" *ngFor="let item of vehicle_master_doc_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                          <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                          <div class="label_col"><input class="form-control" type="number" readonly min="0" formControlName="slno" /></div>
+                          <div class="label_col"><input class="form-control" [readonly]="editable" type="text" formControlName="description" /></div>    
+                             
+                          <div class="label_col"><input (change)="onFileSelected($event)" #myFileInput multiple  class="form-control width_220_sm" type="file"  /></div>               
+                        </div>
+                      </div>
+                   </div>
+                   <div class="btm_btn_content">
+                    <button type="button" class="btn btn-success" (click)="add()">Add </button>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
+          </div>
+
+        </div>
+
+      </div>
+     
+      <div class="row">
+        <div class="col-lg-12" *ngIf="action == 'update' || action == 'save'">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="vehiclemastersave">Submit</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+   
+
+  <!-- list -->
+
+<div class="master_container" *ngIf="isHidden==false">
+  <div class="container-fluid">   
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Vehicle Master List</legend>
+          <div class="table_content">
+            
+            <div class="row">
+              <div class="col-sm-12 col-md-6">
+                <div class="dataTables_length bs-select pull-left">
+                 <label>Show <select name="dtBasicExample_length" aria-controls="dtBasicExample" class="custom-select custom-select-sm form-control form-control-sm"><option value="10">10</option><option value="25">25</option><option value="50">50</option><option value="100">100</option></select> entries</label>
+                </div>
+               </div>
+               <div class="col-sm-12 col-md-4 col-md-offset-2"><input type="text" class="form-control" placeholder="Search.." (keydown)="search($event)"></div> 
+            </div>
+          
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Vehicle No</th>
+                  <th>Vehicle Type</th>
+                  <th>Tare Weight UOM</th>
+                  <th>Owner Name</th>
+                  <th>Owner Address</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Vehicle of vehicleData">
+                  <td>{{Vehicle.vehicle_no}}</td>
+                  <td>{{Vehicle.vehtype_name}}</td>
+                  <td>{{Vehicle.tareweight_uomname}}</td>
+                  <td>{{Vehicle.onwer_name}}</td>
+                  <td>{{Vehicle.onwer_address}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(Vehicle.id, Vehicle.vehicle_id,'view')" *ngIf="vehiclemasterview">View</button></td>         
+                  <td><button class="btn btn-info" (click)="onUpdate(Vehicle.id, Vehicle.vehicle_id,'update')" *ngIf="vehiclemasterupdate">Update</button></td>
+                  <td><button class="btn btn-danger" (click)="onDelete(Vehicle.id,Vehicle.vehicle_id)" *ngIf="vehiclemasterdelete">Delete</button></td>                          
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+

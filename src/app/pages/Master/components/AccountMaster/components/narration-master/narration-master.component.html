@@ -1,0 +1,162 @@
+<section class="master_container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+              <div class="button_row">
+                <ul>
+                  <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+                  <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+                </ul>   
+              </div>
+            </div>
+          </div>
+    </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+      <form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+          <section class="master_container">
+              <div class="container-fluid">   
+            <!-- <input autocomplete="false" name="hidden" type="text" style="display:none;">  -->
+        <!-- <form [formGroup]="acc_narration_master_form" (ngSubmit)="send()"> -->
+         <div class="row">
+           <div class="col-lg-12">
+             <fieldset>
+               <legend>Narration Master Info</legend>
+                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                     <div class="form-group">
+                         <label for="Narration code">Narration code</label>
+                         <input [(ngModel)]="model.narration_code"  type="text" formControlName="narration_code" class="form-control" >
+                          <!-- <small *ngIf="narration_code.invalid" class="form-text text-danger">Validation mag</small> -->
+                     </div>
+                 </div>
+                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                     <div class="form-group">
+                       <label for="Narration name">Narration name</label>
+                       <input [(ngModel)]="model.narration_name"  type="text" formControlName="narration_name" class="form-control" >
+                          <!-- <small *ngIf="narration_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                   </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="Description Head">Description Head</label>
+                      <input [(ngModel)]="model.description_head"  type="text" formControlName="description_head" class="form-control" >
+                      <!-- <small *ngIf="description_head.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+                 </div>
+                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Narration line1">Narration line1</label>
+                    <input [(ngModel)]="model.narration_line1"  type="text" formControlName="narration_line1" class="form-control" >
+                      <!-- <small *ngIf="narration_line1.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+                  </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="Narration line2">Narration line2</label>
+                      <input [(ngModel)]="model.narration_line2"  type="text" formControlName="narration_line2" class="form-control" >
+                      <!-- <small *ngIf="narration_line2.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Narration line3">Narration line3</label>
+                    <input [(ngModel)]="model.narration_line3"  type="text" formControlName="narration_line3" class="form-control" >
+                    <!-- <small *ngIf="narration_line3.invalid" class="form-text text-danger">Validation mag</small> -->
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Narration line4">Narration line4</label>
+                    <input [(ngModel)]="model.narration_line4"  type="text" formControlName="narration_line4" class="form-control" >
+                    <!-- <small *ngIf="narration_line4.invalid" class="form-text text-danger">Validation mag</small> -->
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Narration line5">Narration line5</label>
+                    <input [(ngModel)]="model.narration_line5"  type="text" formControlName="narration_line5" class="form-control" >
+                    <!-- <small *ngIf="narration_line5.invalid" class="form-text text-danger">Validation mag</small> -->
+                </div>
+              </div> 
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-label>Business Unit Code</mat-label>
+                          <mat-select class="form-control" [(ngModel)]="model.businessunit_code" formControlName="businessunit_code" (selectionChange)="onchangeBUnitName($event.value)">
+                            <mat-option value="0">~Select Business Unit Code~</mat-option>
+                            <mat-option *ngFor="let businessunit_code of bUnitCodes" [value]="businessunit_code.businessunit_code">{{businessunit_code.businessunit_code}}</mat-option>
+                          </mat-select>
+                        </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Business Unit Name">Business Unit Name</label>
+                    <input [(ngModel)]="model.businessunit_name"  type="text" formControlName="businessunit_name" class="form-control" [value]="businessunit_name" >
+                    <!-- <small *ngIf="businessunit_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+                </div>
+                  
+                <div class="clr"></div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-checkbox [(ngModel)]="model.group_code" formControlName="narration_active" >Narration Active</mat-checkbox> 
+                        <!-- <input [(ngModel)]="acc_narration.group_code"  class="checkbox checkbox-primary" type="checkbox" id="color-checkbox1"  formControlName="narration_active"  required checked>
+                        <label class="check-label" for="color-checkbox1"> Narration Active</label> -->
+                        <!-- <small *ngIf="narration_active.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                  </div>
+                  
+           </fieldset>
+
+             <div class="col-lg-12">
+                 <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="send()">Submit</button>
+                 </div>
+             </div>
+            </div>
+          </div>
+        </div>
+      </section>
+       </form>
+
+
+
+   <!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+              <fieldset class="table_container">
+                <legend>Narration Master List</legend>
+                <div class="table_content">
+                  <table class="table table-bordered">
+                      <thead>
+                          <tr>
+                              <th>Narration name</th>
+                              <th>Narration line1</th>
+                              <th>Narration line4</th>
+                              <th>Code</th>
+                            
+                          </tr>
+                      </thead>
+                    <tbody>
+                          <tr *ngFor="let model of listacc_narration">
+                              <td>{{model.narration_name}}</td>
+                              <td>{{model.narration_line1}}</td>
+                              <td>{{model.narration_line4}}</td>
+                              <td>{{model.narration_code}}</td>
+                            
+                          </tr>
+                  </tbody>
+              </table>
+            
+            </div>
+            </fieldset>
+        </div>
+      </div>
+    </div>
+</div>

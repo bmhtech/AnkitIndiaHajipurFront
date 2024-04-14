@@ -1,0 +1,246 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader"> <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner></div>
+</div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Rate Chart</legend>
+           
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Rate Code<span class="red">*</span></mat-label>
+                <input type="text" formControlName="rate_code" class="form-control" [(ngModel)]="seq_no" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Bussiness Unit<span class="red">*</span></mat-label>
+                <mat-select formControlName="b_unit"  class="form-control" (selectionChange)="onChangeBUnit($event.value)" > 
+                  
+                  <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Valid From</mat-label>
+                <input type="datetime-local" class="form-control" formControlName="date" (change)="onChangeDate($event)" >
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Valid To</mat-label>
+                <input type="datetime-local" class="form-control" formControlName="valid_date" [(ngModel)]="validcurrentDate" >
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <fieldset>
+                  <legend>Item Rate Details</legend>
+                    <div class="col-lg-12">
+                      <div class="dyn_table_conent" >
+                        <div class="dyn_table_header">
+                          <div style="position: absolute; z-index: 1;">
+                              <label class="label_col"><h3>Action</h3></label>
+                              <label class="label_col"><h3 class="srln">Sl.No.</h3></label>
+                              <label class="label_col"><h3 class="i_nam">Item Name<span class="red">*</span></h3></label>
+                          </div>
+                          <div style="left: 77%; position: sticky; width: 1210px; margin-left: 422px;">
+                              <label class="label_col"><h3 class="i_nam">Packing Item<span class="red">*</span></h3></label>
+                              <label class="label_col"><h3 style="width: 115px;">Item UoM</h3></label>
+                              <label class="label_col"><h3>Packing UoM</h3></label>
+                              <label class="label_col"><h3>Price Based on</h3></label>
+                              <label class="label_col"><h3>Qty</h3></label>
+                              <label class="label_col"><h3>Qty UoM</h3></label>
+                              <label class="label_col"><h3>Rate<span class="red">*</span></h3></label>
+                              <label class="label_col"><h3>Tolerance (₹)</h3></label>
+                              <label class="label_col"><h3>Sales Status</h3></label>
+                          </div>
+                        </div>
+      
+                        <div  formArrayName="item_rate_dtls">
+                              <div class="dyn_table" *ngFor="let rates of item_rate_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                <!-- <div style="overflow-x: scroll; overflow-y: visible;"> -->
+                                  <div style="position: absolute; background-color: white; float: left; z-index: 1;">
+                                    <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                                    <div class="label_col"><input class="form-control srln" type="number" formControlName="sl_no" readonly/></div>
+                                    
+                                    <div class="label_col">
+                                      <mat-select-autocomplete class="form-control ats i_nam"  
+                                      [options]="item_codes"
+                                      [display]="'item_name'"
+                                      [value]="'item_id'"
+                                      [multiple]='false'
+                                      (selectionChange)="onChangeItemName(pointIndex, $event)"
+                                      [selectedOptions]="selectedItemName[pointIndex]"
+                                      ngDefaultControl
+                                      [formControlName] ="'item_code'">
+                                      </mat-select-autocomplete>
+                                    </div>
+                                  </div>
+
+                                  <div style="left: 77%; position: sticky; width: 1210px; margin-left: 421px;">
+                                    <div class="label_col">
+                                      <mat-select-autocomplete class="form-control ats i_nam"  
+                                      [options]="packingItem[pointIndex]"
+                                      [display]="'item_name'"
+                                      [value]="'item_code'"
+                                      [multiple]='false'
+                                      [selectedOptions]="selectedPackingItem[pointIndex]"
+                                      (selectionChange)="onChangePackingItem(pointIndex, $event)"
+                                      ngDefaultControl
+                                      [formControlName]="'packing'">
+                                    </mat-select-autocomplete>
+                                    </div>
+                                    <div class="label_col"><input formControlName="item_uom" class="form-control" type="text" readonly></div>
+                                    <div class="label_col"><input formControlName="packing_uom" class="form-control" type="text" readonly></div>
+                                    <div class="label_col">
+                                      <mat-select class="form-control" formControlName="price_based_on" (selectionChange)="onChangePriceBased($event.value,pointIndex)">
+                                        <mat-option value="Item">Item</mat-option>
+                                        <mat-option value="Packing">Packing</mat-option>
+                                      </mat-select>
+                                    </div>
+                                    <div class="label_col"><input formControlName="qty" class="form-control" type="text" ></div>
+                                    <div class="label_col"><input formControlName="qty_uom" class="form-control" type="text" readonly></div>
+                                    <div class="label_col"><input formControlName="rate" class="form-control" type="text" ></div>
+                                    <div class="label_col"><input formControlName="tolerance" class="form-control" type="text" ></div>
+                                    <div class="label_col">
+                                      <mat-select class="form-control" formControlName="sales_status">
+                                        <mat-option value="Open">Open</mat-option>
+                                        <mat-option value="Close">Close</mat-option>
+                                      </mat-select>
+                                    </div>
+                                  </div>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                     </div>
+                     <div class="btm_btn_content">
+                      <button type="button" class="btn btn-success" (click)="add(pointIndex)" *ngIf="ratechartadd">Add</button>
+                      <button mat-raised-button (click)="exportAsXLSX()" color="primary" *ngIf="ratechartexcel">Export To Excel</button>
+                      <!-- <button [useExistingCss]="true" printSectionId="dynamictable" mat-button ngxPrint class="btn btn-info" *ngIf="ratechartprint">Print</button> -->
+                    </div>
+
+                    <!-- Export to Excel Table -->
+                    <div class="table_content" style="display: none;">
+                      <table class="table table-bordered" id="dynamictable">
+                          <thead>
+                              <tr>
+                                <th style="width:70px">Sl.No.</th>
+                                <th>Item Name</th>
+                                <th>Packing Item</th>
+                                <th>Item UoM</th>
+                                <th>Packing UoM</th>
+                                <th>Price Based on</th>
+                                <th>Qty</th>
+                                <th>Qty UoM</th>
+                                <th>Rate</th>
+                                <th>Tolerance (₹)</th>
+                                <th>Sales Status</th>
+                              </tr>
+                          </thead>
+                          <tbody>
+                            <tr *ngFor="let rates of item_rate_dtlsList">
+                              <td>{{rates.sl_no}}</td>
+                              <td>{{rates.item_name}}</td>
+                              <td>{{rates.packing_name}}</td>
+                              <td>{{rates.item_uom}}</td>
+                              <td>{{rates.packing_uom}}</td>
+                              <td>{{rates.price_based_on}}</td>
+                              <td>{{rates.qty}}</td>
+                              <td>{{rates.qty_uom}}</td>
+                              <td>{{rates.rate}}</td>
+                              <td>{{rates.tolerance}}</td>
+                              <td>{{rates.sales_status}}</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                    </div>
+                     
+                  </div>
+                
+                </fieldset>
+              </div>
+            </div>
+
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <button type="submit" (click)="send()" class="btn btn-primary"  *ngIf="ratechartsave">Submit</button>
+                </div>
+              </div>
+            </div>
+
+    </div>
+  </section>
+</form>
+
+<div class="master_container_box" *ngIf="isHidden==false">
+    
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Rate List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Rate Code</th>
+                  <th>Business Unit</th>
+                  <th>Validity</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let rates of listrate">
+                  <td>{{rates.rate_code}}</td>
+                  <td>{{rates.business_unitname}}</td>
+                  <td>{{rates.date | date:'dd-MM-yyyy HH:mm'}} <b>TO</b> {{rates.valid_date | date:'dd-MM-yyyy HH:mm'}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(rates.id, rates.rate_code, 'view', rates.b_unit)" >View</button></td>
+                  <td *ngIf="rates.access =='1';else elseBlock "><button class="btn btn-info" (click)="onUpdate(rates.id, rates.rate_code, 'update',rates.b_unit)">Update</button></td> 
+                  <ng-template #elseBlock>
+                    <td><button class="btn btn-info"  [disabled] ="true">Update</button></td>  
+                  </ng-template> 
+
+                  <td *ngIf="rates.access =='1';else elseBlock1 "><button class="btn btn-danger" (click)="onDelete(rates.id, rates.rate_code)">Delete</button></td>
+                  <ng-template #elseBlock1>
+                    <td><button class="btn btn-danger"  [disabled] ="true">Delete</button></td>  
+                  </ng-template> 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+    
+  </div>
+</div>

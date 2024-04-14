@@ -1,0 +1,334 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid"> 
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Solar Power Generation</legend> 
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Bussiness Unit<span class="red">*</span></mat-label>
+                <mat-select formControlName="b_unit" [(ngModel)]="BuUnit" class="form-control">
+                  <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Date<span class="red">*</span></mat-label>
+                <input type="date" class="form-control" formControlName="solar_date"  (change)="onChangeDate($event.target.value)">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>80/203(No1)</mat-label>
+                <input type="number" class="form-control" formControlName="no_one" (keyup)="getTotal()">
+              </div>
+            </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>50/127(No2)</mat-label>
+              <input type="number" class="form-control" formControlName="no_two" (keyup)="getTotal()">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>80/203(No3)</mat-label>
+              <input type="number" class="form-control" formControlName="no_three" (keyup)="getTotal()">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>50/127(No4)</mat-label>
+              <input type="number" class="form-control" formControlName="no_four" (keyup)="getTotal()">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>50/119(No5)</mat-label>
+              <input type="number" class="form-control" formControlName="no_five" (keyup)="getTotal()">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>50/118(No6)</mat-label>
+              <input type="number" class="form-control" formControlName="no_six" (keyup)="getTotal()">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>80/209(No7)</mat-label>
+              <input type="number" class="form-control" formControlName="no_seven" (keyup)="getTotal()">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>80/209(No8)</mat-label>
+              <input type="number" class="form-control" formControlName="no_eight" (keyup)="getTotal()">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>50/119(No9)</mat-label>
+              <input type="number" class="form-control" formControlName="no_nine" (keyup)="getTotal()">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>80/209(NO10)</mat-label>
+              <input type="number" class="form-control" formControlName="no_ten" (keyup)="getTotal()">
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>80/209(No11)</mat-label>
+              <input type="number" class="form-control" formControlName="no_eleven" (keyup)="getTotal()">
+            </div>
+          </div>
+        
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Total</mat-label>
+              <input type="text" class="form-control" formControlName="total" readonly>
+            </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Remarks</mat-label>
+              <textarea formControlName="remarks" class="form-control" rows="1" ></textarea>
+            </div>
+          </div> 
+
+          </fieldset>
+        </div>
+      </div>
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary"  (click)="send()" *ngIf="soalrpowergenerationsave">Submit</button>
+          </div>
+        </div>
+      </div>
+   </div>
+  </section> 
+</form>
+<!-- list -->
+<div class="master_containerr" *ngIf="isHidden==false">
+  <form [formGroup]="userForm1">
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>Business Unit<span class="red">*</span></mat-label>
+        <mat-select class="form-control" [(ngModel)]="BuUnit" formControlName="business_unit">
+          <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+        </mat-select>
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>From Date<span class="red">*</span></mat-label>
+      <input type="date"  class="form-control" formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+      <mat-label>To Date<span class="red">*</span></mat-label>
+      <input type="date"  class="form-control" [(ngModel)]="currentDate" formControlName="todate">
+      </div>
+    </div>
+    
+    
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
+      </div>
+    </div>
+</form>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Solar Power Generation List</legend>
+          <div class="table_content">
+
+            <div class="col-lg-12" style="float: right;">
+              <div  class="form-group">
+                  <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+                  <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">Print</button>
+              </div>
+          </div>
+
+            <table class="table table-bordered" id="dynamictable">
+              <thead>
+                <tr><td colspan="17"><b>{{headingtop}}</b></td></tr>
+                <tr><td colspan="17"><b>INVERTER RECORDING IN KWH</b></td></tr>
+                <tr>
+                  <th style="width: auto;">Entry Date</th>
+                  <th style="width: auto;">80/203(No1)</th>
+                  <th style="width: auto;">50/127(No2)</th>
+                  <th style="width: auto;">80/203(No3)</th>
+                  <th style="width: auto;">50/127(No4)</th>
+                  <th style="width: auto;">50/119(No5)</th>
+                  <th style="width: auto;">50/118(No6)</th>
+                  <th style="width: auto;">80/209(No7)</th>
+                  <th style="width: auto;">80/209(No8)</th>
+                  <th style="width: auto;">50/119(No9)</th>
+                  <th style="width: auto;">80/209(NO10)</th>
+                  <th style="width: auto;">80/209(No11)</th>
+                  <th style="width: auto;">Total</th>
+                  <th style="width: auto;">Remarks</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+               <tbody>
+                <tr *ngFor="let solar of listsolarpower">
+                  <td style="width: auto;text-align: left;">{{solar.solar_date | date:'dd-MM-yy'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_one | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_two | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_three | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_four | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_five | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_six | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_seven | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_eight | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_nine | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_ten | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.no_eleven | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.total | number:'1.2-2'}}</td>
+                  <td style="width: auto;text-align: left;">{{solar.remarks}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(solar.id,'view')">View</button></td>                 
+                  <td><button class="btn btn-info" (click)="onUpdate(solar.id,'update')">Update</button></td>                 
+                  <td><button class="btn btn-danger" (click)="onDelete(solar.id)">Delete</button></td>                 
+                </tr>
+                <tr>
+                  <td></td>
+                  <td><b>Total</b></td>
+                  <td><b>{{no_oneTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{no_twoTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{no_threeTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{no_fourTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{no_fiveTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{no_sixTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{no_sevenTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{no_eightTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{no_nineTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{no_tenTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{no_elevenTotal | number:'1.2-2'}}</b></td>
+                  <td><b>{{total_Total | number:'1.2-2'}}</b></td>
+                  <td></td>
+                  <td></td>
+                </tr>
+              </tbody> 
+            </table>
+
+            <div  id="print-section" hidden>
+              <h3 class="uc" style="text-align: center;">{{company}}</h3>
+              <div>
+                  <table class="table table-bordered" >
+                      <thead>
+                        <tr><td colspan="16" style="text-align: center;"><b>{{headingtop}}</b></td></tr>
+                        <tr><td colspan="16" style="text-align: center;"><b>INVERTER RECORDING IN KWH</b></td></tr>
+                          <tr>
+                            <th style="width: auto;">Sl</th>
+                            <th style="width: auto;">Entry Date</th>
+                            <th style="width: auto;">80/203(No1)</th>
+                            <th style="width: auto;">50/127(No2)</th>
+                            <th style="width: auto;">80/203(No3)</th>
+                            <th style="width: auto;">50/127(No4)</th>
+                            <th style="width: auto;">50/119(No5)</th>
+                            <th style="width: auto;">50/118(No6)</th>
+                            <th style="width: auto;">80/209(No7)</th>
+                            <th style="width: auto;">80/209(No8)</th>
+                            <th style="width: auto;">50/119(No9)</th>
+                            <th style="width: auto;">80/209(NO10)</th>
+                            <th style="width: auto;">80/209(No11)</th>
+                            <th style="width: auto;">Total</th>
+                            <th style="width: auto;">Remarks</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let solar of listsolarpower; let pointIndex=index">
+                            <td style="width: auto;text-align: left;">{{pointIndex+1}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.solar_date | date:'dd-MM-yy'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_one | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_two | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_three | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_four | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_five | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_six | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_seven | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_eight | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_nine | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_ten | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.no_eleven | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.total | number:'1.2-2'}}</td>
+                            <td style="width: auto;text-align: left;">{{solar.remarks}}</td>
+                        </tr>
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td><b>Total</b></td>
+                          <td><b>{{no_oneTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{no_twoTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{no_threeTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{no_fourTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{no_fiveTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{no_sixTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{no_sevenTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{no_eightTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{no_nineTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{no_tenTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{no_elevenTotal | number:'1.2-2'}}</b></td>
+                          <td><b>{{total_Total | number:'1.2-2'}}</b></td>
+                          <td></td>
+                        </tr>
+                      </tbody>
+                  </table>
+              </div>
+          </div>
+
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+  
+  

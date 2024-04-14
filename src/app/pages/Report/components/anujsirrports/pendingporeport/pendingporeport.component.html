@@ -1,0 +1,120 @@
+<form [formGroup]="userForm8">
+  <fieldset>
+      <legend>Pending Souda Report</legend>
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>From Date</mat-label>
+                  <input type="date"  class="form-control"  formControlName="pendingfromdate">
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>To Date</mat-label>
+                  <input type="date"  class="form-control"  formControlName="pendingtodate">
+              </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+          <div class="form-group ht_59">
+              <mat-label>Catagory<span class="red">*</span></mat-label>
+              <mat-select formControlName="pendingcatagory" class="form-control" (selectionChange)="onChangeCategory($event.value)">
+              <mat-option value="truck">Per Truck</mat-option>
+              <mat-option value="quantity">Per Quantity</mat-option> 
+              </mat-select>
+          </div>
+          </div>
+
+          <div class="col-lg-12" >
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary" (click)="searchpending()" >Search</button>
+              </div>
+          </div>
+          <fieldset class="table_container">
+              
+              <div class="col-lg-12" style="float: right;">
+                  <div  class="form-group">
+                      <button mat-raised-button (click)="exportAsXLSX8()" color="primary" >Export To Excel</button>
+                  </div>
+
+              </div>
+
+              <!-- <div class="form-group">
+                <label for="file">Choose File</label>
+                <div class="label_col"><input  class="form-control  wdt_220_s"   (change)="onFileSelected($event)" #myFileInput   type="file" /></div>
+            </div> -->
+
+          <div class="table_content">
+          <table class="table table-bordered" id="dynamictable8" *ngIf="pertruck;else perqty">
+              <thead>
+                  <tr>
+                      <th style="width:70px">Order Date</th>
+                      <th>Purchae Order No.</th>
+                      <th>Broker Name</th>
+                      <th>Party Name</th>
+                      <th>Rate</th>
+                      <th>Truck</th>
+                      <th>Pending</th>
+                      <th>PO Status</th>
+                  </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let pending of pendingSoudaList; let pointIndex=index">
+                      <td>{{pending.orderdate}}</td>
+                      <td>{{pending.pur_order_no}}</td>
+                      <td>{{pending.brokername}}</td>
+                      <td>{{pending.partyname}}</td>
+                      <td>{{pending.rate}}</td>
+                      <td>{{pending.truck}}</td>
+                      <td>{{pending.pending}}</td>
+                      <td>{{pending.po_status}}</td>
+                  </tr>
+                  <tr>
+                      <td colspan="5"><b>Total</b></td>
+                      <td><b>{{totaltruck}}</b></td>
+                      <td><b>{{totalpending}}</b></td>
+                  </tr>
+              </tbody>
+          </table>
+          <ng-template #perqty>
+
+              <table class="table table-bordered" id="dynamictable8" >
+                  <thead>
+                      <tr>
+                          <th style="width:70px">Order Date</th>
+                          <th>Purchae Order No.</th>
+                          <th>Broker Name</th>
+                          <th>Party Name</th>
+                          <th>Rate</th>
+                          <th>Po Wt</th>
+                          <th>Advice Wt</th>
+                          <th>Pending Wt</th>
+                          <th>PO Status</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                      <tr *ngFor="let pending of pendingSoudaList; let pointIndex=index">
+                          <td>{{pending.orddate}}</td>
+                          <td>{{pending.pur_order_no}}</td>
+                          <td>{{pending.Broker}}</td>
+                          <td>{{pending.supplier}}</td>
+                          <td>{{pending.price}}</td>
+                          <td>{{pending.total_qty}}</td>
+                          <td>{{pending.adv_mat_wt}}</td>
+                          <td>{{pending.pending}}</td>
+                          <td>{{pending.po_status}}</td>
+                      </tr>
+                      <tr>
+                          <td colspan="5"><b>Total</b></td>
+                          <td><b>{{totalqty | number:'1.3-3'}}</b></td>
+                          <td><b>{{advwt | number:'1.3-3'}}</b></td>
+                          <td><b>{{pendingwt | number:'1.3-3'}}</b></td>
+                      </tr>
+                  </tbody>
+              </table>
+          </ng-template>
+          
+      </div>
+      
+      </fieldset>
+  </fieldset>
+</form>

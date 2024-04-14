@@ -1,0 +1,237 @@
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <div class="modal_main_content">
+        <div id="print-section" class="print ">
+        <div class="container-fluid">
+          <div class="main_content inv">
+            <div class="section1">
+              <div class="main_header">
+              <div class="top_div">
+                   <!-- <table class="table">
+                    <tbody>
+                      <tr>
+                        <td style="width: 70%;">GSTIN : 19AADCA25181H12V &nbsp; </td>
+                        <td style="width: 30%;">Phone : 2287-4064/2287-1538</td>
+                      </tr>
+                      <tr>
+                        <td style="width: 70%;">PAN : AADCA251EH &nbsp;</td>
+                        <td style="width: 30%;">FAX : 2281-8269<br></td>
+                        
+                      </tr>
+                    </tbody>
+                  </table>-->
+                </div>
+
+
+                
+                <h1 class="uc">{{company_name}} ({{businessUnit}}) </h1>
+                <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock ">(FRN : {{cin_no}})<br>
+                  <!-- 14A, 5th floor, FMC FORTUNA<br>
+                  234/3A A.J.C Bose Road, Kolkata 700020</div> -->
+                  {{work_address}}<br>
+                  {{state_name}},{{city_name}},{{pin_no}}</div>
+                  <ng-template #elseBlock>
+                  <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <!-- 14A, 5th floor, FMC FORTUNA<br>
+                    234/3A A.J.C Bose Road, Kolkata 700020</div> -->
+                    {{work_address}}<br>
+                    {{state_name}},{{city_name}},{{pin_no}}</div>
+                  </ng-template>
+                <h1 class="uc">SALES ORDER (SOUDA)</h1>
+              </div>
+              <div class="box_table">
+                <div class="bxx-top">
+                  <table class="table table_top table-bordered">
+                    <tbody>
+                      <tr>
+                        <!--<td style="width: 50%; vertical-align: top;" class="brdr_right">-->
+                          <td style="width: 50%;" class="brdr_right">
+                          <!--<div class="form-control" style="min-height: 110px; border: 1px solid #ccc; border-radius: 4px;">
+  
+                            <input type="image" [src]="imageURL12" class="imageContainer" style="height:106px;width: 175px;" >  
+                          </div>-->
+                          <table style="width: 100%;" class="uc">
+                            <tr>
+                              <!-- <td>Customer: </td> -->
+                              <td>{{partyname}}</td>
+                             <!-- <td>Date:</td>
+                              <td>{{currentDate}}</td>  -->
+                            </tr>
+                            <tr>
+                              <!-- <td>Address: </td> -->
+                              <td colspan="3">{{address}}</td>
+                              <!--<td>&nbsp;</td>
+                              <td>&nbsp;</td>-->
+                            </tr>
+                            <tr>
+                              <!-- <td>Broker: </td>
+                              <td colspan="3">{{brokername}}</td> -->
+                              <!--<td>&nbsp;</td>
+                              <td>&nbsp;</td>-->
+                            </tr>
+                            <!-- <tr>
+                              <td>Purchase Order: </td>
+                              <td><b>{{purNo}}</b></td>
+                              <td>Date:</td>
+                              <td>{{orddate}}</td>
+                            </tr> -->
+                           
+                          </table>
+                        </td>
+
+                        <td style="width: 50%;" class="comp_adrs">
+                          <table style="width: 100%;" class="uc">
+                            <tr>
+                              <td>S.Order No: </td>
+                              <td>{{orderno}}</td>
+                              <td>Dt.:</td>
+                              <td>{{orderdate}}</td>
+                            </tr>
+                            <tr>
+                              <td>Souda Type: </td>
+                              <td>fresh</td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td>Del Period: </td>
+                              <td>{{delivery_date}}</td>
+                              <td>Del Term:</td>
+                              <td>{{delivery_term}}</td>
+                            </tr>
+                            <tr>
+                              <td>Payment Term: </td>
+                              <td>{{payment_term}}</td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td>Broker Name: </td>
+                              <td>{{broker}}</td>
+                              <td></td>
+                              <td></td>
+                            </tr>
+                            <tr>
+                              <td>P.Order No: </td>
+                              <td>{{cust_refdocno}}</td>
+                              <td>Dt.:</td>
+                              <td></td>
+                            </tr>
+                           
+                          </table>
+                        </td>
+                     </tr>
+                     
+                    </tbody>
+                  </table>
+                  <br/>
+                  <div class="bxx">
+                    <table class="table table-bordered" style="padding: 5px;text-align: center;">
+                      <thead>
+                        <tr>
+                          <th scope="col" style="width: 6%">SL.</th>
+                          <th scope="col" style="width: 15%;">Particular</th>
+                          <th scope="col" style="width: 15%;">Grade</th>
+                          <th scope="col" style="width: 15%;">Packing</th>
+                          <th scope="col" style="width: 5%;">Bags</th>
+                          <th scope="col" style="width: 5%;">Wt. Qtls</th>
+                          <th scope="col" style="width: 5%;">Rate</th>
+                          <th scope="col" style="width: 5%;">Unit</th>
+                          <th scope="col" style="width: 5%;">Discount</th>
+                          <th scope="col" style="width: 5%;">Amount</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr  *ngFor="let i of itemDetails; let poinIndex = index">
+                          <td>{{poinIndex+1}}</td> 
+                          <td>{{i.item_name}}</td>
+                          <td>{{i.item_name}}</td>
+                          <td>{{i.packing_name}}</td>
+                          <td style="text-align: center!important;">{{i.squantity}}</td>
+                          <td style="text-align: center!important;">{{i.mat_wt | number:'1.3-3'}}</td>
+                          <td style="text-align: center!important;">{{i.price | number:'1.2-2'}}</td>
+                          <td style="text-align: center!important;">{{i.uom}}</td>
+                          <td style="text-align: center!important;">{{i.discount_amt | number:'1.2-2'}}</td>
+                          <td style="text-align: right!important;">{{i.total_amt | number:'1.2-2'}}</td>
+                        </tr>
+                    
+                        <tr>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td></td>
+                          <td><b>Total amount:</b></td>
+                   
+                          <td style="text-align: right!important;"><b>{{itemtotal| number:'1.2-2'}}</b></td>
+                        </tr>
+                                              
+                      </tbody>
+                    </table>
+  
+                  </div>
+                  <br/>
+                  <div class="bxx">
+                    <b> Amount in Words : {{amountinwords}}</b>
+                  <br/>
+                    <b>Remark (if any)</b>
+                    <b style="float: right;">E.& O.E</b>
+                    
+                   
+                  </div>
+                  <div class="bxx"  style="float: right;">
+                   
+                    
+                      For <b>{{company_name}}</b>
+                   
+
+                  </div>
+                  <br/><br/>
+                 
+                  <div class="bxx-toppest" style="padding: 10px;">
+                    <ul>
+                      <li></li>
+                      <li style="float: centre;">Received By</li>
+                      <li style="float: right;"><b>Authorised Signatory</b></li>
+                      
+                    </ul>
+                  </div>
+
+                 
+                </div>
+
+                    <hr style="border: 1px solid black;">
+                    <div class="addresscenter">
+                          <b >{{bu_address}}, {{dist}}-{{pin}} </b>
+                    </div>
+
+              </div>
+            </div>
+          </div>
+          
+        </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    <!-- <mat-dialog-actions align="end">
+      <button mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+      <button class="btn btn-info" mat-button [mat-dialog-close]="true" cdkFocusInitial>Save</button>
+    </mat-dialog-actions> -->
+    <mat-dialog-actions align="end">
+      <button [useExistingCss]="true" printSectionId="print-section" ngxPrint>print</button>
+    </mat-dialog-actions>
+
+  </div>
+</div>
+
+
+
+
+
+
+

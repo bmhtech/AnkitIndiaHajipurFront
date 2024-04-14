@@ -1,0 +1,91 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm">
+  <fieldset>
+      <legend>Sales Order Report</legend>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>From Date</mat-label>
+                  <input type="date"  class="form-control"  formControlName="salesfromdate">
+              </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>To Date</mat-label>
+                  <input type="date"  class="form-control"  formControlName="salestodate">
+              </div>
+          </div>
+
+          <div class="col-lg-12" >
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary" (click)="searchsalesorder()">Search</button>
+              </div>
+          </div>
+
+          <fieldset class="table_container">
+              <div class="col-lg-12" style="float: right;">
+                <div  class="form-group">
+                  <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+                </div>
+              </div>
+
+            <div class="table_content">
+              <table class="table table-bordered" id="dynamictable">
+                  <thead>
+                      <tr>
+                          <th style="width:70px">Order Date</th>
+                          <th>Sales Order No.</th>
+                          <!-- <th>SO Type</th> -->
+                          <th>Ref. Type</th>
+                          <th>Party Name</th>
+                          <th>Broker Name</th>
+                          <th>Item Name</th>
+                          <th>SO Qty</th>
+                          <th>Bag</th>
+                          <th>SO Rate</th>
+                          <th>Price Based on</th>
+                          <th>Dispatch Qty</th>
+                          <th>Dispatch Bag</th>
+                          <th>Pending Qty</th>
+                          <th>Pending Bag</th>
+                      </tr>
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let salesOrder of salesOrderList">
+                      <td>{{salesOrder.order_date}}</td>
+                      <td>{{salesOrder.order_no}}</td>
+                      <!-- <td>{{salesOrder.order_type}}</td> -->
+                      <td>{{salesOrder.ref_type}}</td>
+                      <td>{{salesOrder.partyname}}</td>
+                      <td>{{salesOrder.broker_name}}</td>
+                      <td>{{salesOrder.item_name}}</td>
+                      <td>{{salesOrder.mat_wt}}</td>
+                      <td>{{salesOrder.bag}}</td>
+                      <td>{{salesOrder.price}}</td>
+                      <td>{{salesOrder.price_based_on}}</td>
+                      <!-- <td>{{salesOrder.dispatch}}</td>
+                      <td>{{salesOrder.dispatchbag}}</td>
+                      <td>{{salesOrder.pending}}</td>
+                      <td>{{salesOrder.pendingbags}}</td> -->
+                      <td>{{salesOrder.dispatched_quantity}}</td>
+                      <td>{{salesOrder.dispatched_bag}}</td>
+                      <td>{{salesOrder.pending_quantity}}</td>
+                      <td>{{salesOrder.pending_bag}}</td>
+                    </tr>
+                    <!-- <tr>
+                      <td colspan="5"><b>Total</b></td>
+                      <td><b>{{totaltruck}}</b></td>
+                      <td><b>{{totalpending}}</b></td>
+                    </tr> -->
+                  </tbody>
+                </table>
+            </div>
+          </fieldset>
+  </fieldset>
+</form>

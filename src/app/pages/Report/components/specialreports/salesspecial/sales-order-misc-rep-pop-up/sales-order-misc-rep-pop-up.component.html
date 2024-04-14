@@ -1,0 +1,122 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="row" >
+  <button class="close_btn" mat-button mat-dialog-close style="right: -92%;"><i class="fa fa-close icon"></i></button>
+  <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+    <fieldset class="table_container">
+      <legend>PO Orderwise Report List</legend>
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="float: right;">
+          <div class="col-lg-12">
+            <div  class="form-group">
+                <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+                <button [useExistingCss]="true" printSectionId="popopup" mat-button ngxPrint class="btn btn-info">Print</button>
+                <button mat-raised-button (click)="Back()" color="primary" >Back</button>
+            </div>
+          </div>
+      </div>
+      
+      <table class="table table-bordered" id="dynamictable"  *ngIf="loadstatus">
+        <thead>
+           <tr>
+            <th colspan="7">Loading ADVICE List</th>
+           </tr>
+            
+          <tr>
+             
+              <th style="width: auto;">Sl_No</th>
+              <th style="width: auto;">Advice no.</th>
+              <th style="width: auto;">Date</th>
+              <th style="width: auto;">Supplier</th>
+              <th style="width: auto;">Vehicle No.</th>
+              <th style="width: auto;" colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let load of loadList; let pointIndex=index">
+                
+               
+                <td style="width: auto;text-align: center;">{{pointIndex+1}}</td>
+                <td style="width: auto;text-align: left;">{{load.advice_no}}</td>
+                <td style="width: auto;text-align: center;">{{load.advice_date | date:'dd-MM-yy'}}</td>
+                <td style="width: auto;text-align: left;">{{load.customer_name}}</td>
+                <td style="width: auto;text-align: left;">{{load.vehicle_no}}</td>
+                <td><button class="btn btn-info" (click)="Loaddetails(load.advice_id,load.id)">View</button></td>
+                <td><button class="btn btn-success" (click)="challanshow(load.advice_id)">Next</button></td>
+            </tr>
+            
+        </tbody>
+      </table>
+
+
+      <table class="table table-bordered" id="dynamictable"  *ngIf="Challanstatus">
+        <thead>
+           <tr>
+            <th colspan="6">Challan List</th>
+           </tr>
+            
+          <tr>
+             
+              <th style="width: auto;">Sl_No</th>
+              <th style="width: auto;">GRN no.</th>
+              <th style="width: auto;">Date</th>
+              <th style="width: auto;">Supplier</th>
+         
+              <th style="width: auto;" colspan="2">Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let challan of ChallanList; let pointIndex=index">
+                
+               
+                <td style="width: auto;text-align: center;">{{pointIndex+1}}</td>
+                <td style="width: auto;text-align: left;">{{challan.challan_no}}</td>
+                <td style="width: auto;text-align: center;">{{challan.challan_date | date:'dd-MM-yy'}}</td>
+                <td style="width: auto;text-align: left;">{{challan.partyname}}</td>
+            
+                <td><button class="btn btn-info" (click)="Challandetails(challan.delivery_cid,challan.id)">View</button></td>
+                <td><button class="btn btn-success" (click)="invoiceshow(challan.delivery_cid)">Next</button></td>
+            </tr>
+            
+        </tbody>
+      </table>
+
+      <table class="table table-bordered" id="dynamictable3"  *ngIf="Invoicestatus">
+        <thead>
+           <tr>
+            <th colspan="5">Invoice List</th>
+           </tr>
+            
+          <tr>
+             
+              <th style="width: auto;">Sl_No</th>
+              <th style="width: auto;">Invoice no.</th>
+              <th style="width: auto;">Date</th>
+              <th style="width: auto;">Supplier</th>
+            
+              <th style="width: auto;" >Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr *ngFor="let invoice of InvoiceList; let pointIndex=index">
+                
+               
+                <td style="width: auto;text-align: center;">{{pointIndex+1}}</td>
+                <td style="width: auto;text-align: left;">{{invoice.invoice_no}}</td>
+                <td style="width: auto;text-align: center;">{{invoice.invoice_date | date:'dd-MM-yy'}}</td>
+                <td style="width: auto;text-align: left;">{{invoice.partyname}}</td>
+              
+                <td><button class="btn btn-info" (click)="Invoicedetails(invoice.invoice_id,invoice.id)">View</button></td>
+               
+            
+        </tbody>
+      </table> 
+
+
+
+      </fieldset>
+      </div>
+      </div>
+      

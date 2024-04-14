@@ -1,0 +1,127 @@
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+  
+   <div class="row" >
+    <button class="close_btn" mat-button mat-dialog-close style="right: -92%;"><i class="fa fa-close icon"></i></button>
+    <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+      <fieldset class="table_container">
+        <legend>PO Orderwise Report List</legend>
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12" style="float: right;">
+            <div class="col-lg-12">
+              <div  class="form-group">
+                  <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+                  <button [useExistingCss]="true" printSectionId="popopup" mat-button ngxPrint class="btn btn-info">Print</button>
+                  <button mat-raised-button (click)="Back()" color="primary" >Back</button>
+              </div>
+            </div>
+        </div>
+        <div id="popopup" class="popopupc">
+       
+          
+            <table class="table table-bordered" id="dynamictable"  *ngIf="unloadstatus">
+                <thead>
+                   <tr>
+                    <th colspan="7">UNLOAD ADVICE List</th>
+                   </tr>
+                    
+                  <tr>
+                     
+                      <th style="width: auto;">Sl_No</th>
+                      <th style="width: auto;">Advice no.</th>
+                      <th style="width: auto;">Date</th>
+                      <th style="width: auto;">Supplier</th>
+                      <th style="width: auto;">Vehicle No.</th>
+                      <th style="width: auto;" colspan="2">Action</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let unload of UnloadList; let pointIndex=index">
+                        
+                       
+                        <td style="width: auto;text-align: center;">{{pointIndex+1}}</td>
+                        <td style="width: auto;text-align: left;">{{unload.unadviceno}}</td>
+                        <td style="width: auto;text-align: center;">{{unload.uladate | date:'dd-MM-yy'}}</td>
+                        <td style="width: auto;text-align: left;">{{unload.supp_name}}</td>
+                        <td style="width: auto;text-align: left;">{{unload.vehicle_no}}</td>
+                        <td><button class="btn btn-info" (click)="Unloaddetails(unload.unadviceid,unload.id)">View</button></td>
+                        <td><button class="btn btn-success" (click)="Grnshow(unload.unadviceid)">Next</button></td>
+                    </tr>
+                    
+                </tbody>
+              </table>
+          
+       
+        </div>
+        
+     
+          
+        <table class="table table-bordered" id="dynamictable2" *ngIf="grnstatus">
+            <thead>
+              <tr>
+                <th colspan="7">Grn List</th>
+               </tr>
+                <tr>
+                 
+                  <th style="width: auto;">Sl_No</th>
+                  <th style="width: auto;">Grn no.</th>
+                  <th style="width: auto;">Date</th>
+                  <th style="width: auto;">Supplier</th>
+                  <th style="width: auto;">Vehicle No.</th>
+                  <th style="width: auto;" colspan="2">Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let grn of GrnList; let pointIndex=index">
+                    
+                   
+                    <td style="width: auto;text-align: center;">{{pointIndex+1}}</td>
+                    <td style="width: auto;text-align: left;">{{grn.grn_no}}</td>
+                    <td style="width: auto;text-align: center;">{{grn.grn_date | date:'dd-MM-yy'}}</td>
+                    <td style="width: auto;text-align: left;">{{grn.supplier}}</td>
+                    <td style="width: auto;text-align: left;">{{grn.vehicle_no}}</td>
+                    <td><button class="btn btn-info" (click)="grndetails(grn.grn_id,grn.id)">View</button></td>
+                    <td><button class="btn btn-success" (click)="PurBillshow(grn.grn_id)">Next</button></td>
+                </tr>
+                
+            </tbody>
+          </table>
+
+
+
+          <table class="table table-bordered" id="dynamictable3" *ngIf="purchasestatus">
+            <thead>
+              <tr>
+                <th colspan="6">Purchase Bill List</th>
+               </tr>
+                <tr>
+                 
+                  <th style="width: auto;">Sl_No</th>
+                  <th style="width: auto;">Pur Bill no.</th>
+                  <th style="width: auto;">Date</th>
+                  <th style="width: auto;">Supplier</th>
+                  <th style="width: auto;">Vehicle No.</th>
+                  <th style="width: auto;" >Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let purbill of PurBillList; let pointIndex=index">
+                    
+                    <td style="width: auto;text-align: center;">{{pointIndex+1}}</td>
+                    <td style="width: auto;text-align: left;">{{purbill.pur_bill_no}}</td>
+                    <td style="width: auto;text-align: center;">{{purbill.bill_date | date:'dd-MM-yy'}}</td>
+                    <td style="width: auto;text-align: left;">{{purbill.supplier}}</td>
+                    <td style="width: auto;text-align: left;">{{purbill.vehicleno}}</td>
+                    <td><button class="btn btn-success" (click)="PurBillpopup(purbill.pur_bill_id,purbill.id)">View</button></td>
+                </tr>
+                
+            </tbody>
+          </table>
+
+      </fieldset>
+     </div>
+   </div>
+  
+  

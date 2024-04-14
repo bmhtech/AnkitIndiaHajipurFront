@@ -1,0 +1,24 @@
+npm install file-saver                      // Without Version
+npm install xlsx                            // Without Version
+npm install ng-multiselect-dropdown         // Without Version
+
+npm i angular-dual-listbox@4.6.0
+
+npm i @angular/cli@7.3.10
+
+npm i ngx-export-as@1.2.6
+
+
+ tsconfig
+ "skipLibCheck": true,
+
+
+ npm i xterm (4.18.0)
+npm i xterm-addon-fit (0.5.0)
+
+ng g m name --routing --flat
+
+ng serve --host 0.0.0.0 --port 4300
+
+for multiple selection change database latina/swidish e.g task allocation
+

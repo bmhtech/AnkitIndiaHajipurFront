@@ -1,0 +1,157 @@
+
+<mat-dialog-content>
+  <button class="close_btn" mat-button mat-dialog-close ><i class="fa fa-close icon"></i></button>
+<div class="container-fluid" >
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Wheat Stack Card Report List</legend>
+        <div class="table_content">
+          <table border="1" style="padding:10px; width:100%" >
+            <thead>
+              <tr>
+                <td colspan="16"><b>{{company_name}}</b></td>
+             </tr>
+              <tr>
+                <td colspan="16"><b>WHEAT STACK CARD</b></td>
+             </tr>
+
+              <tr>
+                 <td colspan="10"></td>
+                 <td colspan="3"><b> Godown Name:</b> {{ godownname}}</td>
+                 <td colspan="3"><b> Stack No.:</b> {{ stack}}</td>
+              </tr>
+              <tr>
+                <td></td>
+                 <td colspan="3"><b>OPENING BALANCE</b></td>
+                 <td colspan="6"><b> RECEIPT</b></td>
+                 <td colspan="3"><b>ISSUE</b></td>
+                 <td colspan="3"><b> CLOSING BALANCE</b></td>
+              </tr>
+             
+             
+              <tr>
+                <td>Date</td>
+                <td>BAGS</td>
+                <td>LOOSE BAGS</td>
+                <td>MT</td>
+                <td>TRUCK NO.</td>
+                <td>VARIETY</td>
+                <td>ORIGIN</td>
+                <td>BAGS</td>
+                <td>LOOSE BAGS</td>
+                <td>MT</td>
+                <td>BAGS</td>
+                <td>LOOSE BAGS</td>
+                <td>MT</td>
+                <td>BAGS</td>
+                <td>LOOSE BAGS</td>
+                <td>MT</td>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let wheatstackcard of wheatstackcardlist">
+                    <td>{{wheatstackcard.date}}</td>
+                    <td>{{wheatstackcard.openingbags}}</td>
+                    <td>{{wheatstackcard.openingloosebags}}</td>
+                    <td>{{wheatstackcard.openingmt}}</td>
+                    <td>{{wheatstackcard.truckno}}</td>
+                    <td>{{wheatstackcard.variety}}</td>
+                    <td>{{wheatstackcard.origin}}</td>
+                    <td>{{wheatstackcard.receiptbags}}</td>
+                    <td>{{wheatstackcard.receiptloosebags}}</td>
+                    <td>{{wheatstackcard.receiptmt}}</td>
+                    <td>{{wheatstackcard.issuebags}}</td>
+                    <td>{{wheatstackcard.issueloosebags}}</td>
+                    <td>{{wheatstackcard.issuemt}}</td>
+                    <td>{{wheatstackcard.closingbags}}</td>
+                    <td>{{wheatstackcard.closingloosebags}}</td>
+                    <td>{{wheatstackcard.closingmt}}</td>
+                  </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      </fieldset>
+    </div>
+  </div>
+
+  <div  id="print-section" class="print " hidden>
+    <h3 class="uc" style="text-align: center;">{{company_name}}</h3>
+    <h5 class="uc"  style="text-align: center;">Wheat Stack Card Report</h5>
+    <div>
+        <table class="table table-bordered" >
+            <thead>
+              <tr>
+                <td colspan="16"><b>{{company_name}}</b></td>
+             </tr>
+              <tr>
+                <td colspan="16"><b>WHEAT STACK CARD</b></td>
+             </tr>
+
+              <tr>
+                 <td colspan="10"></td>
+                 <td colspan="3"><b> Godown Name:</b> {{ godownname}}</td>
+                 <td colspan="3"><b> Stack No.:</b> {{ stack}}</td>
+              </tr>
+              <tr>
+                <td></td>
+                 <td colspan="3"><b>OPENING BALANCE</b></td>
+                 <td colspan="6"><b> RECEIPT</b></td>
+                 <td colspan="3"><b>ISSUE</b></td>
+                 <td colspan="3"><b> CLOSING BALANCE</b></td>
+              </tr>
+             
+             
+              <tr>
+                <td>Date</td>
+                <td>BAGS</td>
+                <td>LOOSE BAGS</td>
+                <td>MT</td>
+                <td>TRUCK NO.</td>
+                <td>VARIETY</td>
+                <td>ORIGIN</td>
+                <td>BAGS</td>
+                <td>LOOSE BAGS</td>
+                <td>MT</td>
+                <td>BAGS</td>
+                <td>LOOSE BAGS</td>
+                <td>MT</td>
+                <td>BAGS</td>
+                <td>LOOSE BAGS</td>
+                <td>MT</td>
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let wheatstackcard of wheatstackcardlist">
+                    <td>{{wheatstackcard.date}}</td>
+                    <td>{{wheatstackcard.openingbags}}</td>
+                    <td>{{wheatstackcard.openingloosebags}}</td>
+                    <td>{{wheatstackcard.openingmt}}</td>
+                    <td>{{wheatstackcard.truckno}}</td>
+                    <td>{{wheatstackcard.variety}}</td>
+                    <td>{{wheatstackcard.origin}}</td>
+                    <td>{{wheatstackcard.receiptbags}}</td>
+                    <td>{{wheatstackcard.receiptloosebags}}</td>
+                    <td>{{wheatstackcard.receiptmt}}</td>
+                    <td>{{wheatstackcard.issuebags}}</td>
+                    <td>{{wheatstackcard.issueloosebags}}</td>
+                    <td>{{wheatstackcard.issuemt}}</td>
+                    <td>{{wheatstackcard.closingbags}}</td>
+                    <td>{{wheatstackcard.closingloosebags}}</td>
+                    <td>{{wheatstackcard.closingmt}}</td>
+                  </tr>
+            </tbody>
+        </table>
+    </div> 
+</div>
+
+<div  class="col-lg-12">
+  <div class="form-group">
+      <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+   </div>
+</div>
+
+</div>
+</mat-dialog-content>

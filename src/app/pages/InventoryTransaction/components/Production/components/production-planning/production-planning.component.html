@@ -1,0 +1,265 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          <fieldset>
+            <legend>Basic Information</legend>
+
+
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Bussiness Unit<span class="red">*</span></mat-label>
+                <mat-select [disabled]="editable" formControlName="business_unit" [(ngModel)]="model.business_unit" class="form-control" (selectionChange)="onChangeBussinessUnit($event.value, 'create')">
+                  <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+
+
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+                    <div class="form-group">
+                      <mat-label>Production Planning Code</mat-label>
+                      <input type="text" [readonly]="editable" formControlName="prod_plan_code" [(ngModel)]="seq_no" readonly class="form-control" />
+                     
+                      <div hidden><input type="text" formControlName="id" [(ngModel)]="model.id" readonly class="form-control" />
+                      <input type="text" formControlName="prod_plan_id" [(ngModel)]="model.prod_plan_id" readonly class="form-control" /></div>
+                      
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+                    <div class="form-group">
+                      <mat-label>Description Name<span class="red">*</span></mat-label>
+                      <input type="text" [readonly]="editable" formControlName="prod_plan_desc" [(ngModel)]="model.prod_plan_desc"  class="form-control" >
+                    </div>
+                  </div>
+                  
+
+                  <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Business Unit</mat-label>
+                         <mat-select formControlName="business_unit"  [(ngModel)]="model.business_unit" class="form-control">
+                         <mat-option *ngFor="let business_unit of bussiness_unit_list" [value]="business_unit.businessunit_id">{{business_unit.businessunit_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div> -->
+
+                  
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Period From<span class="red">*</span></mat-label>
+                      <input type="date" [readonly]="editable" class="form-control" [(ngModel)]="model.pred_from" formControlName="pred_from" (change)="onChangeIndentDate()">
+                    </div>
+                  </div> 
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Period To<span class="red">*</span></mat-label>
+                      <input type="date" [readonly]="editable" class="form-control" [(ngModel)]="model.pred_to" formControlName="pred_to" (change)="onChangeIndentDate()" >
+                    </div>
+                  </div> 
+
+                
+                    <div class="col-lg-12" *ngIf="isHide1==false">
+                     <div class="form-group">
+                       <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+                     </div>
+                   </div>
+                  
+
+                  </fieldset>
+                  </div>
+                  </div>
+
+
+                  <div class="col-lg-12">
+                    <div class="dyn_table_conent" style="border: none;">
+                    <mat-tab-group animationDuration="1000ms">
+                    <mat-tab label="Regular Process" *ngIf="isHide==true">
+                      
+                      <div class="dyn_table_conent" style="padding: 10px;">
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3>Action</h3></label>
+                                  <label class="label_col"><h3>SRL NO</h3></label>
+                                  <label class="label_col"><h3>Shop Floor</h3></label>
+                                  <label class="label_col"><h3>Active</h3></label>
+                                  <label class="label_col"><h3>Process</h3></label>
+                                  <label class="label_col"><h3>Production</h3></label>
+                                  <label class="label_col"><h3>Action</h3></label>
+                                  
+                        </div>
+                        <div  class="dyn_table_data_cont" formArrayName="production_planning_shop_floor_dtls">
+                          <div class="dyn_table" *ngFor="let item of production_planning_shop_floor_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                            <div class="label_col"><input formControlName="sl_no" class="form-control" type="text"/></div>
+                            <!-- <div class="label_col"><select formControlName="shop_floor" class="form-control"><option value="0">-Select-</option><option value="spf1">Shop Floor1</option><option value="spf2">Shop Floor2</option><option value="spf3">Shop Floor3</option></select></div> -->
+                            <div class="label_col"><mat-select class="form-control" formControlName="shop_floor" (selectionChange)="onChangeShopFloor($event.value, pointIndex)"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let shop_floor of ShopFloor" [value]="shop_floor.shop_floor_id">{{shop_floor.shop_floor_name}}</mat-option></mat-select></div>
+                            <div class="label_col"><input formControlName="active" class="form-control" type="checkbox" [(ngModel)]="isChecked" (change)="check(isChecked?'A':'B',pointIndex)"/></div>
+                            <!-- <div class="label_col"><select formControlName="process" class="form-control" *ngIf="isActive == true"><option value="0">-Select-</option><option value="pro1">Process1</option><option value="pro2">Process2</option><option value="pro3">Process3</option></select></div> -->
+                            <div class="label_col"><mat-select class="form-control" type="text" formControlName="process" (selectionChange)="onChangeProcess($event.value, pointIndex)" *ngIf="isActive == true"><mat-option value="0">-select-</mat-option><mat-option *ngFor="let process of processList[pointIndex]" [value]="process.process_id">{{process.process_desc}}</mat-option></mat-select></div>
+                            <!-- <div class="label_col" ><select formControlName="production" class="form-control" *ngIf="isActive == true"> <option value="0">-Select-</option><option value="bom1">Wheat Katai</option><option value="bom2">Wheat Granule</option></select></div>                         -->
+                            <div class="label_col"><mat-select class="form-control" type="text" (selectionChange)="onChangeProduction($event.value, pointIndex)" formControlName="production" *ngIf="isActive == true"><mat-option value="0">-select-</mat-option><mat-option *ngFor="let production of ProductionList[pointIndex]" [value]="production.production_id">{{production.prod_desc}}</mat-option></mat-select></div>
+                            <div class="label_col" style="display: none;"><input formControlName="process_date" *ngIf="isActive == true" class="form-control" type="text" /></div>
+
+                           
+                            <div class="label_col" style="width: 116px; text-align: center;"><button type="button" *ngIf="isActive == true" class="btn btn-success" (click)="showDate(pointIndex)" style="margin-right: 5px;">Show</button></div>
+                            <div class="label_col" style="display: none;"><input formControlName="prod_plan_id" [(ngModel)]="prod_idset" class="form-control" type="text"/></div>
+                            <div class="label_col" style="display: none;"><input formControlName="ppd_id" class="form-control" type="text"/></div>
+                            <!-- <div class="label_col"><input formControlName="prod_code" [(ngModel)]="prod_codeset" class="form-control" type="text"/></div></div> -->
+                          
+                          </div>
+                        </div>
+                   
+                        <div class="btm_btn_content" >
+                          <button type="button" class="btn btn-success"  (click)="add(pointIndex)">Add </button>
+                          <div class="clr"></div>
+                        </div>
+                      </div> 
+                  
+                    </mat-tab>
+
+
+                    <mat-tab label="Special Process" *ngIf="isHide==true">
+                      <div class="dyn_table_conent" style="padding: 10px;">
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3>Action</h3></label>
+                                  <label class="label_col"><h3>SRL NO</h3></label>
+                                  <label class="label_col"><h3>Shop Floor</h3></label>
+                                  <label class="label_col"><h3>Active</h3></label>
+                                  <label class="label_col"><h3>Process</h3></label>
+                                  <label class="label_col"><h3>Production</h3></label>
+                                  <label class="label_col"><h3>Action</h3></label>
+                               
+                                  
+                        </div>
+                        <div  class="dyn_table_data_cont" formArrayName="production_planning_special_dtls">
+                          <div class="dyn_table" *ngFor="let item of production_planning_special_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete1(pointIndex)"></i></div>
+                            <div class="label_col"><input formControlName="sl_no" class="form-control" type="text"/></div>
+                            <!-- <div class="label_col"><select formControlName="shop_floor" class="form-control"><option value="0">-Select-</option><option value="spf1">Shop Floor1</option><option value="spf2">Shop Floor2</option><option value="spf3">Shop Floor3</option></select></div> -->
+                            <div class="label_col"><mat-select class="form-control" formControlName="shop_floor" (selectionChange)="onChangeSpecialShopFloor($event.value, pointIndex)"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let shop_floor of ShopFloorspecial" [value]="shop_floor.shop_floor_id">{{shop_floor.shop_floor_name}}</mat-option></mat-select></div>
+                            <div class="label_col"><input formControlName="active" class="form-control" type="checkbox" [(ngModel)]="isChecked1" (change)="check1(isChecked1?'A':'B',pointIndex)"/></div>
+                            <!-- <div class="label_col"><select formControlName="process" class="form-control" *ngIf="isActive == true"><option value="0">-Select-</option><option value="pro1">Process1</option><option value="pro2">Process2</option><option value="pro3">Process3</option></select></div> -->
+                            <div class="label_col"><mat-select class="form-control" type="text" formControlName="process" (selectionChange)="onChangeSpecialProcess($event.value, pointIndex)" *ngIf="isActive1 == true"><mat-option value="0">-select-</mat-option><mat-option *ngFor="let process of SpecialprocessList[pointIndex]" [value]="process.process_id">{{process.process_desc}}</mat-option></mat-select></div>
+                            <!-- <div class="label_col" ><select formControlName="production" class="form-control" *ngIf="isActive == true"> <option value="0">-Select-</option><option value="bom1">Wheat Katai</option><option value="bom2">Wheat Granule</option></select></div>                         -->
+                            <div class="label_col"><select class="form-control" type="text" formControlName="production" *ngIf="isActive1 == true"><option value="0">-select-</option><option *ngFor="let production of SpecialProductionList[pointIndex]" [value]="production.production_id">{{production.prod_desc}}</option></select></div>
+      
+                            <div class="label_col" style="width: 116px; text-align: center;"><button type="button" *ngIf="isActive1 == true" class="btn btn-success" (click)="UpdateIsRow1(pointIndex)" style="margin-right: 5px;">Save</button></div>
+                            <div class="label_col" style="display: none;"><input formControlName="process_date" class="form-control" *ngIf="isActive1 == true" type="text"/></div>
+                            <div class="label_col" style="display: none;"><input formControlName="prod_plan_id" [(ngModel)]="prod_idset1" class="form-control" type="text"/></div>
+                            <div class="label_col" style="display: none;"><input formControlName="pps_id" class="form-control" type="text"/></div>
+                          </div>
+                        </div>
+                   
+                        <div class="btm_btn_content">
+                          <button type="button" class="btn btn-success"  (click)="add1(pointIndex)">Add </button>
+                          <div class="clr"></div>
+                        </div>
+                        <!-- 
+                        <div class="btm_btn_content">
+                          <button type="button" class="btn btn-success"  (click)="UpdateIsRow1(pointIndex)" >Save</button>
+                          <div class="clr"></div>
+                        </div> -->
+                      </div> 
+                  
+                    </mat-tab>
+
+                    <mat-tab label="Repair" *ngIf="isHide==true">
+                    </mat-tab>
+
+                    <mat-tab label="Maintenance" *ngIf="isHide==true">
+                    </mat-tab>
+
+                    </mat-tab-group>
+                    </div>
+                  </div>
+
+
+                  <!-- <div class="row">
+                    <div class="col-lg-12">
+                     <div class="form-group">
+                       <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="productionplanningsave">Submit</button>
+                     </div>
+                   </div>
+                  </div> -->
+
+                  </div>
+                </section>
+                  </form>
+
+
+                  <div class="master_containerr" *ngIf="isHidden==false">
+                    <div class="container-fluid">
+                      <div class="row">
+                        <div class="col-lg-12">
+                          <fieldset class="table_container">
+                            <legend>Production Planning List</legend>
+                            <div class="table_content">
+                              <table class="table table-bordered">
+                                <thead>
+                                  <tr>
+                                    <th>Production Code</th>
+                                    <th>Business Unit Name</th>                         
+                                    <th>Production Description</th>
+                                    <th colspan="2">Period From & to</th>
+                                    <th colspan="2">Action</th>
+                                  </tr>
+                                </thead>
+                                <tbody>
+                                  <tr *ngFor="let Production_planning of listProduction_planning">
+                                    <td>{{Production_planning.prod_plan_code}}</td>
+                                    <th>{{Production_planning.business_unitname}}</th>                                 
+                                    <th>{{Production_planning.prod_plan_desc}}</th>
+                                    <th>{{Production_planning.pred_from}}</th>
+                                    <th>{{Production_planning.pred_to}}</th>
+                                    
+                                    <td><button class="btn btn-info" (click)="onUpdate(Production_planning.id, Production_planning.prod_plan_id)" *ngIf="productionplanningupdate">Update</button></td> 
+                                    <td *ngIf="Production_planning.status == 0;else elseBlock">
+                                      <button class="btn btn-danger" (click)="onDelete(Production_planning.id)">Delete</button>
+                                    </td>  
+                                    <ng-template #elseBlock>
+                                      <td><button class="btn btn-danger" disabled>Delete</button></td>  
+                                    </ng-template>                 
+                                  </tr>
+                                </tbody>
+                              </table>
+                            </div>
+                          </fieldset>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+
+               
+                  
+
+                  
+                  
+
+

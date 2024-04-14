@@ -1,0 +1,202 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="progress_loader_box" *ngIf="status1 == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form *ngIf="isHidden==true" [formGroup]="userForm">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="md_content">
+            <fieldset>
+              <legend>Basic Information</legend>
+             
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12" aria-readonly="true">
+                <div class="form-group">
+                  <mat-label>Date</mat-label>
+                  <input type="text" formControlName="challan_date" [(ngModel)]="currentDate" class="form-control">
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Advice No.</mat-label>
+                  <mat-select formControlName="advive_no" (selectionChange)="getAdvicedlts($event.value)" [(ngModel)]="model.advive_no" class="form-control">
+                    <mat-option *ngFor="let advive_no of advive_nos" [value]="advive_no.advice_id">{{advive_no.advice_no}}</mat-option> 
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Status</mat-label>
+                  <mat-select formControlName="status" [(ngModel)]="model.status" class="form-control">
+                    <mat-option value="0">-select Status-</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <mat-label>Narration</mat-label>
+                  <textarea formControlName="narration" [(ngModel)]="model.narration" class="form-control" style="height: 45px;"></textarea>
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Transporter Name</mat-label>
+                  <mat-select formControlName="trans_name" [(ngModel)]="model.trans_name" class="form-control" [disabled]="true">
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option *ngFor="let trans_code of trans_codes" [value]="trans_code.bp_Id">{{trans_code.bp_name}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+              
+
+              <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Driver Name</mat-label>
+                  <input formControlName="driver_name" [(ngModel)]="model.driver_name" type="text" class="form-control">
+                </div>
+              </div> -->
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Driver Name</mat-label>
+                  <mat-select formControlName="driver_name" [(ngModel)]="model.driver_name" class="form-control" [disabled]="true">
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option *ngFor="let driver_name of driver_names" [value]="driver_name.driver_id">{{driver_name.driver_name}}</mat-option>
+                  </mat-select>
+                </div>
+              </div>
+
+
+              <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Truck No.</mat-label>
+                  <input formControlName="truck_no" [(ngModel)]="model.truck_no" type="text" class="form-control">
+                </div>
+              </div>
+
+            </fieldset>
+            <fieldset>
+              <legend>Items Details</legend>
+              <div class="col-lg-12 weigh">
+                <div class="dyn_table_conent" style="border: none;">
+                <div class="dyn_table_header">
+                  <label class="label_col"> <h3 class="srl_no">Srl No</h3> </label>
+                  <label class="label_col"><h3>Item Name</h3></label>
+                  <label class="label_col"><h3>Packing Material</h3></label>
+                  <label class="label_col"><h3>Packing Quantity</h3></label>
+                  <label class="label_col"><h3>Packing Uom</h3></label>
+                  <label class="label_col"><h3 >Itam quantity</h3></label>
+                  <label class="label_col"><h3 >Itam UoM</h3></label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="gate_Pass_Item_Dtls">
+                  <div class="dyn_table" *ngFor="let item of gate_Pass_Item_Dtls.controls; let pointIndex=index"  [formGroupName]="pointIndex">
+                    <div class="label_col"><input formControlName="sl_no" class="form-control srl_no" type="text" readonly/></div>
+                    <!-- <div class="label_col"><input formControlName="item_name" class="form-control" type="text" /></div> -->
+                    <div class="label_col"><select formControlName="item_name" class="form-control" (change)="onChangeItemName(pointIndex,$event)" [disabled]="true"><option value="0">-Select-</option><option *ngFor="let item_name of item_codes" [value]="item_name.item_id">{{item_name.item_name}}</option></select></div>                 
+                    <!-- <div class="label_col"><input formControlName="pack_mat" class="form-control" type="text" readonly/></div> -->
+                    <div class="label_col"><select formControlName="pack_mat" type="text" class="form-control"><option value="0">-Select-</option><option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">{{packingitm.item_name}}</option></select></div>
+                    <div class="label_col"><input formControlName="pack_qty" class="form-control" type="number" readonly/></div>
+                    <div class="label_col"><input formControlName="pack_uom" class="form-control" type="text" readonly/></div>
+                    <div class="label_col"><input formControlName="item_qty" class="form-control" type="number" readonly/></div>
+                    <div class="label_col"><input formControlName="item_uom" class="form-control wt_df" type="text" readonly/></div>
+                     <!-- <div class="label_col"><select class="form-control"><option value="0"></option></select></div>
+                    <div class="label_col"><select class="form-control"><option value="0"></option></select></div>
+                    <div class="label_col"><input class="form-control" type="text" /></div>
+                    <div class="label_col"><select class="form-control wt_df"><option value="0"></option></select></div> -->
+                  </div>
+                </div>
+              </div>
+              </div>
+            </fieldset>
+
+            <fieldset>
+              <legend>Document Details</legend>
+              <div class="col-lg-12 weigh">
+                <div class="dyn_table_conent" style="border: none;">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Action</h3></label>
+                  <label class="label_col"> <h3 class="srl_no">Srl No</h3> </label>
+                  <label class="label_col"><h3>Document No.</h3></label>
+                  <label class="label_col"><h3>Document Name</h3></label>
+                  <label class="label_col"><h3>Document Date</h3></label>
+                  <label class="label_col"><h3>Applicable Y/N</h3></label>
+                  <label class="label_col"><h3>Checked Y/N</h3></label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="gate_pass_Docs">
+                  <div class="dyn_table"  *ngFor="let item of gate_pass_Docs.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action" (click)="DocDelete(pointIndex)"></i></div>   
+                    <div class="label_col"><input formControlName="sl_no" class="form-control srl_no" type="number" /></div>
+                    <div class="label_col"><select formControlName="doc_no" class="form-control"><option value="0">select</option></select></div>
+                    <div class="label_col"><input formControlName="doc_name" class="form-control" type="text" /></div>
+                    <div class="label_col"><input formControlName="doc_date" class="form-control" type="date" /></div>
+                    <div class="label_col"><div formControlName="applicable" class="form-control ac" style="border: none;"><mat-checkbox></mat-checkbox></div></div>
+                    <div class="label_col"><div formControlName="checked" class="form-control ac wt_df" style="border: none;"><mat-checkbox></mat-checkbox></div></div>
+                  </div>
+                </div>
+              </div>
+              <div class="btm_btn_content">
+                <button type="button" class="btn btn-success"  (click)="DocAdd()">Add </button>
+              </div>
+              </div>
+            </fieldset>
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="gatepasssave">Submit</button>
+                </div>
+              </div>
+            </div>
+          
+        </div>
+      </div>
+      
+    </div>
+  </section>
+</form>
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Gate Pass List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Date</th>
+                  <th>Driver Name</th>
+                  <th>Truck No.</th>
+                 
+
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let GatePass of listGatePass">
+                  <td>{{GatePass.challan_date}}</td>
+                  <td>{{GatePass.driver_name}}</td>
+                  <td>{{GatePass.truck_no}}</td>     
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

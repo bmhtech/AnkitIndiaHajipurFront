@@ -1,0 +1,422 @@
+<div class="container-fluid modal_box">
+    <div class="row">
+      <mat-dialog-content class="mat-typography">
+        <fieldset style="height:80%">
+          <legend>TAX INVOICE (SERVICE)</legend>
+          <div class="modal_main_content">
+            <div id="print-section" class="print ">
+              <div *ngFor="let pagebreakname of PrintMode">
+                <section id="component1" class="page-break">
+  
+  
+                  <p style="text-align: center;">
+                    <span style="font-size: 25px;"><b>{{company_name}}</b></span><br>
+  
+                    <span style="font-size: small;text-transform:uppercase">FACTORY & OFFICE ADDRESS: {{bu_address}},
+                      {{dist}}-{{pin}}, {{company_state}}</span><br>
+                    <!-- <span style="font-size: small;"><b>CIN NO: U15549WB2020PTC238334, GSTIN: 10AATCA7447B1ZVV, FSSAI LIC -->
+                    <span style="font-size: small;" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock "><b>FRN : {{cin_no}}, GSTIN: {{gst_no}}, FSSAI
+                        NO: {{fssai_no}}</b></span><br>
+                    <ng-template #elseBlock>
+                    <span style="font-size: small;"><b>CIN : {{cin_no}}, GSTIN: {{gst_no}}, FSSAI
+                      NO: {{fssai_no}}</b></span><br>
+                    </ng-template>
+                    <span style="font-size: small;">E-MAIL : {{email_id}}, PHONE NO: {{phone_no}}</span><br>
+  
+  
+                  </p>
+  
+                  <hr style="border-top: 2px dashed black; color: transparent;" />
+                  <table style="width:100%; padding: 10px;" class="table3">
+                    <tr>
+                      <td style="width:30%;vertical-align: top;padding: 10px;"></td>
+                      <td style="text-align: center;width:35%;vertical-align: top;padding: 10px;"><b>TAX INVOICE (SERVICE)</b></td>
+                      <td style="text-align:right;width:30%;vertical-align: top;padding: 10px;"><b>{{pagebreakname}}</b></td>
+                    </tr>
+                  </table>
+                  
+  
+                  <table style="width:100%; padding: 10px;" class="table">
+  
+                    <tr>
+                      <td style="padding: 10px; width:50%; text-align: left;">
+                        <span style="font-size: small;"><b>Buyer (Bill to)</b></span><br>
+                        <span style="font-size: small;"><b>{{partyname}}</b></span><br>
+                        <span style="font-size: small;">{{address}} DIST: {{district}}</span><br>
+                        <!-- <span style="font-size: small;">GSTIN/UIN NO: {{gstinno}}, STATE: {{state}}</span><br> -->
+                        <span style="font-size: small;">GSTIN/UIN NO: {{gstinno}}</span><br>
+                        <span style="font-size: small;" *ngIf="contactnoshow">CONTACT NO : {{constactno}}</span><br /><br />
+  
+                        <span style="font-size: small;"><b>Consignee (Ship to)</b></span><br>
+                        <span style="font-size: small;"><b>{{partyname}}</b></span><br>
+                        <span style="font-size: small;">{{address}} DIST: {{district}}</span><br>
+                        <!-- <span style="font-size: small;">GSTIN/UIN NO: {{gstinno}}, STATE: {{state}}</span><br> -->
+                        <span style="font-size: small;">Place of Supply: {{state}}, GSTIN/UIN NO: {{gstinno}}</span><br>
+                        <span style="font-size: small;" *ngIf="contactnoshow">CONTACT NO : {{constactno}}</span>
+  
+                      </td>
+  
+                      <td style="width:25%; vertical-align: top; text-align: left;" border="0">
+                        <table style="width:100%; padding: 10px;" class="table1">
+                          <tr>
+                            <td> <span style="font-size: small;"><b>Invoice Number</b></span><br>
+                              <span style="font-size: small;">{{invoiceno}}</span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> <span style="font-size: small;"><b>Delivery Note Number</b></span><br>
+                              <span style="font-size: small;">{{deleveryno}}</span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <!-- <td> <span style="font-size: small;"><b>Referance no. & Date.</b></span><br>
+                              <span style="font-size: small;">{{refchallanno}} & {{refchallandate |
+                                date:'dd-MM-yyyy'}}</span>
+                            </td> -->
+                            <td> <span style="font-size: small;"><b>Buyer's Order No.</b></span><br>
+                              <span style="font-size: small;">{{cust_refdocno}}</span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <!-- <td> <span style="font-size: small;"><b>Buyer's Order No.</b></span><br>
+                              <span style="font-size: small;">{{cust_refdocno}}</span>
+                            </td> -->
+                            <td> <span style="font-size: small;"><b>Broker/Other's</b></span><br>
+                              <span style="font-size: small;">{{brokername}}</span>
+                            </td>
+                          </tr>
+  
+                          <tr>
+                            <td> <span style="font-size: small;"><b>Payment Term</b></span><br>
+                              <span style="font-size: small;">{{paymentterm}}</span>
+                            </td>
+                          </tr>
+  
+                          <!--<tr>
+                              <td> <span style="font-size: small;"><b>Bill of Lading/LR-RR No.</b></span><br>
+                                  <span  style="font-size: medium;">dt. 11-Sep-23</span>
+                             </td>
+                          </tr>-->
+                        </table>
+                      </td>
+                      <td style="width:25%; vertical-align: top; text-align: left;">
+                        <table style="width:100%; padding: 10px;" class="table1">
+                          <tr>
+                            <td> <span style="font-size: small;"><b>Invoice Date</b></span><br>
+                              <span style="font-size: small;">{{invoicedate | date:'dd-MM-yyyy'}}</span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> <span style="font-size: small;"><b>Delivery Note Date</b></span><br>
+                              <span style="font-size: small;">{{delievrydate | date:'dd-MM-yyyy'}}</span>
+                            </td>
+                          </tr>
+                          <!--<tr>
+                            <td> <span style="font-size: small;"><b>Other References</b></span><br>
+                                <span  style="font-size: medium;">1511441842</span>
+                           </td>
+                        </tr>-->
+                          <tr>
+                            <!-- <td> <span style="font-size: small;"><b>Dated( BON )</b></span><br> -->
+                            <td> <span style="font-size: small;"><b>Buyer's Order No. Dated</b></span><br>
+                              <span style="font-size: small;">{{cust_ref_doc_date | date:'dd-MM-yyyy'}}</span>
+                            </td>
+                          </tr>
+  
+                          <tr>
+                            <td> <span style="font-size: small;"><b>Vehicle No</b></span><br>
+                              <span style="font-size: small;">{{vehicleno}}</span>
+                            </td>
+                          </tr>
+                          <tr>
+                            <td> <span style="font-size: small;"><b>Other References</b></span><br>
+                              <span style="font-size: small;">{{remarks_asn}}</span>
+                            </td>
+                          </tr>
+                         
+                          <tr>
+                            <!-- <td style="border-bottom: 0px solid black;"> <span style="font-size: small;"><b>Vehicle
+                                  No</b></span><br>
+                              <span style="font-size: small;">{{vehicleno}}</span>
+                            </td> -->
+                          </tr>
+  
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+  
+  
+                  <p style="text-align: center;"><b>E-Invoice Details</b></p>
+                  <table style="width:100%; padding: 10px;" class="table">
+                    <tr>
+                      <td colspan="2" style="padding: 10px; text-align: left;vertical-align: top;">
+                        Ack No: {{e_invoice_no}}<br />
+                        Ack Date: {{ack_date}}<br />
+                        IRN: {{irnno}}<br />
+                      </td>
+                      <td colspan="2" style="width:50%; text-align: center;padding:10px;">
+                        <!-- <img src="AIL_QR.jpg" alt="QR Code" width="150" height="150"> -->
+                        <input type="image" [src]="imagepath" alt="QR Code" width="150" height="150">
+                      </td>
+                    </tr>
+  
+                  </table>
+                  <p style="text-align: center;"><b>Job Work Dispatch Item Details</b></p>
+                  <table style="width:100%; padding:10px;border-top:1px solid black;" class="table2">
+                    <tr>
+                        <th style="text-align: center;" rowspan=2>Sl. No</th>
+                        <th style="text-align: center;" rowspan=2>Particulars</th>
+                        <th style="text-align: center;" rowspan=2>HSN</th>
+                        <th style="text-align: center;" colspan=2>Quantity</th>
+                    </tr>
+                    <tr>
+                      <th style="text-align: center;">in Pcs</th>
+                      <th style="text-align: center;">in Qtls</th>
+                    </tr>
+                    <tr *ngFor="let job of JobItem">
+                        <td style="text-align:center">{{job.sl_no}}</td>
+                        <td style="padding-left:10px;">{{job.job_item_name}}</td>
+                        <td style="text-align:center">{{job.job_hsn}}</td>
+                        <td style="text-align:center">{{job.pack_qty}}</td>
+                        <td style="text-align:center;">{{job.item_qty | number:'1.2-2'}}</td>
+                    </tr>
+                    <tr>
+                      <td colspan="3" style="text-align:right;padding:5px;"><b>Total</b></td>
+                      <td style="text-align:center">{{totalpackqty}}</td>
+                      <td style="text-align:center;">{{totalitemqty | number:'1.2-2'}}</td>
+                    </tr>
+                </table>
+                <p style="text-align: center;padding: 15px;"><b>Invoice Summary</b></p>
+                <table style="width:100%; padding:10px;border-top:1px solid black;" class="table2">
+                    <tr>
+                       <th style="text-align: center;">Sl. No</th>
+                        <th style="text-align: center;">Particulars</th>
+                        <th style="text-align: center;">SAC Code</th>
+                        <th style="text-align: center;">Quantity(in Qtls)</th>
+                        <th style="text-align: center;">Rate (₹)</th>
+                        <th style="text-align: center;">Value (₹)</th>
+                        <th style="text-align: center;" *ngIf="gststat">SGST(%)</th>
+                        <th style="text-align: center;" *ngIf="gststat">Amount (₹)</th>
+                        <th style="text-align: center;" *ngIf="gststat">CGST(%)</th>
+                        <th style="text-align: center;" *ngIf="gststat">Amount (₹)</th>
+                        <th style="text-align: center;" *ngIf="gststatno">IGST(%)</th>
+                        <th style="text-align: center;" *ngIf="gststatno">Amount (₹)</th>
+                        <th style="text-align: center;">Total (₹)</th>
+                    </tr>
+                    <tr *ngFor="let job of JobPrice">
+                      <td style="text-align:center">1</td>
+                        <td style="padding-left: 10px;">{{job.item_service_name}}</td>
+                        <td style="text-align:center">{{job.sac_code}}</td>
+                        <td style="text-align:center;">{{totalitemqty | number:'1.2-2'}}</td>
+                        <td style="text-align:center;">{{job.job_price | number:'1.2-2'}}</td>
+                        <td style="text-align:right;padding-right: 10px;" >{{ job.tax_value | number:'1.2-2'}}</td>
+                        <td style="text-align:center" *ngIf="gststat">{{job.sgst_tax}}</td>
+                        <td style="text-align:right;padding-right: 10px;" *ngIf="gststat">{{job.sgst_amt| number:'1.2-2'}}</td>
+                        <td style="text-align:center" *ngIf="gststat">{{job.cgst_tax}}</td>
+                        <td style="text-align:right;padding-right: 10px;" *ngIf="gststat">{{job.cgst_amt| number:'1.2-2'}}</td>
+                        <td style="text-align:center" *ngIf="gststatno">{{job.igst_tax}}</td>
+                        <td style="text-align:right;padding-right: 10px;" *ngIf="gststatno">{{job.igst_amt| number:'1.2-2'}}</td>
+                        <td style="text-align:right;padding-right: 10px;">{{job.tot_amount| number:'1.2-2'}}</td>
+                    </tr>
+                    
+                     <tr>
+                        <td colspan="3" style="text-align:right;padding:5px;"><b>Grand Total</b></td>
+                        <td style="text-align:center;padding-right: 10px;"><b>{{totalitemqty | number:'1.2-2'}}</b></td>
+                        <td></td>
+                        <td style="text-align:right;padding-right: 10px;"><b>{{taxtotal | number:'1.2-2'}}</b></td>
+                        <td style="text-align:right" *ngIf="gststat"></td>
+                        <td style="text-align:right;padding-right: 10px;" *ngIf="gststat"><b>{{cgsttotal| number:'1.2-2'}}</b></td>
+                        <td style="text-align:right" *ngIf="gststat"></td>
+                        <td style="text-align:right;padding-right: 10px;" *ngIf="gststat"><b>{{sgsttotal| number:'1.2-2'}}</b></td>
+                        <td style="text-align:right;" *ngIf="gststatno"></td>
+                        <td style="text-align:right;padding-right: 10px;" *ngIf="gststatno"><b>{{igsttotal| number:'1.2-2'}}</b></td>
+                        <td style="text-align:right;padding-right: 10px;"><b>{{totalamount| number:'1.2-2'}}</b></td>
+                    </tr>
+                    <tr>
+                        <td colspan="10" style="text-align:right;padding:5px;" *ngIf="gststat"><b>Round Off</b></td>
+                        <td colspan="8" style="text-align:right;padding:5px;" *ngIf="gststatno"><b>Round Off</b></td>
+                        <td style="text-align:right;padding-right: 10px;"><b>{{roundoff| number:'1.2-2'}}</b></td>
+                        
+                    </tr>
+                    <tr>
+                        <td colspan="10" style="text-align:right;padding:5px;" *ngIf="gststat"><b>Invoice Value</b></td>
+                        <td colspan="8" style="text-align:right;padding:5px;" *ngIf="gststatno"><b>Invoice Value</b></td>
+                        <td style="text-align:right; padding-right: 10px;"><b>{{taxabletotal| number:'1.2-2'}}</b></td>
+                        
+                    </tr>
+                    <tr>
+                        <td colspan="11" style="text-align:left;padding:5px;"><b>Amount In Words : {{amountinwords}}</b></td>
+                       
+                    </tr>
+                </table>
+                  <p style="text-align: center;padding: 15px;"><b>Tax Summary</b></p>
+                  <table style="width:100%; padding: 10px;" class="table">
+                    <tr>
+                      <td style="vertical-align:top;padding:10px;width:70%; ">
+                        <table style="padding: 5px;" class="table">
+  
+                          <tr>
+                            <td style="font-size: small;text-align: center;padding:5px;" rowspan=2><b>SAC Code</b></td>
+                            <td style="font-size: small;text-align: center;padding:5px;" rowspan=2><b>TAXABLE AMOUNT<br />(₹)</b></td>
+                            <td style="font-size: small;text-align: center;padding:5px;" colspan=2><b>SGST</b></td>
+                            <!-- <td style="font-size: small;text-align: center;padding:5px;" rowspan=2><b>SGST_AMOUNT</b></td> -->
+                            <td style="font-size: small;text-align: center;padding:5px;" colspan=2><b>CGST</b></td>
+                            <!-- <td style="font-size: small;text-align: center;padding:5px;" rowspan=2><b>CGST_AMOUNT</b></td> -->
+                            <td style="font-size: small;text-align: center;padding:5px;" colspan=2><b>IGST</b></td>
+                            <!-- <td style="font-size: small;text-align: center;padding:5px;" rowspan=2><b>IGST_AMOUNT</b></td> -->
+                          </tr>
+                          <tr>
+                            <th style="text-align: center;">Rate</th>
+                            <th style="text-align: center;">Amount (₹)</th>
+                            <th style="text-align: center;">Rate</th>
+                            <th style="text-align: center;">Amount (₹)</th>
+                            <th style="text-align: center;">Rate</th>
+                            <th style="text-align: center;">Amount (₹)</th>
+                          </tr>
+                          <tr *ngFor="let hsnsum of item_sacwise_taxsumm1">
+                            <td style="font-size: small;text-align: center;padding:5px;"><b>{{hsnsum.hsnsummary}}</b></td>
+                            <td style="font-size: small;text-align: center;padding:5px;"><b>{{hsnsum.hsntax_amt | number:'1.2-2'}}</b></td>
+                            <td style="font-size: small;text-align: center;padding:5px;"><b>{{hsnsum.sgst_hsn}}</b></td>
+                            <td style="font-size: small;text-align: center;padding:5px;"><b>{{hsnsum.sgstamt_hsn | number:'1.2-2'}}</b></td>
+                            <td style="font-size: small;text-align: center;padding:5px;"><b>{{hsnsum.cgst_hsn}}</b></td>
+                            <td style="font-size: small;text-align: center;padding:5px;"><b>{{hsnsum.cgstamt_hsn | number:'1.2-2'}}</b></td>
+                            <td style="font-size: small;text-align: center;padding:5px;"><b>{{hsnsum.igst_hsn}}</b></td>
+                            <td style="font-size: small;text-align: center;padding:5px;"><b>{{hsnsum.igstamt_hsn | number:'1.2-2'}}</b></td>
+                          </tr>
+                          <tr>
+                            <td colspan="8" style="text-align:left;padding:5px;"><b>Total Tax In Words : {{amountinwordstax}}</b></td>
+                          </tr>
+  
+                        </table>
+                      </td>
+                      <td style="text-align:left;width:30%;">
+                        <table style=" font-size: medium;" class="table3">
+                          <tr>
+                            <td style="width:50%;padding-left: 5px;"><b>TAXABLE&nbsp;VALUE (₹) </b></td>
+                            <td style="padding: 5px;"><b> : </b></td>
+                            <td style="width:50%;text-align:right;padding-right: 5px;"><b> {{taxtotal| number:'1.2-2'}}</b></td>
+                          </tr>
+                          <tr>
+                            <td style="width:50%;padding-left: 5px;"><b>CGST&nbsp;AMOUNT (₹) </b></td>
+                            <td style="padding: 5px;"><b> : </b></td>
+                            <td style="width:50%;text-align:right;padding-right: 5px;"><b> {{cgsttotal| number:'1.2-2'}}</b></td>
+                          </tr>
+                          <tr>
+                            <td style="width:50%;padding-left: 5px;"><b>SGST&nbsp;AMOUNT (₹) </b></td>
+                            <td style="padding: 5px;"><b> : </b></td>
+                            <td style="width:50%;text-align:right;padding-right: 5px;"><b> {{sgsttotal| number:'1.2-2'}}</b></td>
+                          </tr>
+                          <tr>
+                            <td style="width:50%;padding-left: 5px;"><b>IGST&nbsp;AMOUNT (₹) </b></td>
+                            <td style="padding: 5px;"><b> : </b></td>
+                            <td style="width:50%;text-align:right;padding-right: 5px;"><b> {{igsttotal| number:'1.2-2'}}</b></td>
+                          </tr>
+                          <tr>
+                            <td style="width:50%;padding-left: 5px;"><b>ROUND&nbsp;OFF&nbsp;(+/-)</b></td>
+                            <td style="padding: 5px;"><b> : </b></td>
+                            <td style="width:50%;text-align:right;padding-right: 5px;"><b> {{roundoff| number:'1.2-2'}}</b></td>
+                          </tr>
+                          <tr>
+                            <td style="width:50%;padding-left: 5px;"><b>INVOICE&nbsp;VALUE (₹) </b></td>
+                            <td style="padding: 5px;"><b> : </b></td>
+                            <td style="width:50%;text-align:right;padding-right: 5px;"><b> {{taxabletotal| number:'1.2-2'}}</b></td>
+                          </tr>
+                        </table>
+                      </td>
+                    </tr>
+                  </table>
+  
+                  <table style="width:100%; padding: 10px;" class="table">
+                    <tr>
+                      <td style="padding:10px;font-size: small; width:50%;text-align: justify;vertical-align: top;">
+                        <br /><b>Company's PAN : {{pan_no}}</b><br /><b>Declaration :</b><br />1.We declare that
+                        this invoice shows the actual price of the goods described and that all particulars are true and
+                        correct.
+                        <br />2.Interst @24% P.A. will be charged if the payment is not made within above term date from
+                        the date of delivery.
+                        <br />3.The Court HAJIPUR will have exclusive Jurisdiction in the event of any differnce/dispute
+                        arising between the Company and the Customer.
+                        <!-- <p *ngIf="einvelse">4.Notes We hereby declare that though our aggregate turnover in any
+                        preceding
+                        financial year from 2017-18 onwards is more than the aggregate turnover notified under sub-rule
+                        (4) of rule 48. We are not required to prepare an invoice in terms of the provisions of the said
+                        sub-rule.</p> -->
+                      </td>
+                      <td style="padding:10px; width:50%">
+                        <table style="width:100%; padding: 10px;" class="table">
+                          <tr>
+                            <td colspan="2" style="font-size: 10px;text-align: center;"><b>COMPANY BANK DETAILS</b></td>
+                          </tr>
+                          <tr>
+                            <td style="padding:10px;font-size: 10px; width:50%;text-align: justify;"><br /><b> BANK NAME :</b> STATE BANK OF INDIA<br />
+                              <b>BRANCH NAME :</b> IFB KOLKATA<br /> 
+                              <b>ACCOUNT TYPE:</b> CASH CREDIT<br />
+                              <b>ACCOUNT No :</b> 41334405163 <br /> 
+                              <b>IFSC Code :</b> SBIN0001936
+                            </td>
+  
+                            <td colspan="2" style="padding:10px;font-size: 10px; width:50%;text-align: justify;">
+                              <br /><b>BANK NAME :</b> STATE BANK OF INDIA<br />
+                                <b>BRANCH NAME :</b> SME HAJIPUR<br /> 
+                                <b>ACCOUNT TYPE:</b> CASH CREDIT<br />
+                                <b>ACCOUNTC No :</b> 41416156521 <br /> 
+                                <b>IFSC Code :</b> SBIN0017487
+                            </td>
+                          </tr>
+                          <tr>
+                            <td style="padding:10px;font-size: 10px; width:50%;">
+                             <div style="float:center">
+                              <img src="assets/images/AIL_QR.jpg" alt="QR Code" width="100" height="100" />
+                              <br style="font-size: small;"><b>UPI ID : AAYOGARO@SBI</b><br />
+                             </div> 
+                            </td>
+                            <td colspan="2" style="width:50%; text-align: center;padding:10px;font-size: 12px">For {{company_name}}<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;
+  
+                              Authorised Signatory
+                            </td>
+                          </tr>
+                        </table>
+                        <p style="font-size: 8px;"><b>*We also accept payment through Debit Card powered by Rupay,(BHIM-UPI)
+                          and (BHIM-UPI QR Code)</b></p>
+  
+  
+                        <!-- <table style="width:100%; padding: 10px;" class="table">
+                          <tr>
+                            <td style="padding:10px;font-size: 10px; width:50%;text-align: justify;">
+                              <img src="assets/images/AIL_QR.jpg" alt="QR Code" width="100" height="100" />
+                              <br style="font-size: small;"><b>UPI ID : AAYOGARO@SBI</b><br />
+                            </td>
+                            <td colspan="2" style="width:50%; text-align: center;padding:10px;">For AAYOG AGRO PRIVATE
+                              LTD<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;
+  
+                              Authorised Signatory
+                            </td>
+                          </tr> 
+                        </table> -->
+  
+                      </td>
+  
+                    </tr>
+                  </table>
+                  <div style="text-align: center;"><span style="font-size: small;">REGISTERED OFFICE ADDRESS: 14A, 5TH
+                      FLOOR, FMC FORTUNA, 234/3A, AJC
+                      BOSE ROAD, KOLKATA-700020, WEST BENGAL</span><br></div>
+  
+                  <div style="text-align: center;"><span><b>This is Computer generated invoice</b></span><br></div>
+                </section>
+              </div>
+            </div>
+  
+          </div>
+        </fieldset>
+      </mat-dialog-content>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+      <mat-dialog-actions align="end">
+        <button [useExistingCss]="true" printSectionId="print-section" ngxPrint>print</button>
+        <!-- <button type="button" class="btn btn-primary" (click)="export()">
+          Convert To Word {{ downloadAs }}
+        </button> -->
+      </mat-dialog-actions>
+    </div>
+  </div>

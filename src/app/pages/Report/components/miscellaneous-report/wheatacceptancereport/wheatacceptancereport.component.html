@@ -1,0 +1,368 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          <fieldset>
+            <legend>BASIC INFO</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Date</mat-label>
+                <input type="date" [(ngModel)]="currentDate" formControlName="date" class="form-control" >
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Vehicle No<span class="red">*</span></mat-label>
+                  <mat-select-autocomplete class="form-control ats"  
+                  [options]="veh_nos"
+                  [display]="'vehicle_no'"
+                  [value]="'vehicle_id'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['vehicle_id']"
+                  >
+                </mat-select-autocomplete>
+              </div>
+            </div>
+          </fieldset>
+
+          <fieldset>
+            <legend>PERIPHERAL SAMPLE REPORTS</legend>
+                
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Grade</mat-label>
+                    <input  formControlName="grade" type="text" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>HLW</mat-label>
+                    <input  formControlName="hlw" type="number" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Moisture DM</mat-label>
+                    <input  formControlName="moisture_dm" type="number" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Moisture AM</mat-label>
+                    <input  formControlName="moisture_am" type="number" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Wet Gluten</mat-label>
+                    <input  formControlName="wet_gluten" type="number" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>SV</mat-label>
+                    <input  formControlName="sv" type="number" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Stone</mat-label>
+                    <input  formControlName="stone" type="number" class="form-control" >
+                  </div>
+                </div>
+                
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Infestation</mat-label>
+                    <mat-select formControlName="infestation" class="form-control" >
+                      <mat-option value="Nil">Nil</mat-option>
+                      <mat-option value="Yes">Yes</mat-option>
+                  </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Odour</mat-label>
+                    <mat-select formControlName="odour" class="form-control" >
+                      <mat-option value="OK">OK</mat-option>
+                      <mat-option value="NO">NO</mat-option>
+                  </mat-select>
+                  </div>
+                </div> 
+          </fieldset>
+
+          <fieldset>
+            <legend>MASTER SAMPLE REPORTS</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Stack No</mat-label>
+                    <input  formControlName="stack_no" type="text" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>HLW</mat-label>
+                    <input  formControlName="master_hlw" type="number" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Oven Moisture</mat-label>
+                    <mat-select formControlName="oven_moisture" class="form-control" >
+                      <mat-option value="OK">OK</mat-option>
+                      <mat-option value="NO">NO</mat-option>
+                  </mat-select>
+                  </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>(+)6MM</mat-label>
+                    <mat-select formControlName="sixmm" class="form-control" >
+                      <mat-option value="OK">OK</mat-option>
+                      <mat-option value="NO">NO</mat-option>
+                  </mat-select>
+                  </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>(-)2.5MM</mat-label>
+                    <mat-select formControlName="twomm" class="form-control" >
+                      <mat-option value="OK">OK</mat-option>
+                      <mat-option value="NO">NO</mat-option>
+                  </mat-select>
+                  </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>OFG</mat-label>
+                  <mat-select formControlName="ofg" class="form-control" >
+                    <mat-option value="OK">OK</mat-option>
+                    <mat-option value="NO">NO</mat-option>
+                </mat-select>
+                </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>IDK</mat-label>
+                  <mat-select formControlName="idk" class="form-control" >
+                    <mat-option value="OK">OK</mat-option>
+                    <mat-option value="NO">NO</mat-option>
+                </mat-select>
+                </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Stone</mat-label>
+                  <mat-select formControlName="master_stone" class="form-control" >
+                    <mat-option value="OK">OK</mat-option>
+                    <mat-option value="NO">NO</mat-option>
+                </mat-select>
+                </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Total Impurities</mat-label>
+                  <mat-select formControlName="total_impurities" class="form-control" >
+                    <mat-option value="OK">OK</mat-option>
+                    <mat-option value="NO">NO</mat-option>
+                </mat-select>
+                </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Broken+Shirvilled</mat-label>
+                  <mat-select formControlName="broken_shirvilled" class="form-control" >
+                    <mat-option value="OK">OK</mat-option>
+                    <mat-option value="NO">NO</mat-option>
+                </mat-select>
+                </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Grand Total</mat-label>
+                  <mat-select formControlName="grand_total" class="form-control" >
+                    <mat-option value="OK">OK</mat-option>
+                    <mat-option value="NO">NO</mat-option>
+                </mat-select>
+                </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>POTIA</mat-label>
+                    <input  formControlName="potia" type="number" class="form-control" >
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>KB</mat-label>
+                    <mat-select formControlName="kb" class="form-control" >
+                      <mat-option value="OK">OK</mat-option>
+                      <mat-option value="NO">NO</mat-option>
+                  </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Infestation</mat-label>
+                    <mat-select formControlName="master_infestation" class="form-control" >
+                      <mat-option value="Nil">Nil</mat-option>
+                      <mat-option value="Yes">Yes</mat-option>
+                  </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Odour</mat-label>
+                    <mat-select formControlName="master_odour" class="form-control" >
+                      <mat-option value="OK">OK</mat-option>
+                      <mat-option value="NO">NO</mat-option>
+                  </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Lab Chemist</mat-label>
+                    <input  formControlName="lab_chemist" type="text" class="form-control" >
+                  </div>
+                </div>
+
+                
+
+                <div class="col-lg-12" >
+                  <div class="form-group">
+                    <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="wheatacceptancesave">Submit</button>
+                  </div>
+                </div>
+                
+          </fieldset>
+        </div>
+       </div>
+    </div>
+  </section>
+</form>
+
+<div class="container-fluid" *ngIf="isHidden==false">
+
+  <form [formGroup]="userForm1">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="todate">
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()"  >Search</button>
+      </div>
+    </div>
+  </form> 
+
+<div class="row">
+  <div class="col-lg-12">
+    <fieldset class="table_container">
+      <legend>Wheat Acceptance Report List</legend>
+      <div class="table_content">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Date</th>
+              <th>Vehicle No</th>
+              <th>Grade</th>
+              <th>HLW</th>
+              <th>Moisture DM</th>
+              <th>Moisture AM</th>
+              <th colspan="4">Action</th>       
+            </tr>
+          </thead>
+          <tbody>
+              <tr *ngFor="let acceptance of wheatacceptancelist">
+                  <td>{{acceptance.date}}</td>
+                  <td>{{acceptance.vehicle_no}}</td>
+                  <td>{{acceptance.grade}}</td>
+                  <td>{{acceptance.hlw}}</td>
+                  <td>{{acceptance.moisture_dm}}</td>
+                  <td>{{acceptance.moisture_am}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(acceptance.id, 'view')" >View</button></td>
+                  <td><button class="btn btn-info" (click)="onUpdate(acceptance.id, 'update')" >Update</button></td>  
+                  
+                  <td><button class="btn btn-danger" (click)="onDelete(acceptance.id)" >Delete</button></td>
+                  <td><button class="btn btn-info" (click)="print(acceptance.acceptanceid)" >Print</button></td>
+                
+                </tr>
+          </tbody>
+        </table>
+       
+      </div>
+    </fieldset>
+  </div>
+</div> 
+</div>
+
+
+
+
+
+                
+
+
+               
+                  
+
+                  
+                  
+
+

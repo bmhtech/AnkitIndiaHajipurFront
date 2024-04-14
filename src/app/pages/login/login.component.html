@@ -1,0 +1,77 @@
+  <div class="card card-block login-card">
+  <h3 class="form-label">Welcome Back</h3>
+  <span class="form-label">sign in to continue to Lines</span>
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon addon-left" id="username">
+        <i class="fa fa-user fa-fw"></i>
+      </span>
+      <input type="password" name="username" [(ngModel)]="username" placeholder="Input User Name Here..." class="form-control with-success-addon">
+      
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon addon-left" id="password">
+        <i class="fa fa-lock fa-fw"></i>
+      </span>
+      <input type="password" name="password" [(ngModel)]="password" placeholder="Enter Password ..." class="form-control with-success-addon">
+      
+    </div>
+    <button (click)=checkLogin() class="btn btn-lg btn-success">Login</button>
+    
+    <div class="progress_loader_box" *ngIf="status == false">
+      <div class="progress-loader" >
+        <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+      </div>
+    </div>
+    
+     <div class="er_msg"  *ngIf="loginStatus == false" style="margin-top:15px;"><i class="fa fa-exclamation-circle" aria-hidden="true"></i> Invalid UserName or Password</div> 
+  </div>
+</div>  
+
+<!-- new -->
+
+ <!-- <form [formGroup]="userForm" autocomplete="off">  
+<div class="card card-block login-card">
+  <h3 class="form-label">Welcome Back</h3>
+  <span class="form-label">sign in to continue to Lines</span>
+  <div class="form-group">
+    <div class="input-group">
+      <span class="input-group-addon addon-left" id="username">
+        <i class="fa fa-user fa-fw"></i>
+      </span>
+      <input type="text" formControlName="username" name="username" [(ngModel)]="username" placeholder="Input User Name Here..." class="form-control with-success-addon">
+    </div>
+    <div class="input-group">
+      <span class="input-group-addon addon-left" id="password">
+        <i class="fa fa-lock fa-fw"></i>
+      </span>
+      <input type="password" formControlName="password" name="password" [(ngModel)]="password" placeholder="Enter Password ..." class="form-control with-success-addon">
+    </div>
+    <button (click)=checkLogin() class="btn btn-lg btn-success">Login</button>
+    
+    
+  </div>
+</div>
+</form>  -->
+ <!-- <h2>Login</h2>
+<form [formGroup]="userForm" (ngSubmit)="checkLogin()">
+    <div class="form-group">
+        <label for="username">Username</label>
+        <input type="text" formControlName="username" class="form-control" [(ngModel)]="{ 'is-invalid': submitted && f.username.errors }" />
+        <div *ngIf="submitted && f.username.errors" class="invalid-feedback">
+            <div *ngIf="f.username.errors.required">Username is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <label for="password">Password</label>
+        <input type="password" formControlName="password" class="form-control" [(ngModel)]="{ 'is-invalid': submitted && f.password.errors }" />
+        <div *ngIf="submitted && f.password.errors" class="invalid-feedback">
+            <div *ngIf="f.password.errors.required">Password is required</div>
+        </div>
+    </div>
+    <div class="form-group">
+        <button [disabled]="loading" class="btn btn-primary">Login</button>
+       
+       
+    </div>
+</form>  -->

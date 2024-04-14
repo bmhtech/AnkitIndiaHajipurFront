@@ -1,0 +1,749 @@
+<section class="master_container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="button_row">
+                    <ul>
+                        <li><button mat-button class="btn btn-info" (click)="showList('add')"><i
+                                    class="material-icons">add</i>Add</button></li>
+                        <li><button mat-button class="btn btn-success" (click)="showList('list')"><i
+                                    class="material-icons">list</i>List</button></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+        <div class="progress-loader" >
+          <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+        </div>
+      </div>
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+    <section class="master_container">
+        <div class="container-fluid">
+            <div class="row">
+                <div class="col-lg-12">
+                    <fieldset>
+                        <legend>Company Master</legend>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Company_name">Company Name<span class="red">*</span></label>
+                                <input [(ngModel)]="model.company_name" formControlName="company_name" type="text"
+                                    class="form-control" id="company_name">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Company_code">Company Code</label>
+                                <input type="text" [(ngModel)]="model.company_code" formControlName="company_code"
+                                    class="form-control" id="company_id">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Company_Prefix">Company Prefix<span class="red">*</span></label>
+                                <input type="text" [(ngModel)]="model.comp_prefix" on-focusout="focusOutFunction()" formControlName="comp_prefix"
+                                    class="form-control" required>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Company Mailing Name">Company Mailing Name</label>
+                                <input type="text" [(ngModel)]="model.comp_mailing_name"
+                                    formControlName="comp_mailing_name" class="form-control" id="company_mailing_name">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Company Address">Company Address</label>
+                                <input type="text" [(ngModel)]="model.company_address" formControlName="company_address"
+                                    class="form-control" id="company_address">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <mat-label>Company Type</mat-label>
+                                <mat-select class="form-control" formControlName="company_type"
+                                    [(ngModel)]="model.company_type">
+                                    <mat-option value="0">-Select-</mat-option>
+                                    <mat-option *ngFor="let company_type of ctypes" [value]="company_type">
+                                        {{company_type}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Parent_company">Parent Company</label>
+                                <input type="text" [(ngModel)]="model.parent_company" formControlName="parent_company"
+                                    class="form-control" id="parent_company">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <mat-label>Country Name<span class="red">*</span></mat-label>
+                                <mat-select class="form-control"  [(ngModel)]="Country" formControlName="country_name"
+                                    (selectionChange)="onChangeCountry($event.value)">
+                                    <mat-option value="0">-Select-</mat-option>
+                                    <mat-option *ngFor="let country_name of countries" [value]="country_name.country_name">
+                                        {{country_name.country_name}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <mat-label>State Name<span class="red">*</span></mat-label>
+                                <mat-select class="form-control" [(ngModel)]="model.state_name" formControlName="state_name">
+                                    <mat-option value="0">-Select-</mat-option>
+                                    <mat-option *ngFor="let state_name of statesList" [value]="state_name.state_name">{{state_name.state_name}}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <mat-label>City Name</mat-label>
+                                <mat-select class="form-control" [(ngModel)]="model.city_name" formControlName="city_name">
+                                    <mat-option value="0">-Select</mat-option>
+                                    <mat-option *ngFor="let city_name of cities" [value]="city_name.city_name">{{city_name.city_name}}
+                                    </mat-option>
+                                </mat-select>
+                            </div>
+                        </div> -->
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                              <mat-label>City Name</mat-label>
+                              <input type="text" class="form-control" formControlName="city_name">
+                            </div>
+                          </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="PIN Code">PIN Code</label>
+                                <input type="number" min="0" [(ngModel)]="model.pin_code" formControlName="pin_code"
+                                    class="form-control">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Office Contact no">Office Contact No</label>
+                                <input type="number" min="0" [(ngModel)]="model.office_contactno"
+                                    formControlName="office_contactno" class="form-control" id="office_contact_no">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Work Phone no">Work Phone No</label>
+                                <input type="number" min="0" [(ngModel)]="model.work_phoneno"
+                                    formControlName="work_phoneno" class="form-control" id="work_phone_no">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Mobile no">Mobile No</label>
+                                <input type="number" min="0" [(ngModel)]="model.mobile_no" formControlName="mobile_no"
+                                    class="form-control" id="mobile_no">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Email id">Email id</label>
+                                <input type="email" [(ngModel)]="model.email_id" formControlName="email_id"
+                                    class="form-control" id="email">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Website_name">Website Name</label>
+                                <input type="text" [(ngModel)]="model.website_name" formControlName="website_name"
+                                    class="form-control" id="website_name">
+                            </div>
+                        </div>
+
+                        <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Company code">Company Code</label>
+                                <input type="text" [(ngModel)]="model.company_scode" formControlName="company_scode"
+                                    class="form-control" id="company_code">
+                            </div>
+                        </div> -->
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Fin Period From">Fin Period From</label>
+                                <input type="date" [(ngModel)]="model.fin_period_from" formControlName="fin_period_from"
+                                    class="form-control" id="fin_period_from">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Fin Period To">Fin Period To</label>
+                                <input type="date" [(ngModel)]="model.fin_period_to" formControlName="fin_period_to"
+                                    class="form-control" id="fin_period_to">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-6 col-md-6 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Work Address">Work Address</label>
+                                <input type="text" [(ngModel)]="model.work_address" formControlName="work_address"
+                                    class="form-control" id="work_address">
+                            </div>
+                        </div>
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12" style="margin-bottom:5px;">
+                            <div class="form-group chk_tp_pad">
+                                <mat-checkbox [(ngModel)]="model.use_audit_feature" formControlName="use_audit_feature">
+                                    Use Audit Feature</mat-checkbox>
+                            </div>
+                        </div>
+
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Decimal Place">Decimal Place</label>
+                                <input type="number" min="0" [(ngModel)]="model.decimal_place"
+                                    formControlName="decimal_place" class="form-control" id="decimal_place">
+                            </div>
+                        </div>
+
+                        <div class="blnk_row">
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <mat-checkbox [(ngModel)]="model.incometax_required"
+                                        formControlName="incometax_required">Income Tax Required</mat-checkbox>
+                                </div>
+                            </div>
+
+                            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <mat-checkbox [(ngModel)]="model.salestax_required"
+                                        formControlName="salestax_required">Sales Tax Required</mat-checkbox>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <mat-checkbox [(ngModel)]="model.servicetax_required"
+                                        formControlName="servicetax_required">Service Tax Required</mat-checkbox>
+                                </div>
+                            </div> -->
+
+                            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <mat-checkbox [(ngModel)]="model.roc_required" formControlName="roc_required">ROC
+                                        Required</mat-checkbox>
+                                </div>
+                            </div> -->
+
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <mat-checkbox [(ngModel)]="model.tds_required" formControlName="tds_required">TDS
+                                        Required</mat-checkbox>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <mat-checkbox [(ngModel)]="model.maintain_licencedetails"
+                                        formControlName="maintain_licencedetails">Maintain Licence Details
+                                    </mat-checkbox>
+                                </div>
+                            </div>
+                            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                                <div class="form-group">
+                                    <mat-checkbox [(ngModel)]="model.maintain_businessunit"
+                                        formControlName="maintain_businessunit">Maintain Business Unit</mat-checkbox>
+                                </div>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <fieldset>
+                        <legend>Income Tax Info</legend>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="PAN No">PAN No<span class="red">*</span></label>
+                                <input type="text" [(ngModel)]="model.pan_no" formControlName="pan_no" class="form-control" (focusout)="getPanNoValid()" id="PAN_no" >
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="PAN Circle No">PAN Circle No</label>
+                                <input type="text" [(ngModel)]="model.pan_circle_no" formControlName="pan_circle_no"
+                                    class="form-control" id="PAN_circle_no">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="PAN Ward No">PAN Ward No</label>
+                                <input type="text" [(ngModel)]="model.pan_wardno" formControlName="pan_wardno"
+                                    class="form-control" id="PAN_ward_no">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Pan Accessing Officer">Pan Accessing Officer</label>
+                                <input type="text" [(ngModel)]="model.pan_accessing_officer"
+                                    formControlName="pan_accessing_officer" class="form-control"
+                                    id="Pan_accessing_officer">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Inhouse Responsible Person">Inhouse Responsible Person</label>
+                                <mat-select type="text" formControlName="inhouse_responsibleperson"
+                                    [(ngModel)]="model.inhouse_responsibleperson" class="form-control">
+                                   
+                                    <mat-option *ngFor="let empname of employeeNames" [value]="empname.emp_name">
+                                        {{empname.emp_name}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Outside Responsible Person">Outside Responsible Person</label>
+                                <mat-select type="text" formControlName="outside_responsibleperson"
+                                    [(ngModel)]="model.outside_responsibleperson" class="form-control">
+                                    <mat-option *ngFor="let empname of employeeNames" [value]="empname.emp_name">
+                                        {{empname.emp_name}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Remarks Other Info">Remarks Other Info</label>
+                                <input type="text" [(ngModel)]="model.remarks_otherinfo"
+                                    formControlName="remarks_otherinfo" class="form-control" id="remarks_other_info">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Circle No">Circle No</label>
+                                <input type="text" [(ngModel)]="model.circleno" formControlName="circleno"
+                                    class="form-control" id="circle_no">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Taxpayment Type">Taxpayment Type</label>
+                                <mat-select class="form-control" [(ngModel)]="model.taxpayment_type"
+                                    formControlName="taxpayment_type">
+                                    <mat-option value="Monthly">MONTHLY</mat-option>
+                                    <mat-option value="Quarterly">QUARTERLY</mat-option>
+                                    <mat-option value="Yearly">YEARLY</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Taxpayment Date">Taxpayment Date</label>
+                                <input type="Date" class="form-control" [(ngModel)]="model.taxpayment_date"
+                                    formControlName="taxpayment_date" id="taxpayment_date">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Return Filling Type">Return Filling Type</label>
+                                <mat-select class="form-control" [(ngModel)]="model.returnfilling_type"
+                                    formControlName="returnfilling_type">
+                                    <mat-option value="Monthly">MONTHLY</mat-option>
+                                    <mat-option value="Quarterly">QUARTERLY</mat-option>
+                                    <mat-option value="Yearly">YEARLY</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Return Filling Date">Return Filling Date</label>
+                                <input type="Date" [(ngModel)]="model.returnfilling_date"
+                                    formControlName="returnfilling_date" class="form-control" id="return_filling_date">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <fieldset>
+                        <legend>Sales Tax Info</legend>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="GSTIN No">GSTIN No</label>
+                                <input type="text" [(ngModel)]="model.gstin_no" formControlName="gstin_no" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <!-- <label>TIN No</label> -->
+                                <label>CIN No<span class="red">*</span></label>
+                                <input type="text" [(ngModel)]="model.tin_no" formControlName="tin_no"  class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>CST No</label>
+                                <input type="text" [(ngModel)]="model.cst_no" formControlName="cst_no" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Inhouse Responsible Person</label>
+                                <mat-select type="text" formControlName="sales_inhouse_responsibleperson" [(ngModel)]="model.sales_inhouse_responsibleperson" class="form-control">                        
+                                    <mat-option *ngFor="let empname of employeeNames" [value]="empname.emp_name"> {{empname.emp_name}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Outside Responsible Person</label>
+                                <mat-select type="text" formControlName="sales_outside_responsibleperson" [(ngModel)]="model.sales_outside_responsibleperson" class="form-control">                                    
+                                    <mat-option *ngFor="let empname of employeeNames" [value]="empname.emp_name"> {{empname.emp_name}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Remarks Other Info</label>
+                                <input type="text" [(ngModel)]="model.sales_remarks_otherinfo" formControlName="sales_remarks_otherinfo" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Circle No</label>
+                                <input type="text" [(ngModel)]="model.sales_circleno" formControlName="sales_circleno" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Tax Payment Type</label>
+                                <mat-select class="form-control" [(ngModel)]="model.sales_taxpayment_type" formControlName="sales_taxpayment_type">
+                                    <mat-option value="Monthly">MONTHLY</mat-option>
+                                    <mat-option value="Quarterly">QUARTERLY</mat-option>
+                                    <mat-option value="Yearly">YEARLY</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Tax Payment Date</label>
+                                <input type="Date" [(ngModel)]="model.sales_taxpayment_date" formControlName="sales_taxpayment_date" class="form-control" id="taxpayment_date">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Return Filling Type</label>
+                                <mat-select class="form-control" [(ngModel)]="model.sales_returnfilling_type" formControlName="sales_returnfilling_type">
+                                    <mat-option value="Monthly">MONTHLY</mat-option>
+                                    <mat-option value="Quarterly">QUARTERLY</mat-option>
+                                    <mat-option value="Yearly">YEARLY</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Return Filling Date</label>
+                                <input type="Date" [(ngModel)]="model.sales_returnfilling_date" formControlName="sales_returnfilling_date" class="form-control">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <fieldset>
+                        <legend>Service Tax Info</legend>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Service Tax No">Service Tax No</label>
+                                <input type="text" [(ngModel)]="model.servicetax_no" formControlName="servicetax_no"  class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Service Nature">Service Nature</label>
+                                <input type="text" [(ngModel)]="model.service_nature" formControlName="service_nature" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Inhouse Responsible Person</label>
+                                <mat-select type="text" formControlName="service_inhouse_responsibleperson"  [(ngModel)]="model.service_inhouse_responsibleperson" class="form-control">
+                                    <mat-option *ngFor="let empname of employeeNames" [value]="empname.emp_name"> {{empname.emp_name}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label>Outside Responsible Person</label>
+                                <mat-select type="text" formControlName="service_outside_responsibleperson"  [(ngModel)]="model.service_outside_responsibleperson" class="form-control">
+                                   
+                                    <mat-option *ngFor="let empname of employeeNames" [value]="empname.emp_name"> {{empname.emp_name}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Remarks Other Info">Remarks Other Info</label>
+                                <input type="text" class="form-control" [(ngModel)]="model.service_remarks_otherinfo"
+                                    formControlName="service_remarks_otherinfo" id="remarks_other_info">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Circle No">Circle No</label>
+                                <input type="text" [(ngModel)]="model.service_circleno"  formControlName="service_circleno" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Tax Payment Type">Tax Payment Type</label>
+                                <mat-select class="form-control" [(ngModel)]="model.service_taxpayment_type"  formControlName="service_taxpayment_type">
+                                    <mat-option value="Monthly">MONTHLY</mat-option>
+                                    <mat-option value="Quarterly">QUARTERLY</mat-option>
+                                    <mat-option value="Yearly">YEARLY</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Tax Payment Date">Tax Payment Date</label>
+                                <input type="Date" [(ngModel)]="model.service_taxpayment_date" formControlName="service_taxpayment_date" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Return Filling Type">Return Filling Type</label>
+                                <mat-select class="form-control" [(ngModel)]="model.service_returnfilling_type" formControlName="service_returnfilling_type">
+                                    <mat-option value="Monthly">MONTHLY</mat-option>
+                                    <mat-option value="Quarterly">QUARTERLY</mat-option>
+                                    <mat-option value="Yearly">YEARLY</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Return Filling Date">Return Filling Date</label>
+                                <input type="Date" [(ngModel)]="model.service_returnfilling_date" formControlName="service_returnfilling_date" class="form-control">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <fieldset>
+                        <legend>ROC Info</legend>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Inhouse Responsible Person">Inhouse Responsible Person</label>
+                                <mat-select type="text" formControlName="roc_inhouse_responsibleperson" [(ngModel)]="model.roc_inhouse_responsibleperson" class="form-control">                           
+                                    <mat-option *ngFor="let empname of employeeNames" [value]="empname.emp_name"> {{empname.emp_name}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Outside Responsible Person">Outside Responsible Person</label>
+                                <mat-select type="text" formControlName="roc_outside_responsibleperson" [(ngModel)]="model.roc_outside_responsibleperson" class="form-control">                               
+                                    <mat-option *ngFor="let empname of employeeNames" [value]="empname.emp_name">  {{empname.emp_name}}</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Remarks Other Info">Remarks Other Info</label>
+                                <input type="text" [(ngModel)]="model.roc_remarks_otherinfo"
+                                    formControlName="roc_remarks_otherinfo" class="form-control">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Circle No">Circle No</label>
+                                <input type="text" [(ngModel)]="model.roc_circleno" formControlName="roc_circleno"
+                                    class="form-control" id="circle_no">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Tax Payment Type">Tax Payment Type</label>
+                                <mat-select class="form-control" [(ngModel)]="model.roc_taxpayment_type"
+                                    formControlName="roc_taxpayment_type">
+                                    <mat-option value="Monthly">MONTHLY</mat-option>
+                                    <mat-option value="Quarterly">QUARTERLY</mat-option>
+                                    <mat-option value="Yearly">YEARLY</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Tax Payment Date">Tax Payment Date</label>
+                                <input type="Date" [(ngModel)]="model.roc_taxpayment_date"  formControlName="roc_taxpayment_date" class="form-control" id="taxpayment_date">
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Return Filling Type">Return Filling Type</label>
+                                <mat-select class="form-control" [(ngModel)]="model.roc_returnfilling_type"
+                                    formControlName="roc_returnfilling_type">
+                                    <mat-option value="Monthly">MONTHLY</mat-option>
+                                    <mat-option value="Quarterly">QUARTERLY</mat-option>
+                                    <mat-option value="Yearly">YEARLY</mat-option>
+                                </mat-select>
+                            </div>
+                        </div>
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <label for="Return Filling Date">Return Filling Date</label>
+                                <input type="Date" [(ngModel)]="model.roc_returnfilling_date"  formControlName="roc_returnfilling_date" class="form-control">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <fieldset>
+                        <legend>Company Licence Details</legend>
+                        <div class="col-lg-12">
+                            <div class="dyn_table_conent" style="border: none;">
+                                <div class="dyn_table_header">
+                                    <label class="label_col"><h3>Action</h3></label>
+                                    <label class="label_col"><h3>Sln no</h3></label>
+                                    <label class="label_col"><h3>Licence Number</h3></label>
+                                    <label class="label_col"><h3>Licence Name</h3></label>
+                                    <label class="label_col"><h3 class="wdt_164">Expiry Date</h3></label>
+                                    <label class="label_col"><h3>Remarks</h3></label>
+                                </div>
+
+                                <div class="dyn_table_data_cont" formArrayName="company_licence_details">
+                                    <div class="dyn_table"
+                                        *ngFor="let item of company_licence_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                        <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                                        <div class="label_col"><input class="form-control" type="number" formControlName="sln_no" readonly/></div>
+                                        <div class="label_col"><input class="form-control" type="text" formControlName="licence_no" /></div>
+                                        <div class="label_col"><input class="form-control" type="text" formControlName="licence_name" /></div>
+                                        <div class="label_col"><input class="form-control wdt_form_164" type="date" formControlName="expiry_date" /></div>
+                                        <div class="label_col"><input class="form-control" type="text" formControlName="remarks" /></div>
+                                    </div>
+                                </div>
+
+                            </div>
+                            <div class="btm_btn_content">
+                                <button type="button" class="btn btn-success" (click)="add(pointIndex)">Add </button>
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+
+            </div>
+
+
+            <!--OtherDetails_Info  -->
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <fieldset>
+                        <legend>Other Details Information</legend>
+                        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                            <div class="form-group">
+                                <label for="Other Details Remarks">Other Details Remarks</label>
+                                <input type="text" [(ngModel)]="model.otherdetails_remarks"
+                                    formControlName="otherdetails_remarks" class="form-control"
+                                    id="other_details_remarks">
+                            </div>
+                        </div>
+                    </fieldset>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="companymastersave">Submit</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+</form>
+
+
+
+
+
+
+<div class="master_container_box" *ngIf="isHidden==false">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+                <fieldset class="table_container">
+                    <legend>Company Master List</legend>
+                    <div class="table_content">
+
+                        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                            <div class="form-group">
+                                <input type="text" placeholder="    Search..." class="form-control" (keydown)="search($event)">
+                            </div>
+                          </div>
+                        <table class="table table-bordered">
+                            <thead>
+                                <tr>
+                                    <th>Company code</th>
+                                    <th>Company Name</th>
+                                    <th>Company Type</th>
+                                    <th>Contact Number</th>
+                                    <th>Website</th>
+                                    <th>Gstin Number</th>
+                                    <th colspan="3">Action</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let Company of listCompany">
+                                    <td>{{Company.company_code}}</td>
+                                    <td>{{Company.company_name}}</td>
+                                    <td>{{Company.company_type}}</td>
+                                    <td>{{Company.office_contactno}}</td>
+                                    <td>{{Company.website_name}}</td>
+                                    <td>{{Company.gstin_no}}</td>
+                                    <td><button class="btn btn-success" (click)="onUpdate(Company.id,Company.company_id,'view')" *ngIf="companymasterview">View</button></td>  
+                                    <td><button class="btn btn-info" (click)="onUpdate(Company.id,Company.company_id,'update')" *ngIf="companymasterupdate">Update</button></td>  
+                                    <!-- <td><button class="btn btn-danger" (click)="onDelete(Company.id,Company.company_id)" *ngIf="companymasterdelete">Delete</button></td>                  -->
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </fieldset>
+            </div>
+        </div>
+    </div>
+</div>

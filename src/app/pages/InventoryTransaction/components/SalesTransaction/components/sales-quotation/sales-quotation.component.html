@@ -1,0 +1,1007 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" *ngIf="isHidden  ==  true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Sales Quotation</legend>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="row">
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12 ac">
+                  <label style="font-weight: normal; padding-right: 15px;">Provisional Order:</label>  <input formControlName="pro_order" [(ngModel)]="model.pro_order" type="radio" value="Yes"> Yes &nbsp; &nbsp; <input type="radio" formControlName="pro_order" [(ngModel)]="model.pro_order" value="No"> No
+              </div>
+              </div>
+            </div>
+            <div class="ht_15"></div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Quotation Type</mat-label>
+                <mat-select class="form-control" formControlName="quo_type" [(ngModel)]="Quo_type" (selectionChange)="onChangeQuotationType($event.value)" >
+                  <mat-option value="0">Choose an Option</mat-option>
+                  <mat-option *ngFor="let quo_type of quo_types" [value]="quo_type">{{quo_type}}</mat-option>
+                </mat-select>
+             </div>
+           </div>
+
+           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+              <mat-label>Quotation Date</mat-label>
+              <input type="date" (change)="onChangeQuoDate($event)" formControlName="quotation_date" [(ngModel)]="currentDate" class="form-control">
+            </div>
+          </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Quotation No.</mat-label>
+                <input type="text" formControlName="quotation_no" [(ngModel)]="seq_no" class="form-control" readonly>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Reference Type</mat-label>
+                <mat-select class="form-control" formControlName="ref_type" [(ngModel)]="ref_Type" type="text" (selectionChange)="onChangeRefType($event.value)">
+                  <mat-option value="Open Quotation">Open Quotation</mat-option>
+                  <mat-option value="Previous Quotation">Previous Quotation</mat-option>
+                  <mat-option value="Sales Enquiry">Sales Enquiry</mat-option>            
+                </mat-select>
+              </div>
+            </div>
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="businesslists"
+                [display]="'businessunit_name'"
+                [value]="'businessunit_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['business_unit']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div> -->
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Bussiness Unit</mat-label>
+                <mat-select formControlName="business_unit" [(ngModel)]="Bunit" class="form-control" (selectionChange)="onChangeBuUnit($event.value)">
+                  <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+  
+
+
+           <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="model.quo_type == 'FORMAL' && action == 'update'">
+            <div class="form-group">
+                <label style="width: 100%;">&nbsp;</label>
+              <button class="btn btn-info" (click)=" openDialog()">Show </button>
+            </div>
+          </div> -->
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="Quo_type == 'Formal' && action == 'update'">
+            <div class="form-group">
+                <label style="width: 100%;">&nbsp;</label>
+              <button class="btn btn-info" (click)=" openDialog()">Select Customer <span class="red">*</span> </button>
+            </div>
+          </div>
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Valid Till</mat-label>
+                <!-- <input type="date" formControlName="valid_till" [(ngModel)]="model.valid_till" class="form-control" (change)="onChangeValidTill($event.target.value)"> -->
+                <input type="date" formControlName="valid_till" [(ngModel)]="model.valid_till" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Price Term</mat-label>
+                <mat-select class="form-control" formControlName="price_term" [(ngModel)]="Price_term">
+                  <mat-option value="On Secondary Qty">On Secondary Qty</mat-option>
+                  <mat-option value="With Packing Weight">With Packing Weight</mat-option>
+                  <mat-option value="Without Packing Weight">Without Packing Weight</mat-option>               
+                </mat-select>
+              </div>
+            </div>
+
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="model.quo_type != 'Formal'">
+              <div class="form-group">
+                <mat-label>Customer Channel</mat-label>
+                <mat-select class="form-control" formControlName="cust_channel" [(ngModel)]="model.cust_channel" (selectionChange)="onChangeCustomerChannel($event.value)">
+                  <mat-option value="0">-select-</mat-option>
+                  <mat-option *ngFor="let channel of channel_master_list" [value]="channel.channel_custid">{{channel.channel_desc}}</mat-option>
+                </mat-select>
+              </div>
+            </div>  -->
+           
+            <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="model.quo_type == 'Informal'">
+              <div class="form-group">
+                <mat-label>Customer Channel</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="channel_master_list"
+                [display]="'channel_desc'"
+                [value]="'channel_custid'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['cust_channel']"
+                (selectionChange)="onChangeCustomerChannel($event)">
+              </mat-select-autocomplete>
+              </div>
+            </div> -->
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+              <div class="form-group">
+                <mat-label>Customer</mat-label>
+                <mat-select-autocomplete class="form-control ats"   
+                [options]="partyNameList"
+                [display]="'cp_name'"
+                [value]="'cp_Id'"
+                [multiple]='false'
+                [disabled]="quotationtypecheck"
+                ngDefaultControl
+                [formControl]="userForm.controls['customer']"
+                (selectionChange)="onChangePartyStatic($event)">
+              </mat-select-autocomplete>
+              </div>
+            </div> 
+           
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Receipt Criteria</mat-label>
+                <mat-select class="form-control" formControlName="receipt_ct" [(ngModel)]="Receipt_Criteria" type="text">
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option value="Customer Weight">Customer Weight</mat-option>
+                  <mat-option value="Own Weight">Own Weight</mat-option>         
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Weighment UOM</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="customUOMs"
+                [display]="'description'"
+                [value]="'customuom_id'"
+                [multiple]='false'
+                (selectionChange)="onChangeWgmtUom($event)"
+                ngDefaultControl
+                [formControl]="userForm.controls['we_uom']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+          
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Delivery Within</mat-label>
+                <input type="date" class="form-control" formControlName="delivery" [(ngModel)]="model.delivery">
+              </div>
+            </div>
+           
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Delivery Term<span class="red">*</span> </mat-label>
+                <mat-select class="form-control" tabindex="11" formControlName="delivery_term" [(ngModel)]="_deliveryTerm" (selectionChange)="onChangeDeliveryTerm($event.value)">
+              
+                  <mat-option value="FOB">FOB</mat-option>
+                  <mat-option value="FOR">FOR</mat-option>          
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Shipment Mode</mat-label>
+                <mat-select class="form-control" formControlName="shipment_mode" (selectionChange)="onChangeshipment($event.value)" [(ngModel)]="Shipment_Mode">
+                  <mat-option value="By Air">By Air</mat-option>
+                  <mat-option value="By Rail">By Rail</mat-option>
+                  <mat-option value="By Road">By Road</mat-option>                
+                  <mat-option value="By Water">By Water</mat-option>               
+                  <mat-option value="By Other">By Other</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Sales Person</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="employeeNames"
+                [display]="'emp_name'"
+                [value]="'emp_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['sales_person']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Customer Ref. Document No.</mat-label>
+                <input type="text" formControlName="cust_ref" [(ngModel)]="model.cust_ref" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Quotation status</mat-label>
+                <mat-select class="form-control" formControlName="q_status" [(ngModel)]="Q_status" type="text">              
+                  <mat-option value="Close">Close</mat-option>
+                  <mat-option value="Finalise">Finalise</mat-option>
+                  <mat-option value="Pending">Pending</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Sales Invoice Type</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="invoiceType"
+                [display]="'invtype_name'"
+                [value]="'invtype_id'"
+                [multiple]='false'
+                ngDefaultControl
+                (selectionChange)="onChangewithinvoicetype($event)"
+                [formControl]="userForm.controls['inv_type']">
+              </mat-select-autocomplete>
+                <!-- <mat-select class="form-control" formControlName="inv_type" [(ngModel)]="model.inv_type" type="text">
+                  <mat-option value="0">Select</mat-option>            
+                </mat-select> -->
+              </div>
+            </div>
+            
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="ref_Type == 'Sales Enquiry' && action == 'update'">
+              <div class="form-group">
+                <label style="width: 100%;">&nbsp;</label>
+                <button class="btn btn-info" (click)=" onClickShow()">Sales Enquiry</button>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="ref_Type == 'Previous Quotation' && action == 'update'">
+              <div class="form-group">
+                <label style="width: 100%;">&nbsp;</label>
+                <button class="btn btn-info" (click)=" onClickShow()">Previous Quotation</button>
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+      <!--  Dynamic Start-->
+    <div class="weigh_n">
+      <div class="dyn_table_conent" style="border: none;">
+        <mat-tab-group animationDuration="1000ms" (selectedTabChange)="onChangeMatTab($event)">
+          <mat-tab label="Item Details">
+            <div class="dyn_table_conent" style="border: none;">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3 class="act">Action</h3></label>
+                <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                <label class="label_col"><h3 class="i_nam">Packing Item</h3></label>
+                <label class="label_col"><h3>Packing Qty.</h3></label>
+                <label class="label_col"><h3>Packing Uom</h3></label>
+                <label class="label_col"><h3>Price</h3></label>
+                <label class="label_col"><h3>Price Based On</h3></label>
+                <label class="label_col"><h3>Item Qty.</h3></label>
+                <label class="label_col"><h3>Item Uom</h3></label>
+                <label class="label_col"><h3>Conversion <br>Factor</h3></label>
+                <label class="label_col"><h3>Gross.Wt</h3></label>
+                <label class="label_col"><h3>HSN Code</h3></label>
+                <label class="label_col"><h3>Amount</h3></label>
+                <label class="label_col"><h3>Discount</h3></label>
+                <label class="label_col"><h3>Discount Based On</h3></label>
+                <label class="label_col"><h3>Discount Amt</h3></label>
+                <label class="label_col"><h3>Tolerance(%)</h3></label>
+                <label class="label_col"><h3>Tax Code</h3></label>
+                <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                <label class="label_col"><h3>Tax Amt</h3></label>            
+                <label class="label_col"><h3>Quality<br> Norms</h3></label>
+                <label class="label_col"><h3>packing List Req.</h3></label>
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="sales_Quotation_Item_Dtls">
+                <div class="dyn_table" *ngFor="let item of sales_Quotation_Item_Dtls.controls; let pointIndex=index"  [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteItem(pointIndex)"></i></div>
+                  <div class="label_col"><input class="form-control srln" formControlName="slno" type="number" readonly/></div>
+                
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"  
+                    [options]="item_codes"
+                    [display]="'item_name'"
+                    [value]="'item_id'"
+                    [multiple]='false'
+                    (selectionChange)="onChangeItemName(pointIndex, $event)"
+                    [selectedOptions]="selectedItemName[pointIndex]"
+                    ngDefaultControl
+                    [formControlName] = "'item_code'">
+                  </mat-select-autocomplete>
+                  </div>
+
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"  
+                    [options]="packingItem[pointIndex]"
+                    [display]="'item_name'"
+                    [value]="'item_code'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedPackingItem[pointIndex]"
+                    (selectionChange)="onChangePackingItem(pointIndex, $event)"
+                    ngDefaultControl
+                    [formControlName]="'packing'">
+                  </mat-select-autocomplete>
+                  </div>
+                 
+                  <div class="label_col"><input class="form-control" formControlName="squantity" type="number" (keyup)="getPackingQty($event, pointIndex)"/></div>
+                  <div class="label_col"><input type="text" class="form-control" formControlName="suom" readonly></div>
+                  <div class="label_col"><input class="form-control" formControlName="price" type="number" (keyup)="getPrice($event, pointIndex)"/></div>
+                  <div class="label_col"><select class="form-control" formControlName="price_based_on" (change)="onChangePriceBasedOn($event, pointIndex)"><option value="Item">Item</option><option value="Packing">Packing</option></select></div>
+                  <!-- <div class="label_col"><input class="form-control" formControlName="quantity" type="number" (keyup)="getItemQty($event, pointIndex)"/></div> -->
+                  <div class="label_col"><input class="form-control" formControlName="quantity" type="number" (focusout)="getItemQty($event, pointIndex)"/>
+                    <input class="form-control" formControlName="item_tolerance" type="hidden" readonly/>
+                    <input class="form-control" formControlName="tolerance_qty" type="hidden" readonly/>
+                  </div>
+                  <div class="label_col"><input type="text" class="form-control" formControlName="uom" readonly></div>
+                  
+                  <div class="label_col"><input class="form-control" formControlName="con_factor" type="number" /></div>
+                  
+                  <div class="label_col"><input class="form-control" formControlName="mat_wt" type="number" readonly/></div>
+                  <div class="label_col"><input class="form-control" formControlName="hsn_code" type="text" readonly/></div>
+      
+                  <div class="label_col"><input class="form-control" formControlName="amount" type="number" /></div>
+                  <div class="label_col"><input class="form-control" formControlName="discount_rate" type="number" (keyup)="getDiscount($event, pointIndex)"/></div>
+                  <div class="label_col"><select class="form-control" formControlName="discount_type" (change)="onChangeDiscountBasedOn($event, pointIndex)"><option value="0">-Select-</option><option value="%">On %</option><option value="Uom">On UoM</option></select></div>
+                  <div class="label_col"><input class="form-control" formControlName="discount_amt" type="number"/></div>
+                  
+                  <div class="label_col"><input class="form-control" formControlName="tolerance" type="number" /></div>
+                  <div class="label_col"><input class="form-control" formControlName="tax_code" type="text" readonly/><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp(pointIndex)" aria-hidden="true"></i></div>
+                  <div class="label_col"><input class="form-control" formControlName="tax_rate" type="text" /></div> 
+                  <div class="label_col"><input class="form-control" formControlName="tax_amt" type="number"/></div>                
+                  <div class="label_col"><input class="form-control" formControlName="acc_norms" type="text" /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp2(pointIndex)" aria-hidden="true"></i></div>
+                  <div class="label_col"><select class="form-control" type="text" formControlName="packing_list_req" (change)="onChangePackingReqList($event, pointIndex)"><option value="No">No</option><option value="Yes">Yes</option></select></div>
+                  <div class="label_col" style="border-top:1px solid #ccc;"><button type="button" class="btn btn-success" *ngIf="isPackingListReq[pointIndex] == 'true'" (click)="packingListPopUp(pointIndex)" style="margin-right: 5px;">Show</button></div>
+                  <div class="label_col" style="display: none;"><input class="form-control" type="text" formControlName="packing_list" /></div>
+                  <div class="label_col" style="display: none;"><input class="form-control" formControlName="total_amt" type="number"/></div>
+                  <!-- <div class="label_col" style="display: none;"><input class="form-control" formControlName="cgst_amt" type="number"/></div>
+                  <div class="label_col" style="display: none;"><input class="form-control" formControlName="sgst_amt" type="number"/></div>
+                  <div class="label_col" style="display: none;"><input class="form-control" formControlName="igst_amt" type="number"/></div> -->
+                </div>
+              </div>
+            </div>
+            <div class="btm_btn_content" *ngIf="action == 'update'">
+              <button type="button" class="btn btn-success" *ngIf = "!show_Row" (click)="addItems()">Add</button>
+            </div>
+            <div class="clr"></div>
+          </mat-tab>
+
+           <mat-tab label="Party Details">
+            <!-- <div class="dyn_table_conent" style="border: none;">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3 class="act">Action</h3></label>
+                <label class="label_col"><h3 class="srl_no" style="width:110px;">Srl No</h3> </label>
+                <label class="label_col"><h3 class="i_nam">Party Name</h3></label>
+                <label class="label_col"><h3 class="i_nam">Contact Person Name</h3></label>
+                <label class="label_col"><h3>Contact Number</h3></label>
+                <label class="label_col"><h3>Send Via</h3></label>
+                <label class="label_col"><h3>Tcs Applicable</h3></label>
+                <label class="label_col"><h3>Tcs Rate</h3></label>
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="sales_Quotation_Party_Dtls">
+                <div class="dyn_table" *ngFor="let item of sales_Quotation_Party_Dtls.controls; let pointIndex=index"  [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteParty(pointIndex)"></i></div>
+                  <div class="label_col"><input formControlName="sl_no" class="form-control" type="number" readonly/></div>
+                
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"  
+                    [options]="partyNameList"
+                    [display]="'cp_name'"
+                    [value]="'cp_Id'"
+                    [multiple]='false'
+                    (selectionChange)="onChangePartyName($event, pointIndex)"
+                    [selectedOptions]="selectedPartyName[pointIndex]"
+                    ngDefaultControl
+                    [formControlName] = "'p_code'">
+                  </mat-select-autocomplete>
+                </div>
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"  
+                    [options]="contNameList[pointIndex]"
+                    [display]="'contact_person'"
+                    [value]="'contact_person'"
+                    [multiple]='false'
+                    (selectionChange)="onChangeContactName(pointIndex, $event)"
+                    [selectedOptions]="selectedContName[pointIndex]"
+                    ngDefaultControl
+                    [formControlName] = "'cp_name'">
+                  </mat-select-autocomplete>
+                  </div>
+                      <div class="label_col" *ngIf="model.ref_type == 'Sales Enquiry' "><input formControlName="cp_name" class="form-control" /></div>  // By Default Commented
+                  <div class="label_col"><input formControlName="cp_contact" class="form-control" type="text" style="width: 106px;" /></div>
+                  <div class="label_col"> <select formControlName="send_via" class="form-control"><option value="0">-Select Name-</option> <option *ngFor="let send_via of send_via_list" [value]="send_via">{{send_via}}</option></select> </div>
+                  <div class="label_col"><input formControlName="tcs_applicable" class="form-control" type="text"></div>
+                  <div class="label_col"><input formControlName="tcs_rate" class="form-control" type="number"></div>
+                </div>
+              </div>
+            </div>
+            <div class="btm_btn_content" *ngIf="action == 'update'">
+              <button type="button" class="btn btn-success" *ngIf = "!show_Row" (click)="addParty()">Add</button>
+            </div>
+            <div class="clr"></div> -->
+
+            <fieldset>
+              <legend>Payment</legend>
+              <!-- <div class="col-lg-4 col-md-4 col-sm-6 col-12" *ngIf="model.quo_type == 'Informal'">
+                <div class="form-group">
+                  <mat-label>Party</mat-label>
+                  <mat-select class="form-control" [(ngModel)]="model.customer" formControlName="customer" (selectionChange)="onChangePartyStatic($event.value)">
+                   <mat-option *ngFor="let customer of partyList" [value]="customer.cp_Id">{{customer.cp_name}}</mat-option>
+                  </mat-select>                 
+              </div>
+              </div> -->
+
+              <div formGroupName="sales_Quotation_Terms_Con">          
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Payment Mode</mat-label>
+                    <mat-select class="form-control" (selectionChange)="onChangePaymentMode($event.value)" formControlName="payment_mode" type="text">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option value="Cash">Cash</mat-option>
+                      <mat-option value="Cheque">Cheque</mat-option>
+                      <mat-option value="DD">DD</mat-option>
+                      <mat-option value="NEFT">NEFT</mat-option>
+                      <mat-option value="RTGS">RTGS</mat-option>                
+                    </mat-select>
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Bank Name</mat-label>
+                    <input type="text" class="form-control" formControlName="bank_name" [disabled]="!isBankNameDisabled">                 
+                </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12"  *ngIf="isChecked">
+                  <div class="form-group">
+                    <mat-label>Account Number</mat-label>
+                    <input type="number" formControlName="account_no"  class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12" *ngIf="isChecked">
+                  <div class="form-group">
+                    <mat-label>Account Holder Name</mat-label>
+                    <input type="text" class="form-control" formControlName="account_name">
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12" *ngIf="isChecked">
+                  <div class="form-group">
+                    <mat-label>Branch</mat-label>
+                    <input type="text" class="form-control" formControlName="branch">
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12" *ngIf="isChecked">
+                  <div class="form-group">
+                    <mat-label>IBAN</mat-label>
+                    <input type="text" class="form-control" formControlName="iban">
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12" *ngIf="isChecked">
+                  <div class="form-group">
+                    <mat-label>BIC/SWIFT Code</mat-label>
+                    <input type="text" class="form-control" formControlName="bic_swift_code">
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12" *ngIf="isChecked">
+                  <div class="form-group"> 
+                    <mat-label>IFSC Code</mat-label>
+                    <input type="text" formControlName="ifsc_code"  class="form-control">
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12" *ngIf="isChecked1">
+                  <div class="form-group">
+                    <mat-label>Cash Limit</mat-label>
+                    <input type="number" formControlName="cash_limit"  class="form-control" readonly>
+                  </div>
+                </div>
+
+                <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Payment Term</mat-label>
+                    <mat-select class="form-control" formControlName="payment_term" type="text">
+                      <mat-option *ngFor="let payment_term of payTerms" [value]="payment_term.payterm_id">{{payment_term.payterm_desc}}</mat-option>  
+                    </mat-select>
+                  </div>
+                </div>               
+              </div> 
+            </fieldset>
+          </mat-tab>
+
+          <mat-tab label="Broker Details">
+            <div class="form-group" style="width: 150px; margin: 0;">
+              <!-- <mat-checkbox [(ngModel)]="model.brokerage_app" formControlName="brokerage_app">Brokerage Applicable</mat-checkbox> -->
+              <mat-checkbox [(ngModel)]="brokerage_appChecked" formControlName="brokerage_app">Brokerage Applicable</mat-checkbox>
+            </div>
+            <!-- <div class="dyn_table_conent" *ngIf="model.brokerage_app == true"> -->
+            <div class="dyn_table_conent" *ngIf="brokerage_appChecked">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3>Action</h3></label>
+                <label class="label_col"><h3 class="srln">Srl No</h3></label>
+                <label class="label_col"><h3 class="i_nam">Broker Name</h3></label>
+                <!-- <label class="label_col"><h3>Broker Name</h3></label> -->
+                <label class="label_col"><h3>Basis</h3></label>
+                <label class="label_col"><h3>Based On</h3></label>
+                <label class="label_col"><h3 style="width: 116px;">Rate</h3></label>
+               
+              </div>
+             
+              <div class="dyn_table_data_cont" formArrayName="sales_Quotation_Broker_Dtls">
+                <div class="dyn_table" *ngFor="let item of sales_Quotation_Broker_Dtls.controls; let pointIndex=index"  [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteBrokers(pointIndex)"></i></div>
+                  <div class="label_col"><input type="number" formControlName="slno" class="form-control srln" min="0" readonly/></div>
+                  <!-- <div class="label_col"><select formControlName="broker_code" class="form-control" type="text" (change)="onChangeBrokerName(pointIndex,$event)">
+                    <option value="0">-Select-</option>
+                    <option *ngFor="let list of brokerNames" [value]="list.broker_Id">{{list.name}}
+                    </option>
+                  </select></div> -->
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"  
+                    [options]="brokerNames"
+                    [display]="'ven_name'"
+                    [value]="'ven_code_name'"
+                    [multiple]='false'
+                    (selectionChange)="onChangeBrokerName($event, pointIndex)"
+                    [selectedOptions]="selectedBrokerName[pointIndex]"
+                    ngDefaultControl
+                    [formControlName] = "'broker_code'">
+                  </mat-select-autocomplete>
+                  </div>
+
+                  <!-- <div class="label_col"><input formControlName="broker_name" type="text" class="form-control i_nam" /></div> -->
+                  <div class="label_col"><select formControlName="basis" class="form-control" ><option value="0">-Select-</option><option *ngFor="let basis of basiss" value={{basis}}>{{basis}}</option></select></div>
+                  <div class="label_col" ><input formControlName="based_on" class="form-control" /></div>
+                  <div class="label_col"><input formControlName="rate" class="form-control" min="0" type="number" /> </div>
+                
+                </div>
+              </div>
+            </div>
+            <div class="btm_btn_content" *ngIf="model.brokerage_app == true && action == 'update'">
+              <button type="button" (click)="addBrokers()" class="btn btn-success">Add Row</button>
+            <div class="clr"></div>
+            </div>
+          </mat-tab>
+      
+          <mat-tab label="Summary">
+
+            <fieldset>
+              <legend>Amount Calculation</legend>
+
+              <div formGroupName="sales_Quotation_Summary">
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Item Total</mat-label>
+                    <input class="form-control" type="number" formControlName="item_total" readonly/>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Discount</mat-label>
+                  <input  class="form-control" type="number" formControlName="discount" readonly/>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Tax Total</mat-label>
+                  <input  class="form-control" type="number" formControlName="tax_total" readonly/>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Net Amount</mat-label>
+                    <input  class="form-control" type="number" formControlName="net_amount" readonly/>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Applicable Brokerage</mat-label>
+                  <input type="number" formControlName="app_brokerage" class="form-control" (keyup)="calNetRValue($event)">
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Net R Value.</mat-label>
+                  <input type="number" formControlName="net_r_value" class="form-control" readonly/>
+                </div>
+              </div>
+
+            </div>  
+          </fieldset>
+
+            <fieldset>
+              <legend>Applicable Charges</legend>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Applicable Charges</mat-label>
+                  <mat-select-autocomplete class="form-control ats"  
+                  [options]="chargesIdList"
+                  [display]="'charge_desc'"
+                  [value]="'charge_id'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [formControl]="userForm.controls['app_chgs_id']"
+                  (selectionChange)="onChangeApplicableCharges($event)">
+                </mat-select-autocomplete>
+                </div>
+              </div>
+             
+              
+              <div class="col-lg-12">
+                  <div class="dyn_table_conent">
+                    <div class="dyn_table_header">
+                      <label class="label_col"><h3 class="wdt_fst">Charges Name</h3></label>
+                      <label class="label_col"><h3 class="wdt_130">Rate Calculation Method</h3></label>
+                      <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                      <label class="label_col"><h3>Amount</h3></label>
+                    </div>
+  
+                    <div class="dyn_table_data_cont" formArrayName="sales_Quotation_Summary_dyn">
+                      <div class="dyn_table" *ngFor="let item of sales_Quotation_Summary_dyn.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <div class="label_col"><input formControlName="charge_name" class="form-control" type="text"/></div>
+                        <div class="label_col"><input type="text" class="form-control wdt_form_130" formControlName="rate_cal_method"></div>
+                        <div class="label_col"><input type="text" class="form-control" formControlName="tax_rate"></div>
+                        <div class="label_col"><input class="form-control" formControlName="amount" min="0" type="number" /></div>
+                      </div>
+                    </div>
+                 </div>
+              </div>
+            </fieldset>
+          </mat-tab>
+
+           <!-- <mat-tab label="Transport Information">
+            <div formGroupName="sales_Quotation_Trans_Info">
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Transport Borne By</mat-label>
+                  <mat-select class="form-control" (selectionChange)="onChangeTransBornBy($event.value)"  formControlName="trans_borne_by" [disabled]="_deliveryTerm == 'FOB'">
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option *ngFor="let trans_borne_by of transBrone" [value]="trans_borne_by">{{trans_borne_by}}</mat-option>
+                  </mat-select>
+              </div>
+              </div>
+             
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Mode Of Transport</mat-label>
+                  <input type="text" formControlName="mode_of_trans"  class="form-control" readonly>
+                </div>
+              </div>
+              
+
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Transporter Name</mat-label>
+                  <mat-select class="form-control"  formControlName="trans_code" [disabled]="is_trans_Info == 'FOR' || _deliveryTerm == 'FOB'">
+                    <mat-option value="0">-Select-</mat-option>
+                   <mat-option *ngFor="let transport_name of trans_codes" [value]="transport_name.bp_Id">{{transport_name.bp_name}}</mat-option>
+                  </mat-select>
+              </div>
+              </div>
+
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Charge Code</mat-label>
+                  <div style="position: relative; display: table;">
+                    <input class="form-control with-primary-addon" type="text" formControlName="charge_code" [readonly]="is_trans_Info == 'FOR' || _deliveryTerm == 'FOB'">
+                    <span class="input-group-addon input-group-addon-primary addon-left"><i class="fa fa-external-link tax_insert_icon"  (click)="openDialog1()" aria-hidden="true"></i></span>
+                </div>
+                </div>
+              </div>
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Transporter</mat-label>
+                  <button class="btn btn-success" type="button" [disabled]="is_trans_Info == 'FOR' || _deliveryTerm == 'FOB'" (click)="transporterPopUp()">Transporter</button>
+              </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12"  style="display: none;" > 
+                <div class="form-group">
+                  <input type="text" formControlName="transporters" class="form-control"/>
+                </div>
+              </div>
+
+            </div>
+          </mat-tab> -->
+
+          <mat-tab label="Shipment Details">
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+              <fieldset>
+                <legend>Ship To</legend>
+                <div formGroupName="sales_Quotation_Shipment_Dtls">
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <mat-label>Address Id</mat-label>
+                      <mat-select-autocomplete class="form-control ats"  
+                      [disabled]="_deliveryTerm == 'FOB'"
+                      [options]="customerDelvAddList"
+                      [display]="'b_unit_name'"
+                      [value]="'b_unit_name'"
+                      [multiple]='false'
+                      ngDefaultControl
+                      [formControl]="sales_Quotation_Shipment_Dtls.controls['ship_addr']"
+                      (selectionChange)="onChangeShipToAddId($event)">
+                    </mat-select-autocomplete>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <textarea class="form-control" formControlName="ship_details" type="text" style="height: 65px;" [readonly]="_deliveryTerm == 'FOB'"></textarea>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div> 
+            <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+              <fieldset>
+                <legend>Payment From</legend>
+                <div formGroupName="sales_Quotation_Shipment_Dtls">
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <mat-label>Address Id</mat-label>
+                      <mat-select-autocomplete class="form-control ats" 
+                      [options]="bussiness_unit_list"
+                      [display]="'businessunit_name'"
+                      [value]="'businessunit_id'"
+                      [multiple]='false'
+                      ngDefaultControl
+                      [formControl]="sales_Quotation_Shipment_Dtls.controls['pay_addr']"
+                      (selectionChange)="onChangePaymentFromAddId($event)">
+                    </mat-select-autocomplete>
+                    </div>
+                  </div>
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <textarea class="form-control" formControlName="pay_details" type="text" style="height: 65px;"></textarea>
+                    </div>
+                  </div>
+                </div>  
+              </fieldset>
+              
+            </div>     
+          </mat-tab>  
+
+          <mat-tab label="Remarks">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="form-group">
+                <mat-label>Remarks</mat-label>
+                <textarea class="form-control" formControlName="remarks" [(ngModel)]="model.remarks" type="text"></textarea>
+              </div>
+            </div>     
+          </mat-tab>   
+
+          <mat-tab label="Document Attachment">
+            <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+              <div class="dyn_table_conent" style="float:left;">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Action</h3></label>
+                  <label class="label_col"><h3>Document Name</h3></label>
+                  <label class="label_col"><h3 class="width_220">Document Upload</h3></label>
+                </div>           
+                <div class="dyn_table_data_cont" formArrayName="sales_Quotation_Docs">
+                  <div class="dyn_table"  *ngFor="let item of sales_Quotation_Docs.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action" (click)="deleteDocument(pointIndex)"></i></div>      
+                    <div class="label_col"><input  class="form-control" type="text" formControlName="doc_name" /></div>
+                    <div class="label_col"><input class="form-control width_220_sm" type="file" /></div>
+                  </div>
+                </div>
+              </div>
+                            
+              <div class="btm_btn_content" *ngIf="action == 'update'">
+                <button type="button" class="btn btn-success" (click)="addDocument()">Add </button>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <fieldset style="padding-bottom: 0px;">
+                <legend>Document List</legend>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                  <div class="form-group" style="height: auto;">
+                    <textarea class="form-control" rows="1" style="height: 100px;"></textarea>
+                  </div>
+                </div>
+              </fieldset>
+            </div>     
+        </mat-tab>
+          <mat-tab label="Approval">
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Confirmed By</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="employeeNames"
+                [display]="'emp_name'"
+                [value]="'emp_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['confirmed_by']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Approved</mat-label>
+                <mat-select class="form-control" formControlName="approved" [(ngModel)]="model.approved" type="text">
+                  <mat-option value="No">No</mat-option>
+                  <mat-option value="Yes">Yes</mat-option>             
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Reason</mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="reasonIdList"
+                [display]="'reason'"
+                [value]="'reason_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['reason']"
+                [labelCount]="2">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12" *ngIf="Userroles">
+              <div class="form-group">
+                <mat-label>Quotation CheckPoint<span class="red">*</span></mat-label>
+                <mat-select class="form-control" [(ngModel)]="Quotationcheckpoint" formControlName="quotationcheckpoint">
+                  <mat-option value="Yes">Yes</mat-option>
+                  <mat-option value="No">No</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+        </mat-tab>
+      </mat-tab-group>
+      </div>
+    </div>
+
+      <div class="col-lg-12" *ngIf="action == 'update'">
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" (click)="send()" *ngIf="salesquotationsave">Submit</button>
+        </div>
+      </div>
+      <!--  Dynamic End-->
+    </div>
+  </section>
+</form>
+
+
+<div class="master_container_box" *ngIf="isHidden == false">
+
+  <form [formGroup]="userForm1">
+    
+      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="form-group">
+        <mat-label>From Date<span class="red">*</span></mat-label>
+        <input type="date"  class="form-control"  formControlName="fromdate">
+        </div>
+      </div>
+
+      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="form-group">
+        <mat-label>To Date<span class="red">*</span></mat-label>
+        <input type="date"  class="form-control"  formControlName="todate">
+        </div>
+      </div>
+
+      <div class="col-lg-12" >
+        <div class="form-group">
+          <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
+        </div>
+      </div>
+
+  </form>
+
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Sales Quotation List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                 <th>Quotation NO</th>
+                  <th>Quotation Date</th>
+                  <th>Party Name</th>
+                  <th>Reference</th>
+                  <th>Price Term</th>
+                  <th>Quotation CheckPoint</th>
+                  <!-- <th>Receipt Criteria</th>
+                  <th>Valid Until</th>
+                  <th>ShipmentMode</th>
+                  <th>Quotation Status</th> -->
+                  <th colspan="4">Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                  <tr *ngFor="let salesQue of listSalesQuotation">
+                    <td>{{salesQue.quotation_no}}</td>
+                    <td>{{salesQue.quotation_date}}</td>
+                    <td>{{salesQue.customername}}</td>
+                    <td>{{salesQue.ref_type}}</td>
+                    <td>{{salesQue.price_term}}</td>
+                    <td>{{salesQue.quotationcheckpoint}}</td>
+
+                    <td><button class="btn btn-success" (click)="onUpdate(salesQue.id,salesQue.quotation_id, 'view')" *ngIf="salesquotationview">View</button></td>
+                    <td *ngIf="salesQue.terminate =='0';else terminateupdate">
+                      <button class="btn btn-info" (click)="onUpdate(salesQue.id,salesQue.quotation_id, 'update')" *ngIf="salesquotationupdate">Update</button>
+                    
+                    </td>  
+                    <ng-template #terminateupdate>
+                      <td><button class="btn btn-info"  [disabled] ="true">Update</button></td>
+                    </ng-template>
+                    
+                   
+                    <td *ngIf="salesQue.sale_orderused !='1';else elseBlock1 ">
+                      
+                      <button class="btn btn-danger" (click)="onDelete(salesQue.id,salesQue.quotation_id)" *ngIf="salesQue.terminate =='0';else terminatedelete">Delete</button>
+                      <ng-template #terminatedelete>
+                        <button class="btn btn-danger"  [disabled] ="true">Delete</button>
+                      </ng-template>
+                    </td> 
+                    <ng-template #elseBlock1>
+                      <td><button class="btn btn-danger"  [disabled] ="true">Delete</button></td>
+                    </ng-template>
+
+                    <td *ngIf="salesQue.terminate =='0';else terminate"><button class="btn btn-danger" (click)="onTerminate(salesQue.id)">Terminate</button></td> 
+                    <ng-template #terminate>
+                      <td><button class="btn btn-danger"  [disabled] ="true">Terminate</button></td>
+                    </ng-template>
+                  </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,180 @@
+<section class="master_container">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+              <div class="button_row">
+                <ul>
+                  <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+                  <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+                </ul>   
+              </div>
+            </div>
+          </div>
+    </div>
+  </section>
+  <div class="progress_loader_box" *ngIf="status == false">
+      <div class="progress-loader" >
+        <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+      </div>
+    </div>
+        <!-- <form [formGroup]="acc_gen_ledger_master_form" (ngSubmit)="send()"> -->
+      <form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true"> 
+          <section class="master_container">
+              <div class="container-fluid">   
+       <div class="row">
+          <div class="col-lg-12">
+            <fieldset>
+               <legend>GA Ledger Master Info</legend>
+                 <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                     <div class="form-group">
+                         <label for="GA Ledger code">GA Ledger code</label>
+                         <input type="text" [(ngModel)]="model.galedger_code" formControlName="galedger_code" class="form-control" required>
+                         <!-- <small *ngIf="galedger_code.invalid" class="form-text text-danger">Validation mag</small> -->
+                     </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                     <div class="form-group">
+                       <label for="GA Ledger name">GA Ledger name</label>
+                       <input type="text" [(ngModel)]="model.galedger_name" formControlName="galedger_name" class="form-control" required>
+                         <!-- <small *ngIf="galedger_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                   </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="GA Ledger name">GA Ledger Alias Name</label>
+                      <input type="text" [(ngModel)]="model.galedger_alias" formControlName="galedger_alias" class="form-control" required>
+                      <!-- <small *ngIf="galedger_alias.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+                </div>
+                   
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                   <div class="form-group ht_59">
+                      <mat-label>ASubGroup Code</mat-label>
+                        <mat-select class="form-control ht_34" [(ngModel)]="model.asubgroup_code" formControlName="asubgroup_code" (selectionChange)="onchangeAcSubGroupName($event.value)" >
+                          <mat-option value="0">~Select ASubGroup Code~</mat-option>
+                          <mat-option *ngFor="let asubgroup_code of acSubGroupCodes" [value]="asubgroup_code.subgroupcode">{{asubgroup_code.subgroupcode}}</mat-option>
+                        </mat-select>
+                    </div>
+                </div>
+                  
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="ASubGroup Name">ASubGroup Name </label>
+                      <input type="text" [(ngModel)]="model.subgroupname" formControlName="subgroupname" class="form-control" [value]="subgroupname" required><!-- <small *ngIf="asubgroup_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                   </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <label for="Agroup Name">Agroup Name </label>
+                      <input type="text" [(ngModel)]="model.groupname"  formControlName="groupname" class="form-control" [value]="groupname" required>
+                   </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <mat-label>Business Unit Code</mat-label>
+                      <mat-select class="form-control" [(ngModel)]="model.businessunit_code" formControlName="businessunit_code" (selectionChange)="onchangeBUnitName($event.value)">
+                        <mat-option value="0">~Select Business Unit Code~</mat-option>
+                        <mat-option *ngFor="let businessunit_code of bUnitCodes" [value]="businessunit_code.businessunit_code">{{businessunit_code.businessunit_code}}</mat-option>
+                      </mat-select>
+                    </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                      <label for="Business Unit Name">Business Unit Name</label>
+                      <input [(ngModel)]="model.businessunit_name" type="text" formControlName="businessunit_name" class="form-control" [value]="businessunit_name" required>
+                      <!-- <small  *ngIf="businessunit_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+                </div> 
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Opening Balance Amount">Opening Balance Amount</label>
+                    <input [(ngModel)]="model.open_bal_amt" min="0" type="number" formControlName="open_bal_amt" class="form-control" required>
+                      <!-- <small *ngIf="open_bal_amt.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                    <label for="Current Balance Amount">Current Balance Amount</label>
+                    <input [(ngModel)]="model.curr_bal_amt" min="0" type="number" formControlName="curr_bal_amt" class="form-control" required>
+                      <!-- <small *ngIf="curr_bal_amt.invalid" class="form-text text-danger">Validation mag</small> -->
+                  </div>
+                </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                      <label for="Opening Balance Type">Opening Balance Type</label>
+                      <select [(ngModel)]="model.open_bal_type" formControlName="open_bal_type" class="form-control" required>
+                          <option value="null">-Select Opening Balance Type-</option>
+                          <option *ngFor="let open_bal_type of openblnceList" [value]="open_bal_type">{{open_bal_type}}</option>
+                      </select>
+                    </div>
+                </div>
+                <div class="clr"></div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-checkbox [(ngModel)]="model.galedger_active" formControlName="galedger_active">GA Ledger Active</mat-checkbox> 
+                        <!-- <input [(ngModel)]="acc_gen_ledger.galedger_active" class="checkbox checkbox-primary" type="checkbox" id="color-checkbox1"  formControlName="galedger_active"  required checked>
+                        <label class="check-label" for="color-checkbox1"> GA Ledger Active</label> -->
+                        <!-- <small *ngIf="galedger_active.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                  </div>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                        <mat-checkbox [(ngModel)]="model.inventory_val" formControlName="inventory_val">Inventory Value Affected</mat-checkbox> 
+                        <!-- <input [(ngModel)]="acc_gen_ledger.inventory_val" class="checkbox checkbox-primary" type="checkbox" id="color-checkbox1"  formControlName="inventory_val"  required checked>
+                        <label class="check-label" for="color-checkbox1"> Inventory Value Affected</label> -->
+                        <!-- <small *ngIf="inventory_val.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                          <mat-checkbox [(ngModel)]="model.cost_center_app" formControlName="cost_center_app">Inventory Value Affected</mat-checkbox> 
+                          <!-- <input [(ngModel)]="acc_gen_ledger.cost_center_app" class="checkbox checkbox-primary" type="checkbox" id="color-checkbox1"  formControlName="cost_center_app"  required checked>
+                        <label class="check-label" for="color-checkbox1"> Cost Center Applicable</label> -->
+                        <!-- <small *ngIf="cost_center_app.invalid" class="form-text text-danger">Validation mag</small> -->
+                        </div>
+                  </div>
+             
+                  <div class="col-lg-12">
+                      <div class="form-group">
+                         <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+                      </div>
+                  </div>
+             </fieldset>
+          </div>
+        </div>
+      </div>
+    </section>
+      </form>
+  
+
+   <!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+    <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+              <fieldset class="table_container">
+                <legend>GA Ledger Master List</legend>
+                <div class="table_content">
+                  <table class="table table-bordered">
+                      <thead>
+                          <tr>
+                              <th>GA Ledger name</th>
+                              <th>ASubGroup Name</th>
+                              <th>Inventory Value Affected</th>
+                          </tr>
+                      </thead>
+                    <tbody>
+                          <tr *ngFor="let model of listacc_gen_ledger">
+                              <td>{{model.galedger_name}}</td>
+                              <td>{{model.subgroupname}}</td>
+                              <td>{{model.inventory_val}}</td>
+                          </tr>
+                    </tbody>
+                  </table>
+                </div>
+             </fieldset>
+          </div>
+      </div>
+    </div>
+</div>

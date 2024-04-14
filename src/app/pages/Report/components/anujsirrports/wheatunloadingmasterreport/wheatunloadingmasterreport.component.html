@@ -1,0 +1,124 @@
+<form [formGroup]="userForm10">
+  <fieldset>
+      <legend>Purchase Order Anuj Sir Report</legend>
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>From Date</mat-label>
+                  <input type="date"  class="form-control"  formControlName="orderfromdate">
+              </div>
+          </div>
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>To Date</mat-label>
+                  <input type="date"  class="form-control"  formControlName="ordertodate">
+              </div>
+          </div>
+
+          <div class="col-lg-12" >
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary" (click)="searchPurOrder()" >Search</button>
+              </div>
+          </div>
+          <fieldset class="table_container">
+              
+              <div class="col-lg-12" style="float: right;">
+                  <div  class="form-group">
+                      <button mat-raised-button (click)="exportAsXLSX10()" color="primary" >Export To Excel</button>
+                  </div>
+
+              </div>
+
+          <div class="table_content">
+          <table class="table table-bordered" id="dynamictable10">
+              <thead>
+     
+                  <tr>
+                    <th>Pur Bill No</th>
+                    <th>Pur Order No</th>
+                    <th>Advice Number</th>
+                    <th>Party Name</th>
+                    <th>Vehicle No</th>
+                    <th>Gross Weight</th>
+                    <th>Net Weight</th>
+                    <th>Digital Weight</th>
+                    <th>Digital Weight1</th>
+                    <th>Weighment Date</th>
+                    <th>Adv Item Name</th>
+                    <th>Adv Packing Item Name</th>
+                    <th>Passed Packing Qty</th>
+                    <th>Passed Item Qty</th>
+                    <th>Unit Rate</th>
+                    <th>Price Based On</th>
+                    <th>Gross Amt</th>
+                    <th>Discount</th>
+                    <th>QC Deduction</th>
+                    <th>Dala Charges Driver</th>
+                    <th>UP Front Brokerage</th>
+                    <th>WB Truck Charges Driver</th>
+                    <th>Deduction From Supplier</th>
+                    <th>FREIGHT ADV</th>
+                    <th>MOISTURE</th>
+                    <th>DALA CHARGES</th>
+                    <th>UP BROKERAGE</th>
+                    <th>QUALITY CLAIM</th>
+                    <th>WB CHARGES</th>
+                    <th>OFFICE EXP</th>
+                    <th>HDPE BAG</th>
+                    <th>TDS 194Q</th>
+                    <th>FREIGHT ADVANCE</th>
+                    <th>Add Tax</th>
+                    <th>Add (+)</th>
+                    <th>Add (-)</th>
+                    <th>RoundOff Amt</th>
+                    <th>Payable Party</th>
+                    
+                  </tr>
+                </thead>
+                <tbody>
+                      <tr *ngFor="let item of pur_order_list">
+                        <td>{{item.pur_bill_no}}</td>
+                        <td>{{item.pur_order_no}}</td>
+                        <td>{{item.advicenumber}}</td>
+                        <td>{{item.partyname}}</td>
+                        <td>{{item.vehicleno}}</td>
+                        <td>{{item.grossweight}}</td>
+                        <td>{{item.netweight}}</td>
+                        <td>{{item.digital_weight}}</td>
+                        <td>{{item.digital_weight1}}</td>
+                        <td>{{item.weighmentdate}}</td>
+                        <td>{{item.adv_item_name}}</td>
+                        <td>{{item.adv_packing_item_name}}</td>
+                        <td>{{item.passed_packing_qty}}</td>
+                        <td>{{item.passed_item_qty}}</td>
+                        <td>{{item.unit_rate}}</td>
+                        <td>{{item.price_based_on}}</td>
+                        <td>{{item.gross_amt}}</td>
+                        <td>{{item.discount}}</td>
+                        <td>{{item.qc_deduction}}</td>
+                        <td>{{item.Dala_Charges_Driver}}</td>
+                        <td>{{item.UP_Front_Brokerage}}</td>
+                        <td>{{item.WB_Truck_Charges_Driver}}</td>
+                        <td>{{item.Deduction_From_Supplier}}</td>
+                        <td>{{item.FREIGHT_ADV}}</td>
+                        <td>{{item.MOISTURE}}</td>
+                        <td>{{item.DALA_CHARGES}}</td>
+                        <td>{{item.UP_BROKERAGE}}</td>
+                        <td>{{item.QUALITY_CLAIM}}</td>
+                        <td>{{item.WB_CHARGES}}</td>
+                        <td>{{item.OFFICE_EXP}}</td>
+                        <td>{{item.HDPE_BAG}}</td>
+                        <td>{{item.TDS_194Q}}</td>
+                        <td>{{item.FREIGHT_ADVANCE}}</td>
+                        <td>{{item.add_tax}}</td>
+                        <td>{{item.addplus}}</td>
+                        <td>{{item.addminus}}</td>
+                        <td>{{item.roundoff_amt}}</td>
+                        <td>{{item.payable_party}}</td>
+                      </tr>
+                </tbody>
+          </table>
+      </div>
+      
+      </fieldset>
+  </fieldset>
+</form>

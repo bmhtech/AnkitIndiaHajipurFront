@@ -1,0 +1,240 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <fieldset>
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          
+          <fieldset>
+            <legend>Granulation Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Date</mat-label>
+                <input  formControlName="date"  [(ngModel)]="currentDate" type="date" class="form-control">
+              </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit<span class="red">*</span></mat-label>
+                <mat-select class="form-control"  [(ngModel)]="BuUnit" formControlName="business_unit" (selectionChange)="getitemname($event.value)">
+                  <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Shift<span class="red">*</span></mat-label>
+                <mat-select formControlName="shift" class="form-control" >
+                  <mat-option value="0">Choosen an option</mat-option>
+                  <mat-option value="ShiftA">Shift A</mat-option>
+                  <mat-option value="ShiftB">Shift B</mat-option>
+              </mat-select>
+              </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Item Name<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats i_nam"  
+                  [options]="itemList"
+                  [display]="'item_name'"
+                  [value]="'item_id'"
+                  [multiple]='false'
+                  ngDefaultControl
+                  [selectedOptions]="selectedItemName"
+                  (selectionChange)="onchangeItemNamestock($event)"
+                  (selectionChange)="getSeivesname($event)"
+                  [formControlName] = "'itemid'">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+          </fieldset>
+            <fieldset>
+              <legend>Granulation Report Details</legend>
+
+                    <div class="col-lg-12">
+                      <div class="dyn_table_conent">
+                        
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3>Action</h3></label>
+                          <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                          <label class="label_col"><h3 class="i_nam">Seives<span class="red">*</span></h3></label>
+                          <label class="label_col"><h3>8</h3></label>
+                          <label class="label_col"><h3>9</h3></label>
+                          <label class="label_col"><h3>10</h3></label>
+                          <label class="label_col"><h3>11</h3></label>
+                          <label class="label_col"><h3>12</h3></label>
+                          <label class="label_col"><h3>1</h3></label>
+                          <label class="label_col"><h3>2</h3></label>
+                          <label class="label_col"><h3>3</h3></label>
+                          <label class="label_col"><h3>4</h3></label>
+                          <label class="label_col"><h3>5</h3></label>
+                          <label class="label_col"><h3>6</h3></label>
+                          <label class="label_col"><h3>7</h3></label>
+
+                        
+                        </div>
+                        <div class="dyn_table_data_cont" formArrayName="granulation_Dtls">
+                          <div class="dyn_table" *ngFor="let item of granulation_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete2(pointIndex)"></i></div>
+                            <div class="label_col"><input formControlName="slno" class="form-control srln" type="text" readonly/></div>
+                            <div class="label_col" >
+                              <mat-select-autocomplete class="form-control i_nam"  
+                                [options]="seivesList"
+                                [display]="'seives_name'"
+                                [value]="'seives_name'"
+                                [multiple]='false'
+                                ngDefaultControl
+                                [selectedOptions]="selectedSeivesName[pointIndex]"
+                                [formControlName] = "'seivesid'" disabled>
+                              </mat-select-autocomplete>
+                            </div>
+                            <div class="label_col"><input formControlName="eight" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="nine" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="ten" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="eleven" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="twelve" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="one" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="two" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="three" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="four" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="five" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="six" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="seven" class="form-control" type="text"/></div>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="btm_btn_content" hidden>
+                    <button type="button" class="btn btn-success"  (click)="addItems()">Add Row </button>
+                  </div>
+
+
+            </fieldset>
+
+            <fieldset>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Approved By</mat-label>
+                  <mat-select class="form-control" formControlName="approvedby">
+                    <mat-option *ngFor="let emplist of employeelist" [value]="emplist.emp_id">{{emplist.emp_name}}</mat-option>
+                  </mat-select>
+              </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Closed<span class="red">*</span></mat-label>
+                  <mat-select formControlName="closed"  [(ngModel)]="close" class="form-control" >
+                    <mat-option value="0">Choosen an option</mat-option>
+                    <mat-option value="NO">NO</mat-option>
+                    <mat-option value="YES">YES</mat-option>
+                </mat-select>
+                </div>
+              </div>
+           </fieldset>
+
+          <div class="col-lg-12" >
+            <div class="form-group">
+              <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="granulationsave">Submit</button>
+            </div>
+          </div>
+        </div>
+       </div>
+
+    </div>
+  </fieldset>
+  </section>
+</form>
+
+
+<div class="container-fluid" *ngIf="isHidden==false">
+
+  <form [formGroup]="userForm1">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="todate">
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()"  >Search</button>
+      </div>
+    </div>
+  </form> 
+
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Granulation Report List</legend>
+        <div class="table_content">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Bussiness Unit</th>
+                <th>item Name</th>
+                <th>Shift</th>
+                <th>Approved By</th>
+                <th>Closed</th>
+                <th colspan="4">Action</th>       
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let granulation of granulationlist">
+                    <td>{{granulation.date}}</td>
+                    <td>{{granulation.business_unitname}}</td>
+                    <td>{{granulation.item_name}}</td>
+                    <td>{{granulation.shift}}</td>
+                    <td>{{granulation.approvedby_name}}</td>
+                    <td>{{granulation.closed}}</td>
+                    <td><button class="btn btn-success" (click)="onUpdate(granulation.id, 'view')" >View</button></td>
+                    <td *ngIf="granulation.closed =='NO';else elseBlockclosed"><button class="btn btn-info" (click)="onUpdate(granulation.id, 'update')" >Update</button></td>  
+                    <ng-template #elseBlockclosed>
+                      <td><button class="btn btn-info" disabled >Update</button></td>  
+                    </ng-template>
+                    
+                    <td><button class="btn btn-danger" (click)="onDelete(granulation.id)" >Delete</button></td>
+                    <td><button class="btn btn-info" (click)="print(granulation.granulationreportid,granulation.date,granulation.business_unitname,granulation.item_name,granulation.shift,granulation.approvedby_name)" >Print</button></td>
+                  
+                  </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      </fieldset>
+    </div>
+  </div> 
+</div>

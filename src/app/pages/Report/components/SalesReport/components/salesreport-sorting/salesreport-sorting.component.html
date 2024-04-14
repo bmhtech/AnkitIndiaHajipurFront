@@ -1,0 +1,75 @@
+<div class="progress_loader_box" *ngIf="status == false">
+	<div class="progress-loader" >
+	  <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+	</div>
+  </div>
+
+  <form [formGroup]="userForm">
+	<section class="master_container">
+	  <div class="container-fluid">
+		<div class="row">
+		  <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+			<fieldset>
+			  <legend>Sales Report Sorting</legend>
+				
+			  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+				<div class="form-group">
+				  <mat-label>Report Type</mat-label>             
+					  <mat-select class="form-control" [(ngModel)]="model.reporttype" formControlName="reporttype" (selectionChange)="onChangeGroupReportType($event.value)">
+					   
+							<mat-option value="salesreport">Sales Report</mat-option>
+							<mat-option value="purchasereport">Purchase Report</mat-option>     
+							<mat-option value="weigmentreport">Weighment Report</mat-option>    
+					  </mat-select>
+				</div>
+			  </div>
+
+				<div class="col-lg-3 col-md-4 col-sm-6 col-12">
+					<div class="form-group">
+					<mat-label>Report Name</mat-label>
+				
+					<mat-select class="form-control" [(ngModel)]="model.reportname" formControlName="reportname" (selectionChange)="onChangeGroup($event.value)">
+					<mat-option *ngFor="let list of reportnamelist" [value]="list.id">{{list.reportname}}</mat-option>
+					</mat-select>
+					</div>
+				</div>
+			  
+				
+				<div style="text-align:center">
+					<app-custom-listbox [source]="source" [display]="display"  [key]="key" [(destination)]="target" height="350px"
+						(selectChange)="showMessage($event)" sourceName="Available Stations" targetName="Selected Stations"
+						[sort]="false" [compare]="compare"></app-custom-listbox>
+				</div>
+
+				<div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+					<div class="form-group">
+					 
+					  <input type="hidden" formControlName="static_report" [(ngModel)]="model.static_report" class="form-control" required />
+					</div>
+				  </div>
+
+				  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+					<div class="form-group">
+					 
+					  <input type="hidden" formControlName="sortNumber" [(ngModel)]="model.sortNumber" class="form-control" required />
+					</div>
+				  </div>
+
+			    <br/>
+			   <!----<button (click)="reloadPage()">Save</button> ------->
+					<div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+						<div class="form-group">
+						<button class="btn btn-info" (click)=" send()">Save</button>
+						</div>
+					</div>
+		   	</fieldset>
+		   </div>
+		</div>
+	  </div>
+	</section>
+
+
+</form>
+
+
+<!--<pre>{{message|json}}</pre>---->

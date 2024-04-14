@@ -1,0 +1,211 @@
+
+<section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="button_row">
+            <ul>
+              <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+              <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+            </ul>   
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+  <div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div> 
+  
+  <form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+    <section class="master_container">
+      <div class="container-fluid">   
+        <div class="row">
+          <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+            <fieldset>
+              <legend>Basic Information</legend>
+  
+                <div class="col-lg-2 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                    <mat-label>Date</mat-label>
+                    <input type="date" [(ngModel)]="currentDate" formControlName="date" class="form-control" (change)="onChangedate($event)">
+                    </div>
+                </div>
+              
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Business Unit<span class="red">*</span></mat-label>
+                      <mat-select class="form-control" [(ngModel)]="BuUnit"  formControlName="business_unit"   (selectionChange)="onChangeBuUnit($event.value)">
+                        <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Created By<span class="red">*</span></mat-label>
+                      <mat-select class="form-control" formControlName="createdby">
+                        <mat-option *ngFor="let emplist of employeelist" [value]="emplist.emp_id">{{emplist.emp_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                    <div class="form-group">
+                      <mat-label>Approved By</mat-label>
+                      <mat-select class="form-control" formControlName="approvedby">
+                        <mat-option *ngFor="let emplist of employeelist" [value]="emplist.emp_id">{{emplist.emp_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12">
+                    <div class="dyn_table_conent">
+                      <div class="dyn_table_header">
+                        <label class="label_col"><h3>Action</h3></label>
+                        <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                        <label class="label_col"><h3 class="i_nam">Item Name<span class="red">*</span></h3></label>
+                        <label class="label_col"><h3>O/Stock</h3></label>
+                        <label class="label_col"><h3>Production</h3></label>
+                        <label class="label_col"><h3>Conversion</h3></label>
+                        <label class="label_col"><h3>Sale</h3></label>
+                        <label class="label_col"><h3>C/Stock</h3></label>
+                      
+                      </div>
+                      <div class="dyn_table_data_cont" formArrayName="dailystockfinishgood_Dtls">
+                        <div class="dyn_table" *ngFor="let item of dailystockfinishgood_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                          <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                          <div class="label_col"><input formControlName="slno" class="form-control srln" type="text" readonly/></div>
+                          <div class="label_col">
+                            <mat-select-autocomplete class="form-control ats i_nam"  
+                            [options]="itemList"
+                            [display]="'item_name'"
+                            [value]="'item_id'"
+                            [multiple]='false'
+                            [selectedOptions]="selectedItemName[pointIndex]"
+                            (selectionChange)="onchangeItemName(pointIndex, $event)"
+                            ngDefaultControl
+                            [formControlName] = "'item_code'">
+                          </mat-select-autocomplete>
+                          </div>
+                          
+                          <div class="label_col"><input type="text"  formControlName="openingstock"   class="form-control"   (keyup)="calstock(pointIndex)"/></div>
+                          <div class="label_col"><input type="text"  formControlName="production"     class="form-control"   (keyup)="calstock(pointIndex)"></div>
+                          <div class="label_col"><input type="text"  formControlName="conversion"     class="form-control"   (keyup)="calstock(pointIndex)"/></div>
+                          <div class="label_col"><input type="text"  formControlName="sale"           class="form-control"   (keyup)="calstock(pointIndex)"/></div>
+                          <div class="label_col"><input type="text"  formControlName="closingstock"   class="form-control"    readonly></div>
+                       
+                       
+
+                        </div>
+                      </div>
+                   </div>
+                   <div class="btm_btn_content" >
+                    <button type="button" class="btn btn-success"  (click)="addItems()">Add Row </button>
+                  </div>
+                </div>
+                
+
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div class="form-group">
+                  <mat-label>Total Closing Stock</mat-label>
+                  <input type="text"  formControlName="grandtotal" class="form-control" >
+                  </div>
+              </div>
+                
+
+                  <div class="col-lg-12" >
+                    <div class="form-group">
+                      <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="dailyfinishedgoodsave">Submit</button>
+                    </div>
+                  </div>
+                  
+            </fieldset>
+          </div>
+         </div>
+      </div>
+    </section>
+  </form>
+  
+  
+  
+  
+   
+    <div class="container-fluid" *ngIf="isHidden==false">
+      
+      <form [formGroup]="userForm1">
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+          <div class="form-group">
+            <mat-label>From Date</mat-label>
+            <input type="date"  class="form-control"  formControlName="fromdate">
+          </div>
+        </div>
+    
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+          <div class="form-group">
+            <mat-label>To Date</mat-label>
+            <input type="date"  class="form-control"  formControlName="todate">
+          </div>
+        </div>
+       
+        <div class="col-lg-12" >
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="search()"  >Search</button>
+          </div>
+        </div>
+      </form> 
+
+     <div class="row">
+        <div class="col-lg-12">
+          <fieldset class="table_container">
+            <legend>Daily Stock Finish Goods List</legend>
+            <div class="table_content">
+              <table class="table table-bordered" >
+                <thead>
+                  <tr>
+                   
+                    <th>Date</th>
+                    <th colspan="4">Action</th>       
+                  </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let dailyreport of dailyreportlist">
+                        <td>{{dailyreport.date}}</td>
+                        <td><button class="btn btn-success" (click)="onUpdate(dailyreport.id, 'view')" >View</button></td>
+                        <td><button class="btn btn-info" (click)="onUpdate(dailyreport.id, 'update')" >Update</button></td>  
+                        <td><button class="btn btn-danger" (click)="onDelete(dailyreport.id)" >Delete</button></td>
+                        <td><button class="btn btn-info" (click)="print(dailyreport.id,dailyreport.dailystockid,dailyreport.date)" >Print</button></td>
+                      
+                      </tr>
+                </tbody>
+              </table>
+             
+            </div>
+          </fieldset>
+        </div>
+      
+      <!-- <div  class="col-lg-12">
+        <div class="form-group">
+            <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+         </div>
+     </div> -->
+      </div>
+       
+    </div>
+
+  
+  
+  
+                  
+  
+  
+                 
+                    
+  
+                    
+                    
+  
+  
+  

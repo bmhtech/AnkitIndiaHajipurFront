@@ -1,0 +1,43 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Item List</legend>
+            <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                <label class="label_col"><h3>Select</h3></label>
+                <label class="label_col"><h3>Item Name</h3></label>
+
+               
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="itemModalPopUp">
+                  <div class="dyn_table" *ngFor="let item of itemModalPopUp.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><mat-checkbox class="form-control" formControlName="checkbox" ></mat-checkbox></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="item_name" /></div>  
+                    <div class="label_col" style="display: none;" ><input class="form-control" type="text" formControlName="item_id" /></div> 
+                   
+                  </div>
+                </div>  
+              </div>
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <mat-dialog-actions align="end">
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+        </mat-dialog-actions>
+  </form>
+</div>
+  
+  
+  
+  

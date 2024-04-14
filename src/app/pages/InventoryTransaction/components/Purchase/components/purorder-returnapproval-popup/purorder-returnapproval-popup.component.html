@@ -1,0 +1,255 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm">
+    <div class="row">
+      <div class="col-lg-8 col-md-12 col-sm-12 col-12 col-lg-offset-2">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Document List</legend>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="table_content">
+                <table class="table table-bordered">
+                  <thead>
+                    <tr>
+                      <th style="width: 50px;">&nbsp;</th>
+                      <th>Sl No.</th>
+                      <th>Order No</th>
+                      <th>Order Date</th>
+                      <th>Party Name</th>
+                    </tr>  
+                  </thead>
+                  <tbody>
+                    <tr *ngFor="let i of PurOrderList; let poinIndex = index">
+                      
+                      <td *ngIf="showbutton;else elseBlockupdate">
+                        <mat-radio-button (change)="check1(i)"></mat-radio-button></td>
+                      <ng-template #elseBlockupdate>
+                            <td >
+                              <mat-radio-button [checked] ="true" [disabled]="true"></mat-radio-button>
+                            </td>
+                        </ng-template>
+
+                      <td>{{poinIndex+1}}</td>
+                      <td>{{i.pur_order_no}}</td>
+                      <td>{{i.ord_date}}</td>
+                      <td *ngIf="showbutton;else elseBlockcustomername">
+                         {{i.supplier}}
+                      </td>
+                      <ng-template #elseBlockcustomername>
+                        <td >
+                          {{i.supplier}}
+                        </td>
+                    </ng-template>
+
+
+                    </tr>
+                  </tbody>
+                </table>
+              </div>
+            </div>           
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <div class="col-lg-8 col-md-12 col-sm-12 col-12 col-lg-offset-2">
+        <mat-dialog-content class="mat-typography">
+            <fieldset>
+               <legend>GRN List</legend>
+                 <div class="dyn_table_conent">
+                       <div class="dyn_table_header" style="padding-left: 11%!important;">
+                       
+                              <label class="label_col "><h3>Select</h3></label>
+                              <label class="label_col"><h3 class="i_nam">GRN No</h3></label>
+                              <label class="label_col"><h3 >GRN Date</h3></label>
+
+                        </div>
+                        <div class="dyn_table_data_cont" formArrayName="grn" style="padding-left: 11%!important;">
+                            <div class="dyn_table" *ngFor="let gr of grn.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                                  
+                              <div *ngIf="showbutton;else elseBlockupdate12" class="label_col srln"><mat-checkbox class="form-control " formControlName="checkbox" (change)="checkgrn(pointIndex);"></mat-checkbox></div>
+                                
+                              <ng-template #elseBlockupdate12>
+                                <div class="label_col" ><mat-checkbox class="form-control" formControlName="checkbox"></mat-checkbox></div>
+                              </ng-template>
+                  
+                        
+                                <div class="label_col">
+                                          <input class="form-control i_nam" readonly type="text" formControlName="grn_no"/>
+                                            <input class="form-control" readonly type="text" formControlName="grn_id" />
+                                </div>  
+                                <div class="label_col"><input type="text" class="form-control" readonly formControlName="grn_date"/></div>
+
+                            </div>
+
+                        </div>
+                  </div>
+
+                  <!-- <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th style="width: 50px;">&nbsp;</th>
+                        <th>Sl No.</th>
+                        <th>GRN No</th>
+                        <th>GRN Date</th>
+                       
+                      </tr>  
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let v of GrnList; let poinIndex = index">
+                        
+                        <td *ngIf="showbutton;else elseBlockupdate23">
+                          <mat-radio-button (change)="checkgrn(v)"></mat-radio-button></td>
+                        <ng-template #elseBlockupdate23>
+                              <td >
+                                <mat-radio-button [checked] ="true" [disabled]="true"></mat-radio-button>
+                              </td>
+                          </ng-template>
+  
+                        <td>{{poinIndex+1}}</td>
+                        <td>{{i.grn_no}}</td>
+                        <td>{{i.grn_date}}</td>
+                      </tr>
+                    </tbody>
+                  </table> -->
+            </fieldset>
+        </mat-dialog-content>
+      </div>
+
+
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Document List</legend>
+            
+
+            <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Select</h3></label>
+                  <label class="label_col"><h3 class="i_nam">Adv Item Name</h3></label>
+                  <label class="label_col"><h3>HSN Code</h3></label>
+                  <label class="label_col"><h3 class="i_nam">Adv Packing Item</h3></label>
+                  <label class="label_col"><h3>Adv Packing Qty</h3></label>
+                  <label class="label_col"><h3>Adv Packing Uom</h3></label>
+                  <label class="label_col"><h3>Adv Item Qty</h3></label>
+                 
+                  <label class="label_col"><h3>Adv Mat Wt</h3></label>
+                  <label class="label_col"><h3>Adv Item Uom</h3></label>
+                  <label class="label_col"><h3>Rcv Packing Qty</h3></label>
+                  <label class="label_col"><h3>Rcv Packing Uom</h3></label>
+                  <label class="label_col"><h3>Rcv Item Qty</h3></label>
+                  <label class="label_col"><h3>Rcv Mat Wt</h3></label>
+                  <label class="label_col"><h3>Rcv Item Uom</h3></label>
+                  <label class="label_col"><h3>Pssd Packing Qty</h3></label>
+                  <label class="label_col"><h3>Pssd Packing Uom</h3></label>
+                  <label class="label_col"><h3>Pssd Item Qty</h3></label>
+                  <label class="label_col"><h3>Pssd Mat Wt</h3></label>
+                  <label class="label_col"><h3>Pssd Item Uom</h3></label>
+                  <label class="label_col"><h3>Conversion <br>Factor</h3></label>
+                  <label class="label_col"><h3>Unit Rate</h3></label>
+                  <label class="label_col"><h3>Price Based On</h3></label>
+                  <label class="label_col"><h3>Amount</h3></label>
+                  <label class="label_col"><h3>Disocunt</h3></label>
+                  <label class="label_col"><h3>Discount Based On</h3></label>
+                  <label class="label_col"><h3>Disocunt Amount</h3></label>
+                  <label class="label_col"><h3>Net Amount</h3></label>
+                  <label class="label_col"><h3>Qc Deduction</h3></label>
+                  <label class="label_col"><h3>Net Amt After Qc</h3></label>
+                  <label class="label_col"><h3>Tax Code</h3></label>
+                  <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                  <label class="label_col"><h3>Tax Amount</h3></label>
+                  <label class="label_col"><h3>Gross Amount</h3></label>
+                  <label class="label_col"><h3>Qc Norms</h3></label>
+                  <label class="label_col"><h3>WearHouse Name</h3></label>
+                  <label class="label_col"><h3>Stack / Rack No</h3> </label>
+                  <label class="label_col"><h3>Stack Uom</h3> </label>
+                  <label class="label_col"><h3>Stack Qty</h3> </label>
+                  <!-- --------hidden---------- -->
+                  <label class="label_col" style="display: none;"><h3>Item code</h3></label>
+                  <label class="label_col" style="display: none;"><h3>Packing</h3></label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="pur_Order_Item_Details">
+                  <div class="dyn_table" *ngFor="let item of pur_Order_Item_Details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <!-- <div class="label_col"><mat-checkbox class="form-control srln" formControlName="checkbox"></mat-checkbox></div> -->
+                  
+                  <div class="label_col" *ngIf="showbutton;else elseBlockupdatedynamic"><mat-checkbox class="form-control srln" style="width: 53px;" formControlName="checkbox"></mat-checkbox></div>
+                  
+                    <ng-template #elseBlockupdatedynamic>
+                            <div class="label_col" ><mat-checkbox class="form-control srln" style="width: 53px;" formControlName="checkbox"></mat-checkbox></div>
+                    </ng-template>
+                  
+     
+                    <div class="label_col"><input class="form-control i_nam" [readonly]="editable" type="text" formControlName="adv_item_name"/></div>  
+                    <div class="label_col"><input class="form-control"       [readonly]="editable" type="text" formControlName="hsn_code" /></div>
+                    <div class="label_col"><input class="form-control i_nam" [readonly]="editable" type="text" formControlName="adv_packing_name"/></div>
+
+                    <div class="label_col"><input class="form-control"       [readonly]="editable" type="number" formControlName="adv_pack_qty" /></div>
+                    <div class="label_col"><input class="form-control"       [readonly]="editable" type="text"   formControlName="adv_pack_uom" readonly/></div>                     
+                    <div class="label_col"><input class="form-control"       [readonly]="editable" type="number" formControlName="adv_item_qty" /></div>
+
+                    <div class="label_col"><input class="form-control" formControlName="adv_mat_wt" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="adv_item_uom" readonly/></div>
+                    
+                    <div class="label_col"><input class="form-control" type="number" min="0" formControlName="rcv_pack_qty" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="rcv_pack_uom" readonly/></div>                     
+                    <div class="label_col"><input class="form-control" type="number" formControlName="rcv_item_qty" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="rcv_mat_wt" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="rcv_item_uom" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" min="0" formControlName="pssd_pack_qty" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="pssd_pack_uom" readonly/></div>                     
+                    <div class="label_col"><input class="form-control" type="number" formControlName="pssd_item_qty" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="pssd_mat_wt" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="pssd_item_uom" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="con_factor" type="number" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" min="0" formControlName="unit_rate" readonly/></div>
+
+                    <div class="label_col"><input class="form-control" type="text"  formControlName="price_based_on" readonly/></div>  
+
+                    <div class="label_col"><input class="form-control" type="number" min="0" formControlName="amount" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="discount" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text"  formControlName="discount_based_on" readonly/></div>  
+
+                    <div class="label_col"><input class="form-control" type="number" formControlName="discount_amt" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="net_amt" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="qc_deduction" /></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="net_amt_after_qc" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="tax_code" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="tax_rate" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="tax_amt" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="gross_amt" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="text" formControlName="qc_norms" /><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp2(pointIndex)" aria-hidden="true"></i></div>
+                  
+                    <div class="label_col"><input class="form-control" type="number" formControlName="warehouse_name" readonly/></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="rack" readonly/></div>
+
+                    <div class="label_col"><input class="form-control" type="text" formControlName="stack_uom" /></div>
+                    <div class="label_col"><input class="form-control" type="number" formControlName="stack_qty" /></div>
+                    
+                    <div class="label_col"><input class="form-control" [readonly]="editable" type="text" formControlName="adv_item_code"/></div>  
+                    <div class="label_col"><input class="form-control" [readonly]="editable" type="text" formControlName="adv_packing" /></div>
+                    <div class="label_col"  ><input formControlName="grn_id" type="hidden" class="form-control"   /></div>
+                        
+
+                </div>
+                </div>  
+              </div>
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <mat-dialog-actions align="end" *ngIf="showbutton">
+          <!-- <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button> -->
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()">Submit</button>
+        </mat-dialog-actions>
+
+  </form>
+</div>
+  
+  
+  
+  

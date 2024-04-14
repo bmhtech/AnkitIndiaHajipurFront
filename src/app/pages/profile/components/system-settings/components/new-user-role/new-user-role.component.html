@@ -1,0 +1,514 @@
+<form [formGroup]="userForm">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <fieldset>
+          <legend>Role Access</legend>
+
+          <div class="col-lg-3 col-md-3 col-12">
+            <div class="form-group"> 
+              <mat-label>User Role</mat-label>
+              <input type="text" formControlName="user_role" [(ngModel)]="model.user_role" class="form-control">
+            </div>
+          </div>
+          
+            <div class="col-lg-3 col-md-3 col-12">
+              <div class="form-group"> 
+              <mat-label>Approval</mat-label>
+              <mat-select formControlName="parent_role_id" [(ngModel)]="model.parent_role_id" class="form-control" >
+                <mat-option *ngFor="let Roles of RoleList" [value]="Roles.role_id">{{Roles.name}}
+                </mat-option>
+              </mat-select> 
+            </div>
+            </div>
+            </fieldset>
+            <fieldset>
+                <legend>Master</legend>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Item master</u></b></mat-label>  
+                          <mat-tree [dataSource]="dataSource" [treeControl]="treeControl" class="example-tree">                       
+                              <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                                <li class="mat-tree-node">
+                                  <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                                </li>
+                              </mat-tree-node>                    
+                              <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                                <li>
+                                  <div class="mat-tree-node">
+                                    <button mat-icon-button matTreeNodeToggle
+                                            [attr.aria-label]="'toggle ' + node.name">
+                                      <mat-icon class="mat-icon-rtl-mirror">
+                                        {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                      </mat-icon>
+                                    </button>
+                                        <mat-checkbox [checked]="node.selected"
+                                              [indeterminate]="node.indeterminate && !node.selected"
+                                              (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                  </div>
+                                  <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                    <ng-container matTreeNodeOutlet></ng-container>
+                                  </ul>
+                                </li>
+                              </mat-nested-tree-node>
+                            </mat-tree>
+                    </div>
+
+                  </div>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Supplier Master</u></b></mat-label>             
+                        
+                          <mat-tree [dataSource]="dataSource2" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Customer Master</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource3" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Broker Master</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource4" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-6 col-md-6 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Other Partner Master</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource5" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Others Master</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource6" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Mislenious Master</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource7" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+            </fieldset>
+            <fieldset>
+                <legend>Inventory Transaction</legend>
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Purchase Inventory</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource8" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Weighment</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource9" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Sales Transaction</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource10" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Production Module</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource11" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Stock Transfer</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource12" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Store Transaction</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource15" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Gate Pass</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource13" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+            </fieldset>
+            <fieldset>
+              <legend>Report Management</legend>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12">            
+                    <div class="form-group">
+                      <mat-label><b><u>Sales/Purchase Report</u></b></mat-label> 
+                          <mat-tree [dataSource]="dataSource14" [treeControl]="treeControl" class="example-tree">                       
+                            <mat-tree-node *matTreeNodeDef="let node" matTreeNodeToggle>
+                              <li class="mat-tree-node">
+                                <mat-checkbox class="checklist-leaf-node"  (change)="itemToggle($event.checked,node)" [checked]="node.selected">{{node.name}}</mat-checkbox>
+                              </li>
+                            </mat-tree-node>                    
+                            <mat-nested-tree-node *matTreeNodeDef="let node; when: hasChild">
+                              <li>
+                                <div class="mat-tree-node">
+                                  <button mat-icon-button matTreeNodeToggle
+                                          [attr.aria-label]="'toggle ' + node.name">
+                                    <mat-icon class="mat-icon-rtl-mirror">
+                                      {{treeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                                    </mat-icon>
+                                  </button>
+                                      <mat-checkbox [checked]="node.selected"
+                                            [indeterminate]="node.indeterminate && !node.selected"
+                                            (change)="itemToggle($event.checked,node)">{{node.name}}</mat-checkbox>
+                                </div>
+                                <ul [class.example-tree-invisible]="!treeControl.isExpanded(node)">
+                                  <ng-container matTreeNodeOutlet></ng-container>
+                                </ul>
+                              </li>
+                            </mat-nested-tree-node>
+                          </mat-tree>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-12">
+                    <div class="form-group">
+                      <button type="submit" (click)="submit()" class="btn btn-info">Submit</button>
+                    </div>
+                  </div>
+                  
+          </fieldset>
+          </div>
+          </div>
+          </div>
+          </section>
+          </form>
+          

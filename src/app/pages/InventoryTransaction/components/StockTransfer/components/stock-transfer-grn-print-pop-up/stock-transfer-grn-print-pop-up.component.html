@@ -1,0 +1,222 @@
+<div class="container-fluid modal_box">
+  <div class="row">
+    <mat-dialog-content class="mat-typography">
+      <div class="modal_main_content">
+        <div id="print-section" class="print ">
+        <div class="container-fluid">
+          <div class="main_content inv">
+            <div class="section1">
+              <div class="main_header">
+              <div class="top_div">
+                   <!-- <table class="table">
+                    <tbody>
+                      <tr>
+                        <td style="width: 70%;">GSTIN : 19AADCA25181H12V &nbsp; </td>
+                        <td style="width: 30%;">Phone : 2287-4064/2287-1538</td>
+                      </tr>
+                      <tr>
+                        <td style="width: 70%;">PAN : AADCA251EH &nbsp;</td>
+                        <td style="width: 30%;">FAX : 2281-8269<br></td>
+                        
+                      </tr>
+                    </tbody>
+                  </table>-->
+                </div>
+
+
+                
+                <h1 class="uc">Ankit India Limited ({{rec_b_unit}})</h1>
+                <div class="top_h4">(CIN No : L15500WB1981PLC033900)<br>
+                  14A, 5th floor, FMC FORTUNA<br>
+                  234/3A A.J.C Bose Road, Kolkata 700020</div>
+                <h1 class="uc">STOCK TRANSFER GOODS RECEIPT NOTE</h1>
+              </div>
+              <div class="box_table">
+                <div class="bxx-top">
+                  <table class="table table_top table-bordered">
+                    <tbody>
+                      <tr>
+                        <!--<td style="width: 50%; vertical-align: top;" class="brdr_right">-->
+                          <td style="width: 50%;" class="brdr_right">
+                          <!--<div class="form-control" style="min-height: 110px; border: 1px solid #ccc; border-radius: 4px;">
+  
+                            <input type="image" [src]="imageURL12" class="imageContainer" style="height:106px;width: 175px;" >  
+                          </div>-->
+                          <table style="width: 100%;" class="uc">
+                            <tr>
+                              <td>Supplier: </td>
+                              <td>{{Supplier}}</td>
+                             <!-- <td>Date:</td>
+                              <td>{{currentDate}}</td>  -->
+                            </tr>
+                            <tr>
+                              <td>Address: </td>
+                              <td colspan="3">{{partyaddress}}</td>
+                              <!--<td>&nbsp;</td>
+                              <td>&nbsp;</td>-->
+                            </tr>
+                            <tr>
+                              <!--<td>Broker: </td>
+                              <td colspan="3">{{brokername}}</td>
+                              <td>&nbsp;</td>
+                              <td>&nbsp;</td>-->
+                            </tr>
+                            <tr>
+                               <td>Stock Order: </td>
+                              <td><b>{{stockNo}}</b></td>
+                              <td>Date:</td>
+                              <td>{{orddate}}</td>
+                            </tr>
+                           
+                          </table>
+                        </td>
+
+                        <td style="width: 50%;" class="comp_adrs">
+                          <table style="width: 100%;" class="uc">
+                            <tr>
+                              <td>GRN No: </td>
+                              <td>{{grnno}}</td>
+                              <td>Dated:</td>
+                              <td>{{grndate}}</td>
+                            </tr>
+                            <tr>
+                              <td>Truck No: </td>
+                              <td colspan="3">{{truck_no}}</td>
+                              <!--<td>&nbsp;</td>
+                              <td>&nbsp;</td>-->
+                            </tr>
+                            <!-- <tr>
+                              <td>Party Doc No: </td>
+                              <td>{{doc_no}}</td>
+                              <td>Date:</td>
+                              <td>{{doc_date}}</td>
+                            </tr>
+                            <tr>
+                              <td>ADVICE FRT: </td>
+                              <td>{{adviceFrt}}</td>
+                              <td>PAID:</td>
+                              <td>{{billamt}}</td>
+                            </tr> -->
+                            
+                           
+                          </table>
+                        </td>
+                     </tr>
+                     
+                    </tbody>
+                  </table>
+                  <br/>
+                  <div class="bxx">
+                    <table class="table table-bordered" style="padding: 5px;text-align: center;">
+                      <thead>
+                        <tr>
+                          <!-- <th scope="col" style="width: 6%">SL.</th> -->
+                          <th scope="col" style="width: 15%;">Particular</th>
+                          <th scope="col" style="width: 15%;">Packing Type</th>
+                          <th scope="col" style="width: 5%;">Supply Bags</th>
+                          <th scope="col" style="width: 5%;">Supply Weight</th>
+                          <th scope="col" style="width: 5%;">Actual Bags</th>
+                          <th scope="col" style="width: 5%;">Actual Weight</th>
+                          <th scope="col" style="width: 5%;">Passed Bags</th>
+                          <th scope="col" style="width: 5%;">Passed Weight</th>
+                          <th scope="col" style="width: 10%;">Rate/Qtl</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        <tr  *ngFor="let i of itemDetails; let poinIndex = index">
+                          <!-- <td>{{poinIndex+1}}</td> -->
+                          <td>{{i.adv_item_name}}</td>
+                          <td>{{i.adv_packing_name}}</td>
+                          <td>{{i.adv_pack_qty}}</td>
+                          <td>{{i.adv_item_qty}}</td>
+                          <td>{{i.rcv_pack_qty}}</td>
+                          <td>{{i.rcv_item_qty}}</td>
+                          <td>{{i.pssd_pack_qty}}</td>
+                          <!-- <ng-template [ngIf] = "i.price_based_on=='With Packing'">  -->
+                          <td>{{i.pssd_item_qty}}</td>
+                        <!--</ng-template>
+                         <ng-template [ngIf] = "i.price_based_on=='Without Packing'">  
+                          <td>{{i.pssd_mat_wt}}</td>
+                         </ng-template> -->
+                          <td >{{i.unit_rate}}</td>
+                        </tr>
+                                              
+                      </tbody>
+                    </table>
+  
+                  </div>
+                  <br/>
+                  <div class="bxx">
+                    <table class="table table-bordered" style="padding: 5px;text-align: center;">
+                    <tr>
+                      <th>Weightment Status </th>
+                      <th>WeightMent Name</th>
+                      <th>Slip</th>
+                      <th>Tr Weight</th>
+                      <th>Gross Weight</th>
+                      <th>Net Weight</th>
+                      <th>Material Weight</th>
+                    </tr>
+                    <tr>
+                      <td>OWN</td>
+                      <td>{{ownBridge}}</td>
+                      <td>{{ownSlip}}</td>
+                      <td>{{ownTare}}</td>
+                      <td>{{ownGross}}</td>
+                      <td>{{ownNet}}</td>
+                      <td>{{Own_recieve}}</td>
+                     
+                    </tr>
+                    <tr>
+                      <td>PARTY</td>
+                      <td>{{partyBridge}}</td>
+                      <td>{{partySlip}}</td>
+                      <td>{{partyTare}}</td>
+                      <td>{{partyGross}}</td>
+                      <td>{{partyNet}}</td>
+                      <td>{{Part_recieve}}</td>
+                    </tr>
+                    
+                   
+                  </table>
+                  </div>
+                  <div>
+                    <ul>
+                      <li><b>INSPECTION REPORT:</b></li>
+
+                    </ul>
+
+                  </div>
+                  <br/><br/>
+                 
+                  <div class="bxx-toppest">
+                    <ul>
+                      <li>Inspection</li>
+                      <li>Store Incharge</li>
+                      <li>Authorised Signatory</li>
+                      
+                    </ul>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        </div>
+      </div>
+    </mat-dialog-content>
+    <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+   <!-- printing -->
+    <!-- <mat-dialog-actions align="end">
+      <button [useExistingCss]="true" printSectionId="print-section" ngxPrint>print</button>
+    </mat-dialog-actions> -->
+
+  </div>
+</div>
+
+
+
+
+
+
+

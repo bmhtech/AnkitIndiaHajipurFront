@@ -1,0 +1,145 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+   
+<form [formGroup]="userForm" *ngIf="isHidden==true"> 
+  <section class="master_container">
+    <div class="container-fluid"> 
+      <div class="row">
+        <div class="col-lg-12">   
+          <fieldset>
+            <legend>Acc Norms Master</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="ANM code">ANM Code</label>
+                <input  type="text" [(ngModel)]="model.anm_code" formControlName="anm_code" class="form-control" >
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="ANM Description">ANM Description</label>
+                <input [(ngModel)]="model.anm_description" type="text" formControlName="anm_description" class="form-control" >
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="ANM Remarks">ANM Remarks</label>
+                <input [(ngModel)]="model.anm_remarks" type="text" formControlName="anm_remarks" class="form-control" >
+              </div>
+            </div>
+                   
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Business Unit Code">Business Unit Code</label>
+                <input type="text" [(ngModel)]="model.businessunit_code"  formControlName="businessunit_code" class="form-control" >
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Business Unit Name">Business Unit Name</label>
+                <input [(ngModel)]="model.businessunit_name" type="text" formControlName="businessunit_name" class="form-control" >
+              </div>
+            </div>
+                  
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group chk_tp_pad">
+                <mat-checkbox  [(ngModel)]="model.anm_active" formControlName="anm_active">ANM Active</mat-checkbox> 
+              </div>
+            </div>
+                
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <div class="dyn_table_conent" style="padding: 10px;">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3>Action</h3></label>
+                  <label class="label_col"><h3>ANM Parameter</h3></label>
+                  <label class="label_col"><h3 class="wdt_130">Calculation Basis</h3></label>
+                  <label class="label_col"><h3>Basis Amount uom</h3></label>
+                  <label class="label_col"><h3>ANM Min</h3></label>
+                  <label class="label_col"><h3>ANM Max</h3></label>
+                </div>
+              <div  class="dyn_table_data_cont" formArrayName="acc_acceptance_norms_master_dts">
+                <div class="dyn_table" *ngFor="let item of acc_acceptance_norms_master_dts.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                  <div class="label_col"><input class="form-control" type="number" min="0" formControlName="anm_parameter"  /></div>
+                  <div class="label_col"><input class="form-control wdt_form_130" type="number" min="0" formControlName="calculation_basis"  /></div>
+                  <div class="label_col"><input class="form-control" type="number" min="0" formControlName="basis_amt_uom"  /></div>
+                  <div class="label_col"><input class="form-control" type="number" min="0" formControlName="anm_min"  /></div>
+                  <div class="label_col"><input class="form-control" type="number" min="0" formControlName="anm_max"  /></div>
+                </div>
+              </div>
+                        
+              <div class="btm_btn_content">
+                <button type="button" class="btn btn-success"  (click)="add()">Add</button>
+                <div class="clr"></div>
+               </div>
+
+               
+              </div>
+            </div>     
+          </fieldset>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-lg-12">
+            <div class="form-group">
+              <button type="submit" (click)="send()" class="btn btn-primary">Submit</button>
+            </div>
+          </div>
+        </div>
+      </div>
+   
+  </section> 
+</form>
+
+  <!-- list -->
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Acceptance Norms Master List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Description</th>
+                  <th>Remarks</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let Acc_acceptance_norms of listAcc_acceptance_norms">
+                  <td>{{Acc_acceptance_norms.anm_code}}</td>
+                  <td>{{Acc_acceptance_norms.anm_description}}</td>
+                  <td>{{Acc_acceptance_norms.anm_remarks}}</td>  
+                  <td><button class="btn btn-info" (click)="onUpdate(Acc_acceptance_norms.id,Acc_acceptance_norms.anm_id)">Update</button></td>                 
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

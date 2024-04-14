@@ -1,0 +1,62 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Unload Advice Item List</legend>
+            <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col"><h3 class="srln">Srl No</h3></label>
+                  <label class="label_col"><h3  class="i_nam">Item Name</h3></label>
+                  <label class="label_col "><h3 class="i_nam">Packing Item</h3></label>
+                  <label class="label_col"><h3>Packing Quantity</h3></label>
+                  <label class="label_col"><h3>Packing Uom</h3></label>
+                  <label class="label_col"><h3>Item Quantity</h3></label>
+                  <label class="label_col"><h3>Item Uom</h3></label>
+                  <label class="label_col"><h3>Mat.Wt</h3></label>
+                  <label class="label_col"><h3 class="i_nam">Warehouse</h3></label>
+                  <label class="label_col"><h3 class="i_nam">Stack / Rack</h3></label>
+                  <label class="label_col"><h3>Base Quantity</h3></label>
+                  <label class="label_col"><h3>Advice No</h3></label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="Wm_unload_advice_item_dtls">
+                  <div class="dyn_table" *ngFor="let item of Wm_unload_advice_item_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                    <div class="label_col"><input class="form-control srln" formControlName="sl_no" type="number" name="srl no" readonly/></div>
+                    <div class="label_col"><input class="form-control i_nam" formControlName="item_name" type="text" readonly/></div>
+                    <div class="label_col"><input type="text" class="form-control i_nam" formControlName="packing_name"  readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="s_qty" type="number" name="S.Qty" readonly/></div>
+                    <div class="label_col"><input type="text" class="form-control" formControlName="s_uom" name="s.uom" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="quantity" type="text" name="quantity" /></div>
+                    <div class="label_col"><input type="text" class="form-control" formControlName="uom" name="uom" readonly/></div>
+                    <div class="label_col"><input class="form-control" formControlName="mat_wt" type="number" name="mat-wt" readonly/></div>
+                    <div class="label_col"><mat-select class="form-control i_nam" formControlName="wearhouse" [disabled]="true"><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.warehouse_code">{{warehouse.warehouse_name}}</mat-option></mat-select></div>
+                    <div class="label_col"><mat-select type="text" formControlName="rack" class="form-control i_nam" [disabled]="true">
+                      <mat-option value = "0">-Select-</mat-option>
+                      <mat-option *ngFor="let stack of stackList[pointIndex]" [value]="stack.bin_code">{{stack.bin_description}}</mat-option>
+                    </mat-select></div>
+                    <div class="label_col"><input class="form-control" formControlName="base_qty" type="number" name="base qty" readonly/></div>
+                    <div class="label_col"><input type="text" formControlName="unadviceno" class="form-control" readonly/></div>
+                  </div>
+                </div>  
+              </div>
+            
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    </div>
+      <mat-dialog-actions align="end">
+          <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Close</button>
+        </mat-dialog-actions>
+  </form>
+</div>
+  
+  
+  
+  

@@ -1,0 +1,446 @@
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+<form [formGroup]="userForm">
+  <fieldset>
+      <legend>Transaction  Report</legend>
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>From Date</mat-label>
+                  <input type="date"  class="form-control"  formControlName="fromdate">
+              </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                  <mat-label>To Date</mat-label>
+                  <input type="date"  class="form-control"  formControlName="todate">
+              </div>
+          </div>
+
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group ht_59">
+                <mat-label>Catagory<span class="red">*</span></mat-label>
+                <mat-select formControlName="reportcatagory" class="form-control" >
+                <mat-option value="Saleinvoice">Sale Invoice</mat-option>
+                <mat-option value="Purchasebill">Purchase Bill</mat-option> 
+                <mat-option value="CreditNote">Credit Note</mat-option>
+                </mat-select>
+            </div>
+          </div>
+
+          <div class="col-lg-12" >
+              <div class="form-group">
+                  <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
+              </div>
+          </div>
+        
+
+          <!-- <div class="master_container_box" >
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-lg-12">
+                  <fieldset class="table_container">
+                    <legend> Report List</legend>
+                    <div class="table_content">
+                      <table class="table table-bordered" id="dynamictable">
+                        <thead>
+                          <tr>
+                         
+                           <th *ngFor="let flist of headers" >
+                              {{flist}}
+                          </th>
+                         
+                            
+                            
+                          </tr>
+                        </thead>
+                        <tbody>
+                          
+                          <tr *ngFor="let dlist of rows">
+                            <td *ngFor="let list of headers;">
+                                {{dlist[list]}}
+                            </td>
+                          
+                              
+                          </tr>
+                          <tr>
+                            <td>
+                              
+                            </td>
+                          
+                        </tr>
+                        </tbody>
+                      </table>
+                    </div>
+          
+                    <div  class="col-lg-12">
+                       <div class="form-group">
+                           <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+                        </div>
+                    </div>
+          
+                  </fieldset>
+                </div>
+              </div>
+            </div>
+          </div> -->
+
+          <div class="container-fluid" *ngIf="Saleinvoice">
+            <div class="row">
+              <div class="col-lg-12">
+                <fieldset class="table_container">
+                  <legend>Sales Invoice List</legend>
+                  <div class="table_content">
+                    <table class="table table-bordered" id="invoice">
+                      <thead>
+                        <tr>
+                                                                      
+                          <th>invoice_type_name</th>
+                          <th>businessunitname</th>
+                          <th>invoice_no</th>
+                          <th>adviceno</th>
+                          <th>invoice_date</th>
+                          <th>state</th>
+                          <th>partyname</th>
+                          <th>gstno</th>
+                          <th>broker_name</th>
+                          <th>challan</th>
+                          <th>e_invoice_no</th>
+                          <th>salesorderno</th>
+                          <th>salesorderdate</th>
+                          <th>refchallanno</th>
+                          <th>refchallandate</th>
+                          <th>item_name</th>
+                          <th>item_groupname</th>
+                          <th>packing_name</th>
+                          <th>hsn_code</th>
+                          <th>squantity</th>
+                          <th>suom</th>
+                          <th>quantity</th>
+                          <th>uom</th>
+                          <th>mat_wt</th>
+                          <th>price</th>
+                          <th>price_based_on</th>
+                          <th>amount</th>
+                          <th>discount_rate</th>
+                          <th>discount_type</th>
+                          <th>discount_amt</th>
+                          <th>tax_codename</th>
+                          <th>tax_rate</th>
+                          <th>Cgst</th>
+                          <th>Sgst</th>
+                          <th>Igst</th>
+                          <th>tax_amt</th>
+                          <th>total_amt</th>
+                          <th>vehicleno</th>
+                          <th>roundoff_amt</th>
+                          <th>payable_amt</th>
+                          
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let SalesInvoice of reports">
+                                    
+                            <td>{{SalesInvoice.invoice_type_name}}</td>
+                            <td>{{SalesInvoice.businessunitname}}</td>
+                            <td>{{SalesInvoice.invoice_no}}</td>
+                            <td>{{SalesInvoice.adviceno}}</td>
+                            <td>{{SalesInvoice.invoice_date}}</td>
+                            <td>{{SalesInvoice.state}}</td>
+                            <td>{{SalesInvoice.partyname}}</td>
+                            <td>{{SalesInvoice.gstno}}</td>
+                            <td>{{SalesInvoice.broker_name}}</td>
+                            <td>{{SalesInvoice.challan}}</td>
+                            <td>{{SalesInvoice.e_invoice_no}}</td>
+                            <td>{{SalesInvoice.salesorderno}}</td>
+                            <td>{{SalesInvoice.salesorderdate}}</td>
+
+                            <td>{{SalesInvoice.refchallanno}}</td>
+                            <td>{{SalesInvoice.refchallandate}}</td>
+                            <td>{{SalesInvoice.item_name}}</td>
+                            <td>{{SalesInvoice.item_groupname}}</td>
+                            <td>{{SalesInvoice.packing_name}}</td>
+                            <td>{{SalesInvoice.hsn_code}}</td>
+                            <td>{{SalesInvoice.squantity}}</td>
+                            <td>{{SalesInvoice.suom}}</td>
+
+
+                            <td>{{SalesInvoice.quantity}}</td>
+                            <td>{{SalesInvoice.uom}}</td>
+                            <td>{{SalesInvoice.mat_wt}}</td>
+                            <td>{{SalesInvoice.price}}</td>
+                            <td>{{SalesInvoice.price_based_on}}</td>
+                            <td>{{SalesInvoice.amount}}</td>
+                            <td>{{SalesInvoice.discount_rate}}</td>
+                            <td>{{SalesInvoice.discount_type}}</td>
+                            <td>{{SalesInvoice.discount_amt}}</td>
+                            <td>{{SalesInvoice.tax_codename}}</td>
+                            <td>{{SalesInvoice.tax_rate}}</td>
+
+                            <td>{{SalesInvoice.Cgst}}</td>
+                            <td>{{SalesInvoice.Sgst}}</td>
+                            <td>{{SalesInvoice.Igst}}</td>
+                            <td>{{SalesInvoice.tax_amt}}</td>
+                            <td>{{SalesInvoice.total_amt}}</td>
+                            <td>{{SalesInvoice.vehicleno}}</td>
+                            <td>{{SalesInvoice.roundoff_amt}}</td>
+                            <td>{{SalesInvoice.payable_amt}}</td>
+                          
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          
+          </div>
+
+          <div class="container-fluid" *ngIf="Purchasebill">
+            <div class="row">
+              <div class="col-lg-12">
+                <fieldset class="table_container">
+                  <legend>Purchase Bill List</legend>
+                  <div class="table_content">
+                    <table class="table table-bordered" id="bill">
+                      <thead>
+                        <tr>
+
+                          <th>billdate</th>
+                          <th>Adviceno</th>
+                          <th>PurchaseBillno</th>
+                          <th>SupplierName</th>
+                          <th>invoice_date</th>
+                          <th>Vehicleno</th>
+                          <th>itemname</th>
+                          <th>packingname</th>
+                          <th>itemqty</th>
+                          <th>itemuom</th>
+                          <th>packingqty</th>
+                          <th>packinguom</th>
+                          <th>matwt</th>
+                          <th>rate</th>
+                          <th>price_based_on</th>
+                          <th>amount</th>
+                          <th>discount</th>
+                          <th>discount_basedon</th>
+                          <th>discount_amount</th>
+                          <th>net_amount</th>
+                          <th>qc_deduction</th>
+                          <th>net_amt_after_qc</th>
+                          <th>net_amt_after_qc</th>
+                          <th>tax_code</th>
+                          <th>tax_rate</th>
+                          <th>tax_amt</th>
+                          <th>gross_amt</th>
+                          <th>warehouse</th>
+                          <th>stack</th>
+                          <th>item_total</th>
+                          <th>billdiscount</th>
+                          <th>net_amt</th>
+                          <th>billqc_deduction</th>
+                          <th>claimanddeduction</th>
+                          <th>amt_after_deduction</th>
+                          <th>add_tax</th>
+                          <th>post_tax_amt</th>
+                          <th>payable_amt</th>
+                          <th>addplus</th>
+                          <th>addminus</th>
+                          <th>roundoff_amt</th>
+                          <th>payable_party</th>
+                          <th>already_paid</th>
+                          <th>net_payable_party</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let SalesInvoice of reports">
+                                    
+                                                                 
+                            <td>{{SalesInvoice.billdate}}</td>
+                            <td>{{SalesInvoice.Adviceno}}</td>
+                            <td>{{SalesInvoice.PurchaseBillno}}</td>
+                            <td>{{SalesInvoice.SupplierName}}</td>
+                            <td>{{SalesInvoice.Vehicleno}}</td>
+                            <td>{{SalesInvoice.itemname}}</td>
+                            <td>{{SalesInvoice.packingname}}</td>
+                            <td>{{SalesInvoice.itemqty}}</td>
+                            <td>{{SalesInvoice.itemuom}}</td>
+                            <td>{{SalesInvoice.packingqty}}</td>
+                            <td>{{SalesInvoice.packinguom}}</td>
+
+
+                            <td>{{SalesInvoice.matwt}}</td>
+                            <td>{{SalesInvoice.rate}}</td>
+
+                            <td>{{SalesInvoice.price_based_on}}</td>
+                            <td>{{SalesInvoice.amount}}</td>
+                            <td>{{SalesInvoice.discount}}</td>
+                            <td>{{SalesInvoice.discount_amount}}</td>
+                            <td>{{SalesInvoice.net_amount}}</td>
+                            <td>{{SalesInvoice.qc_deduction}}</td>
+
+                                                                 
+
+                            <td>{{SalesInvoice.net_amt_after_qc}}</td>
+                            <td>{{SalesInvoice.tax_code}}</td>
+
+
+                            <td>{{SalesInvoice.tax_rate}}</td>
+                            <td>{{SalesInvoice.tax_amt}}</td>
+                            <td>{{SalesInvoice.gross_amt}}</td>
+
+
+                            <td>{{SalesInvoice.warehouse}}</td>
+                            <td>{{SalesInvoice.stack}}</td>
+                            <td>{{SalesInvoice.item_total}}</td>
+
+                                                           
+
+                            <td>{{SalesInvoice.billdiscount}}</td>
+                            <td>{{SalesInvoice.net_amt}}</td>
+                            <td>{{SalesInvoice.billqc_deduction}}</td>
+                            <td>{{SalesInvoice.claimanddeduction}}</td>
+                            <td>{{SalesInvoice.amt_after_deduction}}</td>
+
+                            <td>{{SalesInvoice.add_tax}}</td>
+                            <td>{{SalesInvoice.post_tax_amt}}</td>
+                            <td>{{SalesInvoice.payable_amt}}</td>
+
+
+                            <td>{{SalesInvoice.addplus}}</td>
+                            <td>{{SalesInvoice.addminus}}</td>
+                            <td>{{SalesInvoice.roundoff_amt}}</td>
+                            <td>{{SalesInvoice.payable_party}}</td>
+                            <td>{{SalesInvoice.already_paid}}</td>
+                            <td>{{SalesInvoice.net_payable_party}}</td>
+                          
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          
+          </div>
+
+          <div class="container-fluid" *ngIf="CreditNote">
+            <div class="row">
+              <div class="col-lg-12">
+                <fieldset class="table_container">
+                  <legend>CreditNote  List</legend>
+                  <div class="table_content">
+                    <table class="table table-bordered" id="cnote">
+                      <thead>
+                        <tr>
+                                                     
+                          <th>Credit_Note_No</th>
+                          <th>Credit_Note_Date</th>
+                          <th>Invoice_Type</th>
+                          <th>Party_Name</th>
+                          
+                          <th>GSTN</th>
+                          <th>Challan</th>
+                          <th>Ref_Challan_No</th>
+                          <th>Ref_Challan_Date</th>
+                          <th>Sales_Return_Note_No</th>
+                          <th>Sales_Return_Note_Date</th>
+                          <th>Item_Group</th>
+                          <th>Item_Name</th>
+                          <th>Packing_Item</th>
+                          <th>HSN_Code</th>
+                          <th>Packing_Qty</th>
+                          <th>Packing_UOM</th>
+                          <th>Item_Qty</th>
+                          <th>Item_UOM</th>
+                          <th>Mat_Wt</th>
+
+                                                                      
+
+                          <th>Price</th>
+                          <th>Price_Based_On</th>
+                          <th>Amount</th>
+                          <th>Discount_Amt</th>
+                          <th>Tax_Code</th>
+                          <th>Tax_Rate</th>
+                          <th>Tax_Amt</th>
+                          <th>Total_Amt</th>
+                          <th>Broker_Name</th>
+                          <th>Vehicle_No</th>
+                          <th>Sales_Return_Type</th>
+                          
+                        </tr>
+                      </thead>
+                      <tbody>
+                          <tr *ngFor="let SalesInvoice of reports">
+                                    
+                                                                 
+                            <td>{{SalesInvoice.Credit_Note_No}}</td>
+                            <td>{{SalesInvoice.Credit_Note_Date}}</td>
+                            <td>{{SalesInvoice.Invoice_Type}}</td>
+                            <td>{{SalesInvoice.Party_Name}}</td>
+                                                                      
+
+                            <td>{{SalesInvoice.GSTN}}</td>
+                            <td>{{SalesInvoice.Challan}}</td>
+                            <td>{{SalesInvoice.Ref_Challan_No}}</td>
+                            <td>{{SalesInvoice.Ref_Challan_Date}}</td>
+                            <td>{{SalesInvoice.Sales_Return_Note_No}}</td>
+                            <td>{{SalesInvoice.Sales_Return_Note_Date}}</td>
+                            <td>{{SalesInvoice.Item_Group}}</td>
+
+
+                            <td>{{SalesInvoice.Item_Name}}</td>
+                            <td>{{SalesInvoice.Packing_Item}}</td>
+
+                            <td>{{SalesInvoice.HSN_Code}}</td>
+                            <td>{{SalesInvoice.Packing_Qty}}</td>
+                            <td>{{SalesInvoice.Packing_UOM}}</td>
+                            <td>{{SalesInvoice.Item_Qty}}</td>
+                            <td>{{SalesInvoice.Item_UOM}}</td>
+                            <td>{{SalesInvoice.Mat_Wt}}</td>
+
+                                                                 
+
+                            <td>{{SalesInvoice.Price}}</td>
+                            <td>{{SalesInvoice.Price_Based_On}}</td>
+
+
+                            <td>{{SalesInvoice.Amount}}</td>
+                            <td>{{SalesInvoice.Discount_Amt}}</td>
+                            <td>{{SalesInvoice.Tax_Code}}</td>
+
+
+                            <td>{{SalesInvoice.Tax_Rate}}</td>
+
+                                                         
+                            <td>{{SalesInvoice.Tax_Amt}}</td>
+                            <td>{{SalesInvoice.Total_Amt}}</td>
+
+                                                           
+
+                            <td>{{SalesInvoice.Broker_Name}}</td>
+                            <td>{{SalesInvoice.Vehicle_No}}</td>
+                            <td>{{SalesInvoice.Sales_Return_Type}}</td>
+                            
+                          
+                          </tr>
+                      </tbody>
+                    </table>
+                  </div>
+                </fieldset>
+              </div>
+            </div>
+          
+          </div>
+          <div  class="col-lg-12">
+            <div class="form-group">
+                <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+               
+             </div>
+         </div>
+  </fieldset>
+</form>

@@ -1,0 +1,80 @@
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<div class="master_container_box" >
+  <form [formGroup]="userForm">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="todate">
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
+      </div>
+    </div>
+  </form>
+ <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Progress List</legend>
+          <div class="table_content">
+            <table class="table table-bordered" id="dynamictable">
+              <thead>
+                <tr>
+                  <th>Task Name</th>
+                  <th>Progress</th>
+                  <th>Progress Date</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let prog of progresslist">
+                  <td>{{prog.task}}</td>
+                  <td>{{prog.progress}}</td>
+                  <td>{{prog.date}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+
+          <div class="col-lg-12" style="float: right;">
+              <div  class="form-group">
+                  <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+              </div>
+
+          </div>
+
+
+        </fieldset>
+      </div>
+    </div>
+
+   </div>
+</div>
+
+
+
+                
+
+
+               
+                  
+
+                  
+                  
+
+

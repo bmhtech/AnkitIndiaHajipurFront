@@ -1,0 +1,20 @@
+<form [formGroup]="userForm">
+  <fieldset>
+    <legend>Job Details</legend>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="form-group">
+          <mat-label>Business Unit<span class="red">*</span></mat-label>
+          <mat-select formControlName="business_unit" class="form-control">
+          <mat-option *ngFor="let business_unit of businesslists" 
+          [value]="business_unit.businessunit_id">{{business_unit.businessunit_name}}</mat-option>
+          </mat-select>
+        </div>
+      </div>
+      <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+        <div class="form-group">
+           <mat-label>Order Number<span class="red">*</span></mat-label>
+            <input type="text" class="form-control" formControlName="order_no" [(ngModel)]="seq_no" readonly>
+        </div>
+      </div>
+  </fieldset>
+</form>

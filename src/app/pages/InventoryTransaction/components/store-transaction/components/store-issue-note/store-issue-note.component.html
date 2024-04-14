@@ -1,0 +1,219 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i
+                  class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i
+                  class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader"> <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner></div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset>
+            <legend>Store Issue Note</legend>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Store Issue Date</mat-label>
+                <input type="date" formControlName="store_issue_date" class="form-control" [readonly]="UpdateReturn"/>
+              </div>
+            </div>
+            </fieldset>
+            <fieldset>
+            <legend>Store Details</legend>
+            <span class="red" style="font-size: large;margin-left: 25%;"><b>{{store_issue_note}}</b></span>
+            <div class="col-lg-12">
+              <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col" *ngIf="UpdateReturn==false">
+                    <h3>Action</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="srln">Srl No</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Warehouse Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Item Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Classified Item Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Available Qty</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Issue Qty</h3>
+                  </label>
+                  <label class="label_col" *ngIf="UpdateReturn">
+                    <h3>Return Qty</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Issue for</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Transferable</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Transfer Warehouse</h3>
+                  </label>
+                </div>
+
+                <div class="dyn_table_data_cont" formArrayName="store_issue_note_details" *ngIf="UpdateReturn;else elseblock ">
+                  <div class="dyn_table" *ngFor="let item of store_issue_note_details.controls; let pointIndex=index"
+                    [formGroupName]="pointIndex">
+
+                    <div class="label_col"><input class="form-control srln" type="number" formControlName="slno"
+                        readonly /></div>
+                    <div class="label_col"><input formControlName="warehouse_name" class="form-control ats i_nam" type="text" readonly/>
+                    </div>
+                    <div class="label_col"><input formControlName="item_name" class="form-control ats i_nam" type="text" readonly/>
+                    </div>
+                    <div class="label_col"><input formControlName="classified_item" class="form-control ats i_nam" type="text" readonly/>
+                    </div>
+                    <div class="label_col"><input formControlName="avail_qty" class="form-control" type="number" readonly/>
+                    </div>
+                    <div class="label_col"><input formControlName="issue_qty" class="form-control" type="number" readonly/>
+                  </div>
+                  <div class="label_col"><input formControlName="return_qty" class="form-control" type="text" (keyup)="returnQtyCheck($event, pointIndex)"  />
+                  </div>
+                  <div class="label_col"><input formControlName="issue_for" class="form-control ats i_nam" type="text" />
+                  </div>
+                  <div class="label_col"><select formControlName="transferable" class="form-control">
+                    <option value="No">No</option>
+                    <option value="Yes">Yes</option>
+                  </select></div>
+                  <div class="label_col"><input formControlName="transfer_warehouse_name" class="form-control ats i_nam" type="text" readonly/>
+                  </div>
+
+                  </div>
+                </div>
+                <ng-template #elseblock>
+
+                  <div class="dyn_table_data_cont" formArrayName="store_issue_note_details" >
+                    <div class="dyn_table" *ngFor="let item of store_issue_note_details.controls; let pointIndex=index"
+                      [formGroupName]="pointIndex">
+  
+                        <div class="label_col" ><i class="fa fa-trash form-control action"
+                            (click)="deletedetails(pointIndex)" ></i> </div>
+                      
+  
+                      <div class="label_col"><input class="form-control srln" type="number" formControlName="slno"
+                          readonly /></div>
+  
+                      <div class="label_col">
+                        <mat-select-autocomplete class="form-control ats i_nam" [options]="warehouseList"
+                          [display]="'warehouse_name'" [value]="'warehouse_code'" [multiple]='false'
+                          [selectedOptions]="selectedWarehouseName[pointIndex]"
+                          (selectionChange)="onChangeWarehouse(pointIndex, $event)" ngDefaultControl
+                          [formControlName]="'warehouse'" [disabled]="UpdateReturn">
+                        </mat-select-autocomplete>
+                      </div>
+  
+                      <div class="label_col">
+                        <mat-select-autocomplete class="form-control ats i_nam" [options]="storeItemList[pointIndex]"
+                          [display]="'adv_item_name'" [value]="'adv_item_code'" [multiple]='false'
+                          [selectedOptions]="selectedItemName[pointIndex]"
+                          (selectionChange)="onChangeItemName(pointIndex, $event)" ngDefaultControl
+                          [formControlName]="'item'" [disabled]="UpdateReturn">
+                        </mat-select-autocomplete>
+                      </div>
+                      <div class="label_col">
+                        <mat-select-autocomplete class="form-control ats i_nam" [options]="classifiedList[pointIndex]"
+                          [display]="'classified_item_name'" [value]="'classified_item_name'" [multiple]='false'
+                          [selectedOptions]="selectedClsItemName[pointIndex]"
+                          (selectionChange)="onChangeClasItemName(pointIndex, $event)" ngDefaultControl
+                          [formControlName]="'classified_item'" [disabled]="UpdateReturn">
+                        </mat-select-autocomplete>
+                      </div>
+                      <div class="label_col"><input formControlName="avail_qty" class="form-control" type="number" readonly/>
+                      </div>
+                      <div class="label_col"><input formControlName="issue_qty" class="form-control" type="number" (keyup)="getQtyCheck($event, pointIndex)" [readonly]="UpdateReturn"/>
+                    </div>
+                    <div class="label_col"><input formControlName="return_qty" class="form-control" type="text" (keyup)="returnQtyCheck($event, pointIndex)" *ngIf="UpdateReturn" />
+                    </div>
+                    <div class="label_col"><input formControlName="issue_for" class="form-control ats i_nam" type="text" />
+                    </div>
+
+                    <div class="label_col"><select formControlName="transferable" class="form-control"   (change)="onChangewarehoseopen(pointIndex, $event.target.value)">
+                      <option value="No">No</option>
+                      <option value="Yes">Yes</option>
+                    </select></div>
+
+                    <div class="label_col">
+                      <mat-select-autocomplete class="form-control ats i_nam" [options]="allWarehouseList"
+                        [display]="'warehouse_name'" [value]="'warehouse_code'" [multiple]='false'
+                        [selectedOptions]="selectedTranWarehouse[pointIndex]"
+                        (selectionChange)="onChangetranWarehouse(pointIndex, $event)" ngDefaultControl
+                        [formControlName]="'transfer_warehouse'" 
+                        [disabled]="warehousediable[pointIndex]">
+                      </mat-select-autocomplete>
+                    </div>
+
+                    </div>
+                  </div>
+                  
+                </ng-template>
+                
+              </div>
+              <div class="btm_btn_content" *ngIf="UpdateReturn==false">
+                <button type="button" (click)="addDetails()" class="btn btn-success">Add </button>
+              </div>
+            </div>
+            <div class="row">
+              <div class="col-lg-12">
+                <div class="form-group">
+                  <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="storeissuenotesave">Submit</button>
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+<div class="container-fluid" *ngIf="isHidden==false">
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Store Issue Note List</legend>
+        <div class="table_content">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Store Issue Date</th>
+                <th colspan="3">Action</th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr *ngFor="let store of storeIssuelist">
+                <td>{{store.store_issue_date}}</td>
+                <td><button class="btn btn-success" (click)="onUpdate(store.id,store.store_issue_id,'view')">View</button>
+                </td>
+                <td><button class="btn btn-info"
+                    (click)="onUpdate(store.id,store.store_issue_id,'update')">Return Items</button></td>
+                <td><button class="btn btn-danger" (click)="onDelete(store.id,store.store_issue_id)">Delete</button></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,78 @@
+
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+<div class="container-fluid modal_box">
+  <form [formGroup]="userForm1">
+    <div class="row">
+      <div class="col-lg-12 col-md-12 col-sm-12 col-12 ">
+        <mat-dialog-content class="mat-typography">
+          <fieldset>
+            <legend>Show Image</legend>
+
+           
+                <!--<div class="col-lg-10 col-md-10 col-sm-12 col-12">
+                  <div class="form-group">
+                 
+                      <div class="imagePreview" *ngIf="imageURL && imageURL !== ''"> 
+                                <input type="image" [src]="imageURL" height="80%" width="100%">
+                      </div>
+                   
+                  </div>
+                </div>-->
+                
+                <div style="position:static;overflow-y: scroll; height:400px; width:100%; padding:10px;" id="abc">
+                <ngx-image-zoom
+                  [thumbImage]=imageURL
+                  [magnification]="2"
+                  [enableScrollZoom]="true"
+                  [enableLens]="true"
+                  [lensWidth]="200"
+                
+              ></ngx-image-zoom>
+            </div>
+          
+             
+            </fieldset>
+            <fieldset style="padding:20px;">
+          
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Party Slip No</mat-label>
+                <input type="text" formControlName="party_slip" class="form-control" tabindex="90" [readonly]="noimg">
+              </div>  
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Party Gross Wt</mat-label>
+                <input  formControlName="partygross" type="number" class="form-control" [readonly]="noimg" tabindex="91" >
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Party Tare Wt</mat-label>
+                <input  formControlName="partytare" type="number" class="form-control" [readonly]="noimg" tabindex="92">
+              </div>
+            </div>
+            
+            <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+    
+          <mat-dialog-actions align="right" style="padding:20px;">
+            <button class="btn btn-info" (click)="SendDataToDifferentComponenet()">Submit</button>
+          </mat-dialog-actions>
+
+          </fieldset>
+        </mat-dialog-content>
+      </div>
+    </div>
+      
+  </form>
+</div>
+  
+  
+  
+  

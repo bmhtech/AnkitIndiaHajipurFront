@@ -1,0 +1,8 @@
+.prc_list_row input[type="text"]{ width: 100% !important; border: none !important; outline: none !important; height: 17px;}
+.pb input[type="text"]{ width: 100% !important; border: none !important; outline: none !important; height: 17px;}
+.dyn_table{position: relative;}
+.dyn_table .acn{ position: absolute; left: -30px; z-index: 999; top: 0px;}
+.acn, .dyn_table{display: inline-block;}
+.dyn_table{float:none; border-bottom: none;}
+.dyn_table_conent { margin: 0 ;  padding: 0 ; }
+

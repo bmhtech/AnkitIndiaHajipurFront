@@ -1,0 +1,159 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div>
+
+<form [formGroup]="userForm" autocomplete="off" (ngSubmit)="send()" *ngIf="isHidden==true"> 
+  <section class="master_container">
+      <div class="container-fluid"> 
+        <div class="row">
+          <div class="col-lg-12">
+            <fieldset>
+              <legend>Purchase Order Details</legend>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <label for="Indent No.">L1 Doc Number</label>
+                  <input type="text" class="form-control" [(ngModel)]="model.l1_doc_no" formControlName="l1_doc_no">
+                </div>
+              </div>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <label for="Date">Date</label>
+                  <input type="date" class="form-control" [(ngModel)]="model.date" formControlName="date">
+                </div>
+              </div>
+
+              <!-- supplier_id -->
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <label for="Date">Supplier Qoutation</label><br>
+                  <button type="button" class="btn btn-success" >Open List</button>
+                </div>
+              </div>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <label for="Remarks">Remarks</label>
+                  <textarea class="form-control" [(ngModel)]="model.remarks" formControlName="remarks" rows="1"></textarea>
+                </div>
+              </div>     
+            </fieldset>
+          </div>
+          
+          <div class="col-lg-12">  
+          <!--  Dynamic start-->   
+            <div class="dyn_table_conent" style="border: none;">
+              <mat-tab-group animationDuration="1000ms">
+                <mat-tab label="Purchase Order Details">
+                  <div class="dyn_table_conent">
+                    <div  class="dyn_table_header">
+                      <label class="label_col"><h3>Action</h3></label>
+                      <label class="label_col"><h3 class="srln">Srl No</h3></label>
+                      <label class="label_col"><h3>P.Qout.Doc.No</h3></label>
+                      <label class="label_col"><h3>Item Code</h3></label>
+                      <label class="label_col"><h3 class="i_nam">Item Name</h3></label>
+                      <label class="label_col"><h3>Vendor Code</h3></label>
+                      <label class="label_col"><h3 class="i_nam">Vendor Name</h3></label>
+                      <label class="label_col"><h3>Price</h3></label> 
+                      <label class="label_col"><h3>Req Date</h3></label>
+                      <label class="label_col"><h3>Qout Date</h3></label>
+                      <label class="label_col"><h3>Req Qty</h3></label>
+                      <label class="label_col"><h3>Qout Qty</h3></label>
+                      <label class="label_col"><h3>Amount</h3></label>
+                      <label class="label_col"><h3>Status</h3></label> 
+                      <label class="label_col"><h3>Reason</h3></label> 
+                      <label class="label_col"><h3>Remarks</h3></label> 
+                    </div>
+                    <div  class="dyn_table_data_cont" formArrayName="pur_L1_Selection_Dtls">
+                      <div class="dyn_table" *ngFor="let item of pur_L1_Selection_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <div class="label_col"><i class="fa fa-trash form-control action"  (click)="delete(pointIndex)"></i></div>
+                        <div class="label_col"><input class="form-control srln" formControlName="sl_no" type="number" min="0" /></div>
+                        <div class="label_col"><input class="form-control" formControlName="pq_doc_no" type="text" /></div>
+                        <div class="label_col"><input class="form-control" formControlName="item_code" type="text" /></div>
+                        <div class="label_col"><input class="form-control i_nam" formControlName="item_name" type="text" /></div>
+                        <div class="label_col"><input class="form-control" formControlName="vendor_code" type="text"  /></div>
+                        <div class="label_col"><input class="form-control i_nam" formControlName="vendor_name" type="text"  /></div>
+                        <div class="label_col"><input class="form-control" formControlName="price" type="number" min="0" /></div>
+                        <div class="label_col"><input class="form-control" formControlName="req_date" type="date"  /></div>
+                        <div class="label_col"><input class="form-control" formControlName="qout_date" type="date"  /></div>
+                        <div class="label_col"><input class="form-control" formControlName="req_qty" type="number" min="0"  /></div>
+                        <div class="label_col"><input class="form-control" formControlName="qout_qty" type="number" min="0"  /></div>
+                        <div class="label_col"><input class="form-control" formControlName="amount" type="number" min="0"  /></div>
+                        <div class="label_col"><input class="form-control" formControlName="status" type="text"  /></div>
+                        <div class="label_col"><input class="form-control" formControlName="reason" type="text" /></div>
+                        <div class="label_col"><input class="form-control wdt_115_s" formControlName="remarks" type="text" /></div>
+                      </div>
+                    </div>
+                  </div>
+                    
+                  <div class="btm_btn_content">
+                    <button type="button" class="btn btn-success" (click)="add(pointIndex)">Add Row </button>
+                    <div class="clr"></div>
+                  </div>           
+                </mat-tab>
+              </mat-tab-group>
+            </div>
+          </div>
+       
+       <!--  Dynamic End-->
+
+          <div class="col-lg-12">
+            <div class="form-group">
+               <button type="submit" class="btn btn-primary" *ngIf="l1selectionsave">Submit</button>
+            </div>
+          </div>
+        </div>
+    </div>
+  </section>
+</form>
+
+
+
+
+
+<div class="master_container_box" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Purchase L1 Selection List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>L1 Doc Number</th>
+                  <th>Date</th>
+                  <th>Supplier Qoutation</th>              
+                  <th>Remarks</th>
+                </tr>  
+              </thead>
+              <tbody>
+                <tr *ngFor="let Purl1Selection of listPurl1Selection">
+                  <td>{{Purl1Selection.l1_doc_no}}</td>
+                  <td>{{Purl1Selection.date}}</td>
+                  <td>{{Purl1Selection.supplier_id}}</td>
+                  <td>{{Purl1Selection.remarks}}</td>      
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>
+

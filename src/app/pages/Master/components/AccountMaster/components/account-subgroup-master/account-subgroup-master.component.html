@@ -1,0 +1,144 @@
+<section class="master_container">
+  <div class="container-fluid">
+      <div class="row">
+          <div class="col-lg-12">
+            <div class="button_row">
+              <ul>
+                <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+                <li><button mat-button class="btn btn-success" (click)="showList('list')" ><i class="material-icons">list</i>List</button></li>
+              </ul>   
+            </div>
+          </div>
+        </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+    
+      <!-- <form [formGroup]="acc_subgroup_master_form" (ngSubmit)="send()"> -->
+      <form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">  
+          <section class="master_container">
+              <div class="container-fluid">
+        <div class="row">
+            <div class="col-lg-12">
+              <fieldset>
+                  <legend>Account SubGroup Info</legend>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group ht_59">
+                            <label for="ASubGroup code">ASubGroup code</label>
+                            <input type="text" [(ngModel)]="model.subgroup_code" formControlName="subgroup_code" class="form-control" >
+                            <!-- <small *ngIf="subgroup_code.invalid" class="form-text text-danger">Validation mag</small> -->
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                          <label for="ASubGroup name">ASubGroup name</label>
+                          <input type="text" [(ngModel)]="model.subgroup_name" formControlName="subgroup_name" class="form-control" >
+                            <!-- <small *ngIf="subgroup_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                    </div>
+                      
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>AGroup Code</mat-label>
+                          <mat-select class="form-control" [(ngModel)]="model.group_code" formControlName="group_code" (selectionChange)="onchangeAcGroupName($event.value)" >
+                            <mat-option value="0">~Select AGroup Code~</mat-option>
+                            <mat-option *ngFor="let group_code of acGroupCodes" [value]="group_code.groupcode">{{group_code.groupcode}}</mat-option>
+                          </mat-select>
+                        </div>
+                    </div>
+                      
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                        <div class="form-group">
+                        <label for="AGroup Name">AGroup Name</label>
+                        <input type="text" [(ngModel)]="model.groupname" formControlName="groupname"  [value]="groupname" class="form-control" >
+                          <!-- <small *ngIf="group_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <mat-label>Business Unit Code</mat-label>
+                          <mat-select class="form-control" [(ngModel)]="model.businessunit_code" formControlName="businessunit_code" (selectionChange)="onchangeBUnitName($event.value)">
+                            <mat-option value="0">~Select Business Unit Code~</mat-option>
+                            <mat-option *ngFor="let businessunit_code of bUnitCodes" [value]="businessunit_code.businessunit_code">{{businessunit_code.businessunit_code}}</mat-option>
+                          </mat-select>
+                        </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label for="Business Unit Name">Business Unit Name</label>
+                        <input type="text"  [(ngModel)]="model.businessunit_name" formControlName="businessunit_name" class="form-control" [value]="businessunit_name" >
+                          <!-- <small *ngIf="businessunit_name.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                    </div>
+                      
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label for="Opening Balance Amount">Opening Balance Amount</label>
+                        <input type="number" min="0" [(ngModel)]="model.open_bal_amt" formControlName="open_bal_amt" class="form-control" >
+                        <!-- <small *ngIf="open_bal_amt.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                        <label for="Current Balance Amount">Current Balance Amount</label>
+                        <input type="number" min="0" [(ngModel)]="model.curr_bal_amt" formControlName="curr_bal_amt" class="form-control" >
+                        <!-- <small *ngIf="curr_bal_amt.invalid" class="form-text text-danger">Validation mag</small> -->
+                      </div>
+                    </div>
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                      <div class="form-group">
+                          <mat-checkbox [(ngModel)]="model.subgroup_active" formControlName="subgroup_active">ASubGroup active</mat-checkbox> 
+                          <!-- <input class="checkbox checkbox-primary" [(ngModel)]="acc_subgroup.subgroup_active" formControlName="subgroup_active" type="checkbox" id="color-checkbox1" required checked>
+                      <label class="check-label" for="color-checkbox1"> ASubGroup active</label> -->
+                      <!-- <small *ngIf="subgroup_active.invalid" class="form-text text-danger">Validation mag</small> -->
+                        </div>
+                    </div>
+                 </fieldset>
+
+                <div class="col-lg-12">
+                    <div class="form-group">
+                        <button type="submit" class="btn btn-primary" (click)="send()">Submit</button>
+                    </div>
+                </div>
+            </div>
+          </div>
+        </div>
+      </section>
+</form>
+ 
+
+ <!-- list -->
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Account SubGroup List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>ASubGroup name</th>
+                  <th>AGroup Name</th>
+                  <th>Opening Balance Amount</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let acc_subgroup of listacc_subgroup">
+                  <td>{{acc_subgroup.subgroup_name}}</td>
+                  <td>{{acc_subgroup.groupname}}</td>
+                  <td>{{acc_subgroup.open_bal_amt}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+</div>

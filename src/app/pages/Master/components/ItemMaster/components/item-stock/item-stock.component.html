@@ -1,0 +1,126 @@
+
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <!-- <li *ngIf="addhide"><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li> -->
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <fieldset>
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          
+          <fieldset>
+            <legend>Item Stock Data</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Entry Person<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats" tabindex="13"  
+                [options]="employeeNames"
+                [display]="'emp_name'"
+                [value]="'emp_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['entryperson']">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Entry Date<span class="red">*</span></mat-label>
+                <input type="date" class="form-control" [(ngModel)]="currentDate" formControlName="entrydate">
+              </div>
+            </div>
+          </fieldset>
+            <fieldset>
+              <legend>All Item Stock Details</legend>
+                    <div class="col-lg-12">
+                      <div class="dyn_table_conent">
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                          <label class="label_col"><h3 class="dt_nam">Item Name</h3></label>
+                          <label class="label_col"><h3 class="dt_nam">Packing Item</h3></label>
+                          <label class="label_col"><h3>Opening Packing Balance</h3></label>
+                          <label class="label_col"><h3>Opening Item Balance</h3></label>
+                          <label class="label_col"><h3 class="dt_nam">Item Type</h3></label>
+                          <label class="label_col"><h3>Date</h3></label>
+                          <label class="label_col"><h3>Financial Year</h3></label>
+                        </div>
+                        <div class="dyn_table_data_cont" formArrayName="item_stock_dtls">
+                          <div class="dyn_table" *ngFor="let item of item_stock_dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <div class="label_col"><input formControlName="slno" class="form-control srln" type="text" readonly/></div>
+                            <div class="label_col"><input formControlName="itemname" class="form-control dt_nam" type="text" readonly/></div>
+                            <div class="label_col" style="display: none;"><input formControlName="itemcode" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="packingname" class="form-control dt_nam" type="text" readonly/></div>
+                            <div class="label_col" style="display: none;"><input formControlName="packingcode" class="form-control" type="text"/></div>
+                            <div class="label_col"><input formControlName="openpackingbal" class="form-control" type="number" (keyup)="getItemWt(pointIndex)"/></div>
+                            <div class="label_col"><input formControlName="openitembal" class="form-control" type="number"/></div>
+                            <div class="label_col"><input formControlName="itemtype" class="form-control dt_nam" type="text" readonly/></div>
+                            <div class="label_col" *ngIf="dateandfinyear"><input formControlName="openingdate" class="form-control" [(ngModel)]="stockDate" type="date"/></div>
+                            <div class="label_col" *ngIf="dateandfinyear1"><input formControlName="openingdate" class="form-control" type="date"/></div>
+                            <div class="label_col" *ngIf="dateandfinyear"><input formControlName="openingfinyear" [(ngModel)]="finyear" class="form-control" type="text" readonly/></div>
+                            <div class="label_col" *ngIf="dateandfinyear1"><input formControlName="openingfinyear" class="form-control" type="text" readonly/></div>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+            </fieldset>
+            <div class="col-lg-12" >
+              <div class="form-group">
+                <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="itemstocksave">Submit</button>
+              </div>
+            </div>
+        </div>
+       </div>
+    </div>
+  </fieldset>
+  </section>
+</form>
+
+
+<div class="container-fluid" *ngIf="isHidden==false">
+
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Item Stock List</legend>
+        <div class="table_content">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Entry Person</th>
+                <th>Entry Date</th>
+                <th colspan="2">Action</th>       
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let stock of stocklist">
+                    <td>{{stock.entrypersonname}}</td>
+                    <td>{{stock.entrydate}}</td>
+                    <td><button class="btn btn-success" (click)="onUpdate(stock.id,stock.stockid,'view')" >View</button></td>
+                    <td><button class="btn btn-info" (click)="onUpdate(stock.id,stock.stockid,'update')" >Update</button></td>  
+                  </tr>
+            </tbody>
+          </table>
+        </div>
+      </fieldset>
+    </div>
+  </div> 
+</div>

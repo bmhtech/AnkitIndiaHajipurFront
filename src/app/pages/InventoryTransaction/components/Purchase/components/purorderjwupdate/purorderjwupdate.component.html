@@ -1,0 +1,55 @@
+
+
+<mat-dialog-content class="mat-typography">
+  <div class="modal_main_content">
+    <div class="progress_loader_box" *ngIf="status == false">
+      <div class="progress-loader"> <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+      </div>
+    </div>
+    <form [formGroup]="userForm" autocomplete="off">
+      <section class="master_container">
+        <div class="container-fluid">
+          <div class="row">
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <fieldset class="axd" style="padding-top:80px;">
+                <legend>Purchase Order Details</legend>
+                <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+                <div class="dyn_table_conent">
+                  <div class="dyn_table_header">
+                    <label class="label_col">
+                      <h3 class="i_nam">Item Name</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3 class="i_nam">Packing Name</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Adjusted Qty</h3>
+                    </label>
+                    <label class="label_col">
+                      <h3>Remarks</h3>
+                    </label>
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="pur_Order_Item_Details">
+                    <div class="dyn_table" *ngFor="let item of pur_Order_Item_Details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                      <div class="label_col"><input class="form-control ats i_nam" type="text" formControlName="item_name" readonly/></div>
+                      <div class="label_col"><input class="form-control ats i_nam" type="text" formControlName="packing_item_name"  readonly/></div>
+                      <div class="label_col"><input class="form-control" type="number" formControlName="adjusted_qty" /></div>
+                      <div class="label_col"><input class="form-control" type="text" formControlName="adjusted_remarks" /></div>
+                    </div>
+                  </div>
+                  </div>
+                  
+              </fieldset>
+            </div>
+          </div>
+        </div>
+      </section>
+    </form>
+
+  </div>
+
+</mat-dialog-content>
+
+<mat-dialog-actions align="end">
+  <button   mat-button mat-dialog-close class="btn btn-info" (click)="SendDataToDifferentComponenet()">Submit</button>
+</mat-dialog-actions>

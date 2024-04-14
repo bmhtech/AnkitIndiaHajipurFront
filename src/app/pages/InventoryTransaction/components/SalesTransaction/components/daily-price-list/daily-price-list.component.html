@@ -1,0 +1,432 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<form>
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 price_listing">
+          <fieldset style="padding: 0 10px 20px;">
+            <legend>Daily Price List</legend>
+            <div class="dyn_table_conent" style="border: none;">
+              <div class="dyn_table_conent">
+                <div class="prc_list_row" style="margin-left: 1px;">
+                  <div class="dyn_table brdt_rgt_none brdt_lft_none">
+                    <div class="label_col">
+                      <div class="pb wdt_285 brdt_lft_none brdt_btn_none">
+                        <div class="list_col1_lft">&nbsp;</div>
+                        <div class="list_col1_itm_nme">&nbsp;</div>
+                        <div class="wdt_72">&nbsp;</div>
+                      </div>
+                    </div>
+                    <div class="label_col">
+                      <div class="pb wdt_125 brdt_btn_none">
+                        <div class="top_hd_sub">&nbsp;</div>
+                      </div>
+                    </div>
+                    <div class="label_col">
+                      <div class="pb mr_rt">
+                        <div class="top_hd_sub brdr2"> PL effective from</div>
+                      </div>
+                    </div>
+                    <div class="label_col">
+                      <div class="pb wdt_125 mr_rt">
+                        <div class="top_hd_sub brdr2"> 01/01/2020</div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+                <div class="dyn_table_header">
+                  <label class="label_col">
+                    <h3 class="wdt_285">
+                      <div class="ht_vc_sub">Category Code & Name</div>
+                      <div class="brdr_top ht_vc_sub">
+                        <div class="list_col1_lft brdr_rt wdt_fg">Sl#</div>
+                        <div class="list_col1_rgt">Product Name & HSN Code</div>
+                      </div>
+                    </h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="wdt_125">
+                      <div class="inva">SKU</div>
+                    </h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="mr_rt">
+                      <div class="list_col1_50 brdr_rt inva">Pouch</div>
+                      <div class="list_col1_50 inva">Mrp</div>
+                    </h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="wdt_125 mr_rt">
+                      <div class="list_col1_33 brdr_rt inva">IBSTI</div>
+                      <div class="list_col1_33 brdr_rt inva">UOM</div>
+                      <div class="list_col1_33 inva">GST</div>
+                    </h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>
+                      <div class="ht_vc_sub">WH</div>
+                      <div class="brdr_top ht_vc_sub">
+                        <div class="list_col1_50 brdr_rt">Basic</div>
+                        <div class="list_col1_50 ">Net</div>
+                      </div>
+                    </h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>
+                      <div class="ht_vc_sub">DE</div>
+                      <div class="brdr_top ht_vc_sub">
+                        <div class="list_col1_50 brdr_rt">Basic</div>
+                        <div class="list_col1_50">Net</div>
+                      </div>
+                    </h3>
+                  </label>
+                </div>
+                <div class="dyn_table_data_cont">
+                  <div class="prc_list_row">
+                    <div class="dyn_table sb_hed">
+                      <div class="label_col">
+                        <div class="pb wdt_285 brdt_lft_none">
+                          <div class="list_col1_lft brdr_rt">C01</div>
+                          <div class="list_col1_itm_nme brdr_rt">Item name</div>
+                          <div class="wdt_72">HSN Code</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125">
+                          <div class="top_hd_sub"><span style="color: #fff;">&nbsp;</span></div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb brdt_lft_none mr_rt brdt_rgt_none">
+                          <div class="top_hd_sub"><span style="color: #fff;">&nbsp;</span></div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125 brdt_lft_none mr_rt brdt_rgt_none">
+                          <div class="top_hd_sub"><span style="color: #fff;">&nbsp;</span></div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb brdt_lft_none">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50">A-IV</div>
+                            <div class="list_col1_50">&nbsp;</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb brdt_lft_none  wdt_96">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50">A-V</div>
+                            <div class="list_col1_50">&nbsp;</div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="prc_list_row">
+                    <div class="dyn_table">
+                      <div class="label_col">
+                        <div class="pb wdt_285 brdt_lft_none">
+                          <div class="list_col1_lft brdr_rt">01</div>
+                          <div class="list_col1_itm_nme brdr_rt">Chilli Powder (Mirchi)</div>
+                          <div class="wdt_72">0904 22 11</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125">
+                          <div class="top_hd_sub">&nbsp;</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb mr_rt">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt">5g</div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125 mr_rt">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_33 brdr_rt">80.00</div>
+                            <div class="list_col1_33 brdr_rt">bdl</div>
+                            <div class="list_col1_33">5%</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt"><input type="text" placeholder="100.00"></div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_96">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt"><input type="text" placeholder="100.00"></div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="prc_list_row">
+                    <div class="dyn_table">
+                      <div class="label_col">
+                        <div class="pb wdt_285 brdt_lft_none">
+                          <div class="list_col1_lft brdr_rt">02</div>
+                          <div class="list_col1_itm_nme brdr_rt">Chilli Powder (Mirchi)</div>
+                          <div class="wdt_72">0904 22 11</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125">
+                          <div class="top_hd_sub">&nbsp;</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb mr_rt">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt">5g</div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125 mr_rt">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_33 brdr_rt">80.00</div>
+                            <div class="list_col1_33 brdr_rt">bdl</div>
+                            <div class="list_col1_33">5%</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt"><input type="text" placeholder="100.00"></div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_96">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt"><input type="text" placeholder="100.00"></div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="prc_list_row">
+                    <div class="dyn_table">
+                      <div class="label_col">
+                        <div class="pb wdt_285 brdt_lft_none">
+                          <div class="list_col1_lft brdr_rt">03</div>
+                          <div class="list_col1_itm_nme brdr_rt">Chilli Powder (Mirchi)</div>
+                          <div class="wdt_72">0904 22 11</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125">
+                          <div class="top_hd_sub">&nbsp;</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb mr_rt">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt">5g</div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125 mr_rt">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_33 brdr_rt">80.00</div>
+                            <div class="list_col1_33 brdr_rt">bdl</div>
+                            <div class="list_col1_33">5%</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt"><input type="text" placeholder="100.00"></div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_96">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt"><input type="text" placeholder="100.00"></div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="prc_list_row">
+                    <div class="dyn_table">
+                      <div class="label_col">
+                        <div class="pb wdt_285 brdt_lft_none">
+                          <div class="list_col1_lft brdr_rt">04</div>
+                          <div class="list_col1_itm_nme brdr_rt">Chilli Powder (Mirchi)</div>
+                          <div class="wdt_72">0904 22 11</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125">
+                          <div class="top_hd_sub">&nbsp;</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb mr_rt">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt">5g</div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125 mr_rt">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_33 brdr_rt">80.00</div>
+                            <div class="list_col1_33 brdr_rt">bdl</div>
+                            <div class="list_col1_33">5%</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt"><input type="text" placeholder="100.00"></div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_96">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt"><input type="text" placeholder="100.00"></div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <div class="prc_list_row">
+                    <div class="dyn_table">
+                      <div class="label_col">
+                        <div class="pb wdt_285 brdt_lft_none">
+                          <div class="list_col1_lft brdr_rt">05</div>
+                          <div class="list_col1_itm_nme brdr_rt">Chilli Powder (Mirchi)</div>
+                          <div class="wdt_72">0904 22 11</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125">
+                          <div class="top_hd_sub">&nbsp;</div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb mr_rt">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt">5g</div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_125 mr_rt">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_33 brdr_rt">80.00</div>
+                            <div class="list_col1_33 brdr_rt">bdl</div>
+                            <div class="list_col1_33">5%</div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt"><input type="text" placeholder="100.00"></div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="label_col">
+                        <div class="pb wdt_96">
+                          <div class="top_hd_sub">
+                            <div class="list_col1_50 brdr_rt"><input type="text" placeholder="100.00"></div>
+                            <div class="list_col1_50"><input type="text" placeholder="100.00"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                </div>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </section>
+</form>
+
+
+
+<!-- <div class="master_container_box" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Sales Order List</legend>
+          <div class="table_content">
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Quotation No.</th>
+                  <th>Quotation Date</th>
+                  <th>Required Date</th>
+                  <th>Valid Until</th>
+                  <th>Quotation Type</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>1</td>
+                  <td>2</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>5</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div> -->

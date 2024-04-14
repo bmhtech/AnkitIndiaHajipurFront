@@ -1,0 +1,12 @@
+@media (max-width: 1024px) {
+    .table_content{ max-width: 1000px; overflow: auto;}
+}
+.dyn_table_conent .dyn_table_header label h3.date_col{ width: 162px !important;}
+.dyn_table{border-top:none;}
+
+div.dataTables_length label { text-align: left; font-weight: 400; padding-top: .5rem; padding-bottom: .5rem; display: inline-block;}
+.dataTables_length select { width: auto;}
+.bs-select select { display: inline-block !important;}
+.table_container .table_content table th {cursor: pointer;}
+.pagination {margin:0px;}
+.table_container .table_content table th .fa-sort{float: right; margin-right: 5px;}

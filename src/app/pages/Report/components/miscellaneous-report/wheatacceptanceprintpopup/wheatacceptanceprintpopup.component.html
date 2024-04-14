@@ -1,0 +1,133 @@
+
+<mat-dialog-content>
+  <button class="close_btn" mat-button mat-dialog-close ><i class="fa fa-close icon"></i></button>
+<div class="container-fluid" >
+  <div class="row" id="print-section" class="print ">
+    <div class="col-lg-12">
+        <div style="padding:10px;">
+          <table border="1" style="padding:10px;" >
+            <thead>
+              <tr>
+                <td colspan="28" style="text-align: center;"><b>{{company_name}}</b></td>
+             </tr>
+              <tr>
+                <td colspan="28" style="text-align: center;"><b>Wheat Acceptance Report</b></td>
+             </tr>
+
+              <tr>
+                 
+                 <td colspan="12" style="text-align: center;"><b>PERIPHERAL SAMPLES REPORT</b></td>
+                 <td colspan="16" style="text-align: center;"><b>MASTER SAMPLES REPORT</b></td>
+              </tr>
+               <tr>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                <th></th>
+                 <th colspan="2" style="text-align: center;"><b>Moisture</b></th>
+                
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 <th></th>
+                 
+              </tr> 
+             
+              <tr>
+                 <th style="text-align: center;"><b>Date</b></th>
+                 <th style="text-align: center;"><b>Vehicle No</b></th>
+                 <th style="text-align: center;"><b>Grade</b></th>
+                 <th style="text-align: center;"><b>HLW</b></th>
+                 <th style="text-align: center;"><b>Moisture DM</b></th>
+                 <th style="text-align: center;"><b>Moisture AM</b></th>
+                 <th style="text-align: center;"><b>Wet Gluten</b></th>
+                 <th style="text-align: center;"><b>SV</b></th>
+                 <th style="text-align: center;"><b>Stone</b></th>
+                 <th style="text-align: center;"><b>Infestation</b></th>
+                 <th style="text-align: center;"><b>Odour</b></th>
+                 <th style="text-align: center;"><b>Stack No</b></th>
+                 <th style="text-align: center;"><b>HLW</b></th>
+                 <th style="text-align: center;"><b>Oven Moisture</b></th>
+                 <th style="text-align: center;"><b>(+)6MM</b></th>
+                 <th style="text-align: center;"><b>(-)2.5MM</b></th>
+                 <th style="text-align: center;"><b>OFG</b></th>
+                 <th style="text-align: center;"><b>IDK</b></th>
+                 <th style="text-align: center;"><b>Stone</b></th>
+                 <th style="text-align: center;"><b>Total Impurities</b></th>
+                 <th style="text-align: center;"><b>Broken Shirvilled</b></th>
+                 <th style="text-align: center;"><b>Grand Total</b></th>
+                 <th style="text-align: center;"><b>Potia</b></th>
+                 <th style="text-align: center;"><b>KB</b></th>
+                 <th style="text-align: center;"><b>Infestation</b></th>
+                 <th style="text-align: center;"><b>Odour</b></th>
+                 <th style="text-align: center;"><b>Lab Chemist</b></th>
+              </tr>
+              
+            </thead>
+            <tbody>
+             
+                <tr *ngFor="let acceptance of wheatacceptancelist">
+                  <td style="text-align: center;">{{acceptance.date}}</td>
+                  <td style="text-align: center;">{{acceptance.vehicle_no}}</td>
+                  <td style="text-align: center;">{{acceptance.grade}}</td>
+                  <td style="text-align: center;">{{acceptance.hlw}}</td>
+                  <td style="text-align: center;">{{acceptance.moisture_dm}}</td>
+                  <td style="text-align: center;">{{acceptance.moisture_am}}</td>
+                  <td style="text-align: center;">{{acceptance.wet_gluten}}</td>
+                  <td style="text-align: center;">{{acceptance.sv}}</td>
+                  <td style="text-align: center;">{{acceptance.stone}}</td>
+                  <td style="text-align: center;">{{acceptance.infestation}}</td>
+                  <td style="text-align: center;">{{acceptance.odour}}</td>
+                  <td style="text-align: center;">{{acceptance.stack_no}}</td>
+                  <td style="text-align: center;">{{acceptance.master_hlw}}</td>
+                  <td style="text-align: center;">{{acceptance.oven_moisture}}</td>
+                  <td style="text-align: center;">{{acceptance.sixmm}}</td>
+                  <td style="text-align: center;">{{acceptance.twomm}}</td>
+                  <td style="text-align: center;">{{acceptance.ofg}}</td>
+                  <td style="text-align: center;">{{acceptance.idk}}</td>
+                  <td style="text-align: center;">{{acceptance.master_stone}}</td>
+                  <td style="text-align: center;">{{acceptance.total_impurities}}</td>
+                  <td style="text-align: center;">{{acceptance.broken_shirvilled}}</td>
+                  <td style="text-align: center;">{{acceptance.grand_total}}</td>
+                  <td style="text-align: center;">{{acceptance.potia}}</td>
+                  <td style="text-align: center;">{{acceptance.kb}}</td>
+                  <td style="text-align: center;">{{acceptance.master_infestation}}</td>
+                  <td style="text-align: center;">{{acceptance.master_odour}}</td>
+                  <td style="text-align: center;">{{acceptance.lab_chemist}}</td>
+                   
+                  </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      
+    </div>
+  </div> 
+</div>
+</mat-dialog-content>
+<div  class="col-lg-12">
+  <div class="form-group">
+      <button mat-raised-button (click)="exportAsXLSX()" color="primary" >Export To Excel</button>
+      <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
+   </div>
+
+ 
+</div>

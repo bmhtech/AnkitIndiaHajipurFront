@@ -1,0 +1,177 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i class="material-icons">list</i>List</button></li>
+          </ul>   
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader" >
+    <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+  </div>
+</div> 
+
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <fieldset>
+    <div class="container-fluid">   
+      <div class="row">
+        <div class="col-lg-12 col-md-9 col-sm-6 col-12">
+          
+          <fieldset>
+            <legend>Mill Breakdown Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Date</mat-label>
+                <input  formControlName="date"  [(ngModel)]="currentDate" type="date" class="form-control">
+              </div>
+            </div>
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Business Unit<span class="red">*</span></mat-label>
+                <mat-select class="form-control"  [(ngModel)]="BuUnit" formControlName="business_unit">
+                  <mat-option *ngFor="let list of businesslists" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+            
+          </fieldset>
+            <fieldset>
+              <legend>Other Parameter Details</legend>
+
+                    <div class="col-lg-12">
+                      <div class="dyn_table_conent">
+                        
+                        <div class="dyn_table_header">
+                          <label class="label_col"><h3>Action</h3></label>
+                          <label class="label_col"><h3 class="srln">Srl No</h3> </label>
+                          <label class="label_col"><h3 class="dt_nam">Breakdown</h3></label>
+                          <label class="label_col"><h3 class="dt_nam">Breakdown Start Date<span class="red">*</span></h3></label>
+                          <label class="label_col"><h3>Breakdown Start Time<span class="red">*</span></h3></label>
+                          <label class="label_col"><h3 class="dt_nam">Breakdown End Date<span class="red">*</span></h3></label>
+                          <label class="label_col"><h3>Breakdown End Time<span class="red">*</span></h3></label>
+                          <label class="label_col"><h3>Time Difference</h3></label>
+                          <label class="label_col"><h3>Shift<span class="red">*</span></h3></label>
+                          <label class="label_col"><h3 class="i_nam">Remarks</h3></label>
+                        
+                        </div>
+                        <div class="dyn_table_data_cont" formArrayName="millbreakdownreport_Dtls">
+                          <div class="dyn_table" *ngFor="let item of millbreakdownreport_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                            <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                            <div class="label_col"><input formControlName="slno" class="form-control srln" type="text" readonly/></div>
+                            <div class="label_col"><input formControlName="breakdowncount" class="form-control dt_nam" type="text" readonly/></div>
+                            <div class="label_col"><input formControlName="startdate" [(ngModel)]="currentDate" class="form-control dt_nam" type="date" (change)="ShutdownStartDate(pointIndex,$event)"/></div>
+                            <div class="label_col"><input formControlName="starttime" class="form-control" type="time" (change)="ShutdownStartTime(pointIndex,$event)"/></div>
+                            <div class="label_col"><input formControlName="enddate" class="form-control dt_nam" type="date" (change)="ShutdownEndDate(pointIndex,$event)"/></div>
+                            <div class="label_col"><input formControlName="endtime" class="form-control" type="time" (change)="ShutdownEndTime(pointIndex,$event)"/></div>
+                            <div class="label_col"><input formControlName="timediff" class="form-control" type="text" readonly/></div>
+                            <div class="label_col"><select class="form-control" formControlName="shift"><option value="0">-Select-</option> <option value="ShiftA">Shift A</option> <option value="ShiftB">Shift B</option></select></div>
+                            <div class="label_col"><input formControlName="remarks" class="form-control i_nam" type="text"/></div>
+                          </div>
+                        </div>
+                    </div>
+                  </div>
+                  <div class="btm_btn_content" >
+                    <button type="button" class="btn btn-success"  (click)="addItems()">Add Row </button>
+                  </div>
+
+
+            </fieldset>
+
+            <fieldset>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Total Breakdown(Hours)</mat-label>
+                  <input  formControlName="totalhoursbreakdown" type="text" class="form-control" readonly>
+                </div>
+              </div>
+
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                  <mat-label>Total No of Breakdown</mat-label>
+                  <input  formControlName="totalnobreakdown" type="text" class="form-control" readonly>
+                </div>
+              </div>
+           </fieldset>
+
+          <div class="col-lg-12" >
+            <div class="form-group">
+              <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="millbreakdownresave">Submit</button>
+            </div>
+          </div>
+        </div>
+       </div>
+
+    </div>
+  </fieldset>
+  </section>
+</form>
+
+
+<div class="container-fluid" *ngIf="isHidden==false">
+
+  <form [formGroup]="userForm1">
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>From Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="fromdate">
+      </div>
+    </div>
+
+    <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+      <div class="form-group">
+        <mat-label>To Date</mat-label>
+        <input type="date"  class="form-control"  formControlName="todate">
+      </div>
+    </div>
+   
+    <div class="col-lg-12" >
+      <div class="form-group">
+        <button type="submit" class="btn btn-primary" (click)="search()"  >Search</button>
+      </div>
+    </div>
+  </form> 
+
+  <div class="row">
+    <div class="col-lg-12">
+      <fieldset class="table_container">
+        <legend>Mill Breakdown Report List</legend>
+        <div class="table_content">
+          <table class="table table-bordered">
+            <thead>
+              <tr>
+                <th>Date</th>
+                <th>Bussiness Unit</th>
+                <th>Total Breakdown</th>
+                <th>Total No of Breakdown</th>
+                <th colspan="4">Action</th>       
+              </tr>
+            </thead>
+            <tbody>
+                <tr *ngFor="let millbreakdown of millbreakdownlist">
+                    <td>{{millbreakdown.date}}</td>
+                    <td>{{millbreakdown.business_unitname}}</td>
+                    <td>{{millbreakdown.totalhoursbreakdown}}</td>
+                    <td>{{millbreakdown.totalnobreakdown}}</td>
+                    <td><button class="btn btn-success" (click)="onUpdate(millbreakdown.id, 'view')" >View</button></td>
+                    <td><button class="btn btn-info" (click)="onUpdate(millbreakdown.id, 'update')" >Update</button></td>  
+                    <td><button class="btn btn-danger" (click)="onDelete(millbreakdown.id)" >Delete</button></td>
+                    <!-- <td><button class="btn btn-info" (click)="print(millbreakdown.millbreakdownid)">Print</button></td> -->
+                  
+                  </tr>
+            </tbody>
+          </table>
+         
+        </div>
+      </fieldset>
+    </div>
+  </div> 
+</div>
