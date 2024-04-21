@@ -2450,7 +2450,7 @@ export class UnloadWeighmentComponent implements OnInit {
       })
   }
 
-  onTerminate(id, wgment_id, net_weight) {
+  onTerminate(id, wgment_id, net_weight,wgment_for) {
     /* if (confirm("Are you sure to Terminate this Weighment ?")) 
     {
       this.status=false;
@@ -2472,7 +2472,7 @@ export class UnloadWeighmentComponent implements OnInit {
     dialogConfig.data = {};
 
     let dialogRef = this.dialog.open(WeighmentterminatepopupComponent, {
-      data: { id: id, wgmentid: wgment_id, net_weight: net_weight }, height: '80%',
+      data: { id: id, wgmentid: wgment_id, net_weight: net_weight, wgment_for:wgment_for }, height: '80%',
       width: '80%'
     });
     dialogRef.afterClosed().subscribe(data => {
