@@ -4,7 +4,7 @@ npm install ng-multiselect-dropdown         // Without Version
 
 npm i angular-dual-listbox@4.6.0
 
-npm i @angular/cli@7.3.10
+npm i -g @angular/cli@7.3.10
 
 npm i ngx-export-as@1.2.6
 

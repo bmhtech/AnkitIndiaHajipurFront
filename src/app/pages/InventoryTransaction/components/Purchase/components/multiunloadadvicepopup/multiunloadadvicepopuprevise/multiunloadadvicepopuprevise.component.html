@@ -13,29 +13,29 @@
             <legend>Document List</legend>
                 <div class="dyn_table_conent">
                   <div class="dyn_table_header">
-                    <label class="label_col" ><h3 >Action</h3></label>
+                    <label class="label_col"><h3 style="width: 58px;">Action</h3></label>
             
-                    <label class="label_col"><h3 >PurchaseOrder No</h3></label>
-                    <label class="label_col"><h3 >Unadvice No</h3></label>
-                    <label class="label_col"><h3 >Weigment No	</h3></label>
-                    <label class="label_col"><h3>Item Type</h3></label>
-                    <label class="label_col"><h3>Supplier Name</h3></label>
+                    <label class="label_col"><h3 style="width: 127px;">PurchaseOrder No</h3></label>
+                    <label class="label_col"><h3 style="width: 185px;">Unadvice No</h3></label>
+                    <label class="label_col"><h3 style="width: 130px;">Weigment No	</h3></label>
+                    <label class="label_col"><h3 style="width: 188px;">Item Type</h3></label>
+                    <label class="label_col"><h3 style="width: 190px;">Supplier Name</h3></label>
                     
                     
                   </div>           
                   <div class="dyn_table_data_cont" formArrayName="multiunloadadvice_details">
                     <div class="dyn_table" *ngFor="let item of multiunloadadvice_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
                       <!-- <div class="label_col" style="width: 50px;"><mat-checkbox (change)="check1(pointIndex,$event,multiunloadadvice_details.controls)" formControlName="checkbox"></mat-checkbox></div>    -->
-                      <div class="label_col" *ngIf="showbutton;else elseBlockupdatedynamic"><mat-checkbox (change)="check1(pointIndex,$event)" formControlName="checkbox"></mat-checkbox></div>
+                      <div class="label_col" *ngIf="showbutton;else elseBlockupdatedynamic" style="padding: 1px 20px 0px 20px;"><mat-checkbox (change)="check1(pointIndex,$event)" formControlName="checkbox"></mat-checkbox></div>
                     
                     <ng-template #elseBlockupdatedynamic>
-                      <div class="label_col" ><mat-checkbox class="form-control" style="width: 53px;" formControlName="checkbox" [disabled] ="true"></mat-checkbox></div>
+                      <div class="label_col"  style="padding: 1px 20px 0px 20px;"><mat-checkbox class="form-control" formControlName="checkbox" [disabled] ="true"></mat-checkbox></div>
                    </ng-template>
-                      <div class="label_col"><input formControlName="referance_id" class="form-control" type="text" /></div>
-                      <div class="label_col"><input formControlName="unadviceno" class="form-control" type="text" /></div>
-                      <div class="label_col"><input formControlName="weigmentno" class="form-control" type="text" /></div>
-                      <div class="label_col"><input formControlName="item_subtypename" class="form-control" type="text" /></div>
-                      <div class="label_col"><input formControlName="supp_name" class="form-control" type="text" />
+                      <div class="label_col"><input formControlName="referance_id" class="form-control" type="text"  style="width: 125px;"/></div>
+                      <div class="label_col"><input formControlName="unadviceno" class="form-control" type="text"  style="width: 180px;"/></div>
+                      <div class="label_col"><input formControlName="weigmentno" class="form-control" type="text"  style="width: 125px;"/></div>
+                      <div class="label_col"><input formControlName="item_subtypename" class="form-control" type="text"  style="width: 180px;"/></div>
+                      <div class="label_col"><input formControlName="supp_name" class="form-control" type="text"  style="width: 180px;"/>
                         
                         <input formControlName="total_qty_check" class="form-control" type="hidden" />
                         <input formControlName="total_stock_qtycheck" class="form-control" type="hidden" />
