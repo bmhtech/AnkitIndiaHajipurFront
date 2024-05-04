@@ -2994,6 +2994,10 @@ export class DropdownServiceService {
     return this.httpClient.get(this.url + 'getMiscList').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getMiscListFast(): Observable<any> {
+    return this.httpClient.get(this.url + 'getMiscListFast').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
   getSuppAddrById(suppid: String): Observable<any> {
     return this.httpClient.get(this.url + 'getSuppContById/' + suppid).pipe(catchError((err) => {
       console.log("error in service: " + JSON.stringify(err));

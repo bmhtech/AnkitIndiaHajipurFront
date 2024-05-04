@@ -134,6 +134,32 @@ retrivePurchaseGRNUnloadAdvicePopup(id:any): Observable<any>{ return this.httpCl
 retrivePurchaseGRNMultipleUnloadAdvicePopup(id:any): Observable<any>{ return this.httpClient.get<any>(this.url+'retrivePurchaseGRNMultipleUnloadAdvicePopup/'+id).pipe(catchError((err) => {console.log("error in service: "+JSON.stringify(err));return throwError(err.status);}));}
 retriveGRNItemFormultiple(id:any): Observable<any>{ return this.httpClient.get<any>(this.url+'retriveGRNItemFormultiple/'+id).pipe(catchError((err) => {console.log("error in service: "+JSON.stringify(err));return throwError(err.status);}));}
 
+
+grnItemDtlsRetriveListFast(grnid): Observable<any> {
+  return this.httpClient.get<any>(this.url + 'grnItemDtlsRetriveListFast/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+}
+grnOtherInfoRetriveListFast(grnid): Observable<any> {
+  return this.httpClient.get<any>(this.url + 'grnOtherInfoRetriveListFast/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+}
+grnBrokerRetriveListFast(grnid): Observable<any> {
+  return this.httpClient.get<any>(this.url + 'grnBrokerRetriveListFast/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+}
+grnTransInfoRetriveListFast(grnid): Observable<any> {
+  return this.httpClient.get<any>(this.url + 'grnTransInfoRetriveListFast/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+}
+grnBPDtlsRetriveListFast(grnid): Observable<any> {
+  return this.httpClient.get<any>(this.url + 'grnBPDtlsRetriveListFast/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+}
+grnResourceCostRetriveListFast(grnid): Observable<any> {
+  return this.httpClient.get<any>(this.url + 'grnResourceCostRetriveListFast/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+}
+grnDocRetriveListFast(grnid): Observable<any> {
+  return this.httpClient.get<any>(this.url + 'grnDocRetriveListFast/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+}
+grndriverdetailsFast(grnid): Observable<any> {
+  return this.httpClient.get<any>(this.url + 'grndriverdetailsFast/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+}
+
 grndriverdetails(grn_id:string): Observable<any>{ return this.httpClient.get<any>(this.url+'grndriverdetails/'+grn_id).pipe(catchError((err) => {console.log("error in service: "+JSON.stringify(err));return throwError(err.status);}));}    
 // end
 
