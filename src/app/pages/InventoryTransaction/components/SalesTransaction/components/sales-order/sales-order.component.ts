@@ -2472,6 +2472,7 @@ export class SalesOrderComponent implements OnInit {
 
   onChangeCustomerChannel(channel_id: string) {
     if (channel_id.length && channel_id != "0") {
+      this.status = false;
       let i = 0;
       this.contNameList = [];
       this.selectedPartyName = [];
@@ -2481,9 +2482,10 @@ export class SalesOrderComponent implements OnInit {
       while (this.sales_Order_Party_Dtls.length)
         this.sales_Order_Party_Dtls.removeAt(0);
 
-      this.DropDownListService.getCustomerByChannel(channel_id).subscribe(data => {
+      //this.DropDownListService.getCustomerByChannel(channel_id).subscribe(data => {
+        this.DropDownListService.getCustomerByChannelFastApi(channel_id).subscribe(data => {
         this.partyList = data;
-
+        console.log("party list :: "+JSON.stringify(data));
         let channelsup: any = [];
         channelsup = this.partyList;
         let channelsuplist = '';
@@ -2493,7 +2495,7 @@ export class SalesOrderComponent implements OnInit {
         });
 
         this.userForm.patchValue({ cust_channel_list: channelsuplist.substring(0, channelsuplist.length - 1) });
-
+        console.log(" here vineet::  " + channelsuplist.substring(0,channelsuplist.length-1));
         this.partyNameList = data;
         for (let data1 of data) {
           this.status = false;
@@ -2511,7 +2513,7 @@ export class SalesOrderComponent implements OnInit {
             this.status = true;
           });
         }
-
+      this.status = true;
       });
     }
   }
