@@ -1878,10 +1878,17 @@ export class DropdownServiceService {
     return this.httpClient.get<cust_bussiness_partner[]>(this.url + 'getCustomerByChannel/' + channel_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getCustomerByChannelFastApi(channel_id): Observable<any> {
+    return this.httpClient.get(this.url + 'getCustomerByChannelFastApi/' + channel_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
   getSupplierByChannel(channel_id: string): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getSupplierByChannel/' + channel_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getSupplierByChannelFastApi(channel_id): Observable<any> {
+    return this.httpClient.get(this.url + 'getSupplierByChannelFastApi/' + channel_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 
   salesQuotationPrevList(): Observable<Sales_Quotation[]> {
     return this.httpClient.get<Sales_Quotation[]>(this.url + 'salesQuotationPrevList').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
