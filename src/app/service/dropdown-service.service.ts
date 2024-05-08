@@ -1878,10 +1878,17 @@ export class DropdownServiceService {
     return this.httpClient.get<cust_bussiness_partner[]>(this.url + 'getCustomerByChannel/' + channel_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getCustomerByChannelFastApi(channel_id): Observable<any> {
+    return this.httpClient.get(this.url + 'getCustomerByChannelFastApi/' + channel_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
   getSupplierByChannel(channel_id: string): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getSupplierByChannel/' + channel_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getSupplierByChannelFastApi(channel_id): Observable<any> {
+    return this.httpClient.get(this.url + 'getSupplierByChannelFastApi/' + channel_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 
   salesQuotationPrevList(): Observable<Sales_Quotation[]> {
     return this.httpClient.get<Sales_Quotation[]>(this.url + 'salesQuotationPrevList').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
@@ -2992,6 +2999,10 @@ export class DropdownServiceService {
 
   getMiscList(): Observable<any> {
     return this.httpClient.get(this.url + 'getMiscList').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getMiscListFast(): Observable<any> {
+    return this.httpClient.get(this.url + 'getMiscListFast').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
   getSuppAddrById(suppid: String): Observable<any> {
@@ -6221,5 +6232,34 @@ export class DropdownServiceService {
   }
   getCompanyBussinessUnitDetails(company,bunit): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getCompanyBussinessUnitDetails/' + company + "/" + bunit).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  // Multiple Advice Single GRN
+  getUnloadAdvRefPOwt2ArgnewMultiItemGRN(b_unit, supp, itemtype, putype, pusutype, ordate): Observable<any> {
+    return this.httpClient.get(this.url + 'getUnloadAdvRefPOwt2ArgnewMultiItemGRN/' + b_unit + "/" + supp + "/" + itemtype + "/" + putype + "/" + pusutype + "/" + ordate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getItemMasterPackMatMultipopupNew(item_code): Observable<any> {
+    return this.httpClient.get(this.url + 'getItemMasterPackMatMultipopupNew/' + item_code).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getItemPackUomNew(itemid, itemcode, company): Observable<any> {
+    return this.httpClient.get(this.url + 'getItemPackUomNew/' + itemid + "/" + itemcode + "/" + company).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getPurOrdItemDtlsMultipleItemGRN(pur_order_id, item_id): Observable<any> {
+    return this.httpClient.get(this.url + 'getPurOrdItemDtlsMultipleItemGRN/' + pur_order_id + '/' + item_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getpssd_packing_item_qtymultiplepopup(unloadid): Observable<any> {
+    return this.httpClient.get(this.url + 'getpssd_packing_item_qtymultiplepopup/' + unloadid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getPurOrdreceipt_criteriaNew(pur_order_id): Observable<any> {
+    return this.httpClient.get(this.url + 'getPurOrdreceipt_criteriaNew/' + pur_order_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getUnloadWeightmentWtmultipopupmultipleItem(wgmt_id): Observable<any> {
+    return this.httpClient.get(this.url + 'getUnloadWeightmentWtmultipopupmultipleItem/' + wgmt_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 }

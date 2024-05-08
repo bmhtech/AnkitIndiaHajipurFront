@@ -2064,44 +2064,70 @@ export class GrnComponent implements OnInit {
             // dialogref=this.dialog.open(MultiunloadadvicepopupComponent, {data:{b_unit: this.businessUnit,supp_id:this.suppli_id,item_type:this.itmType,pur_type:this.itmSubType,pur_subtype:this.PSubtype,order_date:this.ordate,id:this.grnId} } );
             dialogref = this.dialog.open(MultiunloadadvicepopupreviseComponent, { data: { b_unit: this.businessUnit, supp_id: this.suppli_id, item_type: this.itmType, pur_type: this.itmSubType, pur_subtype: this.PSubtype, order_date: this.ordate, id: this.grnId } });
             dialogref.afterClosed().subscribe(data => {
-              console.log("check here tuhin " + JSON.stringify(data));
+              //console.log("check here tuhin " + JSON.stringify(data));
 
+              let unloadid=[];
+              if(data["unadviceid"].includes(","))
+              {
+                unloadid=data["unadviceid"].split(',');
+              }
+              else
+              {
+                unloadid=data["unadviceid"];
+              }
+
+              console.log("unload:: "+unloadid[0]);
+              
+              
 
               if (data != '' && data["unadviceid"] != '0') {
                 //this.userForm.patchValue({referance_id: data["unadviceid"]});
                 //data["stringunloadadvice"].toString()
-                this.userForm.patchValue({ referance_id: data["unadviceid"] });
+                //this.userForm.patchValue({ referance_id: data["unadviceid"] });
+                this.userForm.patchValue({ referance_id: unloadid[0] });
 
-                console.log("refence id here " + data["stringunloadadvice"] + " / " + data["unadviceid"] + " / " + data["pur_orderid"])
+                //console.log("refence id here " + data["stringunloadadvice"] + " / " + data["unadviceid"] + " / " + data["pur_orderid"])
                 this.packingItem = [];
                 let j = 0;
+                let k=0;
                 this.addItem();
                 this.item_sl_no = 0;
                 while (this.pur_good_receipt_item_details.length)
                   this.pur_good_receipt_item_details.removeAt(0);
 
+                //console.log("GRN DATA:: "+JSON.stringify(data.grn_unload_item_list));
 
+                //console.log("GRN Multi DATA:: "+JSON.stringify(data.multiunloadadvice_details));
+
+                console.log("unloadid LOOP:: "+unloadid[k]);
+
+                // Commented for Grn Multi
                 for (let data1 of data.grn_unload_item_list) {
+                  console.log("JJJJ: "+j);
+                  console.log("KKKK: "+k);
+                  //console.log("GRN Item DATA:: "+JSON.stringify(data1));
                   if (data1["checkbox"] == true || data1["checkbox"] == 'true') {
                     //  data["pur_orderid"] means refernceid id from unloadadvice
                     this.selectedItemName = [];
                     // console.log("itemcode "+data1["item_code"]);
                     this.status = false;
+                    this.addItem();
                     forkJoin(
                       // this.DropDownListService.getItemMasterPackMat(data1["item_code"]),
-                      this.DropDownListService.getItemMasterPackMatMultipopup(data1["item_code"]),
-                      this.DropDownListService.getItemPackUom(data1["item_code"], data1["packing"], this.company_name),
+                      this.DropDownListService.getItemMasterPackMatMultipopupNew(data1["item_code"]),
+                      this.DropDownListService.getItemPackUomNew(data1["item_code"], data1["packing"], this.company_name),
                       //this.DropDownListService.getPurOrdItemDtls(data["pur_orderid"], data1["item_code"]),
-                      this.DropDownListService.getPurOrdItemDtlsnew(data["pur_orderid"], data1["item_code"], data1["packing"]),
-                      //here multipleunoading fetch  
+                      //this.DropDownListService.getPurOrdItemDtlsnew(data["pur_orderid"], data1["item_code"], data1["packing"]),
+                      this.DropDownListService.getPurOrdItemDtlsMultipleItemGRN(data["pur_orderid"], data1["item_code"]),
+                      //here multipleunoadingmultipleitem fetch  
                       //   this.DropDownListService.getpssd_item_qty(data1["mat_wt"],data["unadviceid"],data["pur_orderid"]),
-                      this.DropDownListService.getpssd_item_qtymultiplepopup(data["unadviceid"]),
-                      this.DropDownListService.getpssd_packing_qtymultiplepopup(data["unadviceid"]),
-                      this.DropDownListService.getPurOrdreceipt_criteria(data["pur_orderid"]),
-                      this.DropDownListService.getItemNameById(data1["item_code"], this.company_name)
-                    ).subscribe(([packingList, capacityEmptyWt, purOrdData, podata, popackingdata, porc, ItemGrp]) => {
-                      //  console.log("podata :: " + JSON.stringify(podata) + " / " + popackingdata );
-                      //
+                      //this.DropDownListService.getpssd_item_qtymultiplepopup(data["unadviceid"]),
+                      this.DropDownListService.getpssd_packing_item_qtymultiplepopup(unloadid[k]),
+                      //this.DropDownListService.getpssd_packing_qtymultiplepopup(data["unadviceid"]),
+                      this.DropDownListService.getPurOrdreceipt_criteriaNew(data["pur_orderid"]),
+                      this.DropDownListService.getItemNameByIdNew(data1["item_code"], this.company_name)
+                    ).subscribe(([packingList, capacityEmptyWt, purOrdData, itempackingdata, porc, ItemGrp]) => {       //podata, popackingdata,
+                      console.log("itempackingdata :: " + JSON.stringify(itempackingdata));
                       this.status = true;
                       //this.onChangeWarehouse(data1.wearhouse, j);
                       if (data1.wearhouse == '' || data1.wearhouse == null || data1.wearhouse == '0') {
@@ -2111,7 +2137,7 @@ export class GrnComponent implements OnInit {
                         this.onChangeWarehouse(data1.wearhouse, j);
                       }
 
-                      this.finalgrnqty = Number(JSON.stringify(podata));
+                      this.finalgrnqty = Number(itempackingdata["net_weight"]);
                       // console.log(" capacityEmptyWt "+JSON.stringify(capacityEmptyWt))
                       if (porc[0].receipt_criteria == '0' || porc[0].receipt_criteria == null) {
 
@@ -2136,8 +2162,8 @@ export class GrnComponent implements OnInit {
                         }
 
                       }
-                      console.log(" here ::")
-                      this.addItem();
+                     // console.log(" Pur here :: " +JSON.stringify(purOrdData));
+                     
                       this.selectedItemName[j] = data1["item_code"];
                       //   ,empbagwt_based_on:capacityEmptyWt["empbagwt_based_on"]
                       // console.log(" here1 ::" + capacityEmptyWt["empbagwt_based_on"] + " / " + JSON.stringify(packingList) + " / "+  capacityEmptyWt["capacity"]+" // "+capacityEmptyWt["empty_big_wt"])
@@ -2150,17 +2176,19 @@ export class GrnComponent implements OnInit {
                         adv_packing: data1["packing"], adv_pack_qty: data1["s_qty"], adv_pack_uom: data1["s_uom"],
                         adv_item_qty: data1["quantity"], adv_mat_wt: data1["mat_wt"], adv_item_uom: data1["uom"],
                         rcv_pack_uom: data1["s_uom"], rcv_item_uom: data1["uom"],
-                        pssd_pack_uom: data1["s_uom"], rcv_pack_qty: popackingdata, rcv_item_qty: podata, pssd_item_uom: data1["uom"], warehouse_name: data1["wearhouse"],
-                        rack: data1["rack"], qc_norms: data1["qc_norms"],
-                        unit_rate: purOrdData["price"],
-                        price_based_on: purOrdData["price_based_on"], discount: purOrdData["discount"], discount_based_on: purOrdData["discount_basedon"],
-                        tax_code: purOrdData["tax_code"], tax_rate: purOrdData["tax_rate"], hsn_code: ItemGrp["hsn_code"], classified_item_name: data1["classified_item_name"]
+                        pssd_pack_uom: data1["s_uom"], rcv_pack_qty: itempackingdata[0]["tarebags"], rcv_item_qty: itempackingdata[0]["net_weight"], pssd_item_uom: data1["uom"], warehouse_name: data1["wearhouse"],
+                        rack: data1["rack"],
+                        unit_rate: purOrdData[0]["price"],
+                        price_based_on: purOrdData[0]["price_based_on"], discount: purOrdData[0]["discount"], discount_based_on: purOrdData[0]["discount_basedon"],
+                        tax_code: purOrdData[0]["tax_code"], tax_rate: purOrdData[0]["tax_rate"], hsn_code: ItemGrp["hsn_code"], classified_item_name: data1["classified_item_name"], qc_norms: data1["qc_norms"]
                       });
                       this.getRcvPackingQtyautocalculate(this.pur_good_receipt_item_details.at(j).get("rcv_pack_qty").value, j)
-                      //j = j + 1;
+                      j = j + 1;
                     });
                   }
+                  k++;
                 }
+                 // Commented for Grn Multi Ends
 
                 //.log(" sysout " + JSON.stringify(data["stringunloadadvice"]))
 
@@ -2987,12 +3015,8 @@ export class GrnComponent implements OnInit {
       forkJoin(
         this.DropDownListService.getPurOrdDetails(unloadData["pur_orderid"]),
         this.DropDownListService.getPurOrdAppChgs(unloadData["pur_orderid"]),
-
-
-
-
-        this.DropDownListService.getUnloadWeightmentWtmultipopup(staticunloadadvice)
-
+        //this.DropDownListService.getUnloadWeightmentWtmultipopup(staticunloadadvice)
+        this.DropDownListService.getUnloadWeightmentWtmultipopupmultipleItem(unadvice_id)
       ).subscribe(([chargesData, appchargesData, weigmtData]) => {
         this.userForm.patchValue({ applicable_charges_id: chargesData["app_chgs_id"] });
 
@@ -3009,11 +3033,11 @@ export class GrnComponent implements OnInit {
           });
           k = k + 1;
         }
-
+        console.log("WGT :: "+JSON.stringify(weigmtData));
         this.pur_goods_receipt_other_information.patchValue({
-          own_gross_wt: weigmtData["gross_weight"], own_gross_uom: weigmtData["gw_unit"],
-          own_weigh_date: weigmtData["gw_date"], own_net_uom: weigmtData["nw_unit"], own_net_wt: (Math.round(weigmtData["net_weight"] * 100) / 100).toFixed(3),
-          own_tare_wt: weigmtData["tare_weight"], own_tare_uom: weigmtData["tw_unit"]
+          own_gross_wt: weigmtData[0]["gross_weight"], own_gross_uom: weigmtData[0]["gw_unit"],
+          own_weigh_date: weigmtData[0]["gw_date"], own_net_uom: weigmtData[0]["nw_unit"], own_net_wt: (Math.round(weigmtData[0]["net_weight"] * 100) / 100).toFixed(3),
+          own_tare_wt: weigmtData[0]["tare_weight"], own_tare_uom: weigmtData[0]["tw_unit"]
         });
         this.status = true;
       })
@@ -3271,14 +3295,22 @@ export class GrnComponent implements OnInit {
 
     forkJoin(
       this.Service.retrivePurchaseGoodReceipt(id),
-      this.Service.grnItemDtlsRetriveList(grn_id),
-      this.Service.grnOtherInfoRetriveList(grn_id),
-      this.Service.grnBrokerRetriveList(grn_id),
-      this.Service.grnTransInfoRetriveList(grn_id),
-      this.Service.grnBPDtlsRetriveList(grn_id),
-      this.Service.grnResourceCostRetriveList(grn_id),
-      this.Service.grnDocRetriveList(grn_id),
-      this.Service.grndriverdetails(grn_id)
+     // this.Service.grnItemDtlsRetriveList(grn_id),
+     this.Service.grnItemDtlsRetriveListFast(grn_id),
+     // this.Service.grnOtherInfoRetriveList(grn_id),
+     this.Service.grnOtherInfoRetriveListFast(grn_id),
+     // this.Service.grnBrokerRetriveList(grn_id),
+     this.Service.grnBrokerRetriveListFast(grn_id),
+      //this.Service.grnTransInfoRetriveList(grn_id),
+      this.Service.grnTransInfoRetriveListFast(grn_id),
+     // this.Service.grnBPDtlsRetriveList(grn_id),
+     this.Service.grnBPDtlsRetriveListFast(grn_id),
+     // this.Service.grnResourceCostRetriveList(grn_id),
+     this.Service.grnResourceCostRetriveListFast(grn_id),
+      //this.Service.grnDocRetriveList(grn_id),
+      this.Service.grnDocRetriveListFast(grn_id),
+      //this.Service.grndriverdetails(grn_id)
+      this.Service.grndriverdetailsFast(grn_id)
 
     ).subscribe(([GrnData, itemData, OtherInfoData, BrokerData,
       TransData, BpDetails, ResourceCostData, docData, driverdetails]) => {

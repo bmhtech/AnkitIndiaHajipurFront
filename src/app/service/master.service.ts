@@ -2099,6 +2099,36 @@ export class Master {
   wmUnAdvicePartyWmRetriveList(unloadadvice_id: string): Observable<Wm_unload_advice_party_wm> { return this.httpClient.get<Wm_unload_advice_party_wm>(this.url + 'wmUnAdvicePartyWmRetriveList/' + unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); })) }
   wmUnAdviceTransConRetriveList(unloadadvice_id: string): Observable<Wm_unload_advice_terms_con> { return this.httpClient.get<Wm_unload_advice_terms_con>(this.url + 'wmUnAdviceTransConRetriveList/' + unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); })) }
   wmUnAdviceTransInfoRetriveList(unloadadvice_id: string): Observable<Wm_unload_advice_trans_info> { return this.httpClient.get<Wm_unload_advice_trans_info>(this.url + 'wmUnAdviceTransInfoRetriveList/' + unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); })) }
+  
+  wmUnAdviceBrokerRetriveFastList(unloadadvice_id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'wmUnAdviceBrokerRetriveFastList/'+unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  wmUnAdviceBpDtlsRetriveFastList(unloadadvice_id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'wmUnAdviceBpDtlsRetriveFastList/'+unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  wmUnAdviceDriverDtlsRetriveFastList(unloadadvice_id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'wmUnAdviceDriverDtlsRetriveFastList/'+unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  wmUnAdvicePartyWmRetriveFastList(unloadadvice_id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'wmUnAdvicePartyWmRetriveFastList/'+unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  wmUnAdviceTransInfoRetriveFastList(unloadadvice_id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'wmUnAdviceTransInfoRetriveFastList/'+unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  wmUnAdviceAppChgsRetriveListFast(unloadadvice_id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'wmUnAdviceAppChgsRetriveListFast/'+unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  wmUnAdviceDocRetriveListFast(unloadadvice_id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'wmUnAdviceDocRetriveListFast/'+unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+   getUnloadItemFastList(unloadadvice_id): Observable<any> {
+     return this.httpClient.get<any>(this.url + 'getUnloadItemFastList/'+unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+   }
+
+  wmUnAdviceTransConRetriveFastList(unloadadvice_id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'wmUnAdviceTransConRetriveFastList/'+unloadadvice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 
   tagadviceRetrive(id: any): Observable<TagAdviceWithPo> { return this.httpClient.get<TagAdviceWithPo>(this.url + 'tagadviceRetrive/' + id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); })) }
 

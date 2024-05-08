@@ -4777,10 +4777,12 @@ export class PurchaseOrderComponent implements OnInit {
 
   onChangeSupplierChannel(sup_channel) {
     if (sup_channel.length) {
-
-      this.DropDownListService.getSupplierByChannel(sup_channel).subscribe(data => {
+      this.status = false;
+      //this.DropDownListService.getSupplierByChannel(sup_channel).subscribe(data => {
+        this.DropDownListService.getSupplierByChannelFastApi(sup_channel).subscribe(data => {
+          console.log("cust list :: "+JSON.stringify(data));
         this.supplierNames = data;
-        this.status = true;
+        
 
         let channelsup: any = [];
         channelsup = this.supplierNames;
@@ -4791,9 +4793,10 @@ export class PurchaseOrderComponent implements OnInit {
         });
 
         this.userForm.patchValue({ sup_channel_list: channelsuplist.substring(0, channelsuplist.length - 1) });
-        //console.log(" here tuhin " + channelsuplist.substring(0,channelsuplist.length-1))
+        console.log(" here tuhin " + channelsuplist.substring(0,channelsuplist.length-1));
+        this.status = true;
       });
-
+      
 
     }
   }
