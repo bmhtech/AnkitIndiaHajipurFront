@@ -3295,14 +3295,22 @@ export class GrnComponent implements OnInit {
 
     forkJoin(
       this.Service.retrivePurchaseGoodReceipt(id),
-      this.Service.grnItemDtlsRetriveList(grn_id),
-      this.Service.grnOtherInfoRetriveList(grn_id),
-      this.Service.grnBrokerRetriveList(grn_id),
-      this.Service.grnTransInfoRetriveList(grn_id),
-      this.Service.grnBPDtlsRetriveList(grn_id),
-      this.Service.grnResourceCostRetriveList(grn_id),
-      this.Service.grnDocRetriveList(grn_id),
-      this.Service.grndriverdetails(grn_id)
+     // this.Service.grnItemDtlsRetriveList(grn_id),
+     this.Service.grnItemDtlsRetriveListFast(grn_id),
+     // this.Service.grnOtherInfoRetriveList(grn_id),
+     this.Service.grnOtherInfoRetriveListFast(grn_id),
+     // this.Service.grnBrokerRetriveList(grn_id),
+     this.Service.grnBrokerRetriveListFast(grn_id),
+      //this.Service.grnTransInfoRetriveList(grn_id),
+      this.Service.grnTransInfoRetriveListFast(grn_id),
+     // this.Service.grnBPDtlsRetriveList(grn_id),
+     this.Service.grnBPDtlsRetriveListFast(grn_id),
+     // this.Service.grnResourceCostRetriveList(grn_id),
+     this.Service.grnResourceCostRetriveListFast(grn_id),
+      //this.Service.grnDocRetriveList(grn_id),
+      this.Service.grnDocRetriveListFast(grn_id),
+      //this.Service.grndriverdetails(grn_id)
+      this.Service.grndriverdetailsFast(grn_id)
 
     ).subscribe(([GrnData, itemData, OtherInfoData, BrokerData,
       TransData, BpDetails, ResourceCostData, docData, driverdetails]) => {

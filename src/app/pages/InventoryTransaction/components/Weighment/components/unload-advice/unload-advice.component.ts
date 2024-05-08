@@ -716,7 +716,8 @@ export class UnloadAdviceComponent implements OnInit {
 
       if (adviceType == 'Stock Transfer') {
         this.referenceTypeList = [{ "name": "Stock Transfer", "value": "Stock Transfer" }];
-        this.DropDownListService.transporterNamesList().subscribe(data => { this.transporterNames = data; });
+        //this.DropDownListService.transporterNamesList().subscribe(data => { this.transporterNames = data; });
+        this.DropDownListService.getTransporterMNCListFast().subscribe(data => { this.transporterNames = data; });
         this.adviceType = 'Stock Transfer';
         this.userForm.patchValue({ ref_type: 'Stock Transfer' });
         if (this.businessUnit != "0") { this.onChangeBusinessUnit(this.businessUnit, 'update'); }
@@ -969,7 +970,8 @@ export class UnloadAdviceComponent implements OnInit {
       });
     }
     if (transporter_id == "0") {
-      this.DropDownListService.getVehiclenoall().subscribe(data => {
+      //this.DropDownListService.getVehiclenoall().subscribe(data => {
+        this.DropDownListService.getVehiclenoallNew().subscribe(data => {
         this.vehclenos = data;
         this.status = true;
       });
@@ -1179,7 +1181,8 @@ export class UnloadAdviceComponent implements OnInit {
             this.DropDownListService.getDeliveryAddrById(suppid),
             this.DropDownListService.getSuppAddrById(suppid),
             this.DropDownListService.getAddrById(suppid),
-            this.DropDownListService.getVehiclenoall()
+            //this.DropDownListService.getVehiclenoall()
+            this.DropDownListService.getVehiclenoallNew()
             // this.DropDownListService.getBrokerListBySupplierCode(suppid)
             // ).subscribe(([data, data1, data2, data3, data4])=>
           ).subscribe(([data, data2, data3, data4, vehicleall]) => {
@@ -1489,8 +1492,10 @@ export class UnloadAdviceComponent implements OnInit {
           // this.DropDownListService.brokerNameList(),
           this.DropDownListService.brokerNameListFast(),
           this.DropDownListService.getWeighmentCharges(),
-          this.DropDownListService.ledgerNameList(),
-          this.DropDownListService.payTermNameList(),
+         // this.DropDownListService.ledgerNameList(),
+         this.DropDownListService.ledgerNameListNew(),
+         // this.DropDownListService.payTermNameList(),
+         this.DropDownListService.payTermNameListFast(),
           // this.DropDownListService.itemTypeListNew(this.company_name),
           this.DropDownListService.itemTypeListFastAPI(this.company_name),
 
@@ -1503,7 +1508,7 @@ export class UnloadAdviceComponent implements OnInit {
           this.DropDownListService.getChargeMasterList(),
           this.DropDownListService.getMiscList(),
           // this.DropDownListService.getVehiclenoall(), //change on 13042023  by bidhan
-          this.DropDownListService.getVehicleThruWeighmentfast()
+          this.DropDownListService.getVehiclenoallNew()
         ).subscribe(([brokerData, wmtChgData, ledgerData, paytermData, itemTypeData,
           itemNameData, customUomData, buData, chgMasterData, getMiscData, vehclenosall]) => {
           //changes12-04-2022
@@ -1556,8 +1561,10 @@ export class UnloadAdviceComponent implements OnInit {
           // this.DropDownListService.brokerNameList(),
           this.DropDownListService.brokerNameListFast(),
           this.DropDownListService.getWeighmentCharges(),
-          this.DropDownListService.ledgerNameList(),
-          this.DropDownListService.payTermNameList(),
+         // this.DropDownListService.ledgerNameList(),
+         this.DropDownListService.ledgerNameListNew(),
+         // this.DropDownListService.payTermNameList(),
+         this.DropDownListService.payTermNameListFast(),
           // this.DropDownListService.itemTypeListNew(this.company_name),
           this.DropDownListService.itemTypeListFastAPI(this.company_name),
 
@@ -1568,8 +1575,10 @@ export class UnloadAdviceComponent implements OnInit {
           // this.DropDownListService.getCompanyBUMNCList(this.company_name),
           this.DropDownListService.getcompanyBUMNCListnew(this.company_name),
           this.DropDownListService.getChargeMasterList(),
-          this.DropDownListService.getMiscList(),
-          this.DropDownListService.getVehiclenoall(),
+         // this.DropDownListService.getMiscList(),
+         this.DropDownListService.getMiscListFast(),
+          //this.DropDownListService.getVehiclenoall(),
+          this.DropDownListService.getVehiclenoallNew()
         ).subscribe(([brokerData, wmtChgData, ledgerData, paytermData, itemTypeData,
           itemNameData, customUomData, buData, chgMasterData, getMiscData, vehclenosall]) => {
           //changes12-04-2022
@@ -2600,7 +2609,8 @@ export class UnloadAdviceComponent implements OnInit {
                 this.Service.getPurOrdTransChgsDynList(data["pur_orderid"]),
                 this.DropDownListService.purOrdBPDRetriveList(data["pur_orderid"]),
                 this.DropDownListService.getPurOrdDetails(data["pur_orderid"]),
-                this.DropDownListService.transporterNamesList(),
+                //this.DropDownListService.transporterNamesList(),
+                this.DropDownListService.getTransporterMNCListFast(),
                 this.DropDownListService.transporterNameChgsPurList(data["pur_orderid"]),
               ).subscribe(([appChargesData, transporterData, bpData, pOrderData, transport, tranchgslist]) => {
 
@@ -2634,7 +2644,8 @@ export class UnloadAdviceComponent implements OnInit {
                   this.transporterNames = transport;
                 }
                 if (this.transporter_id == '' || this.transporter_id == null || this.transporter_id == '0') {
-                  this.DropDownListService.getVehiclenoall().subscribe(vehicleData1 => {
+                 // this.DropDownListService.getVehiclenoall().subscribe(vehicleData1 => {
+                  this.DropDownListService.getVehiclenoallNew().subscribe(vehicleData1=>{
                     this.vehclenos = vehicleData1;
                     this.status = true;
                   })
@@ -2738,8 +2749,10 @@ export class UnloadAdviceComponent implements OnInit {
                   this.DropDownListService.getReturnApprovalDtls(data["main_id"]),
                   this.DropDownListService.getReturnApprovalTI(data["main_id"]),
                   this.DropDownListService.getReturnApprovalBD(data["main_id"]),
-                  this.DropDownListService.getVehiclenoall(),
-                  this.DropDownListService.transporterNamesList()
+                 // this.DropDownListService.getVehiclenoall(),
+                   this.DropDownListService.getVehiclenoallNew(),
+                 // this.DropDownListService.transporterNamesList()
+                  this.DropDownListService.getTransporterMNCListFast()
                 ).subscribe(([wghmentData, sReturnData, transporterData, brokerData, allvehicle, translist]) => {
                   this.transporterNames = translist;
                   console.log("Check SRETURN  : : " + JSON.stringify(sReturnData));
@@ -2972,7 +2985,8 @@ export class UnloadAdviceComponent implements OnInit {
           //console.log("get trans id:"+this.transporter_id)
 
           if (this.transporter_id == 0 || this.transporter_id == '' || this.transporter_id == null) {
-            this.DropDownListService.getVehiclenoall().subscribe(vehicleData1 => {
+           // this.DropDownListService.getVehiclenoall().subscribe(vehicleData1 => {
+            this.DropDownListService.getVehiclenoallNew().subscribe(vehicleData1=>{
               //  console.log("if part:"+JSON.stringify(vehicleData1))
               this.vehclenos = vehicleData1;
               this.status = true;
@@ -3015,12 +3029,15 @@ export class UnloadAdviceComponent implements OnInit {
 
 
     forkJoin(
-      this.DropDownListService.getCompanyBUMNCList(this.company_name),
+     // this.DropDownListService.getCompanyBUMNCList(this.company_name),
+     this.DropDownListService.getcompanyBUMNCListnew(this.company_name),
       //this.DropDownListService.brokerNameList(),
       this.DropDownListService.brokerNameListFast(),
       this.DropDownListService.getWeighmentCharges(),
-      this.DropDownListService.ledgerNameList(),
-      this.DropDownListService.payTermNameList(),
+      //this.DropDownListService.ledgerNameList(),
+      this.DropDownListService.ledgerNameListNew(),
+     // this.DropDownListService.payTermNameList(),
+     this.DropDownListService.payTermNameListFast(),
       //this.DropDownListService.itemTypeListNew(this.company_name),
       this.DropDownListService.itemTypeListFastAPI(this.company_name),
       //this.DropDownListService.getItemThruPurchase(),
@@ -3028,19 +3045,31 @@ export class UnloadAdviceComponent implements OnInit {
       this.DropDownListService.getWeighmentCustomUOM(),
       this.DropDownListService.getChargeMasterList(),
       this.DropDownListService.getMiscList(),
-      this.DropDownListService.getVehiclenoall(),
+      //this.DropDownListService.getVehiclenoall(),
+      this.DropDownListService.getVehiclenoallNew(),
       this.Service.unloadAdviceRetrive(id),
-      this.Service.getUnloadItemList(unadviceid),
-      this.Service.wmUnAdviceAppChgsRetriveList(unadviceid),
-      this.Service.wmUnAdviceBpDtlsRetriveList(unadviceid),
-      this.Service.wmUnAdviceBrokerRetriveList(unadviceid),
-      this.Service.wmUnAdviceDocRetriveList(unadviceid),
-      this.Service.wmUnAdviceDriverDtlsRetriveList(unadviceid),
-      this.Service.wmUnAdvicePartyWmRetriveList(unadviceid),
-      this.Service.wmUnAdviceTransConRetriveList(unadviceid),
-      this.Service.wmUnAdviceTransInfoRetriveList(unadviceid),
-      this.DropDownListService.getVehiclenoall(),
-      this.DropDownListService.transporterNamesList()
+     // this.Service.getUnloadItemList(unadviceid),
+      this.Service.getUnloadItemFastList(unadviceid),
+      //this.Service.wmUnAdviceAppChgsRetriveList(unadviceid),
+      this.Service.wmUnAdviceAppChgsRetriveListFast(unadviceid),
+     // this.Service.wmUnAdviceBpDtlsRetriveList(unadviceid),
+     this.Service.wmUnAdviceBpDtlsRetriveFastList(unadviceid),
+     // this.Service.wmUnAdviceBrokerRetriveList(unadviceid),
+     this.Service.wmUnAdviceBrokerRetriveFastList(unadviceid),
+      //this.Service.wmUnAdviceDocRetriveList(unadviceid),
+      this.Service.wmUnAdviceDocRetriveListFast(unadviceid),
+      //this.Service.wmUnAdviceDriverDtlsRetriveList(unadviceid),
+      this.Service.wmUnAdviceDriverDtlsRetriveFastList(unadviceid),
+     // this.Service.wmUnAdvicePartyWmRetriveList(unadviceid),
+     this.Service.wmUnAdvicePartyWmRetriveFastList(unadviceid),
+      //this.Service.wmUnAdviceTransConRetriveList(unadviceid),
+      this.Service.wmUnAdviceTransConRetriveFastList(unadviceid),
+     // this.Service.wmUnAdviceTransInfoRetriveList(unadviceid),
+     this.Service.wmUnAdviceTransInfoRetriveFastList(unadviceid),
+      //this.DropDownListService.getVehiclenoall(),
+      this.DropDownListService.getVehiclenoallNew(),
+      //this.DropDownListService.transporterNamesList()
+      this.DropDownListService.getTransporterMNCListFast()
     ).subscribe(([buData, brokerlistData, wmtChgData, ledgerData, paytermData, itemTypeData, itemNameData, customUomData, chgMasterData, getMiscData, vehclenosall, UnloadingAdviceData, itemData, appChargesData,
       bpDetailsData, brokerData, docData, driverData, partyData, termsConditionData, transData, vehicleall, translist]) => {
       this.bussiness_unit_list = buData;
