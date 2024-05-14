@@ -4710,8 +4710,8 @@ export class DropdownServiceService {
     return this.httpClient.get(this.url + 'updatesalesorder/' + id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
-  SalesOrderTerminate(id, username): Observable<any> {
-    return this.httpClient.get(this.url + 'SalesOrderTerminate/' + id + "/" + username).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  SalesOrderTerminate(id, username,quotatioid): Observable<any> {
+    return this.httpClient.get(this.url + 'SalesOrderTerminate/' + id + "/" + username+"/"+quotatioid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
   getWheatReceivinglist(currDate, finyear): Observable<any> {
