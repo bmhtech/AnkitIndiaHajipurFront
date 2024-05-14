@@ -5301,10 +5301,10 @@ export class SalesOrderComponent implements OnInit {
     })
   }
 
-  onTerminate(id) {
+  onTerminate(id,quotatioid) {
     this.status = false;
     if (confirm("Are you sure to Terminate this Sales Order?")) {
-      this.DropDownListService.SalesOrderTerminate(id, localStorage.getItem("username")).subscribe(data => {
+      this.DropDownListService.SalesOrderTerminate(id, localStorage.getItem("username"),quotatioid).subscribe(data => {
         if (data["status"] == "Yes") {
           alert("Sales Order Terminated Successfully...");
           this.status = true;

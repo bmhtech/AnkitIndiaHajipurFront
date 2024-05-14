@@ -2987,7 +2987,7 @@
                       *ngIf="salesorderview">View</button>
                   </td>
 
-
+ 
                   <td *ngIf="salesOrder.loading_status;else elseBlock ">
                     <button class="btn btn-info" [disabled]="true">Update</button>
                   </td>
@@ -3036,7 +3036,7 @@
                       </ng-template> -->
 
                   <td *ngIf="salesOrder.terminate =='0';else terminate">
-                    <button class="btn btn-danger" (click)="onTerminate(salesOrder.id)">Terminate</button>
+                    <button class="btn btn-danger" (click)="onTerminate(salesOrder.id,salesOrder.referance_id)">Terminate</button>
                   </td>
                   <ng-template #terminate>
                     <td><button class="btn btn-danger" [disabled]="true">Terminate</button></td>

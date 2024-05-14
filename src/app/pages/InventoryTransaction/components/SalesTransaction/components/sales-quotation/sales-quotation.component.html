@@ -972,15 +972,21 @@
                     <td>{{salesQue.quotationcheckpoint}}</td>
 
                     <td><button class="btn btn-success" (click)="onUpdate(salesQue.id,salesQue.quotation_id, 'view')" *ngIf="salesquotationview">View</button></td>
-                    <td *ngIf="salesQue.terminate =='0';else terminateupdate">
-                      <button class="btn btn-info" (click)="onUpdate(salesQue.id,salesQue.quotation_id, 'update')" *ngIf="salesquotationupdate">Update</button>
                     
-                    </td>  
-                    <ng-template #terminateupdate>
+                    <div *ngIf="salesQue.so_terminate !='1';else elseSoterminate ">
+
+                      <td *ngIf="salesQue.terminate =='0';else terminateupdate">
+                        <button class="btn btn-info" (click)="onUpdate(salesQue.id,salesQue.quotation_id, 'update')" *ngIf="salesquotationupdate">Update</button>
+                      
+                      </td>  
+                      <ng-template #terminateupdate>
+                        <td><button class="btn btn-info"  [disabled] ="true">Update</button></td>
+                      </ng-template>
+                    </div>
+                    <ng-template #elseSoterminate>
                       <td><button class="btn btn-info"  [disabled] ="true">Update</button></td>
                     </ng-template>
-                    
-                   
+
                     <td *ngIf="salesQue.sale_orderused !='1';else elseBlock1 ">
                       
                       <button class="btn btn-danger" (click)="onDelete(salesQue.id,salesQue.quotation_id)" *ngIf="salesQue.terminate =='0';else terminatedelete">Delete</button>
@@ -992,10 +998,17 @@
                       <td><button class="btn btn-danger"  [disabled] ="true">Delete</button></td>
                     </ng-template>
 
-                    <td *ngIf="salesQue.terminate =='0';else terminate"><button class="btn btn-danger" (click)="onTerminate(salesQue.id)">Terminate</button></td> 
-                    <ng-template #terminate>
+                    <div *ngIf="salesQue.so_terminate !='1';else elseSoterminate1 ">
+
+                      <td *ngIf="salesQue.terminate =='0';else terminate"><button class="btn btn-danger" (click)="onTerminate(salesQue.id)">Terminate</button></td> 
+                      <ng-template #terminate>
+                        <td><button class="btn btn-danger"  [disabled] ="true">Terminate</button></td>
+                      </ng-template>
+                    </div>
+                    <ng-template #elseSoterminate1>
                       <td><button class="btn btn-danger"  [disabled] ="true">Terminate</button></td>
                     </ng-template>
+
                   </tr>
               </tbody>
             </table>
