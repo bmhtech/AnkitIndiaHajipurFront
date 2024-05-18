@@ -152,6 +152,7 @@ export class SalesDynamicReportViewComponent implements OnInit {
       {
         salesfromdate: [''],
         salestodate: [''],
+        salesordernumber:['']
       });
 
     this.userForm14 = fb.group(
@@ -225,6 +226,7 @@ export class SalesDynamicReportViewComponent implements OnInit {
 
   get salesfromdate() { return this.userForm13.get("salesfromdate") as FormControl };
   get salestodate() { return this.userForm13.get("salestodate") as FormControl };
+  get salesordernumber() { return this.userForm13.get("salesordernumber") as FormControl };
 
   get salesinvfromdate() { return this.userForm14.get("salesinvfromdate") as FormControl };
   get salesinvtodate() { return this.userForm14.get("salesinvtodate") as FormControl };
@@ -580,11 +582,30 @@ export class SalesDynamicReportViewComponent implements OnInit {
 
     let fromdate = this.userForm13.get("salesfromdate").value;
     let todate = this.userForm13.get("salestodate").value;
-    this.DropDownListService.getSalesOrderReport(fromdate, todate).subscribe(SOdata => {
-      //console.log("Sales Check ::  "+ JSON.stringify(SOdata))
-      this.salesOrderList = SOdata;
+    let salesordernumber = this.userForm13.get("salesordernumber").value;
+    if (fromdate != "" && todate != "" && salesordernumber != "") 
+    {
+      alert("You Can Search Either Date Wise or Sales Order Number Wise....");
+      this.userForm13.patchValue({salesfromdate:'',salestodate:'',salesordernumber:''})
       this.status = true;
-    });
+    }
+    else if(fromdate != "" && todate != "" && (salesordernumber == "" || salesordernumber ==null))
+      {
+        this.DropDownListService.getSalesOrderReport(fromdate, todate).subscribe(SOdata => {
+          //console.log("Sales Check ::  "+ JSON.stringify(SOdata))
+          this.salesOrderList = SOdata;
+          this.status = true;
+        });
+      }
+    else
+    {
+      this.DropDownListService.getSalesOrderReportOrderWise(salesordernumber).subscribe(SOdata => {
+        //console.log("Sales Check ::  "+ JSON.stringify(SOdata))
+        this.salesOrderList = SOdata;
+        this.status = true;
+      });
+    }
+    
   }
 
   exportAsXLSX13(): void {
