@@ -964,6 +964,174 @@
 </div>
 
 <div>
+    <form [formGroup]="userForm16">
+        <fieldset>
+            <legend>Pending Unload Advice Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="pendinguafromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="pendinguatodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchpendingUnAdvice()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX16()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable16" >
+                        <thead>
+                            <tr>
+                                <th>Purchae Order No.</th>
+                                <th>Unload Advice No</th>
+                                <th>Advice Date</th>
+                                <th>Party Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let unadvice of pendingUnAdviceList; let pointIndex=index">
+                                <td>{{unadvice.pur_order_no}}</td>
+                                <td>{{unadvice.unadviceno}}</td>
+                                <td>{{unadvice.ula_date}}</td>
+                                <td>{{unadvice.supp_name}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm17">
+        <fieldset>
+            <legend>Pending GRN Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="pendinggrnfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="pendinggrntodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchpendingGRN()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX17()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable17" >
+                        <thead>
+                            <tr>
+                                <th>GRN No</th>
+                                <th>GRN Date</th>
+                                <th>Party Name</th>
+                                <th>Purchase Type</th>
+                                <th>Vehicle No</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let grn of pendingGrnList; let pointIndex=index">
+                                <td>{{grn.grn_no}}</td>
+                                <td>{{grn.grn_date}}</td>
+                                <td>{{grn.supplier}}</td>
+                                <td>{{grn.purchase_typename}}</td>
+                                <td>{{grn.vehicle_no}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
+    <form [formGroup]="userForm18">
+        <fieldset>
+            <legend>Pending Delivery Challan Report</legend>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>From Date</mat-label>
+                    <input type="date" class="form-control" formControlName="pendingchallanfromdate">
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>To Date</mat-label>
+                    <input type="date" class="form-control" formControlName="pendingchallantodate">
+                </div>
+            </div>
+
+            <div class="col-lg-12">
+                <div class="form-group">
+                    <button type="submit" class="btn btn-primary" (click)="searchpendingDelvChallan()">Search</button>
+                </div>
+            </div>
+            <fieldset class="table_container">
+
+                <div class="col-lg-12" style="float: right;">
+                    <div class="form-group">
+                        <button mat-raised-button (click)="exportAsXLSX18()" color="primary">Export To Excel</button>
+                    </div>
+
+                </div>
+
+                <div class="table_content">
+                    <table class="table table-bordered" id="dynamictable18" >
+                        <thead>
+                            <tr>
+                                <th>Challan No</th>
+                                <th>Challan Date</th>
+                                <th>Party Name</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let challan of pendingChallanList; let pointIndex=index">
+                                <td>{{challan.challan_no}}</td>
+                                <td>{{challan.challan_date}}</td>
+                                <td>{{challan.partyname}}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </fieldset>
+        </fieldset>
+    </form>
+</div>
+
+<div>
     <form [formGroup]="userForm9">
         <fieldset>
             <legend>Purchase Bill Anuj Sir Report</legend>

@@ -5285,6 +5285,9 @@ export class DropdownServiceService {
     return this.httpClient.get(this.url + 'getJobWorkAllocationReport/' + fromdate + "/" + todate).pipe(catchError((err) => { console.log("Error in Service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getSalesOrderReportOrderWise(salesordernumber): Observable<any> {
+    return this.httpClient.get(this.url + 'getSalesOrderReportOrderWise/' + salesordernumber).pipe(catchError((err) => { console.log("Error in Service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
   // Anuj Sir Sales Order Report
 
   getSalesOrderReport(fromdate, todate): Observable<any> {
@@ -6262,4 +6265,17 @@ export class DropdownServiceService {
   getUnloadWeightmentWtmultipopupmultipleItem(wgmt_id): Observable<any> {
     return this.httpClient.get(this.url + 'getUnloadWeightmentWtmultipopupmultipleItem/' + wgmt_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+  
+  searchpendingUnAdviceReport(fromdate, todate): Observable<any> {
+    return this.httpClient.get(this.url + 'searchpendingUnAdviceReport/' + fromdate + '/' + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  searchpendingGRNReport(fromdate, todate): Observable<any> {
+    return this.httpClient.get(this.url + 'searchpendingGRNReport/' + fromdate + '/' + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  searchpendingDelvChallan(fromdate, todate): Observable<any> {
+    return this.httpClient.get(this.url + 'searchpendingDelvChallan/' + fromdate + '/' + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
 }
