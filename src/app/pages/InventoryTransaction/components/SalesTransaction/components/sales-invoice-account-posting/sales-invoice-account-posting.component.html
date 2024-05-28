@@ -188,7 +188,7 @@
     <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
    
     <mat-dialog-actions align="end">
-      <button style='margin-right: 20px;'  (click)="accountpostingFinal()" mat-button mat-dialog-close class="btn btn-warning" *ngIf="billPosting">Posting</button>
+      <button style='margin-right: 20px;'  (click)="accountpostingFinal()" mat-button class="btn btn-warning" *ngIf="billPosting">Posting</button>
 
       <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint class="btn btn-info">print</button>
     </mat-dialog-actions>

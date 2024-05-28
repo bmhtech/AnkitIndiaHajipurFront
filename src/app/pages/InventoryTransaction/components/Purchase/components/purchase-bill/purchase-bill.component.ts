@@ -24,7 +24,7 @@ export class PurchaseBillComponent implements OnInit {
   status: any;
   model: PurchaseBill = new PurchaseBill();
   isHidden: any;
-  listPurchaseBill: PurchaseBill[];
+  listPurchaseBill: any=[];
   item_codes: {};
   supplier_id = "0";
   supplierNames: any = [];
@@ -2826,9 +2826,20 @@ export class PurchaseBillComponent implements OnInit {
       width: '60%'
     });
     dialogref.afterClosed().subscribe(data => {
+      if(data.response_return==1)
+        {
+          this.listPurchaseBill.find(data => {
+            return data.pur_bill_id == purbillid;
+          }).export = 1;
+        }
+      if(data.response_return==0)
+        {
+          this.listPurchaseBill.find(data => {
+            return data.pur_bill_id == purbillid;
+          }).export = 0;
+        }
     });
   }
-
 
   chargematrixdata() {
     console.log("hello ::")

@@ -21,6 +21,7 @@ import {NgxPrintModule} from 'ngx-print';
 
 
 import { ItemMaster } from './Models/ItemModel/ItemMaster';
+import {ToastrModule} from 'ngx-toastr';
 //import { LogoutpopupmodalComponent } from './shared/layouts/logoutpopupmodal/logoutpopupmodal.component';
 
 
@@ -34,6 +35,8 @@ import { ItemMaster } from './Models/ItemModel/ItemMaster';
   imports: [
     BrowserModule,
     BrowserAnimationsModule,
+    ToastrModule.forRoot({closeButton:true,positionClass:'toast-top-center',
+              timeOut:2000,progressBar:true}),
     NgxPrintModule,
   //  FormsModule,
     PagesModule,

@@ -495,9 +495,9 @@
     <mat-dialog-actions align="end">
       <!-- <button style='margin-right: 20px;'  (click)="accountpostingFinal('Posting')" mat-button mat-dialog-close class="btn btn-warning" *ngIf="billPosting">Posting</button> -->
       <div *ngIf="show">
-          <button style='margin-right: 20px;' (click)="accountpostingFinal('Posting')" mat-button mat-dialog-close class="btn btn-warning" *ngIf="postingAction; else elseBlock">Posting</button>
+          <button style='margin-right: 20px;' (click)="accountpostingFinal('Posting')" mat-button class="btn btn-warning" *ngIf="postingAction; else elseBlock">Posting</button>
         <ng-template #elseBlock>
-          <button style='margin-right: 20px;' (click)="accountpostingFinal('Undo')" mat-button mat-dialog-close class="btn" style="background:darkcyan;" >Undo</button>
+          <button style='margin-right: 20px;' (click)="accountpostingFinal('Undo')" mat-button class="btn" style="background:darkcyan;" >Undo</button>
         </ng-template>
       </div>
 

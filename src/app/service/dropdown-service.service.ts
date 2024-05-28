@@ -1995,6 +1995,10 @@ export class DropdownServiceService {
     return this.httpClient.get<any>(this.url + 'getSalesInvoiceDataList/' + currDate + "/" + finyear).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getSalesInvoiceDataListFast(currDate, finyear): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesInvoiceDataListFast/' + currDate + "/" + finyear).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
   getWeighmentDataList(currDate, finyear): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getWeighmentDataList/' + currDate + "/" + finyear).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
