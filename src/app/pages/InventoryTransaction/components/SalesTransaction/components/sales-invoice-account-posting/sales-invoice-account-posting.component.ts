@@ -1,11 +1,11 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Console } from 'console';
 import { forkJoin } from 'rxjs';
 import { DropdownServiceService } from '../../../../../../service/dropdown-service.service';
 import { Master } from '../../../../../../service/master.service';
-
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-sales-invoice-account-posting',
@@ -53,11 +53,16 @@ export class SalesInvoiceAccountPostingComponent implements OnInit {
   roundoff_gl_acstatus:boolean=false;
   ledgernames:any=[];
   round_statby:boolean=true;
+  public userForm:FormGroup;
 
-  constructor(private fb: FormBuilder,private Service: Master,
+  constructor(private fb: FormBuilder,private Service: Master,private toast:ToastrService,
     private DropDownListService: DropdownServiceService,
     private dialogRef: MatDialogRef<SalesInvoiceAccountPostingComponent>, @Inject(MAT_DIALOG_DATA)data) 
     { 
+      this.userForm=fb.group(
+        {
+          response_return:['']
+        });
       this.Id=data["id"];
       this.invoiceid=data["invoiceid"];
       this.invoice_type=data["invoice_type"];
@@ -431,6 +436,7 @@ export class SalesInvoiceAccountPostingComponent implements OnInit {
     } 
   }
 
+  response_c:any;
   accountpostingFinal()
   {
 this.status=false;
@@ -440,7 +446,8 @@ this.status=false;
       
         if(data["export"] == 1)
         {
-          alert("Data has been Exported Sucessfully !!!!!!!!!!!!! ");
+         // alert("Data has been Exported Sucessfully !!!!!!!!!!!!! ");
+         this.toast.success("Data has been Exported Sucessfully ! ","Success");
         }
         else
         {
@@ -452,12 +459,21 @@ this.status=false;
           let finalmssg=mssg.toString().substring(13,mssg.length-24);
           console.log("finalmssg " + finalmssg)
 
-          alert("Data Didn't Exported  !!!!!!!!!!!!! " + finalmssg + " LEDGER missing");
+         // alert("Data Didn't Exported  !!!!!!!!!!!!! " + finalmssg + " LEDGER missing");
+         this.toast.error("Data Didn't Exported ! ","Error"+ finalmssg + " LEDGER missing");
         }
-        
+        this.response_c=data["export"];
+        //console.log("export " + this.response_c)
+        this.sendtoMaints(this.response_c);
         this.ngOnInit();
        // this.isHidden = false;
         this.status = true;
       });
+  }
+  sendtoMaints(response_c)
+  {
+    //console.log("export1 " + response_c)
+    this.userForm.patchValue({response_return:response_c});
+    this.dialogRef.close(this.userForm.getRawValue()); 
   }
 }

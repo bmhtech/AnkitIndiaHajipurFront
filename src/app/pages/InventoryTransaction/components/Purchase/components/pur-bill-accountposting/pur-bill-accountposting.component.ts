@@ -1,9 +1,10 @@
 import { Component, Inject, OnInit } from '@angular/core';
-import { FormBuilder } from '@angular/forms';
+import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { forkJoin } from 'rxjs';
 import { DropdownServiceService } from '../../../../../../service/dropdown-service.service';
 import { Master } from '../../../../../../service/master.service';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-pur-bill-accountposting',
@@ -72,11 +73,16 @@ import { Master } from '../../../../../../service/master.service';
   statename:any;
   business_unit:any;
   gst_no:any;
+  public userForm:FormGroup;
 
-    constructor(private fb: FormBuilder,private Service: Master,
+    constructor(private fb: FormBuilder,private Service: Master,private toast:ToastrService,
     private DropDownListService: DropdownServiceService,
     private dialogRef: MatDialogRef<PurBillAccountpostingComponent>, @Inject(MAT_DIALOG_DATA)data) 
     {
+      this.userForm=fb.group(
+        {
+          response_return:['']
+        });
           this.Id=data["id"];
           this.Purbillid=data["purbillid"];
           this.companyname=data["company_name"];
@@ -339,7 +345,7 @@ import { Master } from '../../../../../../service/master.service';
       }, (error) => {this.status=true;console.log("ERROR get: "+JSON.stringify(error));alert("something error is occured please try again....");
           this.ngOnInit()}); 
     }
-
+    response_c:any;
       accountpostingFinal(action)
       {
         if(action=="Posting")
@@ -348,13 +354,17 @@ import { Master } from '../../../../../../service/master.service';
           {
             if(data["export"] == 1)
             {
-              alert("Data has been Exported Sucessfully !!!!!!!!!!!!! ");
+              //alert("Data has been Exported Sucessfully !!!!!!!!!!!!! ");
+              this.toast.success("Data has been Exported Sucessfully ! ","Success");
             }
             else
             {
-              alert("Data Didn't Exported  !!!!!!!!!!!!! ");
+              //alert("Data Didn't Exported  !!!!!!!!!!!!! ");
+              this.toast.error("Data Didn't Exported !!!!!!!! ","Error");
             }
-            
+            this.response_c=data["export"];
+            //console.log("export " + this.response_c)
+            this.sendtoMaints(this.response_c);
             this.ngOnInit();
           // this.isHidden = false;
             this.status = true;
@@ -371,13 +381,16 @@ import { Master } from '../../../../../../service/master.service';
                 {
                   if(data["export"] == 0)
                   {
-                    alert("Account Posting Undo Sucessfully !!!!!!!!!!!!! ");
+                    //alert("Account Posting Undo Sucessfully !!!!!!!!!!!!! ");
+                    this.toast.success("Account Posting Undo Sucessfully !!!!!!!!!!!!! ");
                   }
                   else
                   {
-                    alert("Undo Unsucessfull  !!!!!!!!!!!!! ");
+                    this.toast.error("Undo Unsucessfull  !!!!!!!!!!!!! ");
                   }
-                  
+                  this.response_c=data["export"];
+                  //console.log("export " + this.response_c)
+                  this.sendtoMaints(this.response_c);
                   this.ngOnInit();
                   
                 });
@@ -387,4 +400,10 @@ import { Master } from '../../../../../../service/master.service';
         }
       }
 
+      sendtoMaints(response_c)
+      {
+        //console.log("export1 " + response_c)
+        this.userForm.patchValue({response_return:response_c});
+        this.dialogRef.close(this.userForm.getRawValue()); 
+      }
 }
