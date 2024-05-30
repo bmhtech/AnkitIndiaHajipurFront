@@ -228,7 +228,7 @@ export class SaleinvoicereviseprintComponent implements OnInit {
         this.einvoicetype = false;
         this.einvelse = true;
         console.log("length:" + Details["waybill"].length + "//" + Details["invoice_type"])
-        if (Details["waybill"].length && (Details["invoice_type"] == 'INV00002' || Details["invoice_type"] == 'INV00004')) {
+        if (Details["waybill"].length && Details["create_ewaybill_wo_invoice"]===true && (Details["invoice_type"] == 'INV00001' || Details["invoice_type"] == 'INV00002' || Details["invoice_type"] == 'INV00004')) {
           this.waybillshow = true;
           this.DropDownListService.geteinvoicedetails(this.invoiceid).subscribe(eWayDtls=>{
             this.ewaybilldate = eWayDtls["eway_bill_date"];
