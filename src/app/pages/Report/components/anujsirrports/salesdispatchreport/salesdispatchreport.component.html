@@ -79,8 +79,8 @@
               </tbody>
             </table>
           </div> -->
-
-          <div class="table_content" *ngIf="weighmentshow">
+        <!-- native query for fast execution -->
+          <!-- <div class="table_content" *ngIf="weighmentshow">
             <table class="table table-bordered" id="dynamictable">
               <thead>
                 <tr>
@@ -105,7 +105,71 @@
                   </tr>
               </tbody>
             </table>
-          </div>
+          </div> -->
+          <div class="table_content" *ngIf="weighmentshow">
+            <table class="table table-bordered" id="dynamictable">
+                <thead>
+                    <tr>
+                      <th>Date</th>
+                      <th>Weighment For</th>
+                      <th>Advice No</th>
+                      <th>Advice Total Weight</th>
+                      <th>Weighment No</th>
+                      <th>Gross Weight</th>
+                      <th>Gross Wt Unit</th>
+                      <th>Gross Date</th>
+                      <th>Gross Time</th>
+                      <th>Gross Remarks</th>
+                      <th>Tare Weight</th>
+                      <th>Tare Wt Unit</th>
+                      <th>Tare Date</th>
+                      <th>Tare Time</th>
+                      <th>Tare Remarks</th>
+                      <th>Net Weight</th>
+                      <th>Net Wt Unit</th>
+                      <th>Vehicle No.</th>
+                      <th>Bags</th>
+                      <th>Weighment Charge</th>
+                      <th>Weighment Rs.</th>
+                      <th>Digital Weight 1</th>
+                      <th>Digital Weight 2</th>
+                      <th>Customer</th>
+                      <th>Supplier</th>
+                      <th>Remarks</th>
+                    </tr>
+                  </thead>
+                  <tbody>                                          
+                        <tr *ngFor="let weigh of weighmentdata">
+                          <td>{{weigh.wgment_date}}</td>
+                          <td>{{weigh.wgment_for}}</td>
+                          <td>{{weigh.advice_no}}</td>
+                          <td>{{weigh.totalweight}}</td>
+                          <td>{{weigh.wgment_no}}</td>
+                          <td>{{weigh.gross_weight}}</td>
+                          <td>{{weigh.gw_unit}}</td>
+                          <td>{{weigh.gw_date}}</td>
+                          <td>{{weigh.gw_time}}</td>
+                          <td>{{weigh.gw_remarks}}</td>
+                          <td>{{weigh.tare_weight}}</td>
+                          <td>{{weigh.tw_unit}}</td>
+                          <td>{{weigh.tw_date}}</td>
+                          <td>{{weigh.tw_time}}</td>
+                          <td>{{weigh.tw_remarks}}</td>
+                          <td>{{weigh.net_weight}}</td>
+                          <td>{{weigh.nw_unit}}</td>
+                          <td>{{weigh.vehicle_no}}</td>
+                          <td>{{weigh.tarebags}}</td>
+                          <td>{{weigh.wgment_charge}}</td>
+                          <td>{{weigh.wgment_rs}}</td>
+                          <td>{{weigh.digital_weight}}</td>
+                          <td>{{weigh.digital_weight1}}</td>
+                          <td>{{weigh.customername}}</td>
+                          <td>{{weigh.suppliername}}</td>
+                          <td>{{weigh.remarks}}</td>
+                        </tr>
+                  </tbody>
+            </table>
+        </div>
 
           <div class="table_content" *ngIf="trialshow">
             <table class="table table-bordered" id="dynamictable">
@@ -116,6 +180,7 @@
                       <th>Challan Date</th>
                       <th>Challan No</th>
                       <th>Advice No</th>
+                      <th>Weighment No</th>
                       <th>Party Name</th>
                       <th>Price Term</th>
                       <th>Date</th>
@@ -152,6 +217,7 @@
                           <td>{{item.challan_date}}</td>
                           <td>{{item.challan_no}}</td>
                           <td>{{item.adviceno}}</td>
+                          <td>{{item.wgment_no}}</td>
                           <td>{{item.partyname}}</td>
                           <td>{{item.price_term}}</td>
                           <td>{{item.date2}}</td>

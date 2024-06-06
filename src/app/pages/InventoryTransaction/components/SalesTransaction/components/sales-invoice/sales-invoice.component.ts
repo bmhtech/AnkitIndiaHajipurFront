@@ -715,8 +715,8 @@ export class SalesInvoiceComponent implements OnInit {
       this.DropDownListService.getChargeMasterList(),
       // this.DropDownListService.customerNameCodeList(this.company_name)
       this.DropDownListService.newcustomerList(this.company_name),
-      //this.DropDownListService.getSalesInvoiceDataList(this.currentDate, this.financialYear)
-      this.DropDownListService.getSalesInvoiceDataListFast(this.currentDate, this.financialYear)
+      this.DropDownListService.getSalesInvoiceDataList(this.currentDate, this.financialYear)
+      //this.DropDownListService.getSalesInvoiceDataListFast(this.currentDate, this.financialYear)
     ).subscribe(([invoiceData, accPayTermsData, payTermData, bankList,
       custometrBusListData, ledgerData, brokerNameList,
       //  salesInvoiceList, transporterData, vehNoData, vehTypeList,ChargeMasterData])=>

@@ -16,6 +16,7 @@ export class SalesdispatchreportComponent implements OnInit {
   columnslist:any=[];
   datalist: any[];
   trialdata:any=[];
+  weighmentdata:any=[];
   weighmentshow: boolean = false;
   trialshow: boolean = false;
 
@@ -54,15 +55,14 @@ export class SalesdispatchreportComponent implements OnInit {
           {
             this.weighmentshow=true;
             this.trialshow=false;
-          this.DropDownListService.getSalesDynamicReportCol(Reportname)
-          .subscribe(
-            (data)=>
+         // this.DropDownListService.getSalesDynamicReportCol(Reportname)
+         this.DropDownListService.getWeighmentReportForAnujSir(fromdate,todate)
+          .subscribe(wdata=>
           {
-            {
-              this.columnslist = data
-              this.promise(data)
+             // this.columnslist = data
+              //this.promise(data)
+              this.weighmentdata=wdata;
               this.status = true; 
-            }
           });
         }
       } 
