@@ -7,7 +7,7 @@ npm i angular-dual-listbox@4.6.0
 npm i -g @angular/cli@7.3.10
 
 npm i ngx-export-as@1.2.6
-
+npm i ngx-toastr@10.0.4
 
  tsconfig
  "skipLibCheck": true,

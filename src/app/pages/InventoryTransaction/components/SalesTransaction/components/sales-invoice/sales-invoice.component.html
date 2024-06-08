@@ -1824,14 +1824,19 @@
                         [disabled]="SalesInvoice.cencel_ewaybill">E-Way bill Cancel</button>
                     </div>
                   </td>
-                  <td
+                  <!-- <td *ngIf="SalesInvoice.create_ewaybill_wo_invoice ==0 && SalesInvoice.avail_ewaybill_woeinv ==1">
+                    <button class="btn btn-info"
+                      (click)="ewaybill_wo_invoice_create(SalesInvoice.id,SalesInvoice.invoice_id,SalesInvoice.party,SalesInvoice.business_unit)"
+                      [disabled]="SalesInvoice.create_ewaybill_wo_invoice">Waybill WO Inv Create</button>
+                 </td> -->
+                   <td
                     *ngIf="(SalesInvoice.grand_total>=50000) && (SalesInvoice.e_invoice_no==null || SalesInvoice.e_invoice_no=='') && (SalesInvoice.waybill?.length) && (SalesInvoice.invoice_type =='INV00002' || SalesInvoice.invoice_type == 'INV00004')">
                     <div *ngIf="SalesInvoice.create_ewaybill_wo_invoice ==0 ">
                       <button class="btn btn-info"
                         (click)="ewaybill_wo_invoice_create(SalesInvoice.id,SalesInvoice.invoice_id,SalesInvoice.party,SalesInvoice.business_unit)"
                         [disabled]="SalesInvoice.create_ewaybill_wo_invoice">Waybill WO Inv Create</button>
                     </div>
-                  </td>
+                  </td> 
 
                   <!-- <td *ngIf="(SalesInvoice.e_invoice_no?.length) && (SalesInvoice.invoice_type == 'INV00003');else elseBlockEinvoice">
                       <button class="btn btn-danger" (click)="einvoiceCencel(SalesInvoice.invoice_id,SalesInvoice.id)"

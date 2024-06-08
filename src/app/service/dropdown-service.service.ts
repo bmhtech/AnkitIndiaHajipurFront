@@ -1995,6 +1995,10 @@ export class DropdownServiceService {
     return this.httpClient.get<any>(this.url + 'getSalesInvoiceDataList/' + currDate + "/" + finyear).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  // getSalesInvoiceDataListFast(currDate, finyear): Observable<any> {
+  //   return this.httpClient.get<any>(this.url + 'getSalesInvoiceDataListFast/' + currDate + "/" + finyear).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  // }
+  
   getWeighmentDataList(currDate, finyear): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getWeighmentDataList/' + currDate + "/" + finyear).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
@@ -2254,6 +2258,10 @@ export class DropdownServiceService {
 
   getSalesDynamicReportCol(reportname: any): Observable<any> {
     return this.httpClient.get(this.url + 'getSalesDynamicReportCol/' + reportname).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getWeighmentReportForAnujSir(fromdate,todate): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getWeighmentReportForAnujSir/' + fromdate + "/" + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
   getSalesDynamicProcedure(reportname: any, fromdate, todate): Observable<any> {
@@ -5285,6 +5293,9 @@ export class DropdownServiceService {
     return this.httpClient.get(this.url + 'getJobWorkAllocationReport/' + fromdate + "/" + todate).pipe(catchError((err) => { console.log("Error in Service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getSalesOrderReportOrderWise(salesordernumber): Observable<any> {
+    return this.httpClient.get(this.url + 'getSalesOrderReportOrderWise/' + salesordernumber).pipe(catchError((err) => { console.log("Error in Service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
   // Anuj Sir Sales Order Report
 
   getSalesOrderReport(fromdate, todate): Observable<any> {
@@ -6262,4 +6273,17 @@ export class DropdownServiceService {
   getUnloadWeightmentWtmultipopupmultipleItem(wgmt_id): Observable<any> {
     return this.httpClient.get(this.url + 'getUnloadWeightmentWtmultipopupmultipleItem/' + wgmt_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+  
+  searchpendingUnAdviceReport(fromdate, todate): Observable<any> {
+    return this.httpClient.get(this.url + 'searchpendingUnAdviceReport/' + fromdate + '/' + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  searchpendingGRNReport(fromdate, todate): Observable<any> {
+    return this.httpClient.get(this.url + 'searchpendingGRNReport/' + fromdate + '/' + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  searchpendingDelvChallan(fromdate, todate): Observable<any> {
+    return this.httpClient.get(this.url + 'searchpendingDelvChallan/' + fromdate + '/' + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
 }

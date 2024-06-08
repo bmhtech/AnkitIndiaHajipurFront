@@ -2015,7 +2015,7 @@ export class GrnComponent implements OnInit {
    
    */
   }
-
+  
   PSubtype: any;
   onClickShow() {
     this.showunloadadvicepopupcriteria = false;
@@ -2076,7 +2076,18 @@ export class GrnComponent implements OnInit {
                 unloadid=data["unadviceid"];
               }
 
-              console.log("unload:: "+unloadid[0]);
+              console.log("unload1:: "+unloadid);
+              //this.arrSort(unloadid);
+
+              const comparator = (a, b) => {
+                return a.toString().localeCompare(b.toString(), 'en', { numeric: true })
+              };
+              unloadid.sort(comparator);
+
+              console.log("unload2:: "+unloadid);
+              
+              //this.arrSort(unloadid);
+             // console.log("unload3:: "+unloadid);
               
               
 

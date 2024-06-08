@@ -55,7 +55,7 @@ export class SalesInvoiceComponent implements OnInit {
   item_sl_no = 1;
   broker_sl_no = 1;
   jobwork_sl_no = 1;
-  listSalesInvoice: SalesInvoice[];
+  listSalesInvoice: any[];
   sales_invoice_no: any;
   status: any;
   //username:any;
@@ -716,6 +716,7 @@ export class SalesInvoiceComponent implements OnInit {
       // this.DropDownListService.customerNameCodeList(this.company_name)
       this.DropDownListService.newcustomerList(this.company_name),
       this.DropDownListService.getSalesInvoiceDataList(this.currentDate, this.financialYear)
+      //this.DropDownListService.getSalesInvoiceDataListFast(this.currentDate, this.financialYear)
     ).subscribe(([invoiceData, accPayTermsData, payTermData, bankList,
       custometrBusListData, ledgerData, brokerNameList,
       //  salesInvoiceList, transporterData, vehNoData, vehTypeList,ChargeMasterData])=>
@@ -4349,7 +4350,13 @@ export class SalesInvoiceComponent implements OnInit {
       width: '60%'
     });
     dialogref.afterClosed().subscribe(data => {
-
+      //console.log("return::"+JSON.stringify(data))
+      if(data.response_return)
+        {
+          this.listSalesInvoice.find(data => {
+            return data.invoice_id == invoiceid;
+          }).export = data.response_return;
+        }
     });
 
   }

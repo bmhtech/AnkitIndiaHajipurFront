@@ -30,7 +30,9 @@ export class SalesDynamicReportViewComponent implements OnInit {
   public userForm151: FormGroup;
   public userForm152: FormGroup;
   public userForm15: FormGroup;
-
+  public userForm16: FormGroup;
+  public userForm17: FormGroup;
+  public userForm18: FormGroup;
 
   status = false;
   reportnamelists: any = [];
@@ -56,7 +58,9 @@ export class SalesDynamicReportViewComponent implements OnInit {
   freight_list: any = [];
   JWAllocation_list: any = [];
   itemtypes: any = [];
-
+  pendingUnAdviceList: any = [];
+  pendingGrnList:any=[];
+  pendingChallanList:any=[];
   pertruck: boolean = true;
 
   totaltruck: number = 0;
@@ -152,6 +156,7 @@ export class SalesDynamicReportViewComponent implements OnInit {
       {
         salesfromdate: [''],
         salestodate: [''],
+        salesordernumber:['']
       });
 
     this.userForm14 = fb.group(
@@ -176,6 +181,24 @@ export class SalesDynamicReportViewComponent implements OnInit {
     this.userForm15 = fb.group({
       mastertype: [''],
     });
+
+    this.userForm16 = fb.group(
+      {
+        pendinguafromdate: [''],
+        pendinguatodate: [''],
+      });
+
+    this.userForm17 = fb.group(
+      {
+        pendinggrnfromdate: [''],
+        pendinggrntodate: [''],
+      });
+    
+    this.userForm18 = fb.group(
+      {
+        pendingchallanfromdate: [''],
+        pendingchallantodate: [''],
+      });
 
   }
   get reportname() { return this.userForm.get("reportname") as FormControl }
@@ -225,6 +248,7 @@ export class SalesDynamicReportViewComponent implements OnInit {
 
   get salesfromdate() { return this.userForm13.get("salesfromdate") as FormControl };
   get salestodate() { return this.userForm13.get("salestodate") as FormControl };
+  get salesordernumber() { return this.userForm13.get("salesordernumber") as FormControl };
 
   get salesinvfromdate() { return this.userForm14.get("salesinvfromdate") as FormControl };
   get salesinvtodate() { return this.userForm14.get("salesinvtodate") as FormControl };
@@ -235,6 +259,15 @@ export class SalesDynamicReportViewComponent implements OnInit {
 
   get allocationfromdate() { return this.userForm151.get("allocationfromdate") as FormControl };
   get allocationtodate() { return this.userForm151.get("allocationtodate") as FormControl };
+  
+  get pendinguafromdate() { return this.userForm16.get("pendinguafromdate") as FormControl };
+  get pendinguatodate() { return this.userForm16.get("pendinguatodate") as FormControl };
+
+  get pendinggrnfromdate() { return this.userForm17.get("pendinggrnfromdate") as FormControl };
+  get pendinggrntodate() { return this.userForm17.get("pendinggrntodate") as FormControl };
+
+  get pendingchallanfromdate() { return this.userForm18.get("pendinguafromdate") as FormControl };
+  get pendingchallantodate() { return this.userForm18.get("pendingchallantodate") as FormControl };
 
   get mastertype() { return this.userForm15.get("mastertype") as FormControl };
 
@@ -580,11 +613,30 @@ export class SalesDynamicReportViewComponent implements OnInit {
 
     let fromdate = this.userForm13.get("salesfromdate").value;
     let todate = this.userForm13.get("salestodate").value;
-    this.DropDownListService.getSalesOrderReport(fromdate, todate).subscribe(SOdata => {
-      //console.log("Sales Check ::  "+ JSON.stringify(SOdata))
-      this.salesOrderList = SOdata;
+    let salesordernumber = this.userForm13.get("salesordernumber").value;
+    if (fromdate != "" && todate != "" && salesordernumber != "") 
+    {
+      alert("You Can Search Either Date Wise or Sales Order Number Wise....");
+      this.userForm13.patchValue({salesfromdate:'',salestodate:'',salesordernumber:''})
       this.status = true;
-    });
+    }
+    else if(fromdate != "" && todate != "" && (salesordernumber == "" || salesordernumber ==null))
+      {
+        this.DropDownListService.getSalesOrderReport(fromdate, todate).subscribe(SOdata => {
+          //console.log("Sales Check ::  "+ JSON.stringify(SOdata))
+          this.salesOrderList = SOdata;
+          this.status = true;
+        });
+      }
+    else
+    {
+      this.DropDownListService.getSalesOrderReportOrderWise(salesordernumber).subscribe(SOdata => {
+        //console.log("Sales Check ::  "+ JSON.stringify(SOdata))
+        this.salesOrderList = SOdata;
+        this.status = true;
+      });
+    }
+    
   }
 
   exportAsXLSX13(): void {
@@ -705,6 +757,93 @@ export class SalesDynamicReportViewComponent implements OnInit {
   exportAsXLSX15() {
     let element = document.getElementById('dynamictable15');
     this.excelService.exportAsExcelFile(element, this.userForm15.get("mastertype").value + ' Master Report as on ' + formatDate(new Date(localStorage.getItem("CurrentDate")), 'dd-MM-yyyy', 'en'));
+  }
+
+  searchpendingUnAdvice() {
+    let fromdate = this.userForm16.get("pendinguafromdate").value;
+    let todate = this.userForm16.get("pendinguatodate").value;
+
+    this.status = false;
+
+    if (fromdate == null || fromdate == '' || fromdate == 0) {
+      alert("Select From Date ....");
+      this.status = true;
+    }
+    else if (todate == null || todate == '' || todate == 0) {
+      alert("Select To Date ....");
+      this.status = true;
+    }
+    else {
+      this.DropDownListService.searchpendingUnAdviceReport(fromdate, todate).subscribe(unadvdata => {
+        //console.log("unload Data : :  " + JSON.stringify(unadvdata))
+        this.pendingUnAdviceList = unadvdata;
+        this.status = true;
+      });
+    }
+
+  }
+
+  exportAsXLSX16(): void {
+    let element = document.getElementById('dynamictable16');
+    this.excelService.exportAsExcelFile(element, 'Pending Unload Advice Report From ' + this.userForm16.get("pendinguafromdate").value + ' To ' + this.userForm16.get("pendinguafromdate").value);
+  }
+
+  searchpendingGRN() {
+    let fromdate = this.userForm17.get("pendinggrnfromdate").value;
+    let todate = this.userForm17.get("pendinggrntodate").value;
+
+    this.status = false;
+
+    if (fromdate == null || fromdate == '' || fromdate == 0) {
+      alert("Select From Date ....");
+      this.status = true;
+    }
+    else if (todate == null || todate == '' || todate == 0) {
+      alert("Select To Date ....");
+      this.status = true;
+    }
+    else {
+      this.DropDownListService.searchpendingGRNReport(fromdate, todate).subscribe(grndata => {
+        //console.log("unload Data : :  " + JSON.stringify(grndata))
+        this.pendingGrnList = grndata;
+        this.status = true;
+      });
+    }
+
+  }
+
+  exportAsXLSX17(): void {
+    let element = document.getElementById('dynamictable17');
+    this.excelService.exportAsExcelFile(element, 'Pending GRN Report From ' + this.userForm17.get("pendinggrnfromdate").value + ' To ' + this.userForm17.get("pendinggrnfromdate").value);
+  }
+
+  searchpendingDelvChallan() {
+    let fromdate = this.userForm18.get("pendingchallanfromdate").value;
+    let todate = this.userForm18.get("pendingchallantodate").value;
+
+    this.status = false;
+
+    if (fromdate == null || fromdate == '' || fromdate == 0) {
+      alert("Select From Date ....");
+      this.status = true;
+    }
+    else if (todate == null || todate == '' || todate == 0) {
+      alert("Select To Date ....");
+      this.status = true;
+    }
+    else {
+      this.DropDownListService.searchpendingDelvChallan(fromdate, todate).subscribe(challandata => {
+        //console.log("unload Data : :  " + JSON.stringify(unadvdata))
+        this.pendingChallanList = challandata;
+        this.status = true;
+      });
+    }
+
+  }
+
+  exportAsXLSX18(): void {
+    let element = document.getElementById('dynamictable18');
+    this.excelService.exportAsExcelFile(element, 'Pending Delivery Challan Report From ' + this.userForm18.get("pendingchallanfromdate").value + ' To ' + this.userForm18.get("pendingchallanfromdate").value);
   }
 
 }
