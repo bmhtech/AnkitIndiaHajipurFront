@@ -24,7 +24,7 @@ export class PurchaseBillComponent implements OnInit {
   status: any;
   model: PurchaseBill = new PurchaseBill();
   isHidden: any;
-  listPurchaseBill: any=[];
+  listPurchaseBill: any = [];
   item_codes: {};
   supplier_id = "0";
   supplierNames: any = [];
@@ -168,8 +168,8 @@ export class PurchaseBillComponent implements OnInit {
         store_charges: [''],
         store_taxamt: [''],
         allstorecharges: [''],
-        store_frieghtcharges:[''],
-        store_frieghtcharges_gl_ac:[''],
+        store_frieghtcharges: [''],
+        store_frieghtcharges_gl_ac: [''],
 
         pur_Bill_Item_Details: this.fb.array([this.fb.group(
           {
@@ -568,7 +568,7 @@ export class PurchaseBillComponent implements OnInit {
         other_charges_gl_ac: "0", other_charges: 0, payable_amt_gl_ac: "0", created_by: "0",
         add1_gl_ac: "0", add1: 0, add2_gl_ac: "0", add2: 0, roundoff_gl_ac: "IB00001",
         payable_party_gl_ac: "0", already_paid_gl_ac: "0", already_paid: 0,
-        net_payable_party_gl_ac: "0", net_amt: "0", net_amt_gl_ac: "0",store_frieghtcharges_gl_ac:"0"
+        net_payable_party_gl_ac: "0", net_amt: "0", net_amt_gl_ac: "0", store_frieghtcharges_gl_ac: "0"
       });
 
       this.status = true;
@@ -1375,8 +1375,8 @@ export class PurchaseBillComponent implements OnInit {
                         this.DropDownListService.getItemPackUom(data1["adv_item_code"], data1["adv_packing"], this.company_name),
                         this.DropDownListService.getItemNameById(data1["adv_item_code"], this.company_name),
                         // this.DropDownListService.gettaxcodefromgrn(data1["adv_item_code"],data["grn_id"])
-                       // this.DropDownListService.gettaxcodefromgrnnewForStore(data1["adv_item_code"], grn_id, data1["adv_packing"], data1["classified_item_name"])
-                    //  ).subscribe(([packingList, capacityEmptyWt, ItemGrp, taxid]) => {
+                        // this.DropDownListService.gettaxcodefromgrnnewForStore(data1["adv_item_code"], grn_id, data1["adv_packing"], data1["classified_item_name"])
+                        //  ).subscribe(([packingList, capacityEmptyWt, ItemGrp, taxid]) => {
                       ).subscribe(([packingList, capacityEmptyWt, ItemGrp]) => {
                         this.status = true;
                         this.capacity[k] = capacityEmptyWt.capacity;
@@ -1386,7 +1386,7 @@ export class PurchaseBillComponent implements OnInit {
 
                         this.ItemGr.push(ItemGrp["item_group"]);
                         //this.TaxCode.push(taxid["tax_code"]);//earlier
-                        this.TaxCode.push(data1["tax_id"]); 
+                        this.TaxCode.push(data1["tax_id"]);
                         this.HsnCode.push(ItemGrp["hsn_code"]);
                         this.TaxRate.push(data1["tax_rate"]);
                         //hsn_code
@@ -1409,9 +1409,9 @@ export class PurchaseBillComponent implements OnInit {
                           discount_amount: data1["discount_amt"], net_amount: data1["net_amt"], qc_deduction: data1["qc_deduction"],
                           net_amt_after_qc: data1["net_amt_after_qc"], tax_code: data1["tax_code"], warehouse: data1["warehouse_name"], stack: data1["rack"],
                           tax_rate: data1["tax_rate"], cgstamt: data1["cgstamt"], sgstamt: data1["sgstamt"], igstamt: data1["igstamt"], tax_amt: data1["tax_amt"],
-                         // gross_amt: data1["gross_amt"], passed_packing_qty: data1["pssd_pack_qty"], tax_name: taxid["tax_code"],
-                         gross_amt: data1["gross_amt"], passed_packing_qty: data1["pssd_pack_qty"], tax_name: data1["tax_id"],
-                         
+                          // gross_amt: data1["gross_amt"], passed_packing_qty: data1["pssd_pack_qty"], tax_name: taxid["tax_code"],
+                          gross_amt: data1["gross_amt"], passed_packing_qty: data1["pssd_pack_qty"], tax_name: data1["tax_id"],
+
                           classified_item_name: data1["classified_item_name"]
                         });
 
@@ -1623,9 +1623,9 @@ export class PurchaseBillComponent implements OnInit {
                           this.DropDownListService.getItemPackUom(data1["adv_item_code"], data1["adv_packing"], this.company_name),
                           this.DropDownListService.getItemNameById(data1["adv_item_code"], this.company_name),
                           // this.DropDownListService.gettaxcodefromgrn(data1["adv_item_code"],data["grn_id"])
-                        //  this.DropDownListService.gettaxcodefromgrnnewForStore(data1["adv_item_code"], grn_id, data1["adv_packing"], data1["classified_item_name"])
-                       // ).subscribe(([packingList, capacityEmptyWt, ItemGrp, taxid]) => {
-                          ).subscribe(([packingList, capacityEmptyWt, ItemGrp]) => {
+                          //  this.DropDownListService.gettaxcodefromgrnnewForStore(data1["adv_item_code"], grn_id, data1["adv_packing"], data1["classified_item_name"])
+                          // ).subscribe(([packingList, capacityEmptyWt, ItemGrp, taxid]) => {
+                        ).subscribe(([packingList, capacityEmptyWt, ItemGrp]) => {
                           // console.log(" taxid " + JSON.stringify(taxid))
                           this.status = true;
                           this.capacity[k] = capacityEmptyWt.capacity;
@@ -1635,7 +1635,7 @@ export class PurchaseBillComponent implements OnInit {
 
                           this.ItemGr.push(ItemGrp["item_group"]);
                           //this.TaxCode.push(taxid["tax_code"]);//ealrier
-                          this.TaxCode.push(data1["tax_id"]); 
+                          this.TaxCode.push(data1["tax_id"]);
                           this.HsnCode.push(ItemGrp["hsn_code"]);
                           this.TaxRate.push(data1["tax_rate"]);
                           //hsn_code
@@ -1659,7 +1659,7 @@ export class PurchaseBillComponent implements OnInit {
                             net_amt_after_qc: data1["net_amt_after_qc"], tax_code: data1["tax_code"], warehouse: data1["warehouse_name"], stack: data1["rack"],
                             tax_rate: data1["tax_rate"], cgstamt: data1["cgstamt"], sgstamt: data1["sgstamt"], igstamt: data1["igstamt"], tax_amt: data1["tax_amt"],
                             //gross_amt: data1["gross_amt"], passed_packing_qty: data1["pssd_pack_qty"], tax_name: taxid["tax_code"],
-                            gross_amt: data1["gross_amt"], passed_packing_qty: data1["pssd_pack_qty"], tax_name:  data1["tax_id"],
+                            gross_amt: data1["gross_amt"], passed_packing_qty: data1["pssd_pack_qty"], tax_name: data1["tax_id"],
                             classified_item_name: data1["classified_item_name"]
                           });
 
@@ -2437,7 +2437,7 @@ export class PurchaseBillComponent implements OnInit {
       }
     }
   }
-
+  // pur_Bill_Item_Details
 
   HsnCode1 = [];
   TaxCode1 = [];
@@ -2464,7 +2464,7 @@ export class PurchaseBillComponent implements OnInit {
       this.Service.purBillAppChargesRetriveList(pbid),
       this.Service.purBillStoreChargesRetriveList(pbid)
     ).subscribe(([purBillData, itemData, MusterrollData,
-      TaxInfo, brokerData, Bpdetails, AccountData, DocsData, appCharges,storedate]) => {
+      TaxInfo, brokerData, Bpdetails, AccountData, DocsData, appCharges, storedate]) => {
       this.onChangeServicesItemSubType(purBillData["purchase_type"], 'update');
       console.log("BillDetails:" + JSON.stringify(purBillData))
       this.srvItemSubType = purBillData["purchase_type"];
@@ -2503,9 +2503,9 @@ export class PurchaseBillComponent implements OnInit {
         claim1: purBillData["claim1"], claim1_gl_ac: purBillData["claim1_gl_ac"], claim2: purBillData["claim2"], claim2_gl_ac: purBillData["claim2_gl_ac"],
         app_chgs_id: purBillData["app_chgs_id"], tot_amt: purBillData["tot_amt"], add1_remarks: purBillData["add1_remarks"], add2_remarks: purBillData["add2_remarks"], referance_type: purBillData["referance_type"]
         , supp_ref_doc: purBillData["supp_ref_doc"], supp_ref_docno: purBillData["supp_ref_docno"], supp_ref_doc_date: purBillData["supp_ref_doc_date"],
-        referance_id: purBillData["referance_id"], state: purBillData["state"],   store_charges: purBillData["store_charges"],
-        store_taxamt: purBillData["store_taxamt"],allstorecharges: purBillData["allstorecharges"],store_frieghtcharges:purBillData["store_frieghtcharges"],
-        store_frieghtcharges_gl_ac:purBillData["store_frieghtcharges_gl_ac"]
+        referance_id: purBillData["referance_id"], state: purBillData["state"], store_charges: purBillData["store_charges"],
+        store_taxamt: purBillData["store_taxamt"], allstorecharges: purBillData["allstorecharges"], store_frieghtcharges: purBillData["store_frieghtcharges"],
+        store_frieghtcharges_gl_ac: purBillData["store_frieghtcharges_gl_ac"]
       });
 
       console.log("itemData: " + JSON.stringify(itemData));
@@ -2519,7 +2519,8 @@ export class PurchaseBillComponent implements OnInit {
         forkJoin(
           this.DropDownListService.getItemMasterPackMat(data1["adv_item_code"]),
           this.DropDownListService.getItemPackUom(data1["adv_item_code"], data1["adv_packing_item"], this.company_name),
-          this.DropDownListService.gettaxcodefromgrnnew(data1["adv_item_code"], purBillData["referance_id"], data1["adv_packing_item"])
+          //this.DropDownListService.gettaxcodefromgrnnew(data1["adv_item_code"], purBillData["referance_id"], data1["adv_packing_item"])
+          this.DropDownListService.gettaxcodefromgrnnewMulti(data1["adv_item_code"], purBillData["referance_id"], data1["adv_packing_item"])
         ).subscribe(([packingList, capacityEmptyWt, taxid]) => {
           this.status = true;
           this.addItem();
@@ -2813,7 +2814,7 @@ export class PurchaseBillComponent implements OnInit {
 
   }
 
-  accountpostingpopup(id, purbillid,business_unit) {
+  accountpostingpopup(id, purbillid, business_unit) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -2822,22 +2823,20 @@ export class PurchaseBillComponent implements OnInit {
     let comp = this.company_name;
 
     dialogref = this.dialog.open(PurBillAccountpostingComponent, {
-      data: { id: id, purbillid: purbillid, company_name: comp,business_unit:business_unit }, height: '80%',
+      data: { id: id, purbillid: purbillid, company_name: comp, business_unit: business_unit }, height: '80%',
       width: '60%'
     });
     dialogref.afterClosed().subscribe(data => {
-      if(data.response_return==1)
-        {
-          this.listPurchaseBill.find(data => {
-            return data.pur_bill_id == purbillid;
-          }).export = 1;
-        }
-      if(data.response_return==0)
-        {
-          this.listPurchaseBill.find(data => {
-            return data.pur_bill_id == purbillid;
-          }).export = 0;
-        }
+      if (data.response_return == 1) {
+        this.listPurchaseBill.find(data => {
+          return data.pur_bill_id == purbillid;
+        }).export = 1;
+      }
+      if (data.response_return == 0) {
+        this.listPurchaseBill.find(data => {
+          return data.pur_bill_id == purbillid;
+        }).export = 0;
+      }
     });
   }
 
@@ -2900,6 +2899,10 @@ export class PurchaseBillComponent implements OnInit {
     console.log("11");
     let totalamount: number = 0, totalchargematrix: number = 0;
 
+    console.log("obj")
+    console.log(this.pur_Bill_app_chgs);
+    console.log(this.pur_Bill_Item_Details);
+
     for (let i = 0; i < this.pur_Bill_Item_Details.length; i++) {
 
       if (this.pur_Bill_Item_Details.at(i).get("price_based_on").value == "Packing") {
@@ -2911,7 +2914,6 @@ export class PurchaseBillComponent implements OnInit {
       if (this.pur_Bill_Item_Details.at(i).get("price_based_on").value == "Without Packing") {
         totalamount += Number(this.pur_Bill_Item_Details.at(i).get("passed_mat_weight").value);
       }
-
 
       for (let v = 0; v < this.pur_Bill_app_chgs.length; v++) {
 
@@ -2938,6 +2940,7 @@ export class PurchaseBillComponent implements OnInit {
 
     }
 
+    console.log("ame: " + totalchargematrix)
 
     this.userForm.patchValue({ claim1: Number(totalchargematrix).toFixed(2), tot_amt: Number(totalchargematrix).toFixed(2) });
     this.chargematrixcalculation();
@@ -2988,12 +2991,12 @@ export class PurchaseBillComponent implements OnInit {
     console.log(amt + " / " + dscAmt + " / " + taxAmt + " / " + netAmt + " / " + qcDeduction + " / " + netAmtAfterDeduction + " / " + add + " / " + sub + " / " +
       otherCharges + " / " + alreadyPaid + " / " + grossAmt + " / " + claimdeduction)
     let postamountcal: number = 0, amountdefuction: number = 0;
-    let Allstorecharges=this.userForm.get("allstorecharges").value,Store_taxamt=this.userForm.get("store_taxamt").value;
-    if (this.userForm.get("allstorecharges").value == null || this.userForm.get("allstorecharges").value =='') {
-      Allstorecharges=0;
+    let Allstorecharges = this.userForm.get("allstorecharges").value, Store_taxamt = this.userForm.get("store_taxamt").value;
+    if (this.userForm.get("allstorecharges").value == null || this.userForm.get("allstorecharges").value == '') {
+      Allstorecharges = 0;
     }
-    if (this.userForm.get("store_taxamt").value == null || this.userForm.get("store_taxamt").value =='') {
-      Store_taxamt=0;
+    if (this.userForm.get("store_taxamt").value == null || this.userForm.get("store_taxamt").value == '') {
+      Store_taxamt = 0;
     }
 
 
