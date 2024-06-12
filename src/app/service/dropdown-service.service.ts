@@ -6285,5 +6285,9 @@ export class DropdownServiceService {
   searchpendingDelvChallan(fromdate, todate): Observable<any> {
     return this.httpClient.get(this.url + 'searchpendingDelvChallan/' + fromdate + '/' + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+  
+  gettaxcodefromgrnnewMulti(item,grnno,packing): Observable<any> {
+    return this.httpClient.get(this.url + 'gettaxcodefromgrnnewMulti/' + item + '/' + grnno+'/'+packing).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 
 }
