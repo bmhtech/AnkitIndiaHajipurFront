@@ -1755,12 +1755,12 @@
                       (click)="accountpostingpopup(SalesInvoice.id,SalesInvoice.invoice_id,SalesInvoice.invoice_type)"
                       *ngIf="salesinvoiceposting" [disabled]="SalesInvoice.cencel_einvoice">Posting</button>
                   </td>
-                  <td *ngIf="SalesInvoice.invoice_type =='INV00001' && SalesInvoice.export == 0">
+                  <td *ngIf="(SalesInvoice.invoice_type =='INV00001' || SalesInvoice.invoice_type =='INV00005') && SalesInvoice.export == 0">
                     <button class="btn btn-warning"
                       (click)="accountpostingpopup(SalesInvoice.id,SalesInvoice.invoice_id,SalesInvoice.invoice_type)"
                       *ngIf="salesinvoiceposting" [disabled]="SalesInvoice.cencel_einvoice">Posting</button>
                   </td>
-                  <td *ngIf="SalesInvoice.invoice_type =='INV00001' && SalesInvoice.export == 1">
+                  <td *ngIf="(SalesInvoice.invoice_type =='INV00001' || SalesInvoice.invoice_type =='INV00005') && SalesInvoice.export == 1">
                     <button class="btn btn-success"
                       (click)="accountpostingpopup(SalesInvoice.id,SalesInvoice.invoice_id,SalesInvoice.invoice_type)"
                       *ngIf="salesinvoiceposting" [disabled]="SalesInvoice.cencel_einvoice">Posting</button>

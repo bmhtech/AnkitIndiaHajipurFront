@@ -117,7 +117,7 @@ import { ToastrService } from 'ngx-toastr';
           this.partyname=upperdata[0]["supplier"];
           this.address=upperdata[0]["address"];
         })
-      //console.log(" invoice  "+JSON.stringify(invoiceTaxSum))
+      console.log(" invoice Tax:: "+JSON.stringify(invoiceTaxSum))
     
 
       //console.log(" data :: "+ upperdata[0]["vehicleno"])

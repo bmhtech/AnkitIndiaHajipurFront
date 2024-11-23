@@ -3692,7 +3692,8 @@ export class PurchaseOrderComponent implements OnInit {
             else if (this.userForm.get("reason").value == '' || this.userForm.get("reason").value == null) {
               alert("Please Select Reason In Approval Tab"); this.status = true;
             }
-            else if ((this.userForm.get("ser_item_subtype").value == "ITMT00001" || this.userForm.get("ser_item_subtype").value == 'ITMT00010') && (this.userForm.get("app_chgs_id").value == null || this.userForm.get("app_chgs_id").value == '0' || this.userForm.get("app_chgs_id").value == '')) {
+            //else if ((this.userForm.get("ser_item_subtype").value == "ITMT00001" || this.userForm.get("ser_item_subtype").value == 'ITMT00010') && (this.userForm.get("app_chgs_id").value == null || this.userForm.get("app_chgs_id").value == '0' || this.userForm.get("app_chgs_id").value == '')) {
+            else if ((this.userForm.get("ser_item_subtype").value == "ITMT00001") && (this.userForm.get("app_chgs_id").value == null || this.userForm.get("app_chgs_id").value == '0' || this.userForm.get("app_chgs_id").value == '')) {
               alert("Please Select Charges in Terms and Condition Tab !!!");
               this.status = true;
             }
@@ -3932,7 +3933,8 @@ export class PurchaseOrderComponent implements OnInit {
           else if (this.userForm.get("reason").value == '' || this.userForm.get("reason").value == null) {
             alert("Please Select Reason In Approval Tab"); this.status = true;
           }
-          else if ((this.userForm.get("ser_item_subtype").value == "ITMT00001" || this.userForm.get("ser_item_subtype").value == 'ITMT00010') && (this.userForm.get("app_chgs_id").value == null || this.userForm.get("app_chgs_id").value == '0' || this.userForm.get("app_chgs_id").value == '')) {
+          //else if ((this.userForm.get("ser_item_subtype").value == "ITMT00001" || this.userForm.get("ser_item_subtype").value == 'ITMT00010') && (this.userForm.get("app_chgs_id").value == null || this.userForm.get("app_chgs_id").value == '0' || this.userForm.get("app_chgs_id").value == '')) {
+          else if ((this.userForm.get("ser_item_subtype").value == "ITMT00001") && (this.userForm.get("app_chgs_id").value == null || this.userForm.get("app_chgs_id").value == '0' || this.userForm.get("app_chgs_id").value == '')) {
             alert("Please Select Charges in Terms and Condition Tab !!!");
             this.status = true;
           }

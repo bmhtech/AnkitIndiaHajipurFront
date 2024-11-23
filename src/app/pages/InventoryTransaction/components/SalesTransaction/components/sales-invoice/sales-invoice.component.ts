@@ -1569,7 +1569,8 @@ export class SalesInvoiceComponent implements OnInit {
         {
           this.regsiterdgsi = true;
           //if(this.userForm.get("invoice_type").value == 'INV00002' || this.userForm.get("invoice_type").value == 'INV00004')
-          if (this.userForm.get("invoice_type").value == 'INV00002' || this.userForm.get("invoice_type").value == 'INV00004' || this.userForm.get("invoice_type").value == 'INV00003') {
+          //if (this.userForm.get("invoice_type").value == 'INV00002' || this.userForm.get("invoice_type").value == 'INV00004' || this.userForm.get("invoice_type").value == 'INV00003') {
+          if (this.userForm.get("invoice_type").value == 'INV00002' || this.userForm.get("invoice_type").value == 'INV00004' || this.userForm.get("invoice_type").value == 'INV00003' || this.userForm.get("invoice_type").value == 'INV00005') {
             this.einvoiceshow = true;
           }
           else {
