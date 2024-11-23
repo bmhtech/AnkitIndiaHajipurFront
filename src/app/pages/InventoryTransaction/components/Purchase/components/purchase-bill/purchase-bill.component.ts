@@ -1360,9 +1360,6 @@ export class PurchaseBillComponent implements OnInit {
                 //store purchase starts here
                 if (this.userForm.get("purchase_type").value == "ITMT00004") {
 
-
-
-
                   this.DropDownListService.getStoreChargesPo(this.userForm.get("referance_id").value, data["referance_type"]).subscribe(data => {
 
                     console.log("check store data:" + JSON.stringify(data))
@@ -1842,8 +1839,6 @@ export class PurchaseBillComponent implements OnInit {
 
                     }
                   });
-
-
                   //store purchase ends here
                 }
                 else if (this.userForm.get("purchase_type").value == "ITMT00005" || this.userForm.get("purchase_type").value == "ITMT00002" || this.userForm.get("purchase_type").value == "ITMT00007" || rawopen == false) {
@@ -2071,8 +2066,8 @@ export class PurchaseBillComponent implements OnInit {
                     this.DropDownListService.getChargesapplication(data["grn_id"]),
                     this.DropDownListService.getChargesMatrixdetails(data["grn_id"]),
                     this.DropDownListService.getItemNameById(data1["adv_item_code"], this.company_name),
-
-                  ).subscribe(([packingList, capacityEmptyWt, chargesapp, chargematrix, ItemGrp]) => {
+                    this.DropDownListService.gettaxcodefromgrnnew(data1["adv_item_code"], data["grn_id"], data1["adv_packing"]),
+                  ).subscribe(([packingList, capacityEmptyWt, chargesapp, chargematrix, ItemGrp,taxdata]) => {
                     this.status = true;
                     this.capacity[k] = capacityEmptyWt.capacity;
                     this.empty_bag_wt[k] = capacityEmptyWt.empty_big_wt;
@@ -2080,7 +2075,17 @@ export class PurchaseBillComponent implements OnInit {
                     this.packingItem[k] = packingList;
 
                     this.ItemGr.push(ItemGrp["item_group"]);
-                    this.TaxCode.push(data1["tax_code"]);
+
+                    if(this.userForm.get("purchase_type").value=='ITMT00003' || this.userForm.get("purchase_type").value=='ITMT00010'){  //fin & trading purchase
+                      console.log("enter here else part fin purchase")
+                      console.log("tax code:: "+ taxdata["tax_code"])
+                      this.TaxCode.push(taxdata["tax_code"]);
+                    }
+                    else{
+                      this.TaxCode.push(data1["tax_code"]);
+                    }
+
+                    //this.TaxCode.push(data1["tax_code"]);
                     this.HsnCode.push(ItemGrp["hsn_code"]);
                     this.TaxRate.push(data1["tax_rate"]);
 
@@ -2101,7 +2106,7 @@ export class PurchaseBillComponent implements OnInit {
                       amount: data1["amount"], discount: data1["discount"], discount_basedon: data1["discount_based_on"],
                       discount_amount: data1["discount_amt"], net_amount: data1["net_amt"], qc_deduction: data1["qc_deduction"],
                       net_amt_after_qc: data1["net_amt_after_qc"], tax_code: data1["tax_code"], warehouse: data1["warehouse_name"], stack: data1["rack"],
-                      tax_rate: data1["tax_rate"], cgstamt: data1["cgstamt"], sgstamt: data1["sgstamt"], igstamt: data1["igstamt"], tax_amt: data1["tax_amt"], gross_amt: data1["gross_amt"], passed_packing_qty: data1["pssd_pack_qty"]
+                      tax_name: data1["tax_id"],tax_rate: data1["tax_rate"], cgstamt: data1["cgstamt"], sgstamt: data1["sgstamt"], igstamt: data1["igstamt"], tax_amt: data1["tax_amt"], gross_amt: data1["gross_amt"], passed_packing_qty: data1["pssd_pack_qty"]
                     });
 
                     k = k + 1;
@@ -2176,7 +2181,8 @@ export class PurchaseBillComponent implements OnInit {
                         }
                       }
                       )
-                    timer(10000).subscribe
+                    //timer(10000).subscribe
+                    timer(0).subscribe
                       (x => {
                         this.StateName = this.userForm.get("state").value;
                         const distinctArrayTax: any = [] = this.TaxCode.filter((n, i) => this.TaxCode.indexOf(n) === i);
@@ -2190,9 +2196,10 @@ export class PurchaseBillComponent implements OnInit {
                           let cgst = 0;
                           let sgst = 0;
                           let igst = 0;
-
+                          console.log("ENTER TAX array length :: " + distinctArrayTax.length +" /pur item len/ "+this.pur_Bill_Item_Details.length)
                           for (let k = 0; k < this.pur_Bill_Item_Details.length; k++) {
-
+                            console.log("item Pur Tax:: "+this.pur_Bill_Item_Details.at(k).get("tax_name").value+" // "+distinctArrayTax[j]
+                            +" // "+this.pur_Bill_Item_Details.at(k).get("igstamt").value)
                             if (this.pur_Bill_Item_Details.at(k).get("tax_name").value == distinctArrayTax[j]) {
                               TaxRate = this.pur_Bill_Item_Details.at(k).get("tax_rate").value;
                               TaxAmt += this.pur_Bill_Item_Details.at(k).get("tax_amt").value;
@@ -2202,6 +2209,8 @@ export class PurchaseBillComponent implements OnInit {
                             }
                           }
                           this.addItemGrpTax();
+                          console.log(" Pur gst Tax:: "+TaxRate.toFixed(2)+" // "+TaxAmt.toFixed(2)
+                            +" // "+cgst.toFixed(2)+" // "+sgst.toFixed(2)+" // "+igst.toFixed(2))
                           this.purchase_item_groupwise_taxsumm.at(j).patchValue({ tax_code: distinctArrayTax[j], tax_rate: TaxRate.toFixed(2), tax_amt: TaxAmt.toFixed(2), cgst: cgst.toFixed(2), sgst: sgst.toFixed(2), igst: igst.toFixed(2) });
 
                           if (distinctArrayTax[j] != '' && distinctArrayTax[j] != null) {

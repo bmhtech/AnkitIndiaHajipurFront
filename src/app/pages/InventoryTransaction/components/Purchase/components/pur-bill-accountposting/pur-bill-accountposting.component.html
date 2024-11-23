@@ -121,7 +121,7 @@
                       <thead>
                         <tr>
                           <th scope="col" style="width: 10px">SL.</th>
-                          <th scope="col" style="width: 400px">Particular</th>
+                          <th scope="col" style="width: 400px">Particular 1</th>
                           <th scope="col" style="width: 50px">Debit Amount</th>
                           <th scope="col" style="width: 50px;" >Credit Amount</th>
                         </tr>
@@ -218,7 +218,7 @@
                         <thead>
                           <tr>
                             <th scope="col" style="width: 10px">SL.</th>
-                            <th scope="col" style="width: 400px">Particular</th>
+                            <th scope="col" style="width: 400px">Particular 2</th>
                             <th scope="col" style="width: 50px">Debit Amount</th>
                             <th scope="col" style="width: 50px;" >Credit Amount</th>
                           </tr>
@@ -320,7 +320,7 @@
                       <thead>
                         <tr>
                           <th scope="col" style="width: 10px">SL.</th>
-                          <th scope="col" style="width: 400px">Particular</th>
+                          <th scope="col" style="width: 400px">Particular 3</th>
                           <th scope="col" style="width: 50px">Debit Amount</th>
                           <th scope="col" style="width: 50px;" >Credit Amount</th>
                         </tr>
@@ -330,7 +330,7 @@
                        
                         <tr *ngFor="let Itemdata of itemList">
                           <td>{{Itemdata.slno}}</td>
-                          <td>{{Itemdata.adv_item_name}} </td>
+                          <!-- <td>{{Itemdata.adv_item_name}} </td> -->
                           <td>{{Itemdata.adv_item_name}}<br/><b style="font-size:10px;color:red">(Bags: {{Itemdata.passed_packing_qty}}, Pass wt:{{Itemdata.passed_mat_weight}} , Gross wt:{{Itemdata.passed_item_qty}}, Rate:{{Itemdata.unit_rate}})</b></td>
                           <td style="text-align: right!important;">{{Itemdata.net_amount | number:'1.2-2'}}</td>
                           <td></td>
@@ -405,7 +405,7 @@
                         <thead>
                           <tr>
                             <th scope="col" style="width: 10px">SL.</th>
-                            <th scope="col" style="width: 400px">Particular</th>
+                            <th scope="col" style="width: 400px">Particular 4</th>
                             <th scope="col" style="width: 50px">Debit Amount</th>
                             <th scope="col" style="width: 50px;" >Credit Amount</th>
                           </tr>
@@ -415,7 +415,7 @@
                          
                           <tr *ngFor="let Itemdata of itemList">
                             <td>{{Itemdata.slno}}</td>
-                            <td>{{Itemdata.adv_item_name}}</td>
+                            <!-- <td>{{Itemdata.adv_item_name}}</td> -->
                             <td>{{Itemdata.adv_item_name}}<br/><b style="font-size:10px;color:red">(Bags: {{Itemdata.passed_packing_qty}}, Pass wt:{{Itemdata.passed_mat_weight}} , Gross wt:{{Itemdata.passed_item_qty}}, Rate:{{Itemdata.unit_rate}})</b></td>
                             <td style="text-align: right!important;">{{Itemdata.net_amount | number:'1.2-2'}}</td>
                             <td></td>

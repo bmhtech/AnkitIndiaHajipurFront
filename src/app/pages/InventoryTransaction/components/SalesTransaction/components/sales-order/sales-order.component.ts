@@ -679,7 +679,7 @@ export class SalesOrderComponent implements OnInit {
 
     if (inv_type.length) {
 
-      if (inv_type == "INV00005") {
+      /* if (inv_type == "INV00005") {
         this.jobtransaction = true;
         this.jobtransaction1 = false;
         this.orderdatevisiable = true;
@@ -693,9 +693,9 @@ export class SalesOrderComponent implements OnInit {
             this.item_codes = data;
             this.status = true;
           });
-      }
-      else if (inv_type == "INV00003") {
-
+      } */
+      //else if (inv_type == "INV00003") {
+      if (inv_type == "INV00003") {
         this.orderdatevisiable = false;
         this.jobtransaction = false;
         this.jobtransaction1 = true;

@@ -2564,13 +2564,11 @@ import { constants } from 'zlib';
         
          if(inv_type.length)
          {
-          
-           if(inv_type=="INV00005")
+           /* if(inv_type=="INV00006")
            {
              forkJoin
              (
                this.DropDownListService.getItemThruSalesThruBU_inv_type(this.userForm.get("business_unit").value,this.company_name,"INV00001"),
-             
              )
              .subscribe(([data])=>
                {
@@ -2578,30 +2576,31 @@ import { constants } from 'zlib';
                  this.item_codes = data;
                  this.status = true;
                }); 
-           }
-           else if(inv_type=="INV00001")
+           } */
+           //else if(inv_type=="INV00001")
+           if(inv_type=="INV00001")
            {
-                 this.DropDownListService.getItemThruSalesThruBU_inv_typeReg(this.userForm.get("business_unit").value,this.company_name).subscribe(data=>
-                   {
-                     this.item_codes = data;
-                     this.status = true;
-                   });
+            this.DropDownListService.getItemThruSalesThruBU_inv_typeReg(this.userForm.get("business_unit").value,this.company_name).subscribe(data=>
+              {
+                this.item_codes = data;
+                this.status = true;
+              });
            }
            else if(inv_type=="INV00002")
            {
-              this.DropDownListService.getItemThruSalesThruBU_inv_typeGST(this.userForm.get("business_unit").value,this.company_name).subscribe(data=>
-                {
-                  this.item_codes = data;
-                  this.status = true;
-                });
+            this.DropDownListService.getItemThruSalesThruBU_inv_typeGST(this.userForm.get("business_unit").value,this.company_name).subscribe(data=>
+              {
+                this.item_codes = data;
+                this.status = true;
+              });
            }
            else
            {
-               this.DropDownListService.getItemThruSalesThruBU_inv_type(this.userForm.get("business_unit").value,this.company_name,inv_type).subscribe(data=>
-                 {
-                   this.item_codes = data;
-                   this.status = true;
-                 });
+            this.DropDownListService.getItemThruSalesThruBU_inv_type(this.userForm.get("business_unit").value,this.company_name,inv_type).subscribe(data=>
+              {
+                this.item_codes = data;
+                this.status = true;
+              });
            }
            
          }  

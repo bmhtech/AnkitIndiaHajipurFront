@@ -3575,7 +3575,10 @@ export class GrnComponent implements OnInit {
                 this.tolerancestatus = false;
               }
               //need to change afterwards                  
-
+              if (this.userForm.get("purchase_type").value == "ITMT00004" || this.userForm.get("purchase_type").value == "ITMT00005" || this.userForm.get("purchase_type").value == "ITMT00002" || this.userForm.get("purchase_type").value == "ITMT00007" || this.userForm.get("purchase_type").value == "ITMT00010") {
+                this.tolerancestatus = true;
+              }
+              
               if (this.tolerancestatus == true) {
 
 
@@ -3752,7 +3755,7 @@ export class GrnComponent implements OnInit {
               //console.log("this.tolerancestatus "+ this.tolerancestatus)
 
 
-              if (this.userForm.get("purchase_type").value == "ITMT00004" || this.userForm.get("purchase_type").value == "ITMT00005" || this.userForm.get("purchase_type").value == "ITMT00002" || this.userForm.get("purchase_type").value == "ITMT00007") {
+              if (this.userForm.get("purchase_type").value == "ITMT00004" || this.userForm.get("purchase_type").value == "ITMT00005" || this.userForm.get("purchase_type").value == "ITMT00002" || this.userForm.get("purchase_type").value == "ITMT00007" || this.userForm.get("purchase_type").value == "ITMT00010") {
                 this.tolerancestatus = true;
               }
               if (this.tolerancestatus == true) {

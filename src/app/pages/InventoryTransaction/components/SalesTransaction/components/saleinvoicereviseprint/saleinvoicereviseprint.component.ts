@@ -95,7 +95,8 @@ export class SaleinvoicereviseprintComponent implements OnInit {
   ho_address:any;
   address2:any;
   address3:any;
-
+  gstShow: boolean = true;
+  shipname: any;
  
   exportAsConfig: ExportAsConfig = {
     type: 'docx', // the type you want to download
@@ -197,7 +198,7 @@ export class SaleinvoicereviseprintComponent implements OnInit {
         this.contactnoshow = true;
         //console.log("else")
       }
-      if (Details["invoice_type"] == 'INV00002' || Details["invoice_type"] == 'INV00004') {
+      if (Details["invoice_type"] == 'INV00002' || Details["invoice_type"] == 'INV00004' || Details["invoice_type"] == 'INV00005') {
         this.billheading = 'Tax Invoice';
         this.ruleshow = false;
         this.itemdetailsvalueshow = true;
@@ -237,6 +238,10 @@ export class SaleinvoicereviseprintComponent implements OnInit {
             //this.distance = eWayDtls["distance"];
           });
         }
+        if(Details["invoice_type"] == 'INV00005')
+        {
+          this.e_invoice_no = Details["e_invoice_no"];
+        }
       }
       else {
 
@@ -244,15 +249,16 @@ export class SaleinvoicereviseprintComponent implements OnInit {
 
           this.einvoicetype = true;
           this.einvelse = false;
-
-          if (Details.e_invoice_no.length) {
+          if(Details["invoice_type"] == 'INV00002' || Details["invoice_type"] == 'INV00004')
+          {
+            if (Details.e_invoice_no.length) {
             this.imagename = this.invoiceid + '.png';
             console.log("imagename:" + this.imagename)
-          }
-          else {
-            this.imagename = 'noimage.png';
-            console.log("imagename11:" + this.imagename)
-          }
+            }
+            else {
+              this.imagename = 'noimage.png';
+              console.log("imagename11:" + this.imagename)
+            }
 
           /* forkJoin(
             this.DropDownListService.geteinvoicedetails(this.invoiceid),
@@ -280,6 +286,11 @@ export class SaleinvoicereviseprintComponent implements OnInit {
             });
 
           });
+          }
+          if(Details["invoice_type"] == 'INV00005')
+          {
+            this.e_invoice_no = Details["e_invoice_no"];
+          }
         }
         else {
           this.einvoicetype = false;
@@ -301,6 +312,16 @@ export class SaleinvoicereviseprintComponent implements OnInit {
       this.delievrydate = Details["challan_date"];
       this.brokername = Details["broker_name"];
       this.vehicleno = Details["vehicleno"];
+      if(Details["invoice_type"] == 'INV00005')
+      {
+        this.shipname = "";
+        this.gstShow = false;
+      }
+      else
+      {
+        this.shipname = Details["partyname"];
+        this.gstShow = true;
+      }
       this.partyname = Details["partyname"];
       //this.address = Details["paytodtls"];
       this.address = Details["add1"];
