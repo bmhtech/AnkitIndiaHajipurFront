@@ -6290,4 +6290,7 @@ export class DropdownServiceService {
     return this.httpClient.get(this.url + 'gettaxcodefromgrnnewMulti/' + item + '/' + grnno+'/'+packing).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getSalesOrderList(salesprocess,fin_year): Observable<any> {
+    return this.httpClient.get(this.url + 'getSalesOrderList/' + salesprocess+ '/' + fin_year).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 }

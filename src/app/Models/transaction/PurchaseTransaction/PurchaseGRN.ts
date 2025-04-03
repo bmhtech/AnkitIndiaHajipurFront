@@ -9,6 +9,8 @@ export class PurchaseGRN {
 	grn_no: any;
 	supplier_name: any;
 	referance_type: any;
+	sales_process: any;
+	sales_order: any;
 	vehicle_id: any;
 	company_id: any;
 	fin_year: any;
