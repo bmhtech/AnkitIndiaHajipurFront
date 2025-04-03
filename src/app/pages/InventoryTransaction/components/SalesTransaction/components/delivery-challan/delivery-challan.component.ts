@@ -107,6 +107,8 @@ export class DeliveryChallanComponent implements OnInit {
   user_roles: any;
   usernamelock: boolean = false;
   DisableTransportChgs: boolean = false;
+  sale_order_id: any;
+  grn_id: any;
 
   constructor(public fb: FormBuilder, public dialog: MatDialog,
     private Service: Master, private DropDownListService: DropdownServiceService) {
@@ -446,6 +448,14 @@ export class DeliveryChallanComponent implements OnInit {
         //alert(localStorage.getItem("sid")+"//"+localStorage.getItem("sno")+"//"+localStorage.getItem("saction"));
         this.onUpdate(localStorage.getItem("sid"), localStorage.getItem("sno"), localStorage.getItem("saction"));
       }
+      if (localStorage.getItem("svalue") == 'add') {  // For Delivery Challan with GRN & Sale Order id
+        //alert(localStorage.getItem("sid")+"//"+localStorage.getItem("sno"));
+        this.grn_id=localStorage.getItem("sid");
+        this.sale_order_id=localStorage.getItem("sno");
+        //this.ngOnInit();
+        this.showList("add");
+      }
+      console.log("/grn_id/ ",this.grn_id,"/sale_order_id/ ",this.sale_order_id);
     }, (error) => {
       this.status = true; console.log("ERROR get: " + JSON.stringify(error)); alert("something error is occured please try again....");
       this.ngOnInit()

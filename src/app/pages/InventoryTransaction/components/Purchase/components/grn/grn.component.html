@@ -135,6 +135,33 @@
                 </mat-select>
               </div>
             </div> -->
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group ht_59">
+                <mat-label>Sales Process<span class="red">*</span></mat-label>
+                <mat-select formControlName="sales_process" (selectionChange)="onChangeSalesProcess($event)" class="form-control" >
+                  <mat-option value="0">-Select-</mat-option>
+                  <mat-option value="Stock">STOCK</mat-option>
+                  <mat-option value="Sale">SALE</mat-option> 
+                  <mat-option value="Job Work">JOB WORK</mat-option>
+                </mat-select> <!-- {{saleJobworkShow}} -->
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12" *ngIf="salesOrderListShow">
+              <div class="form-group ht_59">
+                <mat-label>Sales Order No.<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control"  
+                [options]="soNoList"
+                [display]="'order_no'"
+                [value]="'order_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['sales_order']">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
               <div class="form-group ht_59">
                 <mat-label>Vehicle No<span class="red">*</span></mat-label>
@@ -349,8 +376,18 @@
                       <div class="label_col"><input class="form-control" type="number" formControlName="tax_amt" readonly/></div>
                       <div class="label_col"><input class="form-control" type="number" formControlName="gross_amt" readonly/></div>
                      <div class="label_col"><input class="form-control" type="text" formControlName="qc_norms" readonly/><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp2(pointIndex)" aria-hidden="true"></i></div>
-                      <div class="label_col"><mat-select class="form-control" formControlName="warehouse_name" (selectionChange)="onChangeWarehouse($event.value, pointIndex)" ><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.warehouse_code">{{warehouse.warehouse_name}}</mat-option></mat-select></div>
-                      <div class="label_col"><mat-select class="form-control wdt_115_s" type="text" formControlName="rack" (selectionChange)="onChangeRack($event.value, pointIndex)"><mat-option value="0">-select-</mat-option><mat-option *ngFor="let stack of stackList[pointIndex]" [value]="stack.stack_no">{{stack.stack_no}}</mat-option></mat-select></div>
+                      <div class="label_col">
+                        <mat-select class="form-control" formControlName="warehouse_name" (selectionChange)="onChangeWarehouse($event.value, pointIndex)" [disabled]="saleJobworkShow">
+                          <mat-option value="0">-Select-</mat-option>
+                          <mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.warehouse_code">{{warehouse.warehouse_name}}</mat-option>
+                        </mat-select>
+                      </div>
+                      <div class="label_col">
+                        <mat-select class="form-control wdt_115_s" type="text" formControlName="rack" (selectionChange)="onChangeRack($event.value, pointIndex)" [disabled]="saleJobworkShow">
+                          <mat-option value="0">-select-</mat-option>
+                          <mat-option *ngFor="let stack of stackList[pointIndex]" [value]="stack.stack_no">{{stack.stack_no}}</mat-option>
+                        </mat-select>
+                      </div>
                       <div class="label_col"><input class="form-control" type="text" formControlName="stack_uom" /></div>
                       <div class="label_col"><input class="form-control" type="number" formControlName="stack_qty" /></div>
                     </div>
@@ -1297,7 +1334,7 @@
                   <th>ItemType</th>
                   <th>Referance Type</th>
                   <th>Vehcle No</th>
-                  <th colspan="4">Action</th>
+                  <th colspan="5">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -1325,6 +1362,7 @@
 
                   <td><button class="btn btn-danger" (click)="onDelete(PurchaseGRN.id, PurchaseGRN.grn_id)" *ngIf="grndelete">Delete</button></td>
                   <td><button class="btn btn-success" (click)="onclickprint(PurchaseGRN.id, PurchaseGRN.grn_id)" *ngIf="grnprint">Print</button></td>
+                  <td *ngIf="PurchaseGRN.sales_process=='Sale' || PurchaseGRN.sales_process=='Job Work'"><button class="btn" style="background-color: chocolate;" (click)="onClickDeliveryChallan(PurchaseGRN.id, PurchaseGRN.grn_id,PurchaseGRN.sales_order,PurchaseGRN.sales_process)">Go To Delivery Challan</button></td>
                 </tr>
               </tbody>
             </table>

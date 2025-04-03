@@ -145,6 +145,8 @@ export class GrnComponent implements OnInit {
       supplier_name: [''],
       referance_type: [''],
       vehicle_id: [''],
+      sales_process: [''],
+      sales_order: [''],
       applicable_charges_id: [''],
       remarks: [''],
       brokerage_active: [''],
@@ -340,6 +342,8 @@ export class GrnComponent implements OnInit {
   get supplier_name() { return this.userForm.get("supplier_name") as FormControl }
   get referance_type() { return this.userForm.get("referance_type") as FormControl }
   get vehicle_id() { return this.userForm.get("vehicle_id") as FormControl }
+  get sales_process() { return this.userForm.get("sales_process") as FormControl }
+  get sales_order() { return this.userForm.get("sales_order") as FormControl }
   get applicable_charges_id() { return this.userForm.get("applicable_charges_id") as FormControl }
   get remarks() { return this.userForm.get("remarks") as FormControl }
   get brokerage_active() { return this.userForm.get("brokerage_active") as FormControl }
@@ -361,7 +365,9 @@ export class GrnComponent implements OnInit {
   get pur_good_receipt_docs() { return this.userForm.get('pur_good_receipt_docs') as FormArray; }
   get pur_good_receipt_broker() { return this.userForm.get('pur_good_receipt_broker') as FormArray; }
 
-
+  get saleJobworkShow(): boolean {
+    return ["Job Work", "Sale"].includes(this.sales_process.value);
+  }
 
   ngOnInit() {
 
@@ -437,6 +443,9 @@ export class GrnComponent implements OnInit {
     this.referance_type_new = '0';
     this.vehicle_id_new = '0';
     let finyear = localStorage.getItem("financial_year");
+    this.salesOrderListShow = false;
+
+    console.log("sales Order List:: ",this.salesOrderListShow);
 
     forkJoin(
       this.DropDownListService.getChargeMasterList(),
@@ -463,7 +472,7 @@ export class GrnComponent implements OnInit {
     ).subscribe(([chargesMasterData, companyBUMNCList, itemNameData,
       itemTypeData, customUOMData, paytermData, ledgerData, vehicleData, suppData, gRNList, taxlist]) => {
       this.taxdata = taxlist;
-      console.log("grn list::" + JSON.stringify(suppData))
+      console.log("grn list::" + JSON.stringify(gRNList))
       this.supplierNames_List = suppData;
       this.chargesIdList = chargesMasterData;
       this.bussiness_unit_list = companyBUMNCList;
@@ -725,7 +734,7 @@ export class GrnComponent implements OnInit {
         this.DropDownListService.getCompanyBussinessUnitDetails(localStorage.getItem("company_name"),buss_id) 
       ).subscribe(([wearHouseData, supplierData,companystate]) => {
         console.log("Check :" + JSON.stringify(wearHouseData))
-        this.warehouses = wearHouseData;
+        this.warehouses = wearHouseData.concat([{ warehouse_code: 'MULTIPLE', warehouse_name: 'MULTIPLE' }]);
         this.supplierNames = supplierData;
         this.company_state=companystate["state_name"]
         this.status = true;
@@ -850,7 +859,7 @@ export class GrnComponent implements OnInit {
       this.DropDownListService.getStackNoByWarehouse(event).subscribe(data1 => {
         console.log("stackListData: " + JSON.stringify(data1))
         this.status = true;
-        this.stackList[index] = data1;
+        this.stackList[index] = data1.concat([{ stack_no: 'MULTIPLE'}]);
       });
     }
   }
@@ -3357,11 +3366,28 @@ export class GrnComponent implements OnInit {
         this.userForm.patchValue({ item_type: "false" });
         // this.orderFor = "false";
       }
+      // SalesOrder Starts
+      if(this.salesProcess==GrnData["sales_process"]){
+        this.salesOrderListShow = false;
+        console.log("sales Order List Update:: ",this.salesOrderListShow);
+        this.userForm.patchValue({sales_order:"NA"});
+      }
+      else{
+        this.salesOrderListShow = true;
+        forkJoin(
+          this.DropDownListService.getSalesOrderList(GrnData["sales_process"],localStorage.getItem("financial_year")),
+        ).subscribe(([soList]) => {
+          console.log("SO List::" + JSON.stringify(soList));
+          console.log("sales Order List Update:: ",this.salesOrderListShow);
+          this.soNoList = soList;
+        });
+      }
+      // SalesOrder Ends
       this.userForm.patchValue({
         id: GrnData["id"], grn_id: GrnData["grn_id"], b_unit: GrnData["b_unit"],
         item_sub_type: GrnData["item_sub_type"], grn_date: GrnData["grn_date"], purchase_type: GrnData["purchase_type"],
         grn_no: GrnData["grn_no"], supplier_name: GrnData["supplier_name"], referance_type: GrnData["referance_type"],
-        vehicle_id: GrnData["vehicle_id"], company_id: GrnData["company_id"], fin_year: GrnData["fin_year"], purchase_subtype: GrnData["purchase_subtype"],
+        vehicle_id: GrnData["vehicle_id"],sales_process: GrnData["sales_process"],sales_order: GrnData["sales_order"], company_id: GrnData["company_id"], fin_year: GrnData["fin_year"], purchase_subtype: GrnData["purchase_subtype"],
         applicable_charges_id: GrnData["applicable_charges_id"], remarks: GrnData["remarks"], brokerage_active: GrnData["brokerage_active"], receipt_criteria: GrnData["receipt_criteria"], multiunloadadvice: GrnData["multiunloadadvice"]
       });
       console.log("GrnData Details: " + JSON.stringify(GrnData));
@@ -3507,6 +3533,14 @@ export class GrnComponent implements OnInit {
           alert("Please select Referance Type!");
           this.status = true;
         }
+        else if (this.userForm.get("sales_process").value == 0 || this.userForm.get("sales_process").value == "0" || this.userForm.get("sales_process").value == "" || this.userForm.get("sales_process").value == null) {
+          alert("Please select Sales Process!");
+          this.status = true;
+        }
+        else if (this.salesOrderListShow = true && (this.userForm.get("sales_order").value == 0 || this.userForm.get("sales_order").value == "0" || this.userForm.get("sales_order").value == "" || this.userForm.get("sales_order").value == null)) {
+          alert("Please select Sales Order No!");
+          this.status = true;
+        }
         else if (vechilestatus == true && this.pur_good_receipt_driver_dtls.get("driver_name").value == 0) {
           alert("Please select Driver Name!");  //open grn alert off on 19112022
           this.status = true;
@@ -3521,10 +3555,10 @@ export class GrnComponent implements OnInit {
             if (this.pur_good_receipt_item_details.at(i).get("hsn_code").value == "0" || this.pur_good_receipt_item_details.at(i).get("hsn_code").value == "" || this.pur_good_receipt_item_details.at(i).get("hsn_code").value == null) {
               heroFound = true;
             }
-            if (this.pur_good_receipt_item_details.at(i).get("warehouse_name").value == "0" || this.pur_good_receipt_item_details.at(i).get("warehouse_name").value == "" || this.pur_good_receipt_item_details.at(i).get("warehouse_name").value == null) {
+            if ((this.pur_good_receipt_item_details.at(i).get("warehouse_name").value == "0" || this.pur_good_receipt_item_details.at(i).get("warehouse_name").value == "" || this.pur_good_receipt_item_details.at(i).get("warehouse_name").value == null)) {
               warehouse = true;
             }
-            if (this.pur_good_receipt_item_details.at(i).get("rack").value == "0" || this.pur_good_receipt_item_details.at(i).get("rack").value == "" || this.pur_good_receipt_item_details.at(i).get("rack").value == null) {
+            if ((this.pur_good_receipt_item_details.at(i).get("rack").value == "0" || this.pur_good_receipt_item_details.at(i).get("rack").value == "" || this.pur_good_receipt_item_details.at(i).get("rack").value == null)) {
               stack = true;
             }
             totalamount += Number(this.pur_good_receipt_item_details.at(i).get("gross_amt").value);
@@ -3533,11 +3567,11 @@ export class GrnComponent implements OnInit {
             alert("Please Enter HSN code in Item master and Make sure to check TAX Code in Statutory Information tab");
             this.status = true;
           }
-          else if (warehouse == true) {
+          else if (this.salesOrderListShow=false && warehouse == true) {
             alert("Please Select Warehouse Name !!!!");
             this.status = true;
           }
-          else if (stack == true) {
+          else if (this.salesOrderListShow=false && stack == true) {
             alert("Please Select Stack Name !!!!");
             this.status = true;
           }
@@ -3679,6 +3713,14 @@ export class GrnComponent implements OnInit {
           alert("Please select Referance Type!");
           this.status = true;
         }
+        else if (this.userForm.get("sales_process").value == 0 || this.userForm.get("sales_process").value == "0" || this.userForm.get("sales_process").value == "" || this.userForm.get("sales_process").value == null) {
+          alert("Please select Sales Process!");
+          this.status = true;
+        }
+        else if (this.salesOrderListShow = true && (this.userForm.get("sales_order").value == 0 || this.userForm.get("sales_order").value == "0" || this.userForm.get("sales_order").value == "" || this.userForm.get("sales_order").value == null)) {
+          alert("Please select Sales Order No!");
+          this.status = true;
+        }
         else if (vechilestatus == true && this.pur_good_receipt_driver_dtls.get("driver_name").value == 0) {
           alert("Please select Driver Name!");//open grn alert off on 19112022
           this.status = true;
@@ -3705,12 +3747,12 @@ export class GrnComponent implements OnInit {
             alert("Please Enter HSN code in Item master and Make sure to check TAX Code in Statutory Information tab");
             this.status = true;
           }
-          else if (warehouse == true) {
-            alert("Please Select Warehouse Name!!!!!!!");
+          else if (this.salesOrderListShow=false && warehouse == true) {
+            alert("Please Select Warehouse Name !!!!");
             this.status = true;
           }
-          else if (stack == true) {
-            alert("Please Select Stack Name!!!!!!!");
+          else if (this.salesOrderListShow=false && stack == true) {
+            alert("Please Select Stack Name !!!!");
             this.status = true;
           }
           else {
@@ -4133,6 +4175,44 @@ export class GrnComponent implements OnInit {
       this.pur_good_receipt_driver_dtls.patchValue({ driver_name: "0" })
       this.status = true;
     });
+  }
+
+  salesProcess:any;
+  salesOrderListShow : boolean = false;
+  soNoList:any=[];
+
+  onChangeSalesProcess(event) {
+    console.log("Event Sales::",event.value);
+    this.salesProcess = event.value;
+    if(this.salesProcess.length){
+      if(this.salesProcess=='Stock'){
+        this.salesOrderListShow = false;
+        console.log("sales Order List:: ",this.salesOrderListShow);
+        this.userForm.patchValue({sales_order:"NA"});
+      }
+      else{
+        this.salesOrderListShow = true;
+        forkJoin(
+          this.DropDownListService.getSalesOrderList(this.salesProcess,localStorage.getItem("financial_year")),
+        ).subscribe(([soList]) => {
+          console.log("SO List::" + JSON.stringify(soList));
+          console.log("sales Order List:: ",this.salesOrderListShow);
+          this.soNoList = soList;
+        });
+      }
+    }
+  } 
+
+  onClickDeliveryChallan(id, grn_id,sale_order_id,sales_process) 
+  {
+    //console.log("/id/ ",id,"/grn_id/ ",grn_id,"/sale_order_id/ ",sale_order_id,"/sales_process/ ",sales_process);
+    if(sales_process=='Sale' || sales_process=='Job Work')
+      {
+        window.open("#/pages/invTrans/salestransaction/DeliveryChallan");
+        localStorage.setItem("svalue",'add');
+        localStorage.setItem("sid",grn_id);
+        localStorage.setItem("sno",sale_order_id);
+      }
   }
 
 }
