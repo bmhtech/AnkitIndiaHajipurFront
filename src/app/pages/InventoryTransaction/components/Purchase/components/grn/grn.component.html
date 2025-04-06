@@ -144,7 +144,7 @@
                   <mat-option value="Stock">STOCK</mat-option>
                   <mat-option value="Sale">SALE</mat-option> 
                   <mat-option value="Job Work">JOB WORK</mat-option>
-                </mat-select> <!-- {{saleJobworkShow}} -->
+                </mat-select>
               </div>
             </div>
 
@@ -377,13 +377,13 @@
                       <div class="label_col"><input class="form-control" type="number" formControlName="gross_amt" readonly/></div>
                      <div class="label_col"><input class="form-control" type="text" formControlName="qc_norms" readonly/><i class="fa fa-external-link tax_insert_icon" (click)="showPopUp2(pointIndex)" aria-hidden="true"></i></div>
                       <div class="label_col">
-                        <mat-select class="form-control" formControlName="warehouse_name" (selectionChange)="onChangeWarehouse($event.value, pointIndex)" [disabled]="saleJobworkShow">
+                        <mat-select class="form-control" formControlName="warehouse_name" (selectionChange)="onChangeWarehouse($event.value, pointIndex)">
                           <mat-option value="0">-Select-</mat-option>
                           <mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.warehouse_code">{{warehouse.warehouse_name}}</mat-option>
                         </mat-select>
                       </div>
                       <div class="label_col">
-                        <mat-select class="form-control wdt_115_s" type="text" formControlName="rack" (selectionChange)="onChangeRack($event.value, pointIndex)" [disabled]="saleJobworkShow">
+                        <mat-select class="form-control wdt_115_s" type="text" formControlName="rack" (selectionChange)="onChangeRack($event.value, pointIndex)">
                           <mat-option value="0">-select-</mat-option>
                           <mat-option *ngFor="let stack of stackList[pointIndex]" [value]="stack.stack_no">{{stack.stack_no}}</mat-option>
                         </mat-select>
@@ -1362,7 +1362,12 @@
 
                   <td><button class="btn btn-danger" (click)="onDelete(PurchaseGRN.id, PurchaseGRN.grn_id)" *ngIf="grndelete">Delete</button></td>
                   <td><button class="btn btn-success" (click)="onclickprint(PurchaseGRN.id, PurchaseGRN.grn_id)" *ngIf="grnprint">Print</button></td>
-                  <td *ngIf="PurchaseGRN.sales_process=='Sale' || PurchaseGRN.sales_process=='Job Work'"><button class="btn" style="background-color: chocolate;" (click)="onClickDeliveryChallan(PurchaseGRN.id, PurchaseGRN.grn_id,PurchaseGRN.sales_order,PurchaseGRN.sales_process)">Go To Delivery Challan</button></td>
+                  <td *ngIf="(PurchaseGRN.sales_process=='Sale' || PurchaseGRN.sales_process=='Job Work') && PurchaseGRN.challan_status!='Yes';else challanBlock"><button class="btn" style="background-color: chocolate;" (click)="onClickDeliveryChallan(PurchaseGRN.id, PurchaseGRN.grn_id,PurchaseGRN.sales_order,PurchaseGRN.sales_process)">Go To Delivery Challan</button></td>
+                  <ng-template #challanBlock>
+                    <td *ngIf="PurchaseGRN.sales_process=='Sale' || PurchaseGRN.sales_process=='Job Work'">
+                      <button class="btn" style="background-color: rgb(5, 177, 62);" disabled>Go To Delivery Challan</button>
+                    </td> 
+              </ng-template>
                 </tr>
               </tbody>
             </table>
