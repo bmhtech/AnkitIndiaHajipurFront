@@ -6293,4 +6293,47 @@ export class DropdownServiceService {
   getSalesOrderList(salesprocess,fin_year): Observable<any> {
     return this.httpClient.get(this.url + 'getSalesOrderList/' + salesprocess+ '/' + fin_year).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+
+  /* Stack Maintain Starts */
+  getGrnDetailsById(grnid): Observable<any> {
+    return this.httpClient.get(this.url + 'getGrnDetailsById/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  stackMaintainList(currdate): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'stackMaintainList/'+currdate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getGrnList(): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getGrnList').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getGrnAllList(): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getGrnAllList').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  retriveStackMaintain(id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'retriveStackMaintain/' + id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  stackItemRetriveList(stackid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'stackItemRetriveList/'+stackid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getItemListByGrnId(grnid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getItemListByGrnId/'+grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getPackingItemByGrn(item,grnid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getPackingItemByGrn/'+item+'/'+grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  findStackMaintain(searchText): Observable<any> {
+    return this.httpClient.get(this.url + 'findStackMaintain/' + searchText).pipe(
+      catchError(this.handleError));
+  }
+
+  getItemMasterPackMatNew(item_code): Observable<any> {
+    return this.httpClient.get(this.url + 'getItemMasterPackMatNew/' + item_code).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  /* Stack Maintain Ends */
 }
