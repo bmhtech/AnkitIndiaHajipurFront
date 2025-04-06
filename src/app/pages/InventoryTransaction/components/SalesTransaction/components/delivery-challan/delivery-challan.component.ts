@@ -16,6 +16,7 @@ import { DeliveryChallanPrintPopupComponent } from '../delivery-challan-print-po
 import { PageEvent } from '@angular/material';
 import { DeliveryChallanJobworkPopupComponent } from '../delivery-challan-jobwork-popup/delivery-challan-jobwork-popup.component';
 import { DelChallanDistancePopUpComponent } from '../del-challan-distance-pop-up/del-challan-distance-pop-up.component';
+import { DelChallanSalesOrdByGrnPopupComponent } from '../del-challan-sales-ord-by-grn-popup/del-challan-sales-ord-by-grn-popup.component';
 
 @Component({
   selector: 'app-delivery-challan',
@@ -448,7 +449,7 @@ export class DeliveryChallanComponent implements OnInit {
         //alert(localStorage.getItem("sid")+"//"+localStorage.getItem("sno")+"//"+localStorage.getItem("saction"));
         this.onUpdate(localStorage.getItem("sid"), localStorage.getItem("sno"), localStorage.getItem("saction"));
       }
-      if (localStorage.getItem("svalue") == 'add') {  // For Delivery Challan with GRN & Sale Order id
+      if (localStorage.getItem("svalue") == 'Yes') {  // For Delivery Challan with GRN & Sale Order id
         //alert(localStorage.getItem("sid")+"//"+localStorage.getItem("sno"));
         this.grn_id=localStorage.getItem("sid");
         this.sale_order_id=localStorage.getItem("sno");
@@ -1784,6 +1785,304 @@ export class DeliveryChallanComponent implements OnInit {
 
     }
 
+    else if (this.reference_type == "GRN") {
+      /*if (this.userForm.get("jobwork").value == true) {
+
+        dialogConfig.data = { index: 0, delivery_date: this.currentDate, partyid: this.partyid, id: this.Id, inv_type: this.userForm.get("inv_type").value };
+        const dialogRef = this.dialog.open(DeliveryChallanJobworkPopupComponent, dialogConfig);
+        dialogRef.afterClosed().subscribe(data => {
+          if (data != '' && data["advice_id"] != "0") {
+
+            this.delvChallanPopupStatus = true;
+            let i = 0;
+            this.selectedPackingItem = [];
+            this.selectedItemName = [];
+            this.packingItem = [];
+            this.grandTotal = 0;
+            this.userForm.patchValue({ referance_id: data["advice_id"] });
+
+            this.addItem();
+            this.item_sl_no = 0;
+            while (this.delivery_challan_Item_Dtls.length) { this.delivery_challan_Item_Dtls.removeAt(0); }
+
+            this.addJobworkItem();
+            this.jobwork_sl_no = 0;
+            while (this.delivery_challan_Item_Dtls_for_jobwork.length) { this.delivery_challan_Item_Dtls_for_jobwork.removeAt(0); }
+
+            this.DropDownListService.getItemThruSalesThruBU_inv_type(this.userForm.get("business_unit").value, this.company_name, this.userForm.get("inv_type").value)
+              .subscribe(itemlist => {
+
+                this.jobitemlist = itemlist;
+                let grandtotal: number = 0;
+                let u = 0;
+                this.jobpackinglist = [];
+                this.selectedJobItem = [];
+                this.selectedJobPacking = [];
+                for (let data1 of data.wm_loading_advice_Item_Dtls_for_jobwork) {
+                  if (data1.checkbox == true || data1.checkbox == "true") {
+                    this.status = false;
+
+                    this.DropDownListService.getItemMasterPackMat(data1["job_item"])
+                      .subscribe(packingList => {
+                        this.addJobworkItem();
+                        this.jobpackinglist[u] = packingList;
+                        this.selectedJobItem[u] = data1["job_item"];
+                        this.selectedJobPacking[u] = data1["job_packing"];
+                        this.delivery_challan_Item_Dtls_for_jobwork.patchValue(data.wm_loading_advice_Item_Dtls_for_jobwork);
+
+                        u++;
+
+                      });
+                  }
+                }
+
+              });
+
+
+            //second part here start
+
+            this.status = false;
+            forkJoin(
+              this.DropDownListService.getLoadingDetails(data["advice_id"]),
+              this.DropDownListService.getLoadingAdvTransinfo(data["advice_id"]),
+              this.DropDownListService.getLoadingAdvShipDtls(data["advice_id"]),
+            ).subscribe(([loadingData, transData, shipDtlsData]) => {
+              this.status = false;
+              this.partyId = loadingData["customer"];
+              this.userForm.patchValue({
+                remarks: loadingData["remarks"],
+                price_term: loadingData["price_term"], cust_ref_doc_no: loadingData["cust_refdocno"]
+              })
+
+              this.DropDownListService.getUnloadWeightmentWt(loadingData["weighment_id"]).subscribe(wgmtDtls => {
+                this.delivery_challan_weight_dtl.patchValue({
+                  own_uom: wgmtDtls["gw_unit"], own_gross: wgmtDtls["gross_weight"],
+                  own_tare: wgmtDtls["tare_weight"], own_net: wgmtDtls["net_weight"], own_slip_no: wgmtDtls["wgment_no"],
+                  own_date: wgmtDtls["gw_date"]
+                });
+                this.status = true;
+              })
+
+              this.delivery_challan_Trans_Info.patchValue({
+                vehle_no: loadingData["vehicle_id"],
+                trans_borne_by: transData["trans_borne_by"], trans_code: transData["transporter_name"]
+              });
+              this.delivery_challan_Chgs_dyn.at(0).patchValue({ transporter_name: transData["transporter_name"] });
+
+              console.log("TransPort : : " + JSON.stringify(transData));
+
+              this.delivery_challan_Shipment_Dtls.patchValue(shipDtlsData)
+
+
+
+              if (loadingData["ref_doc_type"] == 'Sales Order') {
+                this.status = false;
+
+                forkJoin(
+                  this.DropDownListService.getCustDelvFromList(loadingData["customer"]),
+                  this.DropDownListService.getLoadingAdvBrokerDtls(data["advice_id"]),
+                  this.DropDownListService.getLoadingAdvPartyDtls(data["advice_id"]),
+                  this.DropDownListService.getLoadingAdvShipDtls(data["advice_id"]),
+                ).subscribe(([custDelvData, brokerData, partyData, shipmentData]) => {
+
+                  this.customerDelvAddList = custDelvData;
+
+                  let k = 0;
+                  this.addBroker();
+                  this.broker_sl_no = 0;
+                  while (this.delivery_challan_Broker_Dtls.length)
+                    this.delivery_challan_Broker_Dtls.removeAt(0);
+                  for (let data1 of brokerData) {
+                    console.log("CHECK :: " + JSON.stringify(data1))
+                    this.addBroker();
+                    this.delivery_challan_Broker_Dtls.at(k).patchValue({
+                      broker_code: data1["broker_code"],
+                      basis: data1["basis"], rate: data1["rate"]
+                    });
+                    k = k + 1;
+                  }
+                  let j = 0;
+                  this.addParty();
+                  this.party_sl_no = 0;
+                  while (this.delivery_challan_Party_Dtls.length)
+                    this.delivery_challan_Party_Dtls.removeAt(0);
+                  for (let data1 of partyData) {
+                    this.addParty();
+                    this.selectedPartyName[j] = data1.p_code;
+                    j = j + 1;
+                  }
+                  this.delivery_challan_Party_Dtls.patchValue(partyData);
+                  this.delivery_challan_Shipment_Dtls.patchValue({ shipmentData });
+
+                  this.status = true;
+                });
+              }
+
+            });
+            //second part end here 
+          }
+        });
+
+
+
+      }
+      else {
+        */
+        dialogConfig.data = { index: 0,id: this.Id,sale_order_id:this.sale_order_id,grn_id:this.grn_id};
+        const dialogRef = this.dialog.open(DelChallanSalesOrdByGrnPopupComponent, dialogConfig);
+        dialogRef.afterClosed().subscribe(data => {
+          if (data != '' && data["order_id"] != "0") {
+            this.delvChallanPopupStatus = true;
+            let i = 0;
+            this.selectedPackingItem = [];
+            this.selectedItemName = [];
+            this.packingItem = [];
+            this.grandTotal = 0;
+            this.userForm.patchValue({ referance_id: this.grn_id });
+
+            this.addItem();
+            this.item_sl_no = 0;
+            while (this.delivery_challan_Item_Dtls.length) { this.delivery_challan_Item_Dtls.removeAt(0); }
+
+
+
+            for (let data1 of data.sales_Order_Item_Dtls) {
+              if (data1.checkbox == true || data1.checkbox == "true") {
+                console.log("TEST :: " + JSON.stringify(data1))
+                this.status = false;
+                forkJoin(
+                  this.DropDownListService.getItemMasterPackMat(data1["item_code"]),
+                  this.DropDownListService.getItemPackUom(data1["item_code"], data1["packing"], this.company_name),
+                  this.DropDownListService.getAlternativeItemList(data1["item_code"]),
+                  this.DropDownListService.getItemNameById(data1["item_code"], this.company_name),
+                  this.DropDownListService.getItemThruSalesThruBU_inv_type(data.b_unit, this.company_name, data.inv_type),
+                ).subscribe(([packingList, capacityEmptyWt, alteritem, hsn,itemlist]) => {
+                  //console.log("Sales Item:" + JSON.stringify(data.sales_Order_Item_Dtls))
+                  //this.item_codes[i] = alteritem;
+                  this.item_codes[i] = itemlist;
+                  this.addItem();
+                  this.status = true;
+                  this.selectedItemName[i] = data1["item_code"];
+                  this.selectedPackingItem[i] = data1["packing"];
+                  this.packingItem[i] = packingList;
+                  this.capacity[i] = capacityEmptyWt["capacity"];
+                  this.empty_bag_wt[i] = capacityEmptyWt["empty_big_wt"];
+                  this.grandTotal = this.grandTotal + data1["total_amt"];
+
+                  let alluom: any = [];
+                  alluom = JSON.parse(localStorage.getItem("ALLUOM"));
+
+                  if (data1.uom == "PCS") {
+                    this._item_qty = Math.round(this.capacity[i] * data1.squantity);
+                   // console.log("_item_qty1:",this._item_qty,"//",this.capacity[i],"//",data1.squantity)
+                  }
+                  else {
+                    alluom.forEach(element => {
+                      if (element.description == data1.uom) {
+                        this._item_qty = Number(this.capacity[i] * data1.squantity).toFixed(Number(element.decimalv));
+                      }
+                    });
+                    //console.log("_item_qty2:",this._item_qty,"//",this.capacity[i],"//",data1.squantity)
+                  }
+                  //console.log("_item_qty:",this._item_qty)
+                  if (data1.price_based_on == "Packing") { this.amt = data1.price * data1.squantity }
+
+                  if (data1.price_based_on == "Item") { this.amt = data1.price * data1.quantity }
+    
+                  this.delivery_challan_Item_Dtls.at(i).patchValue({
+                    item_code: data1["item_code"], hsn_code: hsn["hsn_code"],
+                    packing: data1["packing"], quantity: data1["quantity"], uom: data1["uom"], squantity: data1["squantity"],
+                    suom: data1["suom"], mat_wt: Number(this._item_qty).toFixed(2), price: data1["price"].toFixed(2), price_based_on: data1["price_based_on"],
+                    amount: Number(this.amt).toFixed(2), discount_rate: data1["discount_rate"].toFixed(2), discount_type: data1["discount_type"],
+                    discount_amt: 0, tax_code: data1["tax_code"], tax_rate: data1["tax_rate"].toFixed(2),
+                    tax_amt: data1["tax_amt"].toFixed(2), total_amt: Number(this._item_qty).toFixed(2), acc_norms: data1["acc_norms"]
+                  });
+
+                  this.calculateItemData(data1.squantity,data1.quantity,data1.price,data1.price_based_on,data1.discount_rate,data1.discount_type,data1.tax_rate,i)
+
+                  i = i + 1;
+                  this.userForm.patchValue({ grand_total: this.grandTotal.toFixed(2) });
+                })
+              }
+            }
+
+            this.status = false;
+            forkJoin(
+              this.DropDownListService.getSalesOrderDetails(data["order_id"]),
+              this.DropDownListService.getSalesOrdShipDtls(data["order_id"]),
+              this.DropDownListService.getSalesOrdBrokerDtls(data["order_id"]),
+              this.DropDownListService.getSalesOrdTransInfo(data["order_id"]),
+              this.DropDownListService.getSalesOrdPartyDtls(data["order_id"]),
+              this.DropDownListService.getGrnWeighment(this.grn_id)
+            ).subscribe(([salesOrdData, shipDtlsData, brokerData, transData, partyData,grnData]) => {
+              this.partyId = salesOrdData["customer"];
+  
+              this.userForm.patchValue({inv_type:salesOrdData.inv_type,party:salesOrdData.customer,business_unit:salesOrdData.business_unit,
+                cust_ref_doc_no:salesOrdData.cust_refdocno,date2:salesOrdData.cust_ref_doc_date,
+                 remark: salesOrdData["remarks"], price_term: salesOrdData["price_term"]});
+
+                this.onChangeSalesInvoiceType(salesOrdData.inv_type);
+
+              this.status = true;
+              if (salesOrdData["customer"] != "" && salesOrdData["customer"] != undefined && salesOrdData["customer"] != undefined) {
+                this.DropDownListService.getCustDelvFromList(salesOrdData["customer"]).subscribe(custDelvData => {
+                  this.customerDelvAddList = custDelvData;
+                  this.status = true;
+                });
+              }
+              console.log("Ship Data:" + JSON.stringify(shipDtlsData))
+              this.delivery_challan_Shipment_Dtls.patchValue(shipDtlsData);
+              
+              this.addBroker();
+              this.broker_sl_no = 0;
+              while (this.delivery_challan_Broker_Dtls.length)
+                this.delivery_challan_Broker_Dtls.removeAt(0);
+              for (let data1 of brokerData)
+                this.addBroker();
+              this.delivery_challan_Broker_Dtls.patchValue(brokerData);
+  
+              this.delivery_challan_Trans_Info.patchValue({
+                vehle_no: grnData["vehicle_id"],
+                trans_borne_by: transData["trans_borne_by"], trans_code: transData["transporter_name"], charge_code: transData["charge_code"]});
+              this.delivery_challan_Chgs_dyn.at(0).patchValue({ transporter_name: transData["transporter_name"] });
+
+              console.log("TransPort : : " + JSON.stringify(transData));
+
+              this.delivery_challan_Shipment_Dtls.patchValue(shipDtlsData)
+
+              if (transData["trans_borne_by"] == "FOR") {
+                this.DisableTransportChgs = false;
+              }
+              else {
+                this.DisableTransportChgs = true;
+              }
+  
+              this.DropDownListService.getUnloadWeightmentWt(grnData["weighment_id"]).subscribe(wgmtDtls => {
+                this.delivery_challan_weight_dtl.patchValue({
+                  own_uom: wgmtDtls["gw_unit"], own_gross: wgmtDtls["gross_weight"],
+                  own_tare: wgmtDtls["tare_weight"], own_net: wgmtDtls["net_weight"], own_slip_no: wgmtDtls["wgment_no"],
+                  own_date: wgmtDtls["gw_date"]
+                });
+                this.status = true;
+              })
+              this.addParty();
+              this.party_sl_no = 0;
+              while (this.delivery_challan_Party_Dtls.length)
+                this.delivery_challan_Party_Dtls.removeAt(0);
+              for (let data1 of partyData)
+                this.addParty();
+              this.delivery_challan_Party_Dtls.patchValue(partyData);
+  
+              this.status = true;
+            });
+          }
+        });
+
+     // }
+
+
+    }
+    
     else {
       alert("Select Party Name..!")
     }

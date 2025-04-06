@@ -6336,4 +6336,18 @@ export class DropdownServiceService {
     return this.httpClient.get(this.url + 'getItemMasterPackMatNew/' + item_code).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
   /* Stack Maintain Ends */
+  
+  getDelvChallanByOrder(sale_id,fin_year): Observable<any> {
+    return this.httpClient.get(this.url + 'getDelvChallanByOrder/' + sale_id+'/'+fin_year).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getSaleOrderItemThroughGrn(order_id,grnid): Observable<any> {
+    return this.httpClient.get(this.url + 'getSaleOrderItemThroughGrn/' + order_id+'/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getGrnWeighment(grnid): Observable<any> {
+    return this.httpClient.get(this.url + 'getGrnWeighment/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+
 }

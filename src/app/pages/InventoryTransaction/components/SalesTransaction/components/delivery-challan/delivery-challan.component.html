@@ -94,7 +94,7 @@
                 <mat-select class="form-control" [(ngModel)]="model.ref_type" formControlName="ref_type" (selectionChange)="onChangeRefType($event.value)">
                   <mat-option value="Loading Advice">Loading Advice</mat-option>
                   <mat-option value="Open Delivery Challan">Open Delivery Challan</mat-option>
-                  <!-- <mat-option value="Sales Order">Sales Order</mat-option> -->                
+                  <mat-option value="GRN">GRN</mat-option>               
                 </mat-select>
               </div>
             </div>
@@ -106,7 +106,7 @@
             </div>
 
            
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="(model.ref_type == 'Sales Order' || model.ref_type == 'Loading Advice') && action == 'update'">
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="(model.ref_type == 'GRN' || model.ref_type == 'Loading Advice') && action == 'update'">
               <div class="form-group" style="height: 54px;">
                 <label>&nbsp;</label>
                 <button class="btn btn-info" (click)=" onClickShow()">Show </button>
@@ -342,7 +342,7 @@
           </ng-template>
 
 <!-- ---------------------------------------BROKER DETAILS----------------------------------------------  -->
-          <mat-tab label="Broker Details" *ngIf="model.ref_type == 'Sales Order' || model.ref_type == 'Loading Advice'">
+          <mat-tab label="Broker Details" *ngIf="model.ref_type == 'Sales Order' || model.ref_type == 'Loading Advice' || model.ref_type == 'GRN'">
             <div class="dyn_table_conent">
               <div class="dyn_table_header">
                 <label class="label_col"><h3>Action</h3></label>

@@ -74,6 +74,7 @@ import { CreditnoteEwaybillCancelComponent } from './components/creditnote-ewayb
 // import { StockTransferComponent } from './components/stock-transfer/stock-transfer.component';
 import { ExportAsModule } from 'ngx-export-as';
 import { UpdateArnNoComponent } from './components/update-arn-no/update-arn-no.component';
+import { DelChallanSalesOrdByGrnPopupComponent } from './components/del-challan-sales-ord-by-grn-popup/del-challan-sales-ord-by-grn-popup.component';
 
 
 @NgModule({
@@ -146,6 +147,7 @@ import { UpdateArnNoComponent } from './components/update-arn-no/update-arn-no.c
         CreditnoteEinvoiceCancelComponent,
         CreditnoteEwaybillCancelComponent,
         UpdateArnNoComponent,
+        DelChallanSalesOrdByGrnPopupComponent,
     ],
 
 
@@ -211,6 +213,7 @@ import { UpdateArnNoComponent } from './components/update-arn-no/update-arn-no.c
        CreditnoteEinvoiceCancelComponent,
        CreditnoteEwaybillCancelComponent,
        UpdateArnNoComponent,
+       DelChallanSalesOrdByGrnPopupComponent,
        
        
       

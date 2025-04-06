@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnDestroy, OnInit } from '@angular/core';
 import { FormControl, FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { PurchaseModuleServiceService } from '../../../../../../service/purchase-module-service.service';
 import { PurchaseGRN } from '../../../../../../Models/transaction/PurchaseTransaction/PurchaseGRN';
@@ -8,7 +8,7 @@ import { UnloadAdvicePopUpComponent } from '../unload-advice-pop-up/unload-advic
 
 import { MultiunloadadvicepopupComponent } from '../multiunloadadvicepopup/multiunloadadvicepopup/multiunloadadvicepopup.component';
 import { formatDate } from '@angular/common';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subscription } from 'rxjs';
 import { TaxPopUpModalComponent } from '../tax-pop-up-modal/tax-pop-up-modal.component';
 import { QcNormPopUpModalComponent } from '../qc-norm-pop-up-modal/qc-norm-pop-up-modal.component';
 import { Console } from 'console';
@@ -27,7 +27,7 @@ import { AddNewVechilePopUpComponentGrnComponent } from '../add-new-vechile-pop-
   styleUrls: ['./grn.component.scss']
 })
 
-export class GrnComponent implements OnInit {
+export class GrnComponent implements OnInit, OnDestroy {
   submitted = false;
   public userForm: FormGroup;
   model: PurchaseGRN = new PurchaseGRN();
@@ -365,12 +365,27 @@ export class GrnComponent implements OnInit {
   get pur_good_receipt_docs() { return this.userForm.get('pur_good_receipt_docs') as FormArray; }
   get pur_good_receipt_broker() { return this.userForm.get('pur_good_receipt_broker') as FormArray; }
 
-  get saleJobworkShow(): boolean {
-    return ["Job Work", "Sale"].includes(this.sales_process.value);
+  get pur_good_receipt_item_detailsForms() {
+    return this.pur_good_receipt_item_details.controls
   }
 
-  ngOnInit() {
+  private salesProcessValChangeSub?: Subscription;
 
+  ngOnInit() {
+    this.salesProcessValChangeSub = this.sales_process.valueChanges.subscribe((newVal)=>{
+      if(["Job Work", "Sale"].includes(newVal)) {
+        this.pur_good_receipt_item_detailsForms.forEach((fg)=>{
+          fg.patchValue({ warehouse_name: '', rack: '' });
+          fg.get("warehouse_name").disable();
+          fg.get("rack").disable();
+        });
+      } else {
+        this.pur_good_receipt_item_detailsForms.forEach((fg)=>{
+          fg.get("warehouse_name").enable();
+          fg.get("rack").enable();
+        });
+      }
+    });
 
     //this.getProducts({ page: "0", size: "10" });
     this.disvehicle = true;
@@ -4209,10 +4224,14 @@ export class GrnComponent implements OnInit {
     if(sales_process=='Sale' || sales_process=='Job Work')
       {
         window.open("#/pages/invTrans/salestransaction/DeliveryChallan");
-        localStorage.setItem("svalue",'add');
+        localStorage.setItem("svalue",'Yes');
         localStorage.setItem("sid",grn_id);
         localStorage.setItem("sno",sale_order_id);
       }
   }
 
+  ngOnDestroy(): void {
+    if(this.salesProcessValChangeSub)
+      this.salesProcessValChangeSub.unsubscribe();
+  }
 }
