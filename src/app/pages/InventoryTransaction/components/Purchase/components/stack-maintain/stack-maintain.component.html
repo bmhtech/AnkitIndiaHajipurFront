@@ -1,0 +1,220 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="showList('add')"><i
+                  class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="showList('list')"><i
+                  class="material-icons">list</i>List</button></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="status == false">
+  <div class="progress-loader"> <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden==true">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <fieldset class="axd" style="padding-top:15px;">
+            <legend>Stack Maintain</legend>
+            
+            <div class="ht_15"></div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label >Bussiness Unit<span class="red">*</span></mat-label>
+                <mat-select formControlName="b_unit"  class="form-control" (selectionChange)="onChangeBussinessUnit($event.value)">
+                  <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id" >{{list.businessunit_name}}</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group ht_59">
+                <mat-label>Stack Date</mat-label>
+                <input type="date" [(ngModel)]="currentDate" formControlName="stack_date" class="form-control">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>GRN No<span class="red" style="font-size: larger;">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="grnList"
+                [display]="'grn_no'"
+                [value]="'grn_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['grn_id']"
+                (selectionChange)="onChangeGrnNo($event)">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Supplier Name<span class="red" style="font-size: larger;">*</span></mat-label>
+                <mat-select-autocomplete class="form-control ats"  
+                [options]="supplierNames"
+                [display]="'bp_name'"
+                [value]="'bp_Id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['supplier']" [disabled]="true">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Vehicle No<span class="red">*</span></mat-label>
+                <mat-select-autocomplete class="form-control"  
+                [options]="vehicleList"
+                [display]="'vehicle_no'"
+                [value]="'vehicle_id'"
+                [multiple]='false'
+                ngDefaultControl
+                [formControl]="userForm.controls['vehicle_id']" [disabled]="true">
+              </mat-select-autocomplete>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Total GRN Pkt</mat-label>
+                <input type="text" formControlName="total_grn_pkt" class="form-control" readonly="true">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <mat-label>Total GRN Item</mat-label>
+                <input type="text"  formControlName="total_grn_item" class="form-control" readonly="true">
+              </div>
+            </div>
+
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="dyn_table_conent" style="border: none;">
+        <mat-tab-group animationDuration="1000ms">
+          <mat-tab label="Stack Items Details">
+            <div class="dyn_table_conent">
+              <div class="dyn_table_header">
+                <label class="label_col"><h3>Action</h3></label>
+                <label class="label_col"><h3 class="srln">Srl No</h3></label>
+                <label class="label_col"><h3 class="i_nam">Item Name<span class="red">*</span></h3></label>
+                <label class="label_col"><h3 class="i_nam">Packing Name<span class="red">*</span></h3></label>
+                <label class="label_col"><h3 class="dt_nam">Warehouse<span class="red">*</span></h3></label>
+                <label class="label_col"><h3 class="dt_nam">Stack<span class="red">*</span></h3></label>
+                <label class="label_col"><h3>Stack Pack Qty<span class="red">*</span></h3></label>
+                <label class="label_col"><h3>Stack Item Qty<span class="red">*</span></h3></label>
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="stack_maintain_details">
+                <div class="dyn_table" *ngFor="let item of stack_maintain_details.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action" (click)="delete(pointIndex)"></i></div>
+                  <div class="label_col">
+                    <input class="form-control srln" formControlName="slno" type="number" readonly />
+                  </div>
+                  <div class="label_col">
+                    <mat-select-autocomplete class="form-control ats i_nam"  
+                    [options]="item_codes"
+                    [display]="'item_name'"
+                    [value]="'item_id'"
+                    [multiple]='false'
+                    [selectedOptions]="selectedItemName[pointIndex]"
+                    (selectionChange)="onchangeItemName(pointIndex, $event)"
+                    ngDefaultControl
+                    [formControlName] = "'item_code'">
+                  </mat-select-autocomplete>
+                  </div>
+                  <div class="label_col"><select formControlName="packing" class="form-control i_nam" (change)="onchangePackingItem(pointIndex, $event)" ><option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">{{packingitm.item_name}}</option></select></div>
+                  <div class="label_col"><mat-select class="form-control dt_nam" formControlName="warehouse" (selectionChange)="onChangeWarehouse($event.value, pointIndex)" ><mat-option value="0">-Select-</mat-option><mat-option *ngFor="let warehouse of warehouses" [value]="warehouse.warehouse_code">{{warehouse.warehouse_name}}</mat-option></mat-select></div>
+                  <div class="label_col"><mat-select class="form-control dt_nam" type="text" formControlName="stack" (selectionChange)="onChangeStack($event.value, pointIndex)"><mat-option value="0">-select-</mat-option><mat-option *ngFor="let stack of stackList[pointIndex]" [value]="stack.stack_no">{{stack.stack_no}}</mat-option></mat-select></div>
+                  <div class="label_col"><input class="form-control" type="number" min="0" formControlName="stack_pack_qty" (keyup)="getPackingQty(pointIndex)" /></div>
+                  <div class="label_col"><input class="form-control" type="number" min="0" formControlName="stack_item_qty"/></div>
+
+                </div>
+              </div>
+            </div>
+            
+            <div class="btm_btn_content" >
+              <button type="button" (click)="add()" class="btn btn-success">Add Row</button>
+              <div class="clr"></div>
+            </div>
+
+          </mat-tab>
+
+
+        </mat-tab-group>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+        <div class="form-group">
+          <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="stackMaintainSave">Submit</button>
+        </div>
+      </div>
+      </div>
+
+    </div>
+  </section>
+</form>
+
+
+<div class="master_containerr" *ngIf="isHidden==false">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Stack Maintain List</legend>
+          <div class="table_content">
+
+           <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group">
+                <input type="text" placeholder="Search ....." class="form-control" (keydown)="search($event)">
+              </div>
+            </div> 
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Stack Date</th>
+                  <th>GRN No</th>
+                  <th>Supplire Name</th>
+                  <th>Vehicle No</th>
+                  <th>GRN Pack Qty</th>
+                  <th>GRN Item Qty</th>
+                  <th colspan="3">Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let stack of stackMaintainList">
+                  <td>{{stack.stack_date}}</td>
+                  <td>{{stack.grn_no}}</td>
+                  <td>{{stack.supplier_name}}</td>
+                  <td>{{stack.vehicle_no}}</td>
+                  <td>{{stack.total_grn_pkt}}</td>
+                  <td>{{stack.total_grn_item}}</td>
+                  <td><button class="btn btn-success" (click)="onUpdate(stack.id,stack.stack_id,'view')" >View</button></td>
+                  <td><button class="btn btn-info" (click)="onUpdate(stack.id,stack.stack_id,'update')" >Update</button></td>                 
+                  <td><button class="btn btn-danger" (click)="onDelete(stack.id,stack.stack_id)" >Delete</button></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

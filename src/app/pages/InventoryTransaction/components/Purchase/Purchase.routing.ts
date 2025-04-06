@@ -14,6 +14,7 @@ import { DebitNoteComponent } from './components/debit-note/debit-note.component
 import { PeripheralQualityCheckComponent } from './components/peripheral-quality-check/peripheral-quality-check.component';
 import { PaymentApprovalComponent } from './components/payment-approval/payment-approval.component';
 import { PurchaseBillApprovalComponent } from './components/purchase-bill-approval/purchase-bill-approval.component';
+import { StackMaintainComponent } from './components/stack-maintain/stack-maintain.component';
 
 const childRoutes: Routes = [
     {
@@ -29,6 +30,7 @@ const childRoutes: Routes = [
             { path: 'grn', component: GrnComponent },
             { path: 'l1-selection', component: L1SelectionComponent },
             { path: 'purchase-bill', component: PurchaseBillComponent },
+            { path: 'stack-maintain', component: StackMaintainComponent },
             { path: 'pur-return-approval-note', component: PurReturnApprovalNoteComponent },
             { path: 'pur-return-note', component: PurReturnNoteComponent },
             { path: 'debit-note', component: DebitNoteComponent },
