@@ -531,6 +531,11 @@ export let MENU_ITEM = [
                         icon: 'angle-right',
                     },
                     {
+                        path: "stack-maintain",
+                        title: "Stack Maintain",
+                        icon: "angle-right",
+                    },
+                    {
                         path: 'pur-return-approval-note',
                         title: 'Purchase Return Approval Note',
                         icon: 'angle-right',

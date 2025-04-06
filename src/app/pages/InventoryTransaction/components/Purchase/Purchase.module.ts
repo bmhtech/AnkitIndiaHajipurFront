@@ -58,7 +58,8 @@ import { PurchasegrndriverComponent } from './components/purchasegrndriver/purch
 import { AddNewVechilePopUpComponentGrnComponent } from './components/add-new-vechile-pop-up-component-gr/add-new-vechile-pop-up-component-gr.component';
 import { PurorderReturnapprovalPopupComponent } from './components/purorder-returnapproval-popup/purorder-returnapproval-popup.component';
 import { PurchasechannelpopupComponent } from './components/purchasechannelpopup/purchasechannelpopup.component';
-import { PurorderjwupdateComponent } from './components/purorderjwupdate/purorderjwupdate.component'; 
+import { PurorderjwupdateComponent } from './components/purorderjwupdate/purorderjwupdate.component';
+import { StackMaintainComponent } from './components/stack-maintain/stack-maintain.component'; 
 @NgModule({
     imports: [
         CommonModule,
@@ -108,7 +109,8 @@ import { PurorderjwupdateComponent } from './components/purorderjwupdate/purorde
                      AddNewVechilePopUpComponentGrnComponent,
                      PurorderReturnapprovalPopupComponent,
                      PurchasechannelpopupComponent,
-                     PurorderjwupdateComponent
+                     PurorderjwupdateComponent,
+                     StackMaintainComponent
                     ],
                     
     declarations: [
@@ -148,7 +150,7 @@ import { PurorderjwupdateComponent } from './components/purorderjwupdate/purorde
          MultiunloadadvicepopupComponent, GrnBillPrintComponent,
           PurchaseorderprintComponent, PurBillAccountpostingComponent,
            PurchaseOrderGrnPopUpComponent, MultiunloadadvicepopupreviseComponent,
-            StorePurchasePopupComponent, PurchasegrndriverComponent,AddNewVechilePopUpComponentGrnComponent, PurorderReturnapprovalPopupComponent, PurchasechannelpopupComponent, PurorderjwupdateComponent
+            StorePurchasePopupComponent, PurchasegrndriverComponent,AddNewVechilePopUpComponentGrnComponent, PurorderReturnapprovalPopupComponent, PurchasechannelpopupComponent, PurorderjwupdateComponent, StackMaintainComponent
        
     ]
 })

@@ -195,6 +195,7 @@ import { TaskProgress } from '../Models/TaskManager/taskprogress';
 import { JW_Grn_ItemTagging } from '../Models/ItemModel/jw_grn_itemtagging';
 import { StoreIssueNote } from '../Models/StoreTransaction/StoreIssueNote';
 import { StoreCharges } from '../Models/OtherMaster/StoreCharges';
+import { StackMaintain } from '../Models/transaction/PurchaseTransaction/StackMaintain';
 
 
 @Injectable({
@@ -3051,7 +3052,18 @@ public deleteStoreChargeMaster(StoreCharges, id): Observable<StoreCharges> {
   return this.httpClient.put<StoreCharges>(this.url + 'deleteStoreChargeMaster/' + id, StoreCharges).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
 }
 
+/* Stack Maintain Starts */
+public createStackMaintain(StackMaintain: StackMaintain): Observable<StackMaintain>{
+  return this.httpClient.post<StackMaintain>(this.url + "createStackMaintain", StackMaintain).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
 }
 
+public updateStackMaintain(StackMaintain: StackMaintain, id): Observable<StackMaintain>{
+  return this.httpClient.put<StackMaintain>(this.url + 'updateStackMaintain/' + id, StackMaintain).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
+}
 
+public deleteStackMaintain(StackMaintain, id): Observable<StackMaintain> {
+  return this.httpClient.put<StackMaintain>(this.url + 'deleteStackMaintain/' + id, StackMaintain).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
+}
+/* Stack Maintain Ends */
 
+}
