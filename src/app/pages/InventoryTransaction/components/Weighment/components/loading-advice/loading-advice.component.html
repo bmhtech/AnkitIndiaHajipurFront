@@ -157,6 +157,15 @@
                 </mat-select>
               </div>
             </div> -->
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+              <div class="form-group">
+                <mat-label>Weight Bridge Location<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="weight_bridge_location" >
+                  <mat-option value="Weight Bridge 1">Weight Bridge 1</mat-option>
+                  <mat-option value="Weight Bridge 2">Weight Bridge 2</mat-option>
+                  </mat-select>
+              </div>
+            </div>
 
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
               <div class="form-group">
@@ -1324,6 +1333,7 @@
                   <th>Advice No</th>
                   <th>Advice Type</th>
                   <th>Business Partner</th>
+                  <th>Weighment Location</th>
                   <th>Vehicle Number</th>
                   <th>Loading Point</th>
                   <th>Order No</th>
@@ -1337,6 +1347,7 @@
                   <td>{{LoadingAdvice.advice_no}}</td>
                   <td>{{LoadingAdvice.advice_type}}</td>
                   <td>{{LoadingAdvice.customer_name}}</td>
+                  <td>{{LoadingAdvice.weight_bridge_location}}</td>
                   <td>{{LoadingAdvice.vehicle_no}}</td>
                   <td>{{LoadingAdvice.load_point}}</td>
                   <td>{{LoadingAdvice.order_no}}</td>

@@ -149,6 +149,7 @@ export class LoadingAdviceComponent implements OnInit {
       refraction: [''],
       pur_cust_refdocno: [''],
       pur_cust_refdocnoqty: [''],
+      weight_bridge_location:[''],
 
       wm_loading_advice_bp_dtls: this.fb.group({
         cust_name: '',
@@ -320,6 +321,7 @@ export class LoadingAdviceComponent implements OnInit {
   get supplier() { return this.userForm.get("supplier") as FormControl }
   get remarks() { return this.userForm.get("remarks") as FormControl }
   get staticuom() { return this.userForm.get("staticuom") as FormControl }
+  get weight_bridge_location() { return this.userForm.get("weight_bridge_location") as FormControl }
   get delivery_business_unit() { return this.userForm.get("delivery_business_unit") as FormControl }
   get unloading_point() { return this.userForm.get("unloading_point") as FormControl }
   get wm_loading_advice_doc_attch() { return this.userForm.get('wm_loading_advice_doc_attch') as FormArray; }
@@ -395,7 +397,7 @@ export class LoadingAdviceComponent implements OnInit {
     this.payModes = ["Cash", "Cheque", "DD", "NEFT", "RTGS"];
     this.userForm.patchValue({
       id: 0, bus_partner: "0", b_unit: "0", referance_id: "0", price_term: "0",
-      cust_refdocno: '', billing_req: "0"
+      cust_refdocno: '', billing_req: "0",weight_bridge_location:'Weight Bridge 2'
     });
     //starts here 
     //forkJoin(
@@ -701,6 +703,7 @@ export class LoadingAdviceComponent implements OnInit {
       refraction: [''],
       pur_cust_refdocno: [''],
       pur_cust_refdocnoqty: [''],
+      weight_bridge_location:[''],
 
       wm_loading_advice_bp_dtls: this.fb.group({
         cust_name: '',
@@ -2709,6 +2712,10 @@ export class LoadingAdviceComponent implements OnInit {
         alert("Please Select Loading Point");
         this.status = true;
       }
+      else if (this.userForm.get("weight_bridge_location").value == '' || this.userForm.get("weight_bridge_location").value == null || this.userForm.get("weight_bridge_location").value == 0) {
+        alert("Please Select Weight Bridge Location");
+        this.status = true;
+      }
       else if (this.userForm.get("vehicle_id").value == "" || this.userForm.get("vehicle_id").value == null || this.userForm.get("vehicle_id").value == 0) {
         alert("Please Select Vehicle No.");
         this.status = true;
@@ -3183,7 +3190,8 @@ export class LoadingAdviceComponent implements OnInit {
         approval: loadingAdviceData["approval"], reason: loadingAdviceData["reason"], unloading_point: loadingAdviceData["unloading_point"],
         delivery_business_unit: loadingAdviceData["delivery_business_unit"], supplier: loadingAdviceData['supplier'], staticuom: loadingAdviceData['staticuom'], multipleloading: loadingAdviceData['multipleloading'], jobwork: loadingAdviceData['jobwork'],
         looseitem: loadingAdviceData['looseitem'], payment_mode: loadingAdviceData['payment_mode'], refraction: loadingAdviceData['refraction'],
-        pur_cust_refdocno: loadingAdviceData['pur_cust_refdocno'],pur_cust_refdocnoqty: loadingAdviceData['pur_cust_refdocnoqty']
+        pur_cust_refdocno: loadingAdviceData['pur_cust_refdocno'],pur_cust_refdocnoqty: loadingAdviceData['pur_cust_refdocnoqty'],
+        weight_bridge_location:loadingAdviceData["weight_bridge_location"]
       });
 
       //console.log("order Details 2 2 : "+  JSON.stringify(loadingAdviceData));
@@ -3445,7 +3453,8 @@ export class LoadingAdviceComponent implements OnInit {
         doc_date: loadingAdviceData["doc_date"], weighment_status: loadingAdviceData["weighment_status"], company_id: loadingAdviceData["company_id"], fin_year: loadingAdviceData["fin_year"],
         remarks: loadingAdviceData["remarks"], advice_id: loadingAdviceData["advice_id"], confirmed_by: loadingAdviceData["confirmed_by"],
         approval: loadingAdviceData["approval"], reason: loadingAdviceData["reason"], unloading_point: loadingAdviceData["unloading_point"],
-        delivery_business_unit: loadingAdviceData["delivery_business_unit"], supplier: loadingAdviceData['supplier'], staticuom: loadingAdviceData['staticuom'], multipleloading: loadingAdviceData['multipleloading'], jobwork: loadingAdviceData['jobwork'], looseitem: loadingAdviceData['looseitem']
+        delivery_business_unit: loadingAdviceData["delivery_business_unit"], supplier: loadingAdviceData['supplier'], staticuom: loadingAdviceData['staticuom'], multipleloading: loadingAdviceData['multipleloading'], jobwork: loadingAdviceData['jobwork'], 
+        looseitem: loadingAdviceData['looseitem'],weight_bridge_location:loadingAdviceData["weight_bridge_location"]
       });
       console.log("order Details: " + JSON.stringify(loadingAdviceData));
 

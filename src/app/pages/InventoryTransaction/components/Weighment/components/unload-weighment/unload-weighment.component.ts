@@ -106,6 +106,7 @@ export class UnloadWeighmentComponent implements OnInit {
   remarkscheck: boolean = false;
   advice1: any = '';
   bulksupplyshow: boolean = false;
+  bridge_location:any;
 
   //end
   constructor(public fb: FormBuilder, private Service: Master,
@@ -148,6 +149,7 @@ export class UnloadWeighmentComponent implements OnInit {
       remarks: [''],
       tare_weight_bulker: [''],
       net_weight_bulker: [''],
+      weight_bridge_location:[''],
 
       wm_unload_wgmnt_dtls: this.fb.array([this.fb.group({
         sl_no: this.party_sl_no,
@@ -222,7 +224,7 @@ export class UnloadWeighmentComponent implements OnInit {
   get tarebags() { return this.userForm.get("tarebags") as FormControl }
   get port_value() { return this.userForm.get("port_value") as FormControl; }
   get vehicle_ref_name() { return this.userForm.get("vehicle_ref_name") as FormControl; }
-
+  get weight_bridge_location() { return this.userForm.get("weight_bridge_location") as FormControl }
   get tare_weight_bulker() { return this.userForm.get("tare_weight_bulker") as FormControl }
   get net_weight_bulker() { return this.userForm.get("net_weight_bulker") as FormControl }
 
@@ -305,8 +307,9 @@ export class UnloadWeighmentComponent implements OnInit {
     this.action = 'update';
     this.userForm.patchValue({
       gw_unit: "0", tw_unit: "0", nw_unit: "0", gross_weight: 0,
-      tare_weight: 0, net_weight: 0
+      tare_weight: 0, net_weight: 0,weight_bridge_location:'Weight Bridge 2'
     });
+    this.bridge_location='Weight Bridge 2';
     let finyear = localStorage.getItem("financial_year");
     forkJoin(
       //this.DropDownListService.getWeighmentDataList(this.currentDate,finyear) ,
@@ -363,6 +366,16 @@ export class UnloadWeighmentComponent implements OnInit {
             this.business_Partner_List=data;
           });
           */
+  }
+
+  onChangeLocation()
+  {
+    let location = this.userForm.get("weight_bridge_location").value;
+    this.bridge_location=this.userForm.get("weight_bridge_location").value;
+    this.DropDownListService.getVehicleLocationwiseWeighmentList(location).subscribe(data => {
+      this.veh_nos = data;
+      this.status = true;
+    });
   }
 
   onChangeWhgmtDate(wgmtDate) {
@@ -704,7 +717,8 @@ export class UnloadWeighmentComponent implements OnInit {
       if (s == "add") {
         this.isHidden = true;
 
-        this.DropDownListService.getVehicleListWeighmentnew().subscribe(data => {
+        //this.DropDownListService.getVehicleListWeighmentnew().subscribe(data => {
+          this.DropDownListService.getVehicleLocationwiseWeighmentList('Weight Bridge 2').subscribe(data => {
           this.veh_nos = data;
           this.status = true;
         });
@@ -1963,10 +1977,23 @@ export class UnloadWeighmentComponent implements OnInit {
     //var e = document.getElementById("SerialSpeed");
     //var strSpd =1200;// e.options[e.selectedIndex].value;
     // alert(strSpd);
-    var speed = 1200;//for aayogagro
-    // var speed = 2400;
-    //svar speed=1200;
-    await this.port.open({ baudRate: [speed], dataBits: 7, stopBits: 1, parity: 'even' });//for aaagyog
+    if(this.bridge_location==='Weight Bridge 1')
+    {
+      console.log("Weight Bridge1/1200/7/EVEN::",this.bridge_location);
+      var speed = 1200;//for aayogagro
+      // var speed = 2400;
+      //svar speed=1200;
+      await this.port.open({ baudRate: [speed], dataBits: 7, stopBits: 1, parity: 'even' });//for aaagyog
+    }
+    if(this.bridge_location==='Weight Bridge 2')
+      {
+        console.log("Weight Bridge2/2400/7/NONE::",this.bridge_location);
+        //var speed = 1200;//for aayogagro
+         var speed = 2400;
+        //svar speed=1200;
+        //await this.port.open({ baudRate: [speed], dataBits: 7, stopBits: 1, parity: 'even' });//for aaagyog
+        await this.port.open({ baudRate: [speed],dataBits: 8,stopBits: 1,parity: 'none'});
+      }
     // await this.port.open({ baudRate: [speed],dataBits: 8,stopBits: 1,parity: 'none'});
 
     //document.getElementById('SerialSpeed').disabled = true;

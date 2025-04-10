@@ -88,6 +88,8 @@ export class OtherWeighmentComponent implements OnInit {
   tareunit: any;
   partylist: any = [];
   itemlist: any = [];
+  bridge_location:any;
+
 
   //end
   constructor(public fb: FormBuilder, private Service: Master,
@@ -132,6 +134,7 @@ export class OtherWeighmentComponent implements OnInit {
       wgment_for: [''],
       shifting_price: [''],
       total_sft_price: [''],
+      weight_bridge_location:[''],
 
       wm_unload_wgmnt_dtls: this.fb.array([this.fb.group({
         sl_no: this.party_sl_no,
@@ -180,7 +183,7 @@ export class OtherWeighmentComponent implements OnInit {
   get vehicle_id() { return this.userForm.get("vehicle_id") as FormControl }
   get vehicle_no() { return this.userForm.get("vehicle_no") as FormControl }
   get veh_type() { return this.userForm.get("veh_type") as FormControl }
-
+  get weight_bridge_location() { return this.userForm.get("weight_bridge_location") as FormControl; }
 
   get digital_weight_backup() { return this.userForm.get("digital_weight_backup") as FormControl }
   get nopartyid() { return this.userForm.get("nopartyid") as FormControl }
@@ -284,6 +287,10 @@ export class OtherWeighmentComponent implements OnInit {
 
   }
 
+  onChangeLocation()
+  {
+    this.bridge_location=this.userForm.get("weight_bridge_location").value
+  }
 
   onChangeVechile(vechile_no: string) {
     if (vechile_no.length) {
@@ -296,7 +303,7 @@ export class OtherWeighmentComponent implements OnInit {
         let gross_time = new Date().toString().substr(16, 5);
         let tare_time = new Date().toString().substr(16, 5);
         this.reference_name = this.userForm.get("wgment_for").value;
-
+        this.bridge_location = this.userForm.get("weight_bridge_location").value;
 
         if (data.sequenceid.substring(10, 7) == '1ST') {
           this.userForm.patchValue({ weight1: 'weight1', weight2: '' });
@@ -310,31 +317,40 @@ export class OtherWeighmentComponent implements OnInit {
         else if (data.sequenceid.substring(10, 7) == '2ND') {
           this.userForm.patchValue({ weight1: 'weight1', weight2: 'weight2' });
 
-          this.DropDownListService.getOtherWgFirstData(this.userForm.get("vehicle_id").value).subscribe(data => {
+          //this.DropDownListService.getOtherWgFirstData(this.userForm.get("vehicle_id").value).subscribe(data => {
+            this.DropDownListService.getOtherWgFirstDataWtWgtFor(this.userForm.get("vehicle_id").value).subscribe(data => {
             console.log(data["wgment_charge"] + "wg 1st:" + JSON.stringify(data))
-
-            if (this.reference_name == 'Unloading') {
-              console.log("Unloading")
-              this.userForm.patchValue({
-                wgment_date: data["wgment_date"], nopartyid: data["nopartyid"], noitemid: data["noitemid"], ref_doc_no: data["ref_doc_no"], ref_doc_date: data["ref_doc_date"],
-                gross_weight: data["gross_weight"], gw_unit: data["gw_unit"], gw_remarks: data["gw_remarks"], tare_weight: data["tare_weight"], tw_unit: data["tw_unit"],
-                tw_remarks: data["tw_remarks"], tarebags: data["tarebags"], firstbags: data["firstbags"], net_weight: data["net_weight"], nw_unit: data["nw_unit"], wgment_charge: data["wgment_charge"], wgment_rs: data["wgment_rs"],
-                gw_date: data["gw_date"], gw_time: data["gw_time"], tw_date: tare_date, tw_time: tare_time
-              });
+            if(this.reference_name === data["wgment_for"] && this.bridge_location===data["weight_bridge_location"])
+              {
+                if (this.reference_name == 'Unloading') {
+                  console.log("Unloading")
+                  this.userForm.patchValue({
+                    wgment_date: data["wgment_date"], nopartyid: data["nopartyid"], noitemid: data["noitemid"], ref_doc_no: data["ref_doc_no"], ref_doc_date: data["ref_doc_date"],
+                    gross_weight: data["gross_weight"], gw_unit: data["gw_unit"], gw_remarks: data["gw_remarks"], tare_weight: data["tare_weight"], tw_unit: data["tw_unit"],
+                    tw_remarks: data["tw_remarks"], tarebags: data["tarebags"], firstbags: data["firstbags"], net_weight: data["net_weight"], nw_unit: data["nw_unit"], wgment_charge: data["wgment_charge"], wgment_rs: data["wgment_rs"],
+                    gw_date: data["gw_date"], gw_time: data["gw_time"], tw_date: tare_date, tw_time: tare_time
+                  });
+                  this.onChangeCharge(data["wgment_charge"]);
+                  this.onChangeParty(data["nopartyid"]);
+                }
+                else {
+                  console.log("loading")
+                  this.userForm.patchValue({
+                    wgment_date: data["wgment_date"], nopartyid: data["nopartyid"], noitemid: data["noitemid"], ref_doc_no: data["ref_doc_no"], ref_doc_date: data["ref_doc_date"],
+                    gross_weight: data["gross_weight"], gw_unit: data["gw_unit"], gw_remarks: data["gw_remarks"], tare_weight: data["tare_weight"], tw_unit: data["tw_unit"],
+                    tw_remarks: data["tw_remarks"], tarebags: data["tarebags"], firstbags: data["firstbags"], net_weight: data["net_weight"], nw_unit: data["nw_unit"], wgment_charge: data["wgment_charge"], wgment_rs: data["wgment_rs"],
+                    gw_date: gross_date, gw_time: gross_time, tw_date: data["tw_date"], tw_time: data["tw_time"]
+                  });
               this.onChangeCharge(data["wgment_charge"]);
               this.onChangeParty(data["nopartyid"]);
             }
-            else {
-              console.log("loading")
-              this.userForm.patchValue({
-                wgment_date: data["wgment_date"], nopartyid: data["nopartyid"], noitemid: data["noitemid"], ref_doc_no: data["ref_doc_no"], ref_doc_date: data["ref_doc_date"],
-                gross_weight: data["gross_weight"], gw_unit: data["gw_unit"], gw_remarks: data["gw_remarks"], tare_weight: data["tare_weight"], tw_unit: data["tw_unit"],
-                tw_remarks: data["tw_remarks"], tarebags: data["tarebags"], firstbags: data["firstbags"], net_weight: data["net_weight"], nw_unit: data["nw_unit"], wgment_charge: data["wgment_charge"], wgment_rs: data["wgment_rs"],
-                gw_date: gross_date, gw_time: gross_time, tw_date: data["tw_date"], tw_time: data["tw_time"]
-              });
-              this.onChangeCharge(data["wgment_charge"]);
-              this.onChangeParty(data["nopartyid"]);
-            }
+          }
+          else
+          {
+            console.log("Wgt For Different");
+            alert("Please select "+data["weight_bridge_location"]+" for Weight Bridge Location And "+data["wgment_for"]+" in (Weightment For) as same in 1st Weightment !!!");
+            window.location.reload();
+          }
           });
 
         }
@@ -887,7 +903,11 @@ export class OtherWeighmentComponent implements OnInit {
     this.submitted = true;
     this.status = false;
     console.log("wg for:" + this.userForm.get("wgment_for").value + "///" + this.userForm.get("weight1").value + "///" + this.userForm.get("weight2").value + "///" + this.userForm.get("tw_unit").value)
-    if (this.userForm.get("wgment_for").value == 0 || this.userForm.get("wgment_for").value == null || this.userForm.get("wgment_for").value == '') {
+    if (this.userForm.get("weight_bridge_location").value == 0 || this.userForm.get("weight_bridge_location").value == null || this.userForm.get("weight_bridge_location").value == '') {
+      alert("Please Select Weight Bridge Location");
+      this.status = true;
+    }
+    else if (this.userForm.get("wgment_for").value == 0 || this.userForm.get("wgment_for").value == null || this.userForm.get("wgment_for").value == '') {
       alert("Please Select Weighment For");
       this.status = true;
     }
@@ -1120,10 +1140,23 @@ export class OtherWeighmentComponent implements OnInit {
     //var e = document.getElementById("SerialSpeed");
     //var strSpd =1200;// e.options[e.selectedIndex].value;
     // alert(strSpd);
-    var speed = 1200;//for aayogagro
-    // var speed = 2400;
-    //svar speed=1200;
-    await this.port.open({ baudRate: [speed], dataBits: 7, stopBits: 1, parity: 'even' });//for aaagyog
+    if(this.bridge_location==='Weight Bridge 1')
+      {
+        console.log("Weight Bridge1/1200/7/EVEN::",this.bridge_location);
+        var speed = 1200;//for aayogagro
+        // var speed = 2400;
+        //svar speed=1200;
+        await this.port.open({ baudRate: [speed], dataBits: 7, stopBits: 1, parity: 'even' });//for aaagyog
+      }
+      if(this.bridge_location==='Weight Bridge 2')
+        {
+          console.log("Weight Bridge2/2400/7/NONE::",this.bridge_location);
+          //var speed = 1200;//for aayogagro
+           var speed = 2400;
+          //svar speed=1200;
+          //await this.port.open({ baudRate: [speed], dataBits: 7, stopBits: 1, parity: 'even' });//for aaagyog
+          await this.port.open({ baudRate: [speed],dataBits: 8,stopBits: 1,parity: 'none'});
+        }
     // await this.port.open({ baudRate: [speed],dataBits: 8,stopBits: 1,parity: 'none'});
 
     //document.getElementById('SerialSpeed').disabled = true;

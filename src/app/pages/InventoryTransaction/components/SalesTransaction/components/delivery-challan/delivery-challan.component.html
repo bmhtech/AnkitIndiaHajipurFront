@@ -1821,7 +1821,7 @@
                   <th>Reference Type</th>
 
                   <th>Price Term</th>
-                  <th colspan="5">Action</th>
+                  <th colspan="6">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -1847,6 +1847,9 @@
 
                   <td><button class="btn btn-info" (click)="onPrint(DeliveryChallan.id,DeliveryChallan.delivery_cid,DeliveryChallan.business_unit)" *ngIf="deliverychallanprint">Print</button></td>
 
+                  <td *ngIf="DeliveryChallan.ref_type =='GRN'"><button class="btn" style="background-color: chocolate;" (click)="onWeighmentPrint(DeliveryChallan.referance_id)">Kata Print</button></td>
+                  
+                  
                   <!-- *ngIf=";else elseBlock1 " -->
                   <!-- <td *ngIf="DeliveryChallan.trans_borne_by ='FOR';else elseBlock1 ">   -->
                   <td>  

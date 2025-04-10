@@ -173,6 +173,7 @@ export class UnloadAdviceComponent implements OnInit {
       poitemnumber: [''],
       jobwork: [''],
       looseitem: [''],
+      weight_bridge_location:[''],
 
 
       wm_unload_advice_item_dtls: this.fb.array([this.fb.group({
@@ -357,6 +358,7 @@ export class UnloadAdviceComponent implements OnInit {
   get remarks() { return this.userForm.get("remarks") as FormControl }
   get brokerage_active() { return this.userForm.get("brokerage_active") as FormControl }
   get app_chgs_id() { return this.userForm.get("app_chgs_id") as FormControl }
+  get weight_bridge_location() { return this.userForm.get("weight_bridge_location") as FormControl }
   get wm_unload_advice_item_dtls() { return this.userForm.get('wm_unload_advice_item_dtls') as FormArray; }
   get wm_unload_advice_item_dtls_for_jobwork() { return this.userForm.get('wm_unload_advice_item_dtls_for_jobwork') as FormArray; }
 
@@ -413,7 +415,7 @@ export class UnloadAdviceComponent implements OnInit {
     this._grossWt = 0;
     this.adviceType = "0";
     this.businessUnit = "0";
-    this.userForm.patchValue({ app_chgs_id: "0" });
+    this.userForm.patchValue({ app_chgs_id: "0",weight_bridge_location:'Weight Bridge 2'});
     this.selectedDocumentType = "Driving Licence";
     this.selectedAdviceType = "Purchase Order";
     this.refNo = true;
@@ -1531,7 +1533,7 @@ export class UnloadAdviceComponent implements OnInit {
           this.WeighBridgeList = getMiscData;
           this.userForm.patchValue({
             business_unit: "0", uom: "0", busi_partner: "0",
-            transporter_code: "0", vehicle_id: "0", item_subtype: "0"
+            transporter_code: "0", vehicle_id: "0", item_subtype: "0", weight_bridge_location:'Weight Bridge 2'
           });
           this.wm_unload_advice_party_wm.patchValue({ pw_date: this.currentDate, uom1: "0", uom2: "0", uom3: "0" });
           this.onChangeAdviceType(this.selectedAdviceType);
@@ -1600,7 +1602,7 @@ export class UnloadAdviceComponent implements OnInit {
           this.WeighBridgeList = getMiscData;
           this.userForm.patchValue({
             business_unit: "0", uom: "0", busi_partner: "0",
-            transporter_code: "0", vehicle_id: "0", item_subtype: "0"
+            transporter_code: "0", vehicle_id: "0", item_subtype: "0",weight_bridge_location:'Weight Bridge 2'
           });
           this.wm_unload_advice_party_wm.patchValue({ pw_date: this.currentDate, uom1: "0", uom2: "0", uom3: "0" });
           this.onChangeAdviceType(this.selectedAdviceType);
@@ -2524,7 +2526,8 @@ export class UnloadAdviceComponent implements OnInit {
               let k = 0;
               this.showstatus = "onShowStatus";
               this.userForm.patchValue({
-                referance_id: data["pur_orderid"], total_qty: data["total_qty_copy"].toFixed(3),
+                referance_id: data["pur_orderid"], pur_orderid: data["pur_orderid"],
+                total_qty: data["total_qty_copy"].toFixed(3),
                 uom: data["staticuom"], poitemnumber: data["poitemnumber"]
               });
 
@@ -2538,7 +2541,8 @@ export class UnloadAdviceComponent implements OnInit {
                 this.showaddrow = true;
               }
               this.packingItem = [];
-              this.userForm.patchValue({ referance_id: data["pur_orderid"] });
+              //this.userForm.patchValue({ referance_id: data["pur_orderid"] });
+              this.userForm.patchValue({ referance_id: data["pur_orderid"],pur_orderid: data["pur_orderid"]});
               this.orderNo = data["pur_orderid"];
 
               if (JSON.stringify(data.weightment_req) == 'true') {
@@ -3149,7 +3153,7 @@ export class UnloadAdviceComponent implements OnInit {
       this.onChangeServicesItemType(UnloadingAdviceData["item_subtype"], UnloadingAdviceData["ref_type"])
 
       // console.log(" tuhin here here   end 5 " +  this.showaddrow)
-
+      this.orderNo = UnloadingAdviceData["pur_orderid"];
       this.userForm.patchValue({
         id: UnloadingAdviceData["id"], unadviceno: UnloadingAdviceData["unadviceno"], unadviceid: UnloadingAdviceData["unadviceid"],
         pur_orderid: UnloadingAdviceData["pur_orderid"], item_type: UnloadingAdviceData["item_type"], veh_no: UnloadingAdviceData["veh_no"],
@@ -3163,8 +3167,9 @@ export class UnloadAdviceComponent implements OnInit {
         transporter_name: UnloadingAdviceData["transporter_name"], transporter_code: UnloadingAdviceData["transporter_code"], brokerage_active: UnloadingAdviceData["brokerage_active"],
         advice_id: UnloadingAdviceData["advice_id"], weighment_status: UnloadingAdviceData["weighment_status"], app_chgs_id: UnloadingAdviceData["app_chgs_id"],
         advice_type: UnloadingAdviceData["advice_type"], qc_required: UnloadingAdviceData["qc_required"], company_id: UnloadingAdviceData["company_id"],
-        remarks: UnloadingAdviceData["remarks"], fin_year: UnloadingAdviceData["fin_year"], customer: UnloadingAdviceData["customer"]
-        , poitemnumber: UnloadingAdviceData["poitemnumber"], jobwork: UnloadingAdviceData["jobwork"], looseitem: UnloadingAdviceData["looseitem"]
+        remarks: UnloadingAdviceData["remarks"], fin_year: UnloadingAdviceData["fin_year"], customer: UnloadingAdviceData["customer"], 
+        poitemnumber: UnloadingAdviceData["poitemnumber"], jobwork: UnloadingAdviceData["jobwork"], looseitem: UnloadingAdviceData["looseitem"],
+        weight_bridge_location:UnloadingAdviceData["weight_bridge_location"]
       });
 
 
@@ -3383,6 +3388,7 @@ export class UnloadAdviceComponent implements OnInit {
     this.wm_unload_advice_driver_dtls.patchValue({ doc_type: this.selectedDocumentType })
 
     //console.log("here start ")
+    console.log("here pur:: "+this.orderNo);
 
     this.userForm.patchValue({
       pur_orderid: this.orderNo, company_id: this.company_name,
@@ -3451,6 +3457,10 @@ export class UnloadAdviceComponent implements OnInit {
         alert("Please Select Transporter Name");
         this.status=true;
       } */
+      else if (this.userForm.get("weight_bridge_location").value == '' || this.userForm.get("weight_bridge_location").value == null || this.userForm.get("weight_bridge_location").value == 0) {
+        alert("Please Select Weight Bridge Location");
+        this.status = true;
+      }
       else if (this.userForm.get("vehicle_id").value == "0") {
         alert("Please Select Vehicle No.");
         this.status = true;

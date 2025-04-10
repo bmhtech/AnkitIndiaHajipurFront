@@ -28,16 +28,40 @@
                   <!-- <h1 class="uc">{{company_name}} </h1> -->
                 <h1 class="uc" style="text-align: center;">{{company_name}} </h1><!-- ({{Businessunit}}) -->
                 </ng-template>
-                <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                <!-- <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
                   {{work_address}}<br>
                   {{state_name}},{{city_name}},{{pin_no}}</div>
                   <ng-template #elseBlockf>
                   <div class="top_h4" style="text-align: center;">(CIN : {{cin_no}})<br>
-                    <!-- 14A, 5thfloor, FMC FORTUNA<br>
-                    234/3A A.J.C Bose Road, Kolkata 700020</div> -->
                     {{work_address}}<br>
                     {{state_name}},{{city_name}},{{pin_no}}</div>
+                  </ng-template> -->
+
+                  <div class="top_h4"  style="text-align: center;" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
+                    <div class="top_h4"  style="text-align: center;" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                      {{work_address}}<br>
+                      {{state_name}},{{city_name}},{{pin_no}}</div>
+                      <ng-template #elseBlockf>
+                      <div class="top_h4">(CIN : {{cin_no}})<br>
+                        {{work_address}}<br>
+                        {{state_name}},{{city_name}},{{pin_no}}</div>
+                      </ng-template>
+                      <div class="top_h4"  style="text-align: center;">
+                        W.B. OWNER :- ANKIT INDIA LIMITED (5200043217)<br>
+                        AT-BHOJPATTI, PO - SARAI, PS-SARAI, BLOCK-RAJAPAKAR
+                      </div> <!-- NEW ADDED FOR REGISTERED WB ORDER BY JITESH SIR ON 10042025-->
+                  </div>
+                  <ng-template #WBname1>
+                    <div class="top_h4"  style="text-align: center;">
+                      <div class="top_h4"  style="text-align: center;">(CIN : {{cin_no}})<br>
+                        {{work_address}}<br>
+                        {{state_name}},{{city_name}},{{pin_no}}</div>
+                      W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
+                      MAHUA ROAD, BELKUNDA, BHOJPATTI, VAISHALI<br>
+                      BIHAR, HAJIPUR - 844125
+                    </div>
                   </ng-template>
+
                 <h1 class="uc" style="text-align: center;">Weighment Slip</h1>
 
                 <div class="rule_act" style="text-align: right;">Office Copy</div>
@@ -202,16 +226,40 @@
                   <!-- <h1 class="uc">{{company_name}} </h1> -->
                   <h1 class="uc" style="text-align: center;">{{company_name}}</h1><!-- ({{Businessunit}}) -->
                 </ng-template>
-                <div class="top_h4" style="text-align: center;" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                <!-- <div class="top_h4" style="text-align: center;" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
                   {{work_address}}<br>
                   {{state_name}},{{city_name}},{{pin_no}}</div>
                 <ng-template #elseBlockf>
                 <div class="top_h4" style="text-align: center;">(CIN : {{cin_no}})<br>
-                  <!-- 14A, 5thfloor, FMC FORTUNA<br>
-                  234/3A A.J.C Bose Road, Kolkata 700020</div> -->
                   {{work_address}}<br>
                   {{state_name}},{{city_name}},{{pin_no}}</div>
+                </ng-template> -->
+
+                <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
+                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                    {{work_address}}<br>
+                    {{state_name}},{{city_name}},{{pin_no}}</div>
+                    <ng-template #elseBlockf>
+                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                      {{work_address}}<br>
+                      {{state_name}},{{city_name}},{{pin_no}}</div>
+                    </ng-template>
+                    <div class="top_h4">
+                      W.B. OWNER :- ANKIT INDIA LIMITED (5200043217)<br>
+                      AT-BHOJPATTI, PO - SARAI, PS-SARAI, BLOCK-RAJAPAKAR
+                    </div> <!-- NEW ADDED FOR REGISTERED WB ORDER BY JITESH SIR ON 10042025-->
+                </div>
+                <ng-template #WBname1>
+                  <div class="top_h4">
+                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                      {{work_address}}<br>
+                      {{state_name}},{{city_name}},{{pin_no}}</div>
+                    W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
+                    MAHUA ROAD, BELKUNDA, BHOJPATTI, VAISHALI<br>
+                    BIHAR, HAJIPUR - 844125
+                  </div>
                 </ng-template>
+
                 <h1 class="uc" style="text-align: center;">Weighment Slip</h1>
 
                 <div class="rule_act" style="text-align: right;">Party Copy</div>
@@ -378,16 +426,40 @@
                   <!-- <h1 class="uc">{{company_name}} </h1> -->
                   <h1 class="uc" style="text-align: center;">{{company_name}}</h1><!-- ({{Businessunit}}) -->
                 </ng-template>
-                <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockfr">(FRN : {{cin_no}})<br>
+                <!-- <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockfr">(FRN : {{cin_no}})<br>
                   {{work_address}}<br>
                   {{state_name}},{{city_name}},{{pin_no}}</div>
                 <ng-template #elseBlockfr>
                 <div class="top_h4" style="text-align: center;">(CIN : {{cin_no}})<br>
-                  <!-- 14A, 5thfloor, FMC FORTUNA<br>
-                  234/3A A.J.C Bose Road, Kolkata 700020</div> -->
                   {{work_address}}<br>
                   {{state_name}},{{city_name}},{{pin_no}}</div>
+                </ng-template> -->
+
+                <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
+                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                    {{work_address}}<br>
+                    {{state_name}},{{city_name}},{{pin_no}}</div>
+                    <ng-template #elseBlockf>
+                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                      {{work_address}}<br>
+                      {{state_name}},{{city_name}},{{pin_no}}</div>
+                    </ng-template>
+                    <div class="top_h4">
+                      W.B. OWNER :- ANKIT INDIA LIMITED (5200043217)<br>
+                      AT-BHOJPATTI, PO - SARAI, PS-SARAI, BLOCK-RAJAPAKAR
+                    </div> <!-- NEW ADDED FOR REGISTERED WB ORDER BY JITESH SIR ON 10042025-->
+                </div>
+                <ng-template #WBname1>
+                  <div class="top_h4">
+                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                      {{work_address}}<br>
+                      {{state_name}},{{city_name}},{{pin_no}}</div>
+                    W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
+                    MAHUA ROAD, BELKUNDA, BHOJPATTI, VAISHALI<br>
+                    BIHAR, HAJIPUR - 844125
+                  </div>
                 </ng-template>
+
                 <h1 class="uc" style="text-align: center;">Weighment Slip</h1>
 
                 <div class="rule_act" style="text-align: right;">Weight Bridge Copy</div>

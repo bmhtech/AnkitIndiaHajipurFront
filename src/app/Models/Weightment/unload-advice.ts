@@ -46,6 +46,7 @@
     fin_year:any;
     username:any;
     total_qty_copy:any;
+    weight_bridge_location:any;
     wm_unload_advice_item_dtls:Wm_unload_advice_item_dtls[];
     wm_unload_advice_party_wm:Wm_unload_advice_party_wm;
     wm_unload_advice_driver_dtls:Wm_unload_advice_driver_dtls;

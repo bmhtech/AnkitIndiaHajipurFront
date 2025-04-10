@@ -4,7 +4,7 @@
         vechileid: any;
         vehicle_verification: any;
         remarks: any;
-       
+        weight_bridge_location:any;
         company_id: any;
         fin_year: any;
         username:any;
