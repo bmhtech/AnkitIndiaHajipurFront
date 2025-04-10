@@ -17,6 +17,8 @@ import { PageEvent } from '@angular/material';
 import { DeliveryChallanJobworkPopupComponent } from '../delivery-challan-jobwork-popup/delivery-challan-jobwork-popup.component';
 import { DelChallanDistancePopUpComponent } from '../del-challan-distance-pop-up/del-challan-distance-pop-up.component';
 import { DelChallanSalesOrdByGrnPopupComponent } from '../del-challan-sales-ord-by-grn-popup/del-challan-sales-ord-by-grn-popup.component';
+import { DchallanWeighmentFromGrnPrintComponent } from '../dchallan-weighment-from-grn-print/dchallan-weighment-from-grn-print.component';
+import { DelChallanSalesOrdByGrnJobworkPopupComponent } from '../del-challan-sales-ord-by-grn-jobwork-popup/del-challan-sales-ord-by-grn-jobwork-popup.component';
 
 @Component({
   selector: 'app-delivery-challan',
@@ -1786,10 +1788,10 @@ export class DeliveryChallanComponent implements OnInit {
     }
 
     else if (this.reference_type == "GRN") {
-      /*if (this.userForm.get("jobwork").value == true) {
+     /* if (this.userForm.get("jobwork").value == true) {
 
         dialogConfig.data = { index: 0, delivery_date: this.currentDate, partyid: this.partyid, id: this.Id, inv_type: this.userForm.get("inv_type").value };
-        const dialogRef = this.dialog.open(DeliveryChallanJobworkPopupComponent, dialogConfig);
+        const dialogRef = this.dialog.open(DelChallanSalesOrdByGrnJobworkPopupComponent, dialogConfig);
         dialogRef.afterClosed().subscribe(data => {
           if (data != '' && data["advice_id"] != "0") {
 
@@ -1926,8 +1928,7 @@ export class DeliveryChallanComponent implements OnInit {
 
 
       }
-      else {
-        */
+      else {*/
         dialogConfig.data = { index: 0,id: this.Id,sale_order_id:this.sale_order_id,grn_id:this.grn_id};
         const dialogRef = this.dialog.open(DelChallanSalesOrdByGrnPopupComponent, dialogConfig);
         dialogRef.afterClosed().subscribe(data => {
@@ -2834,6 +2835,21 @@ export class DeliveryChallanComponent implements OnInit {
     let comp = this.company_name;
     let dialogRef = this.dialog.open(DeliveryChallanPrintPopupComponent, {
       data: { alldata: id, deliveryid: delivery_cid, company_name: comp,bunit:bunit }, height: '80%',
+      width: '80%'
+    });
+    dialogRef.afterClosed().subscribe(data => {
+      // this.sales_Invoice_Item_Dtls.at(index).patchValue({acc_norms: data["qc_code"]});
+    });
+  }
+  
+  onWeighmentPrint(grnid) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {};
+    let comp = this.company_name;
+    let dialogRef = this.dialog.open(DchallanWeighmentFromGrnPrintComponent, {
+      data: { grnid: grnid, company_name: comp }, height: '80%',
       width: '80%'
     });
     dialogRef.afterClosed().subscribe(data => {

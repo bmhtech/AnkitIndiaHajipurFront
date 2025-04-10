@@ -61,6 +61,7 @@ export class OtherWeighmentBillPrintComponent implements OnInit {
   nameswitch:boolean=true;
   firstbags:any;
   totalprice:any;
+  weighBridgeLocation: any;
 
   constructor(private fb: FormBuilder,private Service: Master,
     private DropDownListService: DropdownServiceService,
@@ -81,7 +82,8 @@ export class OtherWeighmentBillPrintComponent implements OnInit {
       this.DropDownListService.getCompanyDetails(this.companyname)
     ).subscribe(([data12, wgmntDtls,compdetails])=>
       {
-       
+        this.weighBridgeLocation=data12["weight_bridge_location"];
+        console.log("weighBridgeLocation:: " + this.weighBridgeLocation);
         //console.log("Wgt Prt : : "+JSON.stringify(data12));
         this.company_name=compdetails.company_name;
         this.cin_no=compdetails.tin_no

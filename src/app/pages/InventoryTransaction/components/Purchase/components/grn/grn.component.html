@@ -153,7 +153,7 @@
                 <mat-label>Sales Order No.<span class="red">*</span></mat-label>
                 <mat-select-autocomplete class="form-control"  
                 [options]="soNoList"
-                [display]="'order_no'"
+                [display]="'cust_order_no'"
                 [value]="'order_id'"
                 [multiple]='false'
                 ngDefaultControl
@@ -1351,7 +1351,7 @@
                  
                   
 
-                  <td *ngIf="PurchaseGRN.bill_status=='1';else elseBlock ">
+                  <td *ngIf="PurchaseGRN.bill_status=='1' || PurchaseGRN.challan_status=='Yes';else elseBlock ">
                     <button class="btn btn-info"  disabled >Update</button>
                   </td>  
                   <ng-template #elseBlock>

@@ -54,6 +54,7 @@ export class WeightmentKata1BillPrintComponent implements OnInit {
   taretime: any;
   purchase1st: boolean = false;
   sale1st: boolean = false;
+  weighBridgeLocation: any;
 
   constructor(private fb: FormBuilder, private Service: Master,
     private DropDownListService: DropdownServiceService,
@@ -75,7 +76,8 @@ export class WeightmentKata1BillPrintComponent implements OnInit {
       console.log("UNLOADDATA:: "+JSON.stringify(data12));
       console.log("WGTDATA:: "+JSON.stringify(wgmntDtls));
       console.log("COMPDATA:: "+JSON.stringify(compdetails));
-
+      this.weighBridgeLocation=data12["weight_bridge_location"];
+      console.log("weighBridgeLocation:: " + this.weighBridgeLocation);
       this.company_name = compdetails.company_name;
       this.cin_no = compdetails.tin_no
       this.netweight = Number(data12.net_weight).toFixed(3);

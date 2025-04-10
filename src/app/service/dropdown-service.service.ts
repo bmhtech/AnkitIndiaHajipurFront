@@ -5296,10 +5296,18 @@ export class DropdownServiceService {
   getSalesOrderReportOrderWise(salesordernumber): Observable<any> {
     return this.httpClient.get(this.url + 'getSalesOrderReportOrderWise/' + salesordernumber).pipe(catchError((err) => { console.log("Error in Service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+
+  getSalesOrderReportOrderProcessWise(salesordernumber, salesprocess): Observable<any> {
+    return this.httpClient.get(this.url + 'getSalesOrderReportOrderProcessWise/' + salesordernumber + "/" + salesprocess).pipe(catchError((err) => { console.log("Error in Service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
   // Anuj Sir Sales Order Report
 
   getSalesOrderReport(fromdate, todate): Observable<any> {
     return this.httpClient.get(this.url + 'getSalesOrderReport/' + fromdate + "/" + todate).pipe(catchError((err) => { console.log("Error in Service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getSalesOrderProcessWiseReport(fromdate, todate, salesprocess): Observable<any> {
+    return this.httpClient.get(this.url + 'getSalesOrderProcessWiseReport/' + fromdate + "/" + todate + "/" + salesprocess).pipe(catchError((err) => { console.log("Error in Service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
   getSalesInvoicetransitReport(fromdate, todate): Observable<any> {
@@ -6348,6 +6356,25 @@ export class DropdownServiceService {
   getGrnWeighment(grnid): Observable<any> {
     return this.httpClient.get(this.url + 'getGrnWeighment/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+  
+  getGrnDetails(grnid): Observable<any> {
+    return this.httpClient.get(this.url + 'getGrnDetails/' + grnid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getGrndetailsforWeighment(grnid,company): Observable<any> {
+    return this.httpClient.get(this.url + 'getGrndetailsforWeighment/' + grnid+'/'+company).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 
+  getVehicleLocationwiseWeighmentList(location): Observable<any> {
+    return this.httpClient.get(this.url + 'getVehicleLocationwiseWeighmentList/'+location).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getVehicleListWeighmentLocation(location): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getVehicleListWeighmentLocation/'+location).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getOtherWgFirstDataWtWgtFor(location): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getOtherWgFirstDataWtWgtFor/'+location).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 
 }
