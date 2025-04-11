@@ -62,7 +62,11 @@ export class WeightmentBillPrintComponent implements OnInit {
   nameswitch: boolean = true;
   ankit: boolean = false;
   weighBridgeLocation: any;
-
+  tareUom: any;
+  grossUom: any;
+  netUom: any;
+  partyGroup: any;
+  
   constructor(private fb: FormBuilder, private Service: Master,
     private DropDownListService: DropdownServiceService,
     private dialogRef: MatDialogRef<WeightmentBillPrintComponent>, @Inject(MAT_DIALOG_DATA) data) {
@@ -98,6 +102,40 @@ export class WeightmentBillPrintComponent implements OnInit {
       this.taretime = data12.tw_time;
       this.taredate = this.datecalculator(data12.tw_date);
       this.grossweight = Number(data12.gross_weight).toFixed(3);
+
+      //GROSS WT UOM
+      if(data12.gw_unit=="CUM00001"){
+        this.grossUom = "KGS";
+      }
+      else if(data12.gw_unit=="CUM00011"){
+        this.grossUom = "MT";
+      }
+      else{
+        this.grossUom = "QTLS";
+      }
+
+      // TARE WT UOM
+      if(data12.tw_unit=="CUM00001"){
+        this.tareUom = "KGS";
+      }
+      else if(data12.tw_unit=="CUM00011"){
+        this.tareUom = "MT";
+      }
+      else{
+        this.tareUom = "QTLS";
+      }
+
+      // NET WT UOM
+      if(data12.nw_unit=="CUM00001"){
+        this.netUom = "KGS";
+      }
+      else if(data12.nw_unit=="CUM00011"){
+        this.netUom = "MT";
+      }
+      else{
+        this.netUom = "QTLS";
+      }
+      
       this.grossdate = this.datecalculator(data12.gw_date);
       this.grosstime = data12.gw_time;
       //this.weighmentno = data12.wgment_no;
@@ -252,7 +290,7 @@ export class WeightmentBillPrintComponent implements OnInit {
 
                 // Company Details
                 this.DropDownListService.getCBUdetails(unloadtable.business_unitname).subscribe(cbudata => {
-                  console.log("UnADVICE Details : : " + JSON.stringify(unloadtable))
+                  console.log("UnADVICE Details : : " + JSON.stringify(unloadtable));
                   this.work_address = cbudata.work_address;
                   this.pin_no = cbudata.pin_code;
                   this.state_name = cbudata.state_name;
@@ -372,7 +410,7 @@ export class WeightmentBillPrintComponent implements OnInit {
                 this.partypincode = data41["pincode"];
                 this.partyaccountname = accountsdetails.acc_no;
                 this.partyifsc = accountsdetails.ifsc;
-
+               console.log("INV SALES::",saleorderdteials["inv_type"]);
                 if (saleorderdteials["inv_type"] == 'INV00003') {
                   //this.invoicetype = "JOB WORK";
                   this.invoicetype = "JOB WORK WHEAT";
@@ -381,8 +419,9 @@ export class WeightmentBillPrintComponent implements OnInit {
                   //this.invoicetype = "FINISHED";
                   if(saleorderdteials["inv_type"]=="INV00005")
                   {this.invoicetype = "TRADING GOODS";}
+                  /* else if(saleorderdteials["inv_type"]=="INV00001" || saleorderdteials["inv_type"]=="INV00002")
+                  {this.invoicetype = "FINISHED GOODS";} */
                   else{this.invoicetype = "WHEAT";}
-                  
                 }
               });
             });
@@ -421,8 +460,9 @@ export class WeightmentBillPrintComponent implements OnInit {
               forkJoin(
                 this.DropDownListService.getCustomerAddress(loadtable.bus_partner),
                 this.Service.custAccountRetriveList(loadtable.bus_partner),
-                this.DropDownListService.getSalesOrderDetails(loadtable["referance_id"])
-              ).subscribe(([data41, accountsdetails, saleorderdteials]) => {
+                this.DropDownListService.getSalesOrderDetails(loadtable["referance_id"]),
+                this.DropDownListService.partynameListById(loadtable.bus_partner)
+              ).subscribe(([data41, accountsdetails, saleorderdteials, customerData]) => {
                 this.partyaddress = data41["add1"] + " " + data41["add2"] + " " + data41["add3"];
                 this.partystate = data41["state"];
                 this.partydistrict = data41["district"];
@@ -430,7 +470,8 @@ export class WeightmentBillPrintComponent implements OnInit {
                 this.partypincode = data41["pincode"];
                 this.partyaccountname = accountsdetails.acc_no;
                 this.partyifsc = accountsdetails.ifsc;
-
+                this.partyGroup = customerData["group_type"];
+                console.log("customerData Details : : " + JSON.stringify(customerData));
                 if (saleorderdteials["inv_type"] == 'INV00004') {
                   this.invoicetype = "PACKING MATERIAL SALE";
                 }
@@ -438,7 +479,10 @@ export class WeightmentBillPrintComponent implements OnInit {
                   //this.invoicetype = "FINISHED";
                   if(saleorderdteials["inv_type"]=="INV00005")
                     {this.invoicetype = "TRADING GOODS";}
-                    else{this.invoicetype = "WHEAT";}
+                  else if((saleorderdteials["inv_type"]=="INV00001" || saleorderdteials["inv_type"]=="INV00002") 
+                            && customerData["group_type"]=="CG00019")
+                    {this.invoicetype = "FINISHED GOODS";}
+                  else{this.invoicetype = "WHEAT";}
                   //this.invoicetype = "WHEAT";
                 }
               });

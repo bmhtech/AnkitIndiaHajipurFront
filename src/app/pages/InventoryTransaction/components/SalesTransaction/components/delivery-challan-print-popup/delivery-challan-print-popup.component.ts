@@ -44,6 +44,8 @@ export class DeliveryChallanPrintPopupComponent implements OnInit {
   dist:any;
   pin:any;
   bu_address:any;
+  gst_no:any;
+  partyGroup: any;
 
   constructor(private fb: FormBuilder,private Service: Master,
     private DropDownListService: DropdownServiceService,
@@ -80,18 +82,21 @@ export class DeliveryChallanPrintPopupComponent implements OnInit {
         salesOrdData,Broker,ordPartyData,partyData,compdetails,bunitdetails])=>
         {
           console.log("staticData:"+JSON.stringify(staticData))
+          console.log("compdetails:"+JSON.stringify(compdetails))
           this.dist=bunitdetails.dist_name;
           this.bu_address=bunitdetails.mailing_address;
           this.pin=bunitdetails.pin_code;
           this.company_name=compdetails.company_name;
           this.cin_no=compdetails.tin_no;
+          this.gst_no=compdetails.gstin_no;
 
           this.DropDownListService.partynameListById(staticData["party"]).subscribe((printData)=>
           { 
-           // console.log("print:"+JSON.stringify(printData))
+            //console.log("print:"+JSON.stringify(printData))
             this.customer=printData["print_to_name"];
+            this.partyGroup = printData["group_type"];
           });
-
+          
           this.DropDownListService.getCBUdetailsById(staticData["business_unit"]).subscribe((cbudata)=>
           { 
            // console.log("cbudata:"+JSON.stringify(cbudata))

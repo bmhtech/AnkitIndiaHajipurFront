@@ -1044,7 +1044,7 @@ export class UnloadWeighmentComponent implements OnInit {
 
           // this.DropDownListService.getUnloadAdviceThruVehicle(vechile_no, orderType).subscribe(data=>
           this.DropDownListService.getUnloadAdviceThruVehiclefast(vechile_no, orderType).subscribe(data => {
-
+            console.log("Cust purchase UoM:: ",JSON.stringify(data));
             this.userForm.patchValue({ gw_unit: data[0]["uom"], tw_unit: data[0]["uom"], nw_unit: data[0]["uom"] });
             this.status = true;
 
@@ -1192,7 +1192,8 @@ export class UnloadWeighmentComponent implements OnInit {
 
           //this.DropDownListService.getLoadngAdviceThruVehicle(vechile_no, orderType).subscribe(data=>
           this.DropDownListService.getLoadngAdviceThruVehiclefast(vechile_no, orderType).subscribe(data => {
-            //  console.log("weighment For: "+this.weighmentFor+":- "+JSON.stringify(data));
+
+            console.log("weighment For: "+this.weighmentFor+" :salesUom- "+JSON.stringify(data));
             this.userForm.patchValue({ gw_unit: data[0]["staticuom"], tw_unit: data[0]["staticuom"], nw_unit: data[0]["staticuom"] });//need to be done later
             //this.userForm.patchValue({gw_unit:'CUM00003',tw_unit:'CUM00003'});
 

@@ -1345,6 +1345,10 @@ export class DropdownServiceService {
     return this.httpClient.get<SequenceId>(this.url + 'getSISequenceId/' + prefix).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getSISequenceIdforDefence(prefix: String): Observable<SequenceId> {
+    return this.httpClient.get<SequenceId>(this.url + 'getSISequenceIdforDefence/' + prefix).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
   getRANSequenceId(prefix: String): Observable<SequenceId> {
     return this.httpClient.get<SequenceId>(this.url + 'getRANSequenceId/' + prefix).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
@@ -1385,6 +1389,10 @@ export class DropdownServiceService {
 
   getDCSequenceId(prefix: String): Observable<SequenceId> {
     return this.httpClient.get<SequenceId>(this.url + 'getDCSequenceId/' + prefix).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getDCSequenceIdforDefence(prefix: String): Observable<SequenceId> {
+    return this.httpClient.get<SequenceId>(this.url + 'getDCSequenceIdforDefence/' + prefix).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
   getLASequenceId(prefix: String): Observable<SequenceId> {
