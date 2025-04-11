@@ -40,6 +40,7 @@
         looseitem:any;
         payment_mode:any;
         refraction:any;
+        weight_bridge_location:any;
     
         wm_loading_advice_bp_dtls:Wm_loading_advice_bp_dtls;
         wm_loading_advice_doc_attch:Wm_loading_advice_doc_attch[];

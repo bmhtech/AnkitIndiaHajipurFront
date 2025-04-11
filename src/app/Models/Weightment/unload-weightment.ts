@@ -43,6 +43,7 @@
    remarks:any;
    tare_weight_bulker:any;
    net_weight_bulker:any;
+   weight_bridge_location:any;
 
 
     wm_unload_wgmnt_dtls:Wm_unload_wgmnt_dtls[];

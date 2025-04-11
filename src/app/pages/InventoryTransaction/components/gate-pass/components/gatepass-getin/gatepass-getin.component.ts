@@ -40,6 +40,7 @@ export class GatepassGetinComponent implements OnInit {
           company_id:[''],
           fin_year:[''],
           username:[''],
+          weight_bridge_location:[''],
 
 
           gatepassGetin_details:this.fb.array([this.fb.group({
@@ -64,6 +65,7 @@ export class GatepassGetinComponent implements OnInit {
    get company_id(){return this.userForm.get("company_id") as FormControl}
    get fin_year(){return this.userForm.get("fin_year") as FormControl}
    get username(){return this.userForm.get("username") as FormControl}
+   get weight_bridge_location() { return this.userForm.get("weight_bridge_location") as FormControl;} 
    get gatepassGetin_details(){return this.userForm.get("gatepassGetin_details") as FormArray};
    get gatepass_checklist_dummy(){return this.userForm.get("gatepass_checklist_dummy") as FormArray};
    
@@ -97,17 +99,18 @@ export class GatepassGetinComponent implements OnInit {
     this.isHidden=false;
     this.status=true;
     forkJoin(
-      this.DropDownListService.getVehicleListWeighment(),
+      //this.DropDownListService.getVehicleListWeighment(),
+      this.DropDownListService.getVehicleListWeighmentLocation('Weight Bridge 2'),
       this.DropDownListService.getGatepasschecklistin(),
       this.DropDownListService.getGatepassgetin_List()
       
     ).subscribe(([vehicleData,gatepasschecklistin,list])=>
       {
-        console.log("chk list"+JSON.stringify(gatepasschecklistin))
-       this.veh_nos=vehicleData;
+       // console.log("chk list"+JSON.stringify(gatepasschecklistin))
+       //this.veh_nos=vehicleData;
        this.status=true;
        this.gatepassinlist=list;
-      
+       this.userForm.patchValue({weight_bridge_location:'Weight Bridge 2'})
        while (this.gatepass_checklist_dummy.length) 
        this.gatepass_checklist_dummy.removeAt(0);
        for(let i=0;i<gatepasschecklistin.length;i++)
@@ -134,8 +137,8 @@ export class GatepassGetinComponent implements OnInit {
            this.isHidden=true;
            this.imageURL ="";
            this.updatedstatus=false;
-           this.DropDownListService.getVehicleListWeighment().subscribe(vehicleData=>{
-
+          //this.DropDownListService.getVehicleListWeighment().subscribe(vehicleData=>{
+          this.DropDownListService.getVehicleListWeighmentLocation('Weight Bridge 2').subscribe(vehicleData=>{
             this.veh_nos=vehicleData;
            })
 
@@ -145,8 +148,8 @@ export class GatepassGetinComponent implements OnInit {
              this.isHidden=false;
              this.imageURL ="";
              this.updatedstatus=false;
-             this.DropDownListService.getVehicleListWeighment().subscribe(vehicleData=>{
-
+             //this.DropDownListService.getVehicleListWeighment().subscribe(vehicleData=>{
+             this.DropDownListService.getVehicleListWeighmentLocation('Weight Bridge 2').subscribe(vehicleData=>{
               this.veh_nos=vehicleData;
              })
              this.userForm.reset();
@@ -154,6 +157,14 @@ export class GatepassGetinComponent implements OnInit {
          }
     }
 
+    onChangeLocation()
+    {
+      let location=this.userForm.get("weight_bridge_location").value;
+      this.DropDownListService.getVehicleListWeighmentLocation(location).subscribe(vehicleData=>{
+        this.veh_nos=vehicleData;
+        this.status=true;
+       })
+    }
 
   onChangeVechileNo()
   {

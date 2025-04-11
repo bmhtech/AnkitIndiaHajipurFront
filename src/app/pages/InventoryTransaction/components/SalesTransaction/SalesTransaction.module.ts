@@ -75,6 +75,8 @@ import { CreditnoteEwaybillCancelComponent } from './components/creditnote-ewayb
 import { ExportAsModule } from 'ngx-export-as';
 import { UpdateArnNoComponent } from './components/update-arn-no/update-arn-no.component';
 import { DelChallanSalesOrdByGrnPopupComponent } from './components/del-challan-sales-ord-by-grn-popup/del-challan-sales-ord-by-grn-popup.component';
+import { DchallanWeighmentFromGrnPrintComponent } from './components/dchallan-weighment-from-grn-print/dchallan-weighment-from-grn-print.component';
+import { DelChallanSalesOrdByGrnJobworkPopupComponent } from './components/del-challan-sales-ord-by-grn-jobwork-popup/del-challan-sales-ord-by-grn-jobwork-popup.component';
 
 
 @NgModule({
@@ -148,6 +150,8 @@ import { DelChallanSalesOrdByGrnPopupComponent } from './components/del-challan-
         CreditnoteEwaybillCancelComponent,
         UpdateArnNoComponent,
         DelChallanSalesOrdByGrnPopupComponent,
+        DchallanWeighmentFromGrnPrintComponent,
+        DelChallanSalesOrdByGrnJobworkPopupComponent,
     ],
 
 
@@ -214,6 +218,8 @@ import { DelChallanSalesOrdByGrnPopupComponent } from './components/del-challan-
        CreditnoteEwaybillCancelComponent,
        UpdateArnNoComponent,
        DelChallanSalesOrdByGrnPopupComponent,
+       DchallanWeighmentFromGrnPrintComponent,
+       DelChallanSalesOrdByGrnJobworkPopupComponent,
        
        
       

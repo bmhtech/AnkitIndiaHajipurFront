@@ -14,14 +14,40 @@
 
                   <h1 class="uc">{{company_name}}</h1>
 
-                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock ">(FRN : {{cin_no}})<br>
+                  <!-- <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock3 ">(FRN : {{cin_no}})<br>
                     {{work_address}}<br>
                     {{state_name}},{{city_name}},{{pin_no}}</div>
-                  <ng-template #elseBlock>
+                  <ng-template #elseBlock3>
                   <div class="top_h4">(CIN : {{cin_no}})<br>
-                    {{work_address}}<br>
-                    {{state_name}},{{city_name}},{{pin_no}}</div>
+                    802,Mahua Road, Belkunda, Bhojpatti, Vaishali<br>
+                    BIHAR,HAJIPUR,844125</div>
+                  </ng-template> -->
+
+                  <div class="top_h4"  style="text-align: center;" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
+                    <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock3 ">(FRN : {{cin_no}})<br>
+                      {{work_address}}<br>
+                      {{state_name}},{{city_name}},{{pin_no}}</div>
+                      <ng-template #elseBlock3>
+                      <div class="top_h4">(CIN : {{cin_no}})<br>
+                        802,Mahua Road, Belkunda, Bhojpatti, Vaishali<br>
+                        BIHAR, HAJIPUR, 844125</div>
+                      </ng-template>
+                      <div class="top_h4"  style="text-align: center;">
+                        W.B. OWNER :- ANKIT INDIA LIMITED (5200043217)<br>
+                        AT-BHOJPATTI, PO - SARAI, PS-SARAI, BLOCK-RAJAPAKAR
+                      </div> <!-- NEW ADDED FOR REGISTERED WB ORDER BY JITESH SIR ON 10042025-->
+                  </div>
+                  <ng-template #WBname1>
+                    <div class="top_h4"  style="text-align: center;">
+                      <div class="top_h4">(CIN : {{cin_no}})<br>
+                        802,Mahua Road, Belkunda, Bhojpatti, Vaishali<br>
+                        BIHAR, HAJIPUR, 844125</div>
+                      W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
+                      MAHUA ROAD, BELKUNDA, BHOJPATTI, VAISHALI<br>
+                      BIHAR, HAJIPUR - 844125
+                    </div>
                   </ng-template>
+
                   <h1 class="uc">Weighment Slip</h1>
 
                   <div class="rule_act">Office Copy</div>
@@ -35,8 +61,8 @@
                           <td style="width: 55%;" class="comp_adrs">
                             <table style="text-transform: uppercase;width: 100%;">
                               <tr>
-                                <td>Party: </td>
-                                <td>{{nopartyname}}</td>
+                                <!-- <td>Party: </td>
+                                <td>{{nopartyname}}</td> -->
                               </tr>
                               <tr>
                                 <td>Item: </td>
@@ -130,14 +156,40 @@
 
                   <h1 class="uc">{{company_name}}</h1>
 
-                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock2">(FRN : {{cin_no}})<br>
+                  <!-- <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock3 ">(FRN : {{cin_no}})<br>
                     {{work_address}}<br>
                     {{state_name}},{{city_name}},{{pin_no}}</div>
-                  <ng-template #elseBlock2>
+                  <ng-template #elseBlock3>
                   <div class="top_h4">(CIN : {{cin_no}})<br>
-                    {{work_address}}<br>
-                    {{state_name}},{{city_name}},{{pin_no}}</div>
+                    802,Mahua Road, Belkunda, Bhojpatti, Vaishali<br>
+                    BIHAR,HAJIPUR,844125</div>
+                  </ng-template> -->
+
+                  <div class="top_h4"  style="text-align: center;" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
+                    <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock3 ">(FRN : {{cin_no}})<br>
+                      {{work_address}}<br>
+                      {{state_name}},{{city_name}},{{pin_no}}</div>
+                      <ng-template #elseBlock3>
+                      <div class="top_h4">(CIN : {{cin_no}})<br>
+                        802,Mahua Road, Belkunda, Bhojpatti, Vaishali<br>
+                        BIHAR, HAJIPUR, 844125</div>
+                      </ng-template>
+                      <div class="top_h4"  style="text-align: center;">
+                        W.B. OWNER :- ANKIT INDIA LIMITED (5200043217)<br>
+                        AT-BHOJPATTI, PO - SARAI, PS-SARAI, BLOCK-RAJAPAKAR
+                      </div> <!-- NEW ADDED FOR REGISTERED WB ORDER BY JITESH SIR ON 10042025-->
+                  </div>
+                  <ng-template #WBname1>
+                    <div class="top_h4"  style="text-align: center;">
+                      <div class="top_h4">(CIN : {{cin_no}})<br>
+                        802,Mahua Road, Belkunda, Bhojpatti, Vaishali<br>
+                        BIHAR, HAJIPUR, 844125</div>
+                      W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
+                      MAHUA ROAD, BELKUNDA, BHOJPATTI, VAISHALI<br>
+                      BIHAR, HAJIPUR - 844125
+                    </div>
                   </ng-template>
+
                   <h1 class="uc">Weighment Slip</h1>
 
                   <div class="rule_act">Party Copy</div>
@@ -152,8 +204,8 @@
 
                             <table style="text-transform: uppercase;width: 100%;">
                               <tr>
-                                <td>Party: </td>
-                                <td>{{nopartyname}}</td>
+                                <!-- <td>Party: </td>
+                                <td>{{nopartyname}}</td> -->
                               </tr>
                               <tr>
                                 <td>Item: </td>
@@ -247,14 +299,40 @@
 
                   <h1 class="uc">{{company_name}}</h1>
 
-                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock3 ">(FRN : {{cin_no}})<br>
+                  <!-- <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock3 ">(FRN : {{cin_no}})<br>
                     {{work_address}}<br>
                     {{state_name}},{{city_name}},{{pin_no}}</div>
                   <ng-template #elseBlock3>
                   <div class="top_h4">(CIN : {{cin_no}})<br>
-                    {{work_address}}<br>
-                    {{state_name}},{{city_name}},{{pin_no}}</div>
+                    802,Mahua Road, Belkunda, Bhojpatti, Vaishali<br>
+                    BIHAR,HAJIPUR,844125</div>
+                  </ng-template> -->
+
+                  <div class="top_h4"  style="text-align: center;" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
+                    <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlock3 ">(FRN : {{cin_no}})<br>
+                      {{work_address}}<br>
+                      {{state_name}},{{city_name}},{{pin_no}}</div>
+                      <ng-template #elseBlock3>
+                      <div class="top_h4">(CIN : {{cin_no}})<br>
+                        802,Mahua Road, Belkunda, Bhojpatti, Vaishali<br>
+                        BIHAR, HAJIPUR, 844125</div>
+                      </ng-template>
+                      <div class="top_h4"  style="text-align: center;">
+                        W.B. OWNER :- ANKIT INDIA LIMITED (5200043217)<br>
+                        AT-BHOJPATTI, PO - SARAI, PS-SARAI, BLOCK-RAJAPAKAR
+                      </div> <!-- NEW ADDED FOR REGISTERED WB ORDER BY JITESH SIR ON 10042025-->
+                  </div>
+                  <ng-template #WBname1>
+                    <div class="top_h4"  style="text-align: center;">
+                      <div class="top_h4">(CIN : {{cin_no}})<br>
+                        802,Mahua Road, Belkunda, Bhojpatti, Vaishali<br>
+                        BIHAR, HAJIPUR, 844125</div>
+                      W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
+                      MAHUA ROAD, BELKUNDA, BHOJPATTI, VAISHALI<br>
+                      BIHAR, HAJIPUR - 844125
+                    </div>
                   </ng-template>
+                  
                   <h1 class="uc">Weighment Slip</h1>
 
                   <div class="rule_act">Weight Bridge Copy</div>
@@ -269,8 +347,8 @@
 
                             <table style="text-transform: uppercase;width: 100%;">
                               <tr>
-                                <td>Party: </td>
-                                <td>{{nopartyname}}</td>
+                                <!-- <td>Party: </td>
+                                <td>{{nopartyname}}</td> -->
                               </tr>
                               <tr>
                                 <td>Item: </td>

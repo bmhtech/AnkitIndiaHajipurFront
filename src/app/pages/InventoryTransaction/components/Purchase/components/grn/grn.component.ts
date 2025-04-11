@@ -27,7 +27,7 @@ import { AddNewVechilePopUpComponentGrnComponent } from '../add-new-vechile-pop-
   styleUrls: ['./grn.component.scss']
 })
 
-export class GrnComponent implements OnInit, OnDestroy {
+export class GrnComponent implements OnInit {
   submitted = false;
   public userForm: FormGroup;
   model: PurchaseGRN = new PurchaseGRN();
@@ -369,10 +369,10 @@ export class GrnComponent implements OnInit, OnDestroy {
     return this.pur_good_receipt_item_details.controls
   }
 
-  private salesProcessValChangeSub?: Subscription;
+  //private salesProcessValChangeSub?: Subscription;
 
   ngOnInit() {
-    this.salesProcessValChangeSub = this.sales_process.valueChanges.subscribe((newVal)=>{
+    /*this.salesProcessValChangeSub = this.sales_process.valueChanges.subscribe((newVal)=>{
       if(["Job Work", "Sale"].includes(newVal)) {
         this.pur_good_receipt_item_detailsForms.forEach((fg)=>{
           fg.patchValue({ warehouse_name: '', rack: '' });
@@ -385,7 +385,7 @@ export class GrnComponent implements OnInit, OnDestroy {
           fg.get("rack").enable();
         });
       }
-    });
+    });*/
 
     //this.getProducts({ page: "0", size: "10" });
     this.disvehicle = true;
@@ -4230,8 +4230,8 @@ export class GrnComponent implements OnInit, OnDestroy {
       }
   }
 
-  ngOnDestroy(): void {
+  /*ngOnDestroy(): void {
     if(this.salesProcessValChangeSub)
       this.salesProcessValChangeSub.unsubscribe();
-  }
+  }*/
 }

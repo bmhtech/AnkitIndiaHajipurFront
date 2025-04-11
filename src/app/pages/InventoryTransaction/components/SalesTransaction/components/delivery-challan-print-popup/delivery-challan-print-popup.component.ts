@@ -79,7 +79,7 @@ export class DeliveryChallanPrintPopupComponent implements OnInit {
       ).subscribe(([staticData,itemData,shipmentData,brokerData,transportData,allVehicledata,
         salesOrdData,Broker,ordPartyData,partyData,compdetails,bunitdetails])=>
         {
-          console.log("bunitdetails:"+JSON.stringify(bunitdetails))
+          console.log("staticData:"+JSON.stringify(staticData))
           this.dist=bunitdetails.dist_name;
           this.bu_address=bunitdetails.mailing_address;
           this.pin=bunitdetails.pin_code;
@@ -149,32 +149,65 @@ export class DeliveryChallanPrintPopupComponent implements OnInit {
             
            // console.log("itemData:"+JSON.stringify(itemData))
           this.itemDetails=itemData;
-          forkJoin(
-          this.DropDownListService.getLoadingDetails(staticData["referance_id"]),
-          this.Service.custStatutoryRetriveList(partyData[0]["p_code"])
 
-          ).subscribe(([advice,gstnNo])=>{
-              
-            if(gstnNo["gst_no"] == null || gstnNo["gst_no"] =='')
-            {
-              this.gstinno = "Un-Registered";
-            }
-            else{
-              this.gstinno = gstnNo["gst_no"];
-            }
-            
-               this.Service.getSalesOrdTermsCon(advice["referance_id"]).subscribe(orderparty=>{
-                
-                ordPartyData.forEach(element => {
-                  if(element.payterm_id == orderparty["payment_term"])
-                  {
-                    this.trms = element.payterm_desc;
-                  }
+          if(staticData.ref_type==='GRN') //For Delivrry challan Comes From Direct GRN
+          {
+            forkJoin(
+              this.DropDownListService.getGrnDetails(staticData["referance_id"]),
+              this.Service.custStatutoryRetriveList(partyData[0]["p_code"])
+    
+              ).subscribe(([grnData,gstnNo])=>{
                   
-                });
-              
-                });
-             });
+                if(gstnNo["gst_no"] == null || gstnNo["gst_no"] =='')
+                {
+                  this.gstinno = "Un-Registered";
+                }
+                else{
+                  this.gstinno = gstnNo["gst_no"];
+                }
+                
+                   this.Service.getSalesOrdTermsCon(grnData["sales_order"]).subscribe(orderparty=>{
+                    
+                    ordPartyData.forEach(element => {
+                      if(element.payterm_id == orderparty["payment_term"])
+                      {
+                        this.trms = element.payterm_desc;
+                      }
+                      
+                    });
+                  
+                    });
+                 });
+          }
+          else{   //For Delivrry challan Comes From Loading Advice
+            forkJoin(
+              this.DropDownListService.getLoadingDetails(staticData["referance_id"]),
+              this.Service.custStatutoryRetriveList(partyData[0]["p_code"])
+    
+              ).subscribe(([advice,gstnNo])=>{
+                  
+                if(gstnNo["gst_no"] == null || gstnNo["gst_no"] =='')
+                {
+                  this.gstinno = "Un-Registered";
+                }
+                else{
+                  this.gstinno = gstnNo["gst_no"];
+                }
+                
+                   this.Service.getSalesOrdTermsCon(advice["referance_id"]).subscribe(orderparty=>{
+                    
+                    ordPartyData.forEach(element => {
+                      if(element.payterm_id == orderparty["payment_term"])
+                      {
+                        this.trms = element.payterm_desc;
+                      }
+                      
+                    });
+                  
+                    });
+                 });
+          }
+
         });
   }
 

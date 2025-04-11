@@ -36,6 +36,13 @@
                     <div class="hed_div">
                       <ul>
                         <li>
+                          <mat-label><b>Weight Bridge Location<span class="red"> * </span></b></mat-label>
+                            <mat-select class="form-control" formControlName="weight_bridge_location" (selectionChange)='onChangeLocation()'>
+                              <mat-option value="Weight Bridge 1">Weight Bridge 1</mat-option>
+                              <mat-option value="Weight Bridge 2">Weight Bridge 2</mat-option>
+                            </mat-select>
+                        </li>
+                        <li>
                           <mat-label><b>Weighment For<span class="red"> * </span></b></mat-label>
                           <mat-select formControlName="wgment_for" class="form-control" (selectionChange)="onChangeWeightment()">
                             <mat-option value="Loading">Loading</mat-option>
@@ -523,6 +530,7 @@
                   <th>Date</th>
                   <th>Party Name</th>
                   <th>Item Name</th>
+                  <th>Weight Bridge Location</th>
                   <th>Vehicle Number</th>
                   <th>Gross Weight</th>
                   <th>Tare Weight</th>
@@ -538,6 +546,7 @@
                   <td>{{UnloadWeightment.wgment_date}}</td>
                   <td>{{UnloadWeightment.nopartyname}}</td>
                   <td>{{UnloadWeightment.noitemname}}</td>
+                  <td>{{UnloadWeightment.weight_bridge_location}}</td>
                   <td>{{UnloadWeightment.vehicle_no}}</td>  
                   <td>{{UnloadWeightment.gross_weight | number:'1.3-3'}}</td>
                   <td>{{UnloadWeightment.tare_weight | number:'1.3-3'}}</td>

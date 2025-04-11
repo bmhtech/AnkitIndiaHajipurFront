@@ -781,6 +781,18 @@
                 </div>
             </div>
 
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                <div class="form-group ht_59">
+                  <mat-label>Sales Process<span class="red">*</span></mat-label>
+                  <mat-select formControlName="sales_process" class="form-control" >
+                    <mat-option value="0">-Select-</mat-option>
+                    <mat-option value="Stock">STOCK</mat-option>
+                    <mat-option value="Sale">SALE</mat-option> 
+                    <mat-option value="Job Work">JOB WORK (NOT READY)</mat-option>
+                  </mat-select>
+                </div>
+            </div>
+
             <div class="col-lg-12">
                 <div class="form-group">
                     <button type="submit" class="btn btn-primary" (click)="searchsalesorder()">Search</button>
@@ -822,7 +834,8 @@
                                 <td>{{salesOrder.partyname}}</td>
                                 <td>{{salesOrder.broker_name}}</td>
                                 <td>{{salesOrder.item_name}}</td>
-                                <td>{{salesOrder.mat_wt}}</td>
+                                <!-- <td>{{salesOrder.mat_wt}}</td> -->
+                                <td>{{salesOrder.quantity}}</td> 
                                 <td>{{salesOrder.bag}}</td>
                                 <td>{{salesOrder.price}}</td>
                                 <td>{{salesOrder.price_based_on}}</td>
@@ -1702,6 +1715,7 @@
                                 <th>State</th>
                                 <th>Party Name</th>
                                 <th>Address</th>
+                                <th>PinCode</th>
                                 <th>Item Name</th>
                                 <th>Packing Name</th>
                                 <th>Packing Qty</th>
@@ -1715,6 +1729,7 @@
                                 <th>Total Amount</th>
                                 <th>Payable Amount</th>
                                 <th>Vehicle No</th>
+                                <th>E-Way Bill No</th>
                             </tr>
                         </thead>
                         <tbody>
@@ -1724,6 +1739,7 @@
                                 <td>{{insurance.state}}</td>
                                 <td>{{insurance.partyname}}</td>
                                 <td>{{insurance.address}}</td>
+                                <td>{{insurance.pincode}}</td>
                                 <td>{{insurance.item_name}}</td>
                                 <td>{{insurance.packing_name}}</td>
                                 <td>{{insurance.squantity}}</td>
@@ -1737,6 +1753,7 @@
                                 <td>{{insurance.total_amt}}</td>
                                 <td>{{insurance.payable_amt}}</td>
                                 <td>{{insurance.vehicleno}}</td>
+                                <td>{{insurance.waybill}}</td>
                             </tr>
                         </tbody>
                     </table>

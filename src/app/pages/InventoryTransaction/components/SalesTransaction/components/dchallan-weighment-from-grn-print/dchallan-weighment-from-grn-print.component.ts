@@ -1,20 +1,17 @@
 import { Component, Inject, OnInit } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
-import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
-import { Console } from 'console';
-
-import { forkJoin } from 'rxjs';
+import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { DropdownServiceService } from '../../../../../../service/dropdown-service.service';
 import { Master } from '../../../../../../service/master.service';
+import { forkJoin } from 'rxjs';
 
 @Component({
-  selector: 'app-weightment-bill-print',
-  templateUrl: './weightment-bill-print.component.html',
-  styleUrls: ['./weightment-bill-print.component.scss']
+  selector: 'app-dchallan-weighment-from-grn-print',
+  templateUrl: './dchallan-weighment-from-grn-print.component.html',
+  styleUrls: ['./dchallan-weighment-from-grn-print.component.scss']
 })
-export class WeightmentBillPrintComponent implements OnInit {
-
-  public userForm1: FormGroup;
+export class DchallanWeighmentFromGrnPrintComponent implements OnInit {
+ public userForm1: FormGroup;
   ID: any;
   weighment_id: any;
   netweight: any;
@@ -61,26 +58,26 @@ export class WeightmentBillPrintComponent implements OnInit {
   invoicetype: any;
   nameswitch: boolean = true;
   ankit: boolean = false;
+  grnid:any;
   weighBridgeLocation: any;
 
   constructor(private fb: FormBuilder, private Service: Master,
     private DropDownListService: DropdownServiceService,
-    private dialogRef: MatDialogRef<WeightmentBillPrintComponent>, @Inject(MAT_DIALOG_DATA) data) {
-    this.ID = data["alldata"];
-    this.weighment_id = data["weighment_id"];
+    private dialogRef: MatDialogRef<DchallanWeighmentFromGrnPrintComponent>, @Inject(MAT_DIALOG_DATA) data) {
+   
+    this.grnid = data["grnid"];
     this.companyname = data["company_name"];
 
   }
 
   ngOnInit() {
     //console.log("tuhin "+this.ID);
-
-    forkJoin(
-      this.DropDownListService.unloadWeightmentRetrive(this.ID),
-      this.DropDownListService.unloadWMDtlsRetriveList(this.weighment_id),
+    this.DropDownListService.getGrndetailsforWeighment(this.grnid,this.companyname).subscribe(grndata=>{
+    forkJoin([
+      this.DropDownListService.unloadWeightmentRetrive(grndata.id),
+      this.DropDownListService.unloadWMDtlsRetriveList(grndata.weighment_id),
       this.DropDownListService.getCompanyDetails(this.companyname)
-    ).subscribe(([data12, wgmntDtls, compdetails]) => {
-      console.log("Wgt DTLS : : " + JSON.stringify(data12));
+    ]).subscribe(([data12, wgmntDtls, compdetails]) => {
       this.weighBridgeLocation=data12["weight_bridge_location"];
       console.log("weighBridgeLocation:: " + this.weighBridgeLocation);
       this.company_name = compdetails.company_name;
@@ -448,6 +445,9 @@ export class WeightmentBillPrintComponent implements OnInit {
         this.weighmentfor = false;
       }
     });
+
+  });
+
   }
 
 

@@ -196,6 +196,16 @@
 
             <!-- [selectedOptions]="selectedOptions"
  -->
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" >
+              <div class="form-group">
+                <mat-label>Weight Bridge Location<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="weight_bridge_location" >
+                  <mat-option value="Weight Bridge 1">Weight Bridge 1</mat-option>
+                  <mat-option value="Weight Bridge 2">Weight Bridge 2</mat-option>
+                  </mat-select>
+              </div>
+            </div>
+
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
               <div class="form-group">
                 <mat-label>Vehicle No.<span class="red">*</span></mat-label>
@@ -1536,6 +1546,7 @@
                   <th>Business Unit</th>
                   <!-- <th>Item/Service</th> -->
                   <th>Item Type</th>
+                  <th>Weighment Location</th>
                   <th>Vehicle Number</th>
                   <!-- <th>Weighment Req</th> -->
                   <th>Advice Type</th>
@@ -1551,6 +1562,7 @@
                   <td>{{UnloadAdvice.business_unitname}}</td>
                   <!-- <td>{{UnloadAdvice.item_type}}</td> -->
                   <td>{{UnloadAdvice.item_subtypename}}</td>
+                  <td>{{UnloadAdvice.weight_bridge_location}}</td>
                   <td>{{UnloadAdvice.vehicle_no}}</td>
                   <!-- <td>{{UnloadAdvice.we_req}}</td> -->
                   <td>{{UnloadAdvice.ref_type}}</td>

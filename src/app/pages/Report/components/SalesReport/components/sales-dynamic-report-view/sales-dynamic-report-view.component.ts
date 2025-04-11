@@ -153,11 +153,12 @@ export class SalesDynamicReportViewComponent implements OnInit {
       });
 
     this.userForm13 = fb.group(
-      {
-        salesfromdate: [''],
-        salestodate: [''],
-        salesordernumber:['']
-      });
+    {
+      salesfromdate: [''],
+      salestodate: [''],
+      salesordernumber:[''],
+      sales_process:[''],
+    });
 
     this.userForm14 = fb.group(
       {
@@ -249,6 +250,7 @@ export class SalesDynamicReportViewComponent implements OnInit {
   get salesfromdate() { return this.userForm13.get("salesfromdate") as FormControl };
   get salestodate() { return this.userForm13.get("salestodate") as FormControl };
   get salesordernumber() { return this.userForm13.get("salesordernumber") as FormControl };
+  get sales_process() { return this.userForm13.get("sales_process") as FormControl };
 
   get salesinvfromdate() { return this.userForm14.get("salesinvfromdate") as FormControl };
   get salesinvtodate() { return this.userForm14.get("salesinvtodate") as FormControl };
@@ -614,24 +616,25 @@ export class SalesDynamicReportViewComponent implements OnInit {
     let fromdate = this.userForm13.get("salesfromdate").value;
     let todate = this.userForm13.get("salestodate").value;
     let salesordernumber = this.userForm13.get("salesordernumber").value;
-    if (fromdate != "" && todate != "" && salesordernumber != "") 
+    let salesprocess = this.userForm13.get("sales_process").value;
+    if ((fromdate != "" && todate != "" && salesordernumber != "") && salesprocess != "") 
     {
-      alert("You Can Search Either Date Wise or Sales Order Number Wise....");
-      this.userForm13.patchValue({salesfromdate:'',salestodate:'',salesordernumber:''})
+      alert("You Can Search Either Date Wise or Sales Order Number Wise with Sales Process....");
+      this.userForm13.patchValue({salesfromdate:'',salestodate:'',salesordernumber:'',sales_process:''})
       this.status = true;
     }
-    else if(fromdate != "" && todate != "" && (salesordernumber == "" || salesordernumber ==null))
-      {
-        this.DropDownListService.getSalesOrderReport(fromdate, todate).subscribe(SOdata => {
-          //console.log("Sales Check ::  "+ JSON.stringify(SOdata))
-          this.salesOrderList = SOdata;
-          this.status = true;
-        });
-      }
+    else if(fromdate != "" && todate != ""  && salesprocess != "" && (salesordernumber == "" || salesordernumber ==null))
+    {
+      this.DropDownListService.getSalesOrderProcessWiseReport(fromdate, todate, salesprocess).subscribe(SOdata => {
+        console.log("Sales Check ::  "+ JSON.stringify(SOdata))
+        this.salesOrderList = SOdata;
+        this.status = true;
+      });
+    }
     else
     {
-      this.DropDownListService.getSalesOrderReportOrderWise(salesordernumber).subscribe(SOdata => {
-        //console.log("Sales Check ::  "+ JSON.stringify(SOdata))
+      this.DropDownListService.getSalesOrderReportOrderProcessWise(salesordernumber,salesprocess).subscribe(SOdata => {
+        console.log("Sales Check ::  "+ JSON.stringify(SOdata));
         this.salesOrderList = SOdata;
         this.status = true;
       });
