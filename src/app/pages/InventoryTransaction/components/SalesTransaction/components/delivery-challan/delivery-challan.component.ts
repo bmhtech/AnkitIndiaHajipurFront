@@ -1338,19 +1338,22 @@ export class DeliveryChallanComponent implements OnInit {
       if (party_id.length && party_id != "0") {
         this.status = false;
         forkJoin(
-
           this.DropDownListService.getCustDelvFromList(party_id),
           this.Service.custBillAddRetriveList(party_id),
-          this.DropDownListService.getCompanyBussinessUnitDetails(localStorage.getItem("company_name"),this.userForm.get("business_unit").value)
-        ).subscribe(([custDelvData, CustAddress,companystate]) => {
+          this.DropDownListService.getCompanyBussinessUnitDetails(localStorage.getItem("company_name"),this.userForm.get("business_unit").value),
+          this.DropDownListService.getDCSequenceIdforDefence(this.financialYear + "/" + this.userForm.get("inv_type").value + "/" + party_id)
+        ).subscribe(([custDelvData, CustAddress,companystate,defenceSqNo]) => {
           // console.log(CustAddress["state"]+" address::"+JSON.stringify(CustAddress))
          // console.log(companystate["state_name"]+"comp state:"+JSON.stringify(companystate))
           this.state = CustAddress["state"];
+          this.challanNo = defenceSqNo.sequenceid;
          // if (this.state == 'BIHAR') { this.statestatus = 0; }
           if (this.state == companystate["state_name"]) { this.statestatus = 0; }
           else {
             this.statestatus = 1;
           }
+          //console.log("CustState:: ",CustAddress["state"]+" ::invType:: "+this.userForm.get("inv_type").value);
+          //this.onChangeSalesInvoiceType(this.userForm.get("inv_type").value);
           this.customerDelvAddList = custDelvData;
           this.delivery_challan_Shipment_Dtls.patchValue({ pay_addr: this.partyId, pay_details: CustAddress["address"] });
           this.status = true;

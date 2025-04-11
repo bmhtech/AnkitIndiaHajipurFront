@@ -22,7 +22,7 @@
     tw_time: any;  
     tw_remarks: any; 
     net_weight: any;   
-    nw_unit:true;
+    nw_unit:any;
     digital_weight: any;  
     digital_weight1: any;  
     wgment_charge: any;  

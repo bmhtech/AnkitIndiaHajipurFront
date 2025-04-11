@@ -1551,9 +1551,11 @@ export class SalesInvoiceComponent implements OnInit {
         this.Service.custAddRetriveList(custid),
         this.DropDownListService.getCustomerControlAccounts(custid),
         this.Service.custBillAddRetriveList(custid),
+        this.DropDownListService.getSISequenceIdforDefence(this.financialYear + "/" + this.userForm.get("invoice_type").value + "/" + custid)
+
        // this.Service.custShipAddDtlsRetriveList(custid),
       //).subscribe(([data, data1, data2, data3, CustAdd, ControlAccdata, CustAddress,shiptodata]) => {
-        ).subscribe(([data, data1, data2, data3, CustAdd, ControlAccdata, CustAddress]) => {
+        ).subscribe(([data, data1, data2, data3, CustAdd, ControlAccdata, CustAddress, siNo]) => {
         //registered
         // console.log(" hello tuhin 1" + JSON.stringify(data))
         // console.log(" hello tuhin 2" + JSON.stringify(data1))
@@ -1563,7 +1565,7 @@ export class SalesInvoiceComponent implements OnInit {
         // console.log(" hello tuhin 6" + JSON.stringify(ControlAccdata))
         // console.log(" hello tuhin 7" + JSON.stringify(CustAddress))
         //console.log(" hello::" + JSON.stringify(shiptodata))
-
+        this.sales_invoice_no = siNo.sequenceid;
        // console.log("register:" + data3["registered"])
         if (data3["registered"] == true)//registered
         {
@@ -2506,9 +2508,8 @@ export class SalesInvoiceComponent implements OnInit {
                 }
                 else {
                   this.isOpenPolicy = true;
-                  this.userForm.patchValue({ policyno: '0000000034939414' });
-
-
+                  //this.userForm.patchValue({ policyno: '0000000034939414' });  // Commented for Army
+                  this.userForm.patchValue({ policyno: '0000000000000000' });
                 }
 
                 //let ItemGr=[];
@@ -3776,9 +3777,11 @@ export class SalesInvoiceComponent implements OnInit {
       this.businesslists = BUUNIT;
 
       this.ledgerNames = ledgerData;
+      
+      this.onChangeInvoiceType(SalesInvoiceData["invoice_type"]);
       this.onChangePartyName(SalesInvoiceData["party"]);
       this.onChangeBuUnit(SalesInvoiceData["business_unit"]);
-      this.onChangeInvoiceType(SalesInvoiceData["invoice_type"])
+      //this.onChangeInvoiceType(SalesInvoiceData["invoice_type"]);
       // console.log(" hello tuhin 2222 : : " + id )
       this.appCharges = SalesInvoiceData["applicable_amt"];
       this.tcsAmt = SalesInvoiceData["tcsamt"];
