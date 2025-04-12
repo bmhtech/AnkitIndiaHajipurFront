@@ -97,6 +97,7 @@ export class SaleinvoicereviseprintComponent implements OnInit {
   address3:any;
   gstShow: boolean = true;
   shipname: any;
+  partyGroup: any;
  
   exportAsConfig: ExportAsConfig = {
     type: 'docx', // the type you want to download
@@ -112,9 +113,6 @@ export class SaleinvoicereviseprintComponent implements OnInit {
     this.PrintMode = data.PrintMode.split(',');
     console.log(this.MainId + " print size " + this.PrintMode.length)
     this.business_unit=data["business_unit"];
-
-  
-
     
     this.hsntax = fb.group(
       {
@@ -156,7 +154,7 @@ export class SaleinvoicereviseprintComponent implements OnInit {
       this.DropDownListService.getCompanyDetails(localStorage.getItem("company_name")),
       this.DropDownListService.getCompanyBussinessUnitDetails(localStorage.getItem("company_name"),this.business_unit)
     ).subscribe(([Details, Itemdata, words, taxsum, paymentdtls,compdetails,companystate]) => {
-      console.log("Details:" + companystate["state_name"])
+      console.log("Details:" + JSON.stringify(Details));
       this.cgst = Number(taxsum[0]['tax_rate']) / 2
       this.sgst = Number(taxsum[0]['tax_rate']) / 2
       this.igst = taxsum[0]['tax_rate']
@@ -182,7 +180,8 @@ export class SaleinvoicereviseprintComponent implements OnInit {
         this.gststat = false;
         this.gststatno = true;
       }*/
-      //console.log("mobile:"+Details["mobile"].length)
+      //console.log("mobile:"+Details["mobile"].length);
+
       if (paymentdtls["payment_term"] == 'APT00001') {
         this.paymentterm = paymentdtls["payment_term"];
       }
@@ -334,7 +333,13 @@ export class SaleinvoicereviseprintComponent implements OnInit {
       this.constactno = Details["mobile"];
       this.roundoff = Details["roundoff_amt"];
       this.refchallanno = Details["refchallanno"];
-      this.refchallandate = Details["refchallandate"]
+      this.refchallandate = Details["refchallandate"];
+
+      this.DropDownListService.partynameListById(Details["party"]).subscribe((custGrp)=>
+      { 
+        console.log("partyGroup print:"+JSON.stringify(custGrp));
+        this.partyGroup = custGrp["group_type"];
+      });
 
       if (Details["gst_no"] == null || Details["gst_no"] == '') {
         this.gstinno = "URP";
@@ -357,7 +362,8 @@ export class SaleinvoicereviseprintComponent implements OnInit {
       console.log("tax total::" + Details["tax_total"])
       let v = 0;
       this.ItemAllData.forEach(element => {
-        this.HsnCode.push(element.hsn_code);
+       // this.HsnCode.push(element.hsn_code);
+       this.HsnCode.push(element.hsnm_code); //hard code for party 'itc' 10019910,others normal
         this.taxtotal += Number(element.amount);
         this.cgsttotal += Number(element.cgstamt);
         this.sgsttotal += Number(element.sgstamt);
