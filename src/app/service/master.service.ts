@@ -717,6 +717,10 @@ export class Master {
   public getdeletefileSalesInvoice(id): Observable<any> {
     return this.httpClient.delete<any>(this.url + 'getdeletefileSalesInvoice/' + id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
   }
+  
+  public getdeletefileDelvChallan(id): Observable<any> {
+    return this.httpClient.delete<any>(this.url + 'getdeletefileDelvChallan/' + id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
+  }
 
   // getdeletefileSystem(filename): Observable<any>
   //{
@@ -1190,9 +1194,12 @@ export class Master {
   }
   // public createDeliveryChallan(SalesReturnNote): Observable<SalesReturnNote> {
   //   return this.httpClient.post<SalesReturnNote>(this.url+"createDeliveryChallan", SalesReturnNote).pipe(catchError((err) => {console.log("error in service: "+JSON.stringify(err));return throwError(err.status);}))}
-  public createDeliveryChallan(DeliveryChallan): Observable<DeliveryChallan> {
-    return this.httpClient.post<DeliveryChallan>(this.url + "createDeliveryChallan", DeliveryChallan).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  public createDeliveryChallan(formdata: FormData): Observable<DeliveryChallan> {
+    return this.httpClient.post<DeliveryChallan>(this.url + "createDeliveryChallan", formdata).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+  // public createDeliveryChallan(DeliveryChallan): Observable<DeliveryChallan> {
+  //   return this.httpClient.post<DeliveryChallan>(this.url + "createDeliveryChallan", DeliveryChallan).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  // }
 
   public deleteDeliveryChallan(DeliveryChallan, id): Observable<any> {
     return this.httpClient.put<DeliveryChallan>(this.url + 'deleteDeliveryChallan/' + id, DeliveryChallan).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
@@ -1469,9 +1476,8 @@ export class Master {
     return this.httpClient.post<Trans_bussiness_partner>(this.url + 'updateTransBussinessPartner', formdata).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
   }
 
-
-  public updateDlvChallan(DeliveryChallan, id): Observable<DeliveryChallan> {
-    return this.httpClient.put<DeliveryChallan>(this.url + 'updateDlvChallan/' + id, DeliveryChallan).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
+  public updateDlvChallan(formdata: FormData): Observable<DeliveryChallan> {
+    return this.httpClient.post<DeliveryChallan>(this.url + "updateDlvChallan", formdata).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
   }
 
   public updateDlvChallantransport(DeliveryChallan, id): Observable<DeliveryChallan> {

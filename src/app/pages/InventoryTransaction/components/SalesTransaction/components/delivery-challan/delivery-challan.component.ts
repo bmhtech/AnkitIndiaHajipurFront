@@ -98,6 +98,7 @@ export class DeliveryChallanComponent implements OnInit {
   selectedChgCode = [];
   listCharges: any = [];
   uoms: any = [];
+  myFiles: any = [];
   Transportchargeschange: boolean = true;
   Transportrate: any;
   jobitemlist: any = [];
@@ -105,6 +106,7 @@ export class DeliveryChallanComponent implements OnInit {
   selectedJobItem: any = [];
   selectedJobPacking: any = [];
   Jobworkshow: boolean = false;
+  gatepassShow:boolean=false;
   //transChgsDyn:boolean=false;
 
   user_roles: any;
@@ -139,6 +141,7 @@ export class DeliveryChallanComponent implements OnInit {
         inv_type: [''],
         username: [''],
         jobwork: [''],
+        gatepass:[''],
 
 
         delivery_challan_Item_Dtls: this.fb.array([this.fb.group({
@@ -182,7 +185,15 @@ export class DeliveryChallanComponent implements OnInit {
         })]),
 
         delivery_challan_Docs: this.fb.array([this.fb.group({
-          doc_name: ''
+          doc_name: '',
+          doc_pdf: '',
+          doc_file_name: ''
+        })]),
+
+        delivery_challan_docs_list: this.fb.array([this.fb.group({
+        doc_name: '',
+        doc_pdf: '',
+        doc_file_name: ''
         })]),
 
         delivery_challan_Shipment_Dtls: this.fb.group({
@@ -294,6 +305,7 @@ export class DeliveryChallanComponent implements OnInit {
   get party() { return this.userForm.get("party") as FormControl; }
   get inv_type() { return this.userForm.get("inv_type") as FormControl; }
   get jobwork() { return this.userForm.get("jobwork") as FormControl; }
+  get gatepass() { return this.userForm.get("gatepass") as FormControl; }
 
 
 
@@ -308,6 +320,7 @@ export class DeliveryChallanComponent implements OnInit {
   get delivery_challan_weight_dtl() { return this.userForm.get("delivery_challan_weight_dtl") as FormGroup };
 
   get delivery_challan_Docs() { return this.userForm.get("delivery_challan_Docs") as FormArray };
+  get delivery_challan_docs_list() { return this.userForm.get('delivery_challan_docs_list') as FormArray; }
 
   ngOnInit() {
     this.user_roles = localStorage.getItem("user_role");
@@ -350,6 +363,7 @@ export class DeliveryChallanComponent implements OnInit {
     this.Confirmed_By = "0";
     this.Reason = "0";
     this.Jobworkshow = false;
+    this.gatepassShow=false;
     this.delivery_challan_weight_dtl.patchValue({ own_uom: "0", party_uom: "0" });
     for (let i = 0; i < this.delivery_challan_Party_Dtls.length; i++) {
       this.delivery_challan_Party_Dtls.at(i).patchValue({ p_code: "0" });
@@ -570,6 +584,10 @@ export class DeliveryChallanComponent implements OnInit {
         this.delivery_challan_Docs.removeAt(0);
       this.addDocument();
 
+      while (this.delivery_challan_docs_list.length)
+        this.delivery_challan_docs_list.removeAt(0);
+      this.addDocumentlist();
+
       while (this.delivery_challan_Chgs_dyn.length)
         this.delivery_challan_Chgs_dyn.removeAt(0);
       this.addChgs();
@@ -723,6 +741,14 @@ export class DeliveryChallanComponent implements OnInit {
     else {
       console.log("MENU :: ");
       this.loadingAllStatus = true;
+      if (event == "GRN")
+      {
+        this.gatepassShow=true;
+      }
+      else{
+        this.gatepassShow=false;
+        this.userForm.patchValue({gatepass:'NA'});
+      }
     }
   }
 
@@ -917,7 +943,16 @@ export class DeliveryChallanComponent implements OnInit {
   addDocument() {
     this.delivery_challan_Docs.push(this.fb.group({
       doc_name: '',
-    }))
+      doc_pdf: '',
+      doc_file_name: ''
+    }));
+  }
+  addDocumentlist() {
+    this.delivery_challan_docs_list.push(this.fb.group({
+      doc_name: '',
+      doc_pdf: '',
+      doc_file_name: ''
+    }));
   }
 
   deleteDocument(index) {
@@ -927,6 +962,10 @@ export class DeliveryChallanComponent implements OnInit {
       this.delivery_challan_Docs.reset();
     }
   }
+  deleteDocumentlist(index) {
+    this.delivery_challan_docs_list.removeAt(index);
+  }
+
 
   getTransName(bp_code: String) {
     if (bp_code) {
@@ -2173,6 +2212,10 @@ export class DeliveryChallanComponent implements OnInit {
         alert("Please Select Price Term");
         this.status = true;
       }
+      else if (this.userForm.get("ref_type").value == 'GRN' && (this.userForm.get("gatepass").value == "" || this.userForm.get("gatepass").value == null || this.userForm.get("gatepass").value == 0)) {
+        alert("Please Enter Gatepass No.");
+        this.status = true;
+      }
       /* else if(this.delivery_challan_Trans_Info.get("trans_borne_by").value == 'FOR' && (this.delivery_challan_Trans_Info.get("transporter_name").value == null || this.delivery_challan_Trans_Info.get("transporter_name").value == '' || this.delivery_challan_Trans_Info.get("transporter_name").value == 0))
       {
           alert("Please Select Transporter Name In Transport Charges Tab")
@@ -2277,7 +2320,22 @@ export class DeliveryChallanComponent implements OnInit {
             { */
             if (this.Id > 0) {
               if (this.userForm.get("jobwork").value == true) {
-                this.Service.updateDlvChallan(this.userForm.getRawValue(), this.Id).subscribe(data => {
+                const InputData = this.userForm.getRawValue();
+                console.log("input: " + JSON.stringify(InputData));
+                const frmData = new FormData();
+                console.log(" length " + this.myFiles.length);
+                for (let i = 0; i < this.myFiles.length; i++) {
+
+                  frmData.append("files", this.myFiles[i]);
+                  console.log();
+                  if (i == 0) {
+                    console.log(i + ",files: " + this.myFiles[i])
+                  }
+                }
+                frmData.append("Input", JSON.stringify(InputData));
+                console.log("Form data update: " + frmData);
+                //this.Service.updateDlvChallan(this.userForm.getRawValue(), this.Id).subscribe(data => {
+                this.Service.updateDlvChallan(frmData).subscribe(data => {
 
                   alert("Delivery-Challan Updated successfully.");
                   this.userForm.reset();
@@ -2292,8 +2350,23 @@ export class DeliveryChallanComponent implements OnInit {
                   if (data["status"] == "Yes") {
 
                     if (this.Transportchargeschange == true) {
-                      this.Service.updateDlvChallan(this.userForm.getRawValue(), this.Id).subscribe(data => {
+                    
+                      const InputData = this.userForm.getRawValue();
+                      console.log("input: " + JSON.stringify(InputData));
+                      const frmData = new FormData();
+                      console.log(" length " + this.myFiles.length);
+                      for (let i = 0; i < this.myFiles.length; i++) {
 
+                        frmData.append("files", this.myFiles[i]);
+                        console.log();
+                        if (i == 0) {
+                          console.log(i + ",files: " + this.myFiles[i])
+                        }
+                      }
+                      frmData.append("Input", JSON.stringify(InputData));
+                      console.log("Form data update: " + frmData);
+                      //this.Service.updateDlvChallan(this.userForm.getRawValue(), this.Id).subscribe(data => {
+                        this.Service.updateDlvChallan(frmData).subscribe(data => {
                         alert("Delivery-Challan Updated successfully.");
                         this.userForm.reset();
                         this.ngOnInit();
@@ -2331,7 +2404,22 @@ export class DeliveryChallanComponent implements OnInit {
             else {
 
               if (this.userForm.get("jobwork").value == true) {
-                this.Service.createDeliveryChallan(this.userForm.getRawValue()).subscribe(data => {
+                        const InputData = this.userForm.getRawValue();
+                        console.log("input: " + JSON.stringify(InputData));
+                        const frmData = new FormData();
+                        console.log(" length " + this.myFiles.length);
+                        for (let i = 0; i < this.myFiles.length; i++) {
+
+                          frmData.append("files", this.myFiles[i]);
+                          console.log();
+                          if (i == 0) {
+                            console.log(i + ",files: " + this.myFiles[i])
+                          }
+                        }
+                        frmData.append("Input", JSON.stringify(InputData));
+                        this.status = false;
+                        this.Service.createDeliveryChallan(frmData).subscribe(data => {
+                //this.Service.createDeliveryChallan(this.userForm.getRawValue()).subscribe(data => {
 
                   alert("New Delivery-Challan created successfully.");
                   this.userForm.reset();
@@ -2344,7 +2432,24 @@ export class DeliveryChallanComponent implements OnInit {
               else {
                 this.DropDownListService.checkcashchallan(this.userForm.get("challan_date").value, this.userForm.get("grand_total").value, 0, this.userForm.get("party").value, this.userForm.get("referance_id").value).subscribe(data => {
                   if (data["status"] == "Yes") {
-                    this.Service.createDeliveryChallan(this.userForm.getRawValue()).subscribe(data => {
+
+                    const InputData = this.userForm.getRawValue();
+                        console.log("input: " + JSON.stringify(InputData));
+                        const frmData = new FormData();
+                        console.log(" length " + this.myFiles.length);
+                        for (let i = 0; i < this.myFiles.length; i++) {
+
+                          frmData.append("files", this.myFiles[i]);
+                          console.log();
+                          if (i == 0) {
+                            console.log(i + ",files: " + this.myFiles[i])
+                          }
+                        }
+                        frmData.append("Input", JSON.stringify(InputData));
+                        this.status = false;
+                        this.Service.createDeliveryChallan(frmData).subscribe(data => {
+
+                   // this.Service.createDeliveryChallan(this.userForm.getRawValue()).subscribe(data => {
 
                       alert("New Delivery-Challan created successfully.");
                       this.userForm.reset();
@@ -2380,6 +2485,26 @@ export class DeliveryChallanComponent implements OnInit {
     }
   }
 
+  onFileSelected(e, i, tm) {
+
+    this.myFiles.push(e.target.files[0]);//abc
+
+    for (let v = 0; v < this.myFiles.length; v++)//v hoache files array length
+    {
+
+      if (this.myFiles.length > tm.length) {
+        if (v == i)//if size greater than 1
+        {
+
+          this.myFiles[i] = e.target.files[0];
+
+          this.myFiles.pop();
+
+        }
+      }
+    }
+  }
+
   onUpdate(id: any, delivery_cid: string, action) {
     this.deliverychallansave = true;
     this.userForm.patchValue({ id: id });
@@ -2394,6 +2519,7 @@ export class DeliveryChallanComponent implements OnInit {
     this.selectedTdsacc = [];
     this.selectedChgCode = [];
     this.DisableTransportChgs = true;
+    this.gatepassShow=false;
     if (action == 'view') {
       this.action = 'view';
       this.deliverychallansave = false;
@@ -2434,9 +2560,15 @@ export class DeliveryChallanComponent implements OnInit {
         cust_ref_doc_no: deliveryChallanData["cust_ref_doc_no"], date2: deliveryChallanData["date2"], remark: deliveryChallanData["remark"],
         confirmed_by: deliveryChallanData["confirmed_by"], approval: deliveryChallanData["approval"], reason: deliveryChallanData["reason"],
         ref_type: deliveryChallanData["ref_type"], party: deliveryChallanData["party"], grand_total: deliveryChallanData["grand_total"], business_unit: deliveryChallanData["business_unit"],
-        delivery_cid: deliveryChallanData["delivery_cid"], company_id: deliveryChallanData["company_id"], fin_year: deliveryChallanData["fin_year"], referance_id: deliveryChallanData["referance_id"], jobwork: deliveryChallanData["jobwork"]
+        delivery_cid: deliveryChallanData["delivery_cid"], company_id: deliveryChallanData["company_id"], fin_year: deliveryChallanData["fin_year"], referance_id: deliveryChallanData["referance_id"], 
+        jobwork: deliveryChallanData["jobwork"],gatepass:deliveryChallanData["gatepass"]
       });
       // console.log("order Details: "+  JSON.stringify(deliveryChallanData)); 
+      
+      if (deliveryChallanData["ref_type"] == "GRN")
+        {
+          this.gatepassShow=true;
+        }else{this.gatepassShow=false;}
 
       this.onChangeBuUnit(deliveryChallanData["business_unit"]);
       this.onChangeParty(deliveryChallanData["party"]);
@@ -2576,6 +2708,10 @@ export class DeliveryChallanComponent implements OnInit {
       for (let data1 of docData)
         this.addDocument();
       this.delivery_challan_Docs.patchValue(docData);
+
+      for (let data2 of docData)
+        this.addDocumentlist();
+      this.delivery_challan_docs_list.patchValue(docData);
       //console.log("docData: "+JSON.stringify(docData));
 
       //console.log("termsconData: "+  JSON.stringify(weightData));
@@ -2648,6 +2784,73 @@ export class DeliveryChallanComponent implements OnInit {
       this.status = true; console.log("ERROR get: " + JSON.stringify(error)); alert("something error is occured please try again....");
       this.ngOnInit()
     });
+  }
+
+  file_name: string;
+  viewpdf(i, tm) {
+
+    var values = tm[i].controls.doc_file_name.value
+    //var values=tm[i].controls.doc_pdf.value
+    console.log("values:" + values)
+    //this.file_name=values.substring(35,tm[i].controls.doc_pdf.length);
+    this.file_name = values;
+    // alert(this.file_name);
+    this.DropDownListService.downloadFileSystemDC(this.file_name).subscribe(response => {
+
+      // console.log("backend data"+response);
+      var binaryData = [];
+      binaryData.push(response.data);
+      var url = window.URL.createObjectURL(new Blob(binaryData, { type: "application/*" }));
+      var a = document.createElement('a');
+      document.body.appendChild(a);
+      a.setAttribute('style', 'display: none');
+      a.setAttribute('target', 'blank');
+      a.href = url;
+      a.download = response.filename;
+      a.click();
+      window.URL.revokeObjectURL(url);
+      a.remove();
+
+    }, error => {
+
+      console.log(error);
+    });
+
+  }
+
+  deletepdfwithid(dataid, i) {
+    console.log("dataid " + JSON.stringify(dataid));//here getting id now procede delte process
+    //  alert(JSON.stringify(dataid.id));
+    this.Service.getdeletefileDelvChallan(dataid).subscribe(data => {
+
+      alert("Pdf Has Been Deleted successfully.");
+      //alert(" i " + i);
+      //this.process_master_doc_list.removeAt(i);
+      this.deleteDocumentlist(i);
+
+      // this.loaddocumentlist(this.process_id.value)
+      this.status = true;
+    }, (error) => {
+      this.status = true; console.log("ERROR get: " + JSON.stringify(error)); alert("something error is occured please try again....");
+      this.ngOnInit()
+    });
+  }
+
+  deletepdf(i, tm) {
+    //var values=tm[i].controls.doc_pdf.value
+    var values = tm[i].controls.doc_file_name.value
+    this.file_name = values;
+    //this.file_name=values.substring(35,tm[i].controls.doc_pdf.length);
+    this.DropDownListService.getdocumentListwithfileDelvChallan(this.file_name)
+      .subscribe(data => {
+
+        console.log("data " + JSON.stringify(data[0].id));
+        this.deletepdfwithid(data[0].id, i);
+
+        this.status = true;
+      }, (error) => { this.status = true; console.log("ERROR get: " + JSON.stringify(error)); });
+
+    // alert(JSON.stringify(this.process_no.value)); 
   }
 
 
@@ -2753,6 +2956,9 @@ export class DeliveryChallanComponent implements OnInit {
       for (let data1 of docData)
         this.addDocument();
       this.delivery_challan_Docs.patchValue(docData);
+      for (let data2 of docData)
+        this.addDocumentlist();
+      this.delivery_challan_docs_list.patchValue(docData);
       //console.log("docData: "+JSON.stringify(docData));
 
       //console.log("termsconData: "+  JSON.stringify(weightData));
