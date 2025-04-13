@@ -35,8 +35,8 @@
     port_value:any;
     vehicle_ref_name:any;
     // company_id: any; 
-   // customer:true;
-   tarebags:any;
+    // customer:true;
+    tarebags:any;
    firstbags:any;
    nopartyname:any;
    noitemname:any;
@@ -44,7 +44,10 @@
    tare_weight_bulker:any;
    net_weight_bulker:any;
    weight_bridge_location:any;
-
+   outside_weighment:any;
+   outside_weighmentno:any;
+   outside_netwt:any;
+   outer_date:any;
 
     wm_unload_wgmnt_dtls:Wm_unload_wgmnt_dtls[];
     weighment_doc:weighment_doc[];

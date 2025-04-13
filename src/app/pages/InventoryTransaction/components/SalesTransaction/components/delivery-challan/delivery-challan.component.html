@@ -136,6 +136,13 @@
               </div>
             </div>
 
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="gatepassShow">
+              <div class="form-group">
+                <mat-label>Gate Pass<span class="red">*</span></mat-label>
+                <input type="text" class="form-control" formControlName="gatepass">
+              </div>
+            </div>
+
             <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
               <div class="form-group  chk_tp_pad">
                 <mat-checkbox (change)="onChangeBrokerRequired($event)" [(ngModel)]="model.bro_info_req" formControlName="bro_info_req">Broker Info. Required</mat-checkbox>
@@ -889,7 +896,7 @@
           </mat-tab> 
 
   <!-- --------------------DOCUMENT ATTACHMENT--------------------------------------- -->
-          <mat-tab label="Document Attachment">
+          <!-- <mat-tab label="Document Attachment">
             <div class="col-lg-8 col-md-8 col-sm-6 col-12">
               <div class="dyn_table_conent" style="float:left;">
 
@@ -922,6 +929,76 @@
                 </div>
               </fieldset>
             </div>     
+          </mat-tab> -->
+          <mat-tab label="Document Attachment">
+            <div class="col-lg-8 col-md-8 col-sm-6 col-12">
+              <div class="dyn_table_conent" style="float:left;">
+                <div class="dyn_table_header">
+                  <label class="label_col">
+                    <h3>Action</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Document Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="wdt_220">Document Upload</h3>
+                  </label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="delivery_challan_Docs">
+                  <div class="dyn_table" *ngFor="let item of delivery_challan_Docs.controls; let pointIndex=index"
+                    [formGroupName]="pointIndex">
+                    <div class="label_col"><i class="fa fa-trash form-control action"
+                        (click)="deleteDocument(pointIndex)"></i></div>
+                    <div class="label_col"><input class="form-control" formControlName="doc_name" type="text" /></div>
+                    <!-- <div class="label_col"><input class="form-control wdt_215" type="file" /></div> -->
+                    <div class="label_col"><input class="form-control  wdt_220_s"
+                        (change)="onFileSelected($event,pointIndex,delivery_challan_Docs.controls)" #myFileInput
+                        type="file" /></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="btm_btn_content" *ngIf="action == 'update'">
+                <button type="button" class="btn btn-success" (click)="addDocument(pointIndex)">Add </button>
+              </div>
+            </div>
+            <div class="col-lg-4 col-md-4 col-sm-6 col-12">
+              <fieldset>
+                <legend>Document List</legend>
+                <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+
+                  <div class="dyn_table_conent">
+                    <div class="dyn_table_header">
+
+                      <label class="label_col">
+                        <h3 class="wdt_215">Document Name</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3> Download</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3> Action</h3>
+                      </label>
+                    </div>
+                    <div class="dyn_table_data_cont" formArrayName="delivery_challan_docs_list">
+                      <div class="dyn_table"
+                        *ngFor="let item of delivery_challan_Docs.controls; let pointIndex=index"
+                        [formGroupName]="pointIndex">
+
+                        <div class="label_col"><input formControlName="doc_name" class="form-control wdt_215 "
+                            type="text" /></div>
+                        <div class="label_col"><button type="button" class="fa fa-download "
+                            (click)="viewpdf(pointIndex,delivery_challan_docs_list.controls)">Download </button></div>
+                        <div class="label_col"><i class="fa fa-trash form-control action wdt_215"
+                            (click)="deletepdf(pointIndex,delivery_challan_docs_list.controls)"></i></div>
+
+
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </fieldset>
+            </div>
           </mat-tab>
 
           <!-- -----------------------APPROVAL-------------------------------------------------- -->

@@ -190,6 +190,11 @@
                           </td>
                         </tr>
 
+                        <tr *ngIf="gatepassShow">
+                          <td> <span style="font-size: small;"><b>Gate Pass</b></span><br>
+                            <span style="font-size: small;">{{gatepass}}</span>
+                          </td>
+                        </tr>
 
                         <tr>
                           <td> <span style="font-size: small;"><b>Other References</b></span><br>
@@ -458,8 +463,9 @@
                               <br style="font-size: small;"><b>UPI ID : MAB.037133004110729@AXISBANK</b><br />
                             </div>
                           </td>
-                          <td colspan="2" style="width:50%; text-align: center;padding:10px;font-size: 12px">For {{company_name}}<br />&nbsp;<br />&nbsp;<br />&nbsp;<br />&nbsp;
-
+                          <td colspan="2" style="width:50%; text-align: center;padding:10px;font-size: 12px">For {{company_name}}<br />
+                            <img src="assets/images/ankit_stamp.jpg" height="100">
+                            <br>
                             Authorised Signatory
                           </td>
                         </tr>

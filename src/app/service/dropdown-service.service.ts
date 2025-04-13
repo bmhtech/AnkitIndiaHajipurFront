@@ -2176,7 +2176,7 @@ export class DropdownServiceService {
 
 
   getdocumentListwithfileSalesInvoice(doc_pdf): Observable<any> {
-    console.log("doc_pdf" + doc_pdf);
+   // console.log("doc_pdf" + doc_pdf);
     return this.httpClient.get<any>(this.url + 'getdocumentListwithfileSalesInvoice/' + doc_pdf).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
   }
 
@@ -2185,7 +2185,11 @@ export class DropdownServiceService {
     return this.httpClient.get<any>(this.url + 'getdocumentListwithfile/' + doc_pdf).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
   }
 
-
+  getdocumentListwithfileDelvChallan(doc_pdf): Observable<any> {
+   // console.log("doc_pdf" + doc_pdf);
+    return this.httpClient.get<any>(this.url + 'getdocumentListwithfileDelvChallan/' + doc_pdf).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
+  }
+  
 
 
   downloadFileSystem(filename: string): Observable<any> {
@@ -2197,6 +2201,17 @@ export class DropdownServiceService {
       };
     }));
   }
+
+  downloadFileSystemDC(filename: string): Observable<any> {
+    console.log("hello");
+    return this.httpClient.get(this.url + 'file/downloadDC/' + filename, { responseType: 'blob' }).pipe(map((response) => {
+      return {
+        filename: filename,
+        data: response
+      };
+    }));
+  }
+
   //@GetMapping("file/download/{fileName:.+}")
   downloadFileSystemForWeighment(filename: string, pagename): Observable<any> {
     console.log("hello");
@@ -6383,6 +6398,10 @@ export class DropdownServiceService {
   
   getOtherWgFirstDataWtWgtFor(location): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getOtherWgFirstDataWtWgtFor/'+location).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getGatepassByChallan(invoiceid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getGatepassByChallan/'+invoiceid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
 }

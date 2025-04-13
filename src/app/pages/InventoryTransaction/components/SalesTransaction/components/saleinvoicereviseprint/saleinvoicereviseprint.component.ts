@@ -98,6 +98,8 @@ export class SaleinvoicereviseprintComponent implements OnInit {
   gstShow: boolean = true;
   shipname: any;
   partyGroup: any;
+  gatepassShow:boolean=false;
+  gatepass:any;
  
   exportAsConfig: ExportAsConfig = {
     type: 'docx', // the type you want to download
@@ -152,8 +154,9 @@ export class SaleinvoicereviseprintComponent implements OnInit {
       this.Service.getInvTaxSum(this.invoiceid),
       this.DropDownListService.getSalesInvPayDtls(this.invoiceid),
       this.DropDownListService.getCompanyDetails(localStorage.getItem("company_name")),
-      this.DropDownListService.getCompanyBussinessUnitDetails(localStorage.getItem("company_name"),this.business_unit)
-    ).subscribe(([Details, Itemdata, words, taxsum, paymentdtls,compdetails,companystate]) => {
+      this.DropDownListService.getCompanyBussinessUnitDetails(localStorage.getItem("company_name"),this.business_unit),
+      this.DropDownListService.getGatepassByChallan(this.invoiceid)
+    ).subscribe(([Details, Itemdata, words, taxsum, paymentdtls,compdetails,companystate,gatepassData]) => {
       console.log("Details:" + JSON.stringify(Details));
       this.cgst = Number(taxsum[0]['tax_rate']) / 2
       this.sgst = Number(taxsum[0]['tax_rate']) / 2
@@ -181,6 +184,17 @@ export class SaleinvoicereviseprintComponent implements OnInit {
         this.gststatno = true;
       }*/
       //console.log("mobile:"+Details["mobile"].length);
+       
+       // console.log("gatepassData print:"+JSON.stringify(gatepassData));
+       if(gatepassData.ref_type==='GRN')
+       {
+        this.gatepassShow=true;
+        this.gatepass=gatepassData.gatepass;
+       }
+       else{
+        this.gatepassShow=false;
+        this.gatepass="";
+       }
 
       if (paymentdtls["payment_term"] == 'APT00001') {
         this.paymentterm = paymentdtls["payment_term"];

@@ -23,6 +23,7 @@
         salesorderno:any; 
         salesorderdate:any;
         jobwork:any;
+        gatepass:any;
         
         delivery_challan_Item_Dtls: delivery_challan_Item_Dtls[];
         delivery_challan_Trans_Info:delivery_challan_Trans_Info;
@@ -38,6 +39,8 @@
     export class delivery_challan_Docs
     {
         doc_name:any;
+        doc_pdf:any;
+        doc_file_name:any;
     }
 
     export class delivery_challan_weight_dtl
