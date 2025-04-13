@@ -147,6 +147,7 @@
                   </div>
 
                   
+                  
                 </div>
 
                 <div class="ht_20"></div>
@@ -157,6 +158,39 @@
                       <input [(ngModel)]="model.ref_doc_date" formControlName="ref_doc_date" type="date" class="form-control">
                     </div>
                   </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+                    <div class="form-group">
+                       <mat-label>Outside Weighment<span class="red">*</span></mat-label>
+                      <mat-select type="text" formControlName="outside_weighment" class="form-control" (selectionChange)='onChangeOutsideWeighment()'>
+                        <mat-option value="0">-Select-</mat-option>
+                        <mat-option value="No">No</mat-option>
+                        <mat-option value="Yes">Yes</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12" *ngIf="outsideShow">
+                    <div class="form-group">
+                      <mat-label>Outside Weighment No</mat-label>
+                      <input formControlName="outside_weighmentno" type="text" class="form-control">
+                    </div>
+                  </div>
+
+                  <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="outsideShow">
+                    <div class="form-group">
+                      <mat-label>Outside Weighment Date</mat-label>
+                      <input type="date" class="form-control" [(ngModel)]="model.outer_date" formControlName="outer_date">
+                    </div>
+                  </div>
+                  
+                  <div class="col-lg-3 col-md-3 col-sm-6 col-12" *ngIf="outsideShow">
+                    <div class="form-group">
+                      <mat-label>Outside Weighment Net Wt.</mat-label>
+                      <input formControlName="outside_netwt" type="number" class="form-control" (focusout)="getNetQtyCheck()">
+                    </div>
+                  </div>
+
                   <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-12">
                     <div class="form-group">
                       <mat-label>Customer</mat-label>

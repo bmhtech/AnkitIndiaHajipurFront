@@ -77,6 +77,8 @@ export class SaleinvoicejobworkprintComponent implements OnInit {
   public sactax:FormGroup;
   sacCode: any = [];
   item_sacwise_taxsumm1:any=[];
+  gatepassShow:boolean=false;
+  gatepass:any;
   
 
   exportAsConfig: ExportAsConfig = {
@@ -131,8 +133,9 @@ export class SaleinvoicejobworkprintComponent implements OnInit {
       this.DropDownListService.getnumtowordsaleinvoice(this.invoiceid),
       this.DropDownListService.getSalesInvPayDtls(this.invoiceid),
       this.DropDownListService.getCompanyDetails(localStorage.getItem("company_name")),
-      this.DropDownListService.getCompanyBussinessUnitDetails(localStorage.getItem("company_name"),this.business_unit)
-      ).subscribe(([jobdata,jobitem,jobprice,words,paymentdtls,compdetails,companystate])=>
+      this.DropDownListService.getCompanyBussinessUnitDetails(localStorage.getItem("company_name"),this.business_unit),
+      this.DropDownListService.getGatepassByChallan(this.invoiceid)
+      ).subscribe(([jobdata,jobitem,jobprice,words,paymentdtls,compdetails,companystate,gatepassData])=>
         {
        // console.log("compdetails::"+JSON.stringify(compdetails))
        // console.log("companystate::"+JSON.stringify(companystate))
@@ -151,6 +154,17 @@ export class SaleinvoicejobworkprintComponent implements OnInit {
         this.phone_no=companystate["work_phoneno"];
         this.fssai_no=companystate["fssai_no"];
         //console.log("comp state:"+companystate["state_name"])
+
+        if(gatepassData.ref_type==='GRN')
+          {
+           this.gatepassShow=true;
+           this.gatepass=gatepassData.gatepass;
+          }
+        else{
+          this.gatepassShow=false;
+          this.gatepass="";
+        }
+
         if(jobdata["state"] ==this.company_state)
         {
           this.gststat=true;

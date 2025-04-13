@@ -74,6 +74,10 @@ export class UnloadWeighmentComponent implements OnInit {
   grossstauts: boolean = true;
   tarestatus: boolean = true;
   bagscheck_2nd: boolean = true;
+
+  outernostatus: boolean = true;
+  outernetstatus: boolean = true;
+
   reference_name: any;
 
   digital_weightmodel: any;
@@ -107,6 +111,8 @@ export class UnloadWeighmentComponent implements OnInit {
   advice1: any = '';
   bulksupplyshow: boolean = false;
   bridge_location:any;
+  outsideShow: boolean = false;
+  outside:any;
 
   //end
   constructor(public fb: FormBuilder, private Service: Master,
@@ -150,6 +156,10 @@ export class UnloadWeighmentComponent implements OnInit {
       tare_weight_bulker: [''],
       net_weight_bulker: [''],
       weight_bridge_location:[''],
+      outside_weighment:[''],
+      outside_weighmentno:[''],
+      outside_netwt:[''],
+      outer_date:[''],
 
       wm_unload_wgmnt_dtls: this.fb.array([this.fb.group({
         sl_no: this.party_sl_no,
@@ -227,6 +237,10 @@ export class UnloadWeighmentComponent implements OnInit {
   get weight_bridge_location() { return this.userForm.get("weight_bridge_location") as FormControl }
   get tare_weight_bulker() { return this.userForm.get("tare_weight_bulker") as FormControl }
   get net_weight_bulker() { return this.userForm.get("net_weight_bulker") as FormControl }
+  get outside_weighment() { return this.userForm.get("outside_weighment") as FormControl }
+  get outside_weighmentno() { return this.userForm.get("outside_weighmentno") as FormControl }
+  get outside_netwt() { return this.userForm.get("outside_netwt") as FormControl }
+  get outer_date() { return this.userForm.get("outer_date") as FormControl }
 
   get weighment_doc() { return this.userForm.get('weighment_doc') as FormArray; }
 
@@ -250,6 +264,7 @@ export class UnloadWeighmentComponent implements OnInit {
     this.loading_weight_tolerance = false;
     this.remarkscheck = false;
     this.bulksupplyshow = false;
+    this.outsideShow=false;
 
     let accessdata = JSON.stringify(JSON.parse(localStorage.getItem("useraccessname")));
 
@@ -307,9 +322,11 @@ export class UnloadWeighmentComponent implements OnInit {
     this.action = 'update';
     this.userForm.patchValue({
       gw_unit: "0", tw_unit: "0", nw_unit: "0", gross_weight: 0,
-      tare_weight: 0, net_weight: 0,weight_bridge_location:'Weight Bridge 2'
+      tare_weight: 0, net_weight: 0,weight_bridge_location:'Weight Bridge 2',
+      outside_weighment:'No',outside_weighmentno:'NA',outside_netwt:0.00,outer_date:''
     });
     this.bridge_location='Weight Bridge 2';
+    this.outside="No";
     let finyear = localStorage.getItem("financial_year");
     forkJoin(
       //this.DropDownListService.getWeighmentDataList(this.currentDate,finyear) ,
@@ -378,6 +395,34 @@ export class UnloadWeighmentComponent implements OnInit {
     });
   }
 
+  onChangeOutsideWeighment()
+  {
+    this.outside=this.userForm.get("outside_weighment").value;
+    if(this.outside==='Yes')
+    {
+      this.outsideShow=true;
+    }
+    else{
+      this.outsideShow=false;
+      this.userForm.patchValue({outside_weighmentno:'NA',outside_netwt:0.00,outer_date:''})
+    }
+  }
+
+  getNetQtyCheck()
+  {
+    this.outside=this.userForm.get("outside_weighment").value;
+    let wei_net=this.userForm.get("net_weight").value;
+    let out_net=this.userForm.get("outside_netwt").value;
+    console.log(wei_net,"/net check/",out_net)
+    if(this.outside =='Yes' && out_net !=wei_net)
+    {
+      alert("Kata Net Wt and Outside Net Wt Should be Same,Please Check it.");
+      this.userForm.patchValue({outside_netwt:0.00});
+      this.status=true;
+    }
+    else{this.status=true;}
+
+  }
   onChangeWhgmtDate(wgmtDate) {
     this.userForm.patchValue({ wgment_no: '' });
     this.currentDate = wgmtDate.target.value;
@@ -1400,8 +1445,6 @@ export class UnloadWeighmentComponent implements OnInit {
       this.status = true;
 
     }
-
-
     else {
 
 
@@ -1412,6 +1455,8 @@ export class UnloadWeighmentComponent implements OnInit {
 
             this.tarestatus = true;
             this.bagscheck_2nd = true;
+            this.outernostatus = true;
+            this.outernetstatus =true;
 
             this.userForm.patchValue({ digital_weight1: '0.000' });
             if (this.userForm.get("gross_weight").value == 0 || this.userForm.get("gross_weight").value == '' || this.userForm.get("gross_weight").value == null) {
@@ -1451,10 +1496,26 @@ export class UnloadWeighmentComponent implements OnInit {
             } else {
               this.bagscheck_2nd = true;
             }
+           
+            if (this.userForm.get("outside_weighment").value === 'Yes' && (this.userForm.get("outside_weighmentno").value == 0 || this.userForm.get("outside_weighmentno").value == 'NA' || this.userForm.get("outside_weighmentno").value == '' || this.userForm.get("outside_weighmentno").value == null)) {
+              alert("Please Enter Outside Weighment No.");
+              this.status = true;
+              this.outernostatus = false;
+            } else {
+              this.outernostatus = true;
+            }
+
+            if (this.userForm.get("outside_weighment").value === 'Yes' && (this.userForm.get("outside_netwt").value == 0 || this.userForm.get("outside_netwt").value == '' || this.userForm.get("outside_netwt").value == null)) {
+              alert("Please Enter Outside Weighment Net Weight.");
+              this.status = true;
+              this.outernetstatus = false;
+            } else {
+              this.outernetstatus = true;
+            }
 
           }
 
-          if (this.tarestatus == true && this.grossstauts == true && this.bagscheck_2nd == true) {
+          if (this.tarestatus == true && this.grossstauts == true && this.bagscheck_2nd == true && this.outernostatus ==true && this.outernetstatus == true) {
 
             if (this.userForm.get("weight2").value == "weight2") {
               this.userForm.patchValue({ digital_weight: this.userForm.get("digital_weight_backup").value });
@@ -1520,6 +1581,8 @@ export class UnloadWeighmentComponent implements OnInit {
             //   console.log("if 2");//first time weighment
             this.grossstauts = true;
             this.bagscheck_2nd = true;
+            this.outernostatus ==true;
+            this.outernetstatus == true;
 
             this.userForm.patchValue({ digital_weight1: '0.000' });
             //   console.log("tare wt::"+this.userForm.get("tare_weight").value) 
@@ -1532,7 +1595,7 @@ export class UnloadWeighmentComponent implements OnInit {
             else {
               this.tarestatus = true;
             }
-            if (this.tarestatus == true && this.grossstauts == true && this.bagscheck_2nd == true) {
+            if (this.tarestatus == true && this.grossstauts == true && this.bagscheck_2nd == true  && this.outernostatus ==true && this.outernetstatus == true) {
               this.status = true;
 
 
@@ -1602,6 +1665,21 @@ export class UnloadWeighmentComponent implements OnInit {
               this.bagscheck_2nd = true;
             }
 
+            if (this.userForm.get("outside_weighment").value === 'Yes' && (this.userForm.get("outside_weighmentno").value == 0 || this.userForm.get("outside_weighmentno").value == 'NA' || this.userForm.get("outside_weighmentno").value == '' || this.userForm.get("outside_weighmentno").value == null)) {
+              alert("Please Enter Outside Weighment No.");
+              this.status = true;
+              this.outernostatus = false;
+            } else {
+              this.outernostatus = true;
+            }
+
+            if (this.userForm.get("outside_weighment").value === 'Yes' && (this.userForm.get("outside_netwt").value == 0 || this.userForm.get("outside_netwt").value == '' || this.userForm.get("outside_netwt").value == null)) {
+              alert("Please Enter Outside Weighment Net Weight.");
+              this.status = true;
+              this.outernetstatus = false;
+            } else {
+              this.outernetstatus = true;
+            }
             /* let convertionfactor:any;
              let uom=this.userForm.get("gw_unit").value 
 
@@ -1614,7 +1692,7 @@ export class UnloadWeighmentComponent implements OnInit {
              });*/
 
 
-            if (this.tarestatus == true && this.grossstauts == true && this.bagscheck_2nd == true) {
+            if (this.tarestatus == true && this.grossstauts == true && this.bagscheck_2nd == true  && this.outernostatus ==true && this.outernetstatus == true) {
               this.status = true;
 
               // console.log("last" + this.remarkscheck +" / "+ this.userForm.get("remarks").value );
@@ -1859,6 +1937,14 @@ export class UnloadWeighmentComponent implements OnInit {
       console.log("weighmentFor M " +this._weighmentFor)
       console.log("WeighmentFor POPup " +this.weighmentFor)
 
+      if(wgmntData.outside_weighment==='Yes')
+        {
+          this.outsideShow=true;
+        }
+        else{
+          this.outsideShow=false;
+          this.userForm.patchValue({outside_weighmentno:'NA',outside_netwt:0.00,outer_date:''})
+        }
       //console.log("hello here " +JSON.stringify(customerData))
       if (wgmntData.remarks == '' || wgmntData.remarks == null || wgmntData.remarks == 0) { this.loading_weight_tolerance = false; }
       else { this.loading_weight_tolerance = true; }
