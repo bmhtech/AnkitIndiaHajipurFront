@@ -33,6 +33,7 @@ export class SalesDynamicReportViewComponent implements OnInit {
   public userForm16: FormGroup;
   public userForm17: FormGroup;
   public userForm18: FormGroup;
+  public userForm1a: FormGroup;
 
   status = false;
   reportnamelists: any = [];
@@ -61,6 +62,8 @@ export class SalesDynamicReportViewComponent implements OnInit {
   pendingUnAdviceList: any = [];
   pendingGrnList:any=[];
   pendingChallanList:any=[];
+  WhPeriQCReport: any = [];
+
   pertruck: boolean = true;
 
   totaltruck: number = 0;
@@ -70,6 +73,10 @@ export class SalesDynamicReportViewComponent implements OnInit {
   pendingwt: number = 0;
   totalpackqty: number = 0;
   totalitemqty: number = 0;
+
+  
+  WhPeriQCfromdate:any;
+  WhPeriQCtodate:any;
 
   constructor(public fb: FormBuilder, private DropDownListService: DropdownServiceService, private excelService: ExcelService) {
     this.userForm = fb.group
@@ -201,6 +208,12 @@ export class SalesDynamicReportViewComponent implements OnInit {
         pendingchallantodate: [''],
       });
 
+    this.userForm1a = fb.group(
+      {
+        whperiqcfromdate: [''],
+        whperiqctodate: ['']
+      });
+
   }
   get reportname() { return this.userForm.get("reportname") as FormControl }
   get fromdate() { return this.userForm.get("fromdate") as FormControl }
@@ -272,6 +285,9 @@ export class SalesDynamicReportViewComponent implements OnInit {
   get pendingchallantodate() { return this.userForm18.get("pendingchallantodate") as FormControl };
 
   get mastertype() { return this.userForm15.get("mastertype") as FormControl };
+
+  get whperiqcfromdate() { return this.userForm1a.get("whperiqcfromdate") as FormControl };
+  get whperiqctodate() { return this.userForm1a.get("whperiqctodate") as FormControl };
 
 
   ngOnInit() {
@@ -847,6 +863,35 @@ export class SalesDynamicReportViewComponent implements OnInit {
   exportAsXLSX18(): void {
     let element = document.getElementById('dynamictable18');
     this.excelService.exportAsExcelFile(element, 'Pending Delivery Challan Report From ' + this.userForm18.get("pendingchallanfromdate").value + ' To ' + this.userForm18.get("pendingchallanfromdate").value);
+  }
+
+  searchWhPeriQCReport() {
+    this.WhPeriQCfromdate = this.userForm1a.get("whperiqcfromdate").value;
+    this.WhPeriQCtodate = this.userForm1a.get("whperiqctodate").value;
+
+    this.status = false;
+
+    if (this.WhPeriQCfromdate == null || this.WhPeriQCfromdate == '' || this.WhPeriQCfromdate == 0) {
+      alert("Select From Date ....");
+      this.status = true;
+    }
+    else if (this.WhPeriQCtodate == null || this.WhPeriQCtodate == '' || this.WhPeriQCtodate == 0) {
+      alert("Select To Date ....");
+      this.status = true;
+    }
+    else {
+      this.DropDownListService.getWhPeriQCReport(this.WhPeriQCfromdate,this.WhPeriQCtodate).subscribe(whperiqcdata => {
+        console.log(" Wheat Peri QC:: " + JSON.stringify(whperiqcdata))
+        this.WhPeriQCReport = whperiqcdata;
+        this.status = true;
+      });
+    }
+
+  }
+
+  exportAsXLSX1a(): void {
+    let element = document.getElementById('dynamictable1a');
+    this.excelService.tableToExcel(element, 'Wheat Peri QC Report from '+this.WhPeriQCfromdate+' to '+ this.WhPeriQCtodate);
   }
 
 }
