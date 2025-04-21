@@ -1656,6 +1656,10 @@ export class DropdownServiceService {
     return this.httpClient.get<any>(this.url + 'getSalesOrderDetailsthdeliverchallan/' + deliverychallan).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getSalesOrderTransDtlswtGRN(delivery_id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesOrderTransDtlswtGRN/' + delivery_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
   getsaleorderjobworkprice(chyallanid): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getsaleorderjobworkprice/' + chyallanid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
@@ -6404,4 +6408,17 @@ export class DropdownServiceService {
     return this.httpClient.get<any>(this.url + 'getGatepassByChallan/'+invoiceid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  /* QC REPORTS API STARTS */
+  getWhPeriQCReport(fromdate, todate): Observable<any> {
+    return this.httpClient.get(this.url + 'getWhPeriQCReport/' + fromdate + "/" + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getWhQCReport(fromdate, todate,basedon): Observable<any> {
+    return this.httpClient.get(this.url + 'getWhQCReport/' + fromdate + "/" + todate + "/" + basedon).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  /* QC REPORTS API ENDS */
+
+  getSecondkataSrlnoCamera(bridge_location): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSecondkataSrlnoCamera/' + bridge_location ).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 }

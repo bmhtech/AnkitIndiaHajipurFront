@@ -1,0 +1,30 @@
+main {
+    position: relative;
+    height: 100%;
+}
+
+.close {
+    position: absolute;
+    top: 1.5rem;
+    right: 1.5rem;
+}
+
+.close-btn {
+    background-color: transparent;
+    border: none;
+    border-radius: 5rem;
+    background-color: #80808080;
+    backdrop-filter: blur(5px);
+}
+
+.close-btn i {
+    color: white;
+    transform: scale(1.2);
+    padding: 0.5rem;
+}
+
+img {
+    width:100%;
+    height:100%;
+    object-fit: contain;
+}

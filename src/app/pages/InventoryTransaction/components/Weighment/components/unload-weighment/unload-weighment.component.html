@@ -102,8 +102,8 @@
                         <li><input type="radio" formControlName="weight1" [(ngModel)]="model.weight1" value="weight1"  (change)="connectSerial();" disabled> Weight 1 &nbsp; &nbsp; </li>
                         <li><input type="radio"  formControlName="weight2" [(ngModel)]="model.weight2" value="weight2" (change)="connectSerial()" disabled> Weight 2 </li>
                      
-                              <li><button  (click)="serialWrite('data')" class="btn btn-info" id="fetchport" [disabled]="fetchstatus" >Fetch</button></li>
-                              <li><button  (click)="getvalue()" class="btn btn-primary" id="getport" [disabled]="getstatus" >Get</button></li>                     
+                              <li><button  (click)="serialWrite('data')" class="btn btn-info" id="fetchport" [disabled]="fetchstatus">Fetch</button></li>   <!--  [disabled]="fetchstatus" -->
+                              <li><button  (click)="getvalue()" class="btn btn-primary" id="getport" [disabled]="getstatus">Get</button></li>    <!--  [disabled]="getstatus" -->           
                             
                             </ul>
                     </div>   
@@ -190,6 +190,14 @@
                       <input formControlName="outside_netwt" type="number" class="form-control" (focusout)="getNetQtyCheck()">
                     </div>
                   </div>
+
+                  <div class="panel">
+                    <div class="col-lg-3 col-md-4 col-sm-6 col-12" style="display: flex;"> 
+                      <div *ngFor="let src of images" class="img-container">
+                        <img [src]="src" alt="camera feed" height="100px" (click)="onViewImg(src)">
+                      </div>
+                    </div>
+                  </div>     <!-- Camera Image Show -->   <!--  *ngIf="!getfetchnotactive" -->
 
                   <!-- <div class="col-lg-3 col-md-3 col-sm-6 col-12">
                     <div class="form-group">

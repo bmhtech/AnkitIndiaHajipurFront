@@ -4,6 +4,9 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { forkJoin } from 'rxjs';
 import { DropdownServiceService } from '../../../../../../service/dropdown-service.service';
 import { Master } from '../../../../../../service/master.service';
+import { apiconfig } from '../../../../../../Configuration/ApiConfig';
+import { HttpClient } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
   selector: 'app-weightment-kata1-bill-print',
@@ -55,14 +58,21 @@ export class WeightmentKata1BillPrintComponent implements OnInit {
   purchase1st: boolean = false;
   sale1st: boolean = false;
   weighBridgeLocation: any;
+  images: string[] = [];
+  cameraserial:any;
+  imgURL: string = "";
 
   constructor(private fb: FormBuilder, private Service: Master,
+      private sanitizer: DomSanitizer,
+      private http: HttpClient,
+      private config: apiconfig,
     private DropDownListService: DropdownServiceService,
     private dialogRef: MatDialogRef<WeightmentKata1BillPrintComponent>, @Inject(MAT_DIALOG_DATA) data) { 
     
     this.ID = data["alldata"];
     this.weighment_id = data["weighment_id"];
     this.companyname = data["company_name"];
+    this.imgURL = config.url + "getKataImg/";
     }
 
   ngOnInit() {
@@ -412,7 +422,46 @@ export class WeightmentKata1BillPrintComponent implements OnInit {
         })
         this.weighmentfor = false;
       }
+      this.cameraserial = data12['wgment_id'];
+      this.fetchAndSetImage();
     });
+  }
+
+  fetchAndSetImage(): void {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.images.push(reader.result as string);
+    };
+
+    let imagename1 = this.cameraserial + '_1.jpg';
+    let imagename2 = this.cameraserial + '_2.jpg';
+
+    this.http
+      //.get(this.imgURL+ imagename1, {
+      .get(this.imgURL+this.weighBridgeLocation+"/"+ imagename1, {
+        responseType: 'blob',
+      })
+      .subscribe((img) => {
+        reader.readAsDataURL(img);
+        this.images = [];
+        this.sanitizer.bypassSecurityTrustUrl(
+          this.images[0]
+        );
+        this.http
+          //.get(this.imgURL + imagename2, {
+          .get(this.imgURL+this.weighBridgeLocation+"/"+ imagename2, {
+            responseType: 'blob',
+          })
+          .subscribe((img) => {
+            console.log(img);
+            reader.readAsDataURL(img);
+            this.sanitizer.bypassSecurityTrustUrl(
+              this.images[1]
+            );
+          });
+      });
+
+    return;
   }
 
   datecalculator(date) 

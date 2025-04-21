@@ -1844,6 +1844,7 @@ import { constants } from 'zlib';
       {this.sales_Quotation_Trans_Info.patchValue({charge_code: data.charge_id}) });      
     }
 
+    custGroup:any;
     openDialog()
     {
       const dialogRef = this.dialog.open(SalesEnqCusPopUpComponent);
@@ -1865,16 +1866,18 @@ import { constants } from 'zlib';
           this._customerId = data["cp_Id"];
           this.is_trans_Info = "FOB";
           forkJoin(
+            this.DropDownListService.partynameListById(data["cp_Id"]),
             this.DropDownListService.getTransporterThruCustomer(data["cp_Id"]),
             this.DropDownListService.getCustDelvFromList(data["cp_Id"]),
             this.DropDownListService.custAddDtlsRetriveList(data["cp_Id"],this.company_name),
             this.DropDownListService.custAccountRetriveList(data["cp_Id"],this.company_name)
-          ).subscribe(([transporterList, custDelvData, contactName, custAccData])=>
+          ).subscribe(([custDtls,transporterList, custDelvData, contactName, custAccData])=>
             {
               this.status = true;
               this.addParty();
               this.trans_codes = transporterList;
-              console.log("customerDelvAddList: "+ JSON.stringify(custDelvData)+" cpId: "+data["cpId"])
+              console.log("customerDelvAddList: "+ JSON.stringify(custDelvData)+" cpId: "+data["cpId"]);
+              console.log("custDtls: "+ JSON.stringify(custDtls));
               this.customerDelvAddList = custDelvData;
               this.contNameList[0] = contactName;
               this.selectedPartyName[0] = data["cp_Id"];
@@ -1882,6 +1885,15 @@ import { constants } from 'zlib';
               this.sales_Quotation_Party_Dtls.at(0).patchValue({p_code: data["cp_Id"], tcs_rate: custAccData["tcs_rate"], tcs_applicable: custAccData["tcs_applicable"]});    
 
               this.cashLimit = custAccData["cash_limit"];
+              this.custGroup=custDtls["group_type"];
+              if(this.custGroup=="CG00019"){
+                this.Quotationcheckpoint="Yes";
+                this.userForm.patchValue({quotationcheckpoint: "Yes"});
+              }
+              else{
+                this.Quotationcheckpoint="No";
+                this.userForm.patchValue({quotationcheckpoint: "No"});
+              }
               this.onChangePartyStatic(data["cp_Id"]);
             });
         }
@@ -2247,7 +2259,15 @@ import { constants } from 'zlib';
       else
       {
         this.Userroles=false;
-        this.userForm.patchValue({quotationcheckpoint: "No"});
+        if(this.custGroup=="CG00019"){
+          //this.Quotationcheckpoint="Yes";
+          this.userForm.patchValue({quotationcheckpoint: "Yes"});
+        }
+        else{
+          //this.Quotationcheckpoint="No";
+          this.userForm.patchValue({quotationcheckpoint: "No"});
+        }
+        //this.userForm.patchValue({quotationcheckpoint: "No"});
       }
       if(!this.userForm.valid) 
       {

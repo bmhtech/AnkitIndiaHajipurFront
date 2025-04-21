@@ -10,6 +10,10 @@ import * as fileSaver from 'file-saver';
 import { PageEvent } from '@angular/material';
 import { OtherWeighmentBillPrintComponent } from '../other-weighment-bill-print/other-weighment-bill-print.component';
 import { AddNewVechilePopUpComponent } from '../add-new-vechile-pop-up/add-new-vechile-pop-up.component';
+import { HttpClient } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
+import { apiconfig } from '../../../../../../Configuration/ApiConfig';
+import { ImageViewModalComponent } from '../image-view-modal/image-view-modal.component';
 
 let val: any;
 //var TextDecoderStream;
@@ -89,10 +93,17 @@ export class OtherWeighmentComponent implements OnInit {
   partylist: any = [];
   itemlist: any = [];
   bridge_location:any;
+  
+  cameraserial: string = "";
+  imgURL: string = "";
+  images: string[] = [];
 
 
   //end
   constructor(public fb: FormBuilder, private Service: Master,
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
+    private config: apiconfig,
     private DropDownListService: DropdownServiceService, private dialog: MatDialog) {
     this.userForm = fb.group({
       wgment_no: [''],
@@ -166,6 +177,7 @@ export class OtherWeighmentComponent implements OnInit {
       nopartyname1: ['']
 
     });
+    this.imgURL = config.url + "getKataImg/";
   }
 
   get wgment1_no() { return this.userForm1.get("wgment1_no") as FormControl }
@@ -1007,10 +1019,16 @@ export class OtherWeighmentComponent implements OnInit {
       this.DropDownListService.getCompanyBUMNCList(this.company_name),
       //this.DropDownListService.supplierNamesList(this.company_name),
       //this.Service.getCustomerBussinessPartner()
-      this.DropDownListService.supplierNamesList(this.company_name),
+      //this.DropDownListService.supplierNamesList(this.company_name),
+      this.DropDownListService.supplierNamesNewList(this.company_name),
       this.DropDownListService.newcustomerList(this.company_name),
       this.DropDownListService.getVehiclenoallNew()
     ).subscribe(([wgmntData, wgmntDtls, customUomData, bunitData, supplierData, customerData, vehicleData]) => {
+
+      this.bridge_location = wgmntData['weight_bridge_location'];
+      this.cameraserial = wgmntData['wgment_id'];
+      this.fetchAndSetImage();  //Camera image Show 
+
       this.veh_nos = vehicleData;
       this.customList = customUomData;
       this.businesslists = bunitData;
@@ -1018,7 +1036,7 @@ export class OtherWeighmentComponent implements OnInit {
 
       //console.log("hello here " + JSON.stringify(wgmntData))
 
-      this.DropDownListService.getGetDocuments(wgmntDtls[0].advice).subscribe(docData => {
+      /* this.DropDownListService.getGetDocuments(wgmntDtls[0].advice).subscribe(docData => {
         //      console.log("docdata: "+JSON.stringify(docData))     
         this.addDocument()
         while (this.weighment_doc.length)
@@ -1029,7 +1047,8 @@ export class OtherWeighmentComponent implements OnInit {
           this.addDocumentlist();
         this.weighment_doc_list.patchValue(docData);
         this.status = true;
-      });
+      }); */     // Other Wgt Document not have advice
+
       // this.onChangeVechileNo = wgmntData['wgment_for'];
       // this.onChangeWeighmentFor(wgmntData['wgment_for'])
       this.onChangeParty(wgmntData["nopartyid"]);
@@ -1065,6 +1084,7 @@ export class OtherWeighmentComponent implements OnInit {
         });
         i = i + 1;
       }
+      this.status = true;
     }, (error) => {
       this.status = true; console.log("ERROR get: " + JSON.stringify(error)); alert("something error is occured please try again....");
       this.ngOnInit()
@@ -1116,23 +1136,26 @@ export class OtherWeighmentComponent implements OnInit {
 
   async serialWrite(data: any) {
     //alert("Connection Made sucessfully");
+    this.DropDownListService.getSecondkataSrlnoCamera(this.bridge_location).subscribe(serialno => {   // bridge location to difference between wb1 & wb2
+      console.log("Camera Serial No::"+serialno.sequenceid)
+      this.cameraserial = serialno.sequenceid;   //Camera image Show 
 
-    this.encoder = new TextEncoder();
-    const dataArrayBuffer = this.encoder.encode(data);
+      this.encoder = new TextEncoder();
+      const dataArrayBuffer = this.encoder.encode(data);
 
-    if (this.port && this.port.writable) {
-      const writer = this.port.writable.getWriter();
-      writer.write(dataArrayBuffer);
-      //alert(dataArrayBuffer);
-      writer.releaseLock();
+      if (this.port && this.port.writable) {
+        const writer = this.port.writable.getWriter();
+        writer.write(dataArrayBuffer);
+        //alert(dataArrayBuffer);
+        writer.releaseLock();
 
-      //  (<HTMLInputElement> document.getElementById("getport")).disabled = false;//tuhin changes 29-08-2022
-      // (<HTMLInputElement> document.getElementById("fetchport")).disabled = true;//tuhin changes 29-08-2022
-      //getport
-      this.fetchstatus = true;
-      this.getstatus = false;
-    }
-
+        //  (<HTMLInputElement> document.getElementById("getport")).disabled = false;//tuhin changes 29-08-2022
+        // (<HTMLInputElement> document.getElementById("fetchport")).disabled = true;//tuhin changes 29-08-2022
+        //getport
+        this.fetchstatus = true;
+        this.getstatus = false;
+      }
+    }); //Camera image Show 
   }
   async getReader() {
     //alert("avi");
@@ -1151,8 +1174,8 @@ export class OtherWeighmentComponent implements OnInit {
       if(this.bridge_location==='Weight Bridge 2')
         {
           console.log("Weight Bridge2/2400/7/NONE::",this.bridge_location);
-          //var speed = 1200;//for aayogagro
-           var speed = 2400;
+          //var speed = 1200;   //for aayogagro
+          var speed = 2400;
           //svar speed=1200;
           //await this.port.open({ baudRate: [speed], dataBits: 7, stopBits: 1, parity: 'even' });//for aaagyog
           await this.port.open({ baudRate: [speed],dataBits: 8,stopBits: 1,parity: 'none'});
@@ -1205,6 +1228,9 @@ export class OtherWeighmentComponent implements OnInit {
     //var abc="hello";
     //alert("val  : " +  parseInt(val.substring(2,10)));
     //alert( 'Value Fetched'+parseInt(val.substring(2,10)));
+
+    this.fetchAndSetImage();      //Camera image Show 
+
     this.userForm.patchValue({ port_value: parseInt(val.substring(2, 10)) });
     let checkweight1: any = this.userForm.get("weight1").value as FormControl;
     let checkweight2: any = this.userForm.get("weight2").value as FormControl;
@@ -1642,6 +1668,50 @@ export class OtherWeighmentComponent implements OnInit {
     })
   }
 
+  fetchAndSetImage(): void {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.images.push(reader.result as string);
+    };
 
+    let imagename1 = this.cameraserial + '_1.jpg';
+    let imagename2 = this.cameraserial + '_2.jpg';
+
+    this.http
+      //.get(this.imgURL+ imagename1, {
+      .get(this.imgURL+this.bridge_location+"/"+imagename1, {
+        responseType: 'blob',
+      })
+      .subscribe((img) => {
+        reader.readAsDataURL(img);
+        this.images = [];
+        this.sanitizer.bypassSecurityTrustUrl(
+          this.images[0]
+        );
+        this.http
+          //.get(this.imgURL + imagename2, {
+          .get(this.imgURL+this.bridge_location+"/"+imagename2, {
+            responseType: 'blob',
+          })
+          .subscribe((img) => {
+            console.log(img);
+            reader.readAsDataURL(img);
+            this.sanitizer.bypassSecurityTrustUrl(
+              this.images[1]
+            );
+          });
+      });
+
+    return;
+  }
+
+  onViewImg(src: string) {
+    let dialogRef = this.dialog.open(ImageViewModalComponent, {
+      data: { src },
+      backdropClass: "img-backdrop",
+      panelClass: "img-panel",
+    });
+    dialogRef.afterClosed().subscribe();
+  }
 
 }
