@@ -291,7 +291,7 @@
                     <td style="text-align:right" *ngIf="gststat"><b>{{sgsttotal| number:'1.2-2'}}</b></td>
                     <td style="text-align:right" *ngIf="gststat"></td>
                     <td style="text-align:right" *ngIf="gststat"><b>{{cgsttotal| number:'1.2-2'}}</b></td>
-                    <td style="text-align:right" *ngIf="gstsztatno"></td>
+                    <td style="text-align:right" *ngIf="gststatno"></td>
                     <td style="text-align:right" *ngIf="gststatno"><b>{{igsttotal| number:'1.2-2'}}</b></td>
                     <td style="text-align:right"><b>{{totalamount| number:'1.2-2'}}</b></td>
                   </tr>
@@ -463,11 +463,22 @@
                               <br style="font-size: small;"><b>UPI ID : MAB.037133004110729@AXISBANK</b><br />
                             </div>
                           </td>
-                          <td colspan="2" style="width:50%; text-align: center;padding:10px;font-size: 12px">For {{company_name}}<br />
-                            <img src="assets/images/ankit_stamp.jpg" height="100">
-                            <br>
-                            Authorised Signatory
+                          <td colspan="2" style="width:50%; text-align: center;padding:10px;font-size: 12px" *ngIf ="partyGroup=='CG00019';else elseBlockE">
+                              For {{company_name}}<br/>
+                              &nbsp;<br/>
+                              &nbsp;<br/>
+                              &nbsp;<br/>
+                              &nbsp;
+                              Authorised Signatory
                           </td>
+                          <ng-template #elseBlockE>
+                            <td colspan="2" style="width:50%; text-align: center;padding:10px;font-size: 12px">For {{company_name}}<br />
+                              <img src="assets/images/ankit_stamp.jpg" height="100">
+                              <br>
+                              Authorised Signatory
+                            </td>
+                          </ng-template>
+                          
                         </tr>
                       </table>
                       <p style="font-size: 8px;"><b>*We also accept payment through Debit Card powered by

@@ -2073,3 +2073,88 @@
         </fieldset>
     </form>
 </div>
+
+<!-- PERIPHERAL QC REPORT STARTS -->
+<div>
+    <form [formGroup]="userForm1a">
+      <fieldset>
+        <legend>Wheat Peripheral QC Report</legend>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+          <div class="form-group">
+            <mat-label>From Date<span class="red"> *</span></mat-label>
+            <input type="date" class="form-control" formControlName="whperiqcfromdate">
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+          <div class="form-group">
+            <mat-label>To Date<span class="red"> *</span></mat-label>
+            <input type="date" class="form-control" formControlName="whperiqctodate">
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="searchWhPeriQCReport()">Search</button>
+          </div>
+        </div>
+        <fieldset class="table_container">
+          <div class="col-lg-12" style="float: right;">
+            <div class="form-group">
+              <button mat-raised-button (click)="exportAsXLSX1a()" color="primary">Export To Excel</button>
+
+              <mat-dialog-actions align="center">
+                <button [useExistingCss]="true" printSectionId="print-section1a" mat-button ngxPrint
+                  class="btn btn-info">Print</button>
+              </mat-dialog-actions>
+
+            </div>
+          </div>
+
+          <div class="table_content" id="print-section1a">
+            <table class="table table-bordered" id="dynamictable1a">
+              <thead>
+                <tr class="tr_thead">
+                  <td colspan="12" align="center"><b>ANKIT INDIA LTD. (HAJIPUR)</b></td>
+                </tr>
+                <tr class="tr_thead">
+                  <td colspan="12" align="center"><u>DETAILS OF WHEAT PERIPHERAL QC FROM: {{WhPeriQCfromdate | date:'dd-MM-yyyy'}}
+                      TO: {{WhPeriQCtodate | date:'dd-MM-yyyy'}}</u></td>
+                </tr>
+                <tr class="tr_thead">
+                  <th>UL DATE</th>
+                  <th>QC DATE</th>
+                  <th>VEHICLE</th>
+                  <th>ITEM</th>
+                  <th>MAT. QTY.</th>
+                  <th>MOIS.</th>
+                  <th>HLW</th>
+                  <th>INFES.</th>
+                  <th>ODR.</th>
+                  <th>POTIA</th>
+                  <th>KB</th>
+                  <th>STONE</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let qc of WhPeriQCReport; let pointIndex=index">
+                  <td>{{qc.unload_date}}</td>
+                  <td>{{qc.qc_date}}</td>
+                  <td>{{qc.vehicle}}</td>
+                  <td>{{qc.item}}</td>
+                  <td>{{qc.mat_weight}}</td>
+                  <td>{{qc.MOIS}}</td>
+                  <td>{{qc.HLW}}</td>
+                  <td>{{qc.INFES}}</td>
+                  <td>{{qc.ODOUR}}</td>
+                  <td>{{qc.STONE}}</td>
+                  <td>{{qc.POTIA}}</td>
+                  <td>{{qc.KB}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </fieldset>
+    </form>
+  </div>
+  <!-- PERIPHERAL QC REPORT ENDS -->

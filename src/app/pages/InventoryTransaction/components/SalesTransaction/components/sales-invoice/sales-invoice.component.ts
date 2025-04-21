@@ -2417,7 +2417,14 @@ export class SalesInvoiceComponent implements OnInit {
                   else {
                     this.onday = true;
                   }
-                  this.sales_Invoice_Payment_Dtls.patchValue({ mode_of_payment: loadingtrans["mode_of_payment"], payment_term: loadingtrans["payment_term"], days: loadingtrans["days"] })
+                  console.log("loadingtransPAYMENT : : " + JSON.stringify(loadingtrans))
+                  if(loadingtrans["payment_term"] == 'APT00001'){
+                    
+                  }
+                  else{
+                    this.sales_Invoice_Payment_Dtls.patchValue({ mode_of_payment: loadingtrans["mode_of_payment"], payment_term: loadingtrans["payment_term"], days: loadingtrans["days"] })
+                  }
+                  //this.sales_Invoice_Payment_Dtls.patchValue({ mode_of_payment: loadingtrans["mode_of_payment"], payment_term: loadingtrans["payment_term"], days: loadingtrans["days"] })
 
                   this.sales_Invoice_Shipment_Dtls.patchValue({ paytoaddr: shipmentdata.pay_addr, paytodtls: shipmentdata.pay_details, shipaddr: shipmentdata.ship_addr, shipdtls: shipmentdata.ship_details });
 
@@ -2833,7 +2840,7 @@ export class SalesInvoiceComponent implements OnInit {
                   this.DropDownListService.getLoadingAdviceTransDtls(data["delivery_cid"]),
                   // ).subscribe(([challanData, shipmentdata, transData, partyData, brokerData, docsData, PartyTcs]) =>
                 ).subscribe(([challanData, shipmentdata, transData, brokerData, docsData, PartyTcs, chargesData, appcharges, saleorderdetails, loadingtrans]) => {
-
+                  console.log("challanData:: " + JSON.stringify(challanData));
                   this.userForm.patchValue({
                     salesorderno: challanData["salesorderno"], salesorderdate: challanData["salesorderdate"],
                     refchallanno: challanData["challan_no"], refchallandate: challanData["challan_date"], app_chgs_id: appcharges["app_chgs_id"]
@@ -2848,14 +2855,31 @@ export class SalesInvoiceComponent implements OnInit {
 
                   this.TcsAmt = (Number(PayableAmount * Tcs_rate) / 100).toFixed(2);
                   //this.userForm.patchValue({tcsamt:this.TcsAmt});
-                  console.log("shipmentdata" + JSON.stringify(shipmentdata))
+                  console.log("shipmentdata" + JSON.stringify(shipmentdata));
                   if (loadingtrans["payment_term"] == 'APT00001') {
                     this.onday = false;
                   }
                   else {
                     this.onday = true;
                   }
-                  this.sales_Invoice_Payment_Dtls.patchValue({ mode_of_payment: loadingtrans["mode_of_payment"], payment_term: loadingtrans["payment_term"], days: loadingtrans["days"] })
+
+                  console.log("loadingtransPAYMENT : : " + JSON.stringify(loadingtrans)," ::REF_TYPE:: ",challanData["ref_type"]);
+                  if(challanData["ref_type"] == 'GRN'){
+                    this.DropDownListService.getSalesOrderTransDtlswtGRN(data["delivery_cid"]).subscribe(data =>{
+                      console.log("SalesOrderTransDtlswtGRN : : " + JSON.stringify(data));
+                      if (data["payment_term"] == 'APT00001') {
+                        this.onday = false;
+                      }
+                      else {
+                        this.onday = true;
+                      }
+                      this.sales_Invoice_Payment_Dtls.patchValue({ mode_of_payment: data["payment_mode"], payment_term: data["payment_term"], days: data["days"]});
+                    });
+                  }
+                  else{
+                    this.sales_Invoice_Payment_Dtls.patchValue({ mode_of_payment: loadingtrans["mode_of_payment"], payment_term: loadingtrans["payment_term"], days: loadingtrans["days"]});
+                  }
+                  //this.sales_Invoice_Payment_Dtls.patchValue({ mode_of_payment: loadingtrans["mode_of_payment"], payment_term: loadingtrans["payment_term"], days: loadingtrans["days"] })
                   
                   this.sales_Invoice_Shipment_Dtls.patchValue({ paytoaddr: shipmentdata.pay_addr, paytodtls: shipmentdata.pay_details, shipaddr: shipmentdata.ship_addr, shipdtls: shipmentdata.ship_details });
                  /* this.sales_Invoice_Shipment_Dtls.patchValue({ paytoaddr: shipmentdata.pay_addr, paytodtls: shipmentdata.pay_details});

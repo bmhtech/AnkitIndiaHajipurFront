@@ -19,6 +19,10 @@ import { element } from 'protractor';
 import { PageEvent } from '@angular/material';
 import { WeighmentterminatepopupComponent } from '../weighmentterminatepopup/weighmentterminatepopup.component';
 import { WeightmentKata1BillPrintComponent } from '../weightment-kata1-bill-print/weightment-kata1-bill-print.component';
+import { HttpClient } from '@angular/common/http';
+import { DomSanitizer } from '@angular/platform-browser';
+import { apiconfig } from '../../../../../../Configuration/ApiConfig';
+import { ImageViewModalComponent } from '../image-view-modal/image-view-modal.component';
 
 //new measure
 let val: any;
@@ -113,9 +117,15 @@ export class UnloadWeighmentComponent implements OnInit {
   bridge_location:any;
   outsideShow: boolean = false;
   outside:any;
+  cameraserial: string = "";
+  imgURL: string = "";
+  images: string[] = [];
 
   //end
   constructor(public fb: FormBuilder, private Service: Master,
+    private http: HttpClient,
+    private sanitizer: DomSanitizer,
+    private config: apiconfig,
     private DropDownListService: DropdownServiceService, private dialog: MatDialog) {
     this.userForm = fb.group({
       wgment_no: [''],
@@ -192,6 +202,7 @@ export class UnloadWeighmentComponent implements OnInit {
       supplier_name1: ['']
 
     });
+    this.imgURL = config.url + "getKataImg/";
   }
 
   get wgment1_no() { return this.userForm1.get("wgment1_no") as FormControl }
@@ -1929,6 +1940,10 @@ export class UnloadWeighmentComponent implements OnInit {
       this.DropDownListService.newcustomerList(this.company_name)
 
     ).subscribe(([vehicleData, wgmntData, wgmntDtls, customUomData, bunitData, supplierData, customerData]) => {
+      this.bridge_location = wgmntData['weight_bridge_location'];
+      this.cameraserial = wgmntData['wgment_id'];
+      this.fetchAndSetImage();  //Camera image Show 
+
       this._weighmentFor = wgmntData["wgment_for"];
       this.weighmentFor = wgmntData["wgment_for"];
       this.customList = customUomData;
@@ -2040,23 +2055,26 @@ export class UnloadWeighmentComponent implements OnInit {
 
   async serialWrite(data: any) {
     //alert("Connection Made sucessfully");
+    this.DropDownListService.getSecondkataSrlnoCamera(this.bridge_location).subscribe(serialno => {   // bridge location to difference between wb1 & wb2
+      console.log("Camera Serial No::"+serialno.sequenceid)
+      this.cameraserial = serialno.sequenceid;   //Camera image Show 
 
-    this.encoder = new TextEncoder();
-    const dataArrayBuffer = this.encoder.encode(data);
+      this.encoder = new TextEncoder();
+      const dataArrayBuffer = this.encoder.encode(data);
 
-    if (this.port && this.port.writable) {
-      const writer = this.port.writable.getWriter();
-      writer.write(dataArrayBuffer);
-      //alert(dataArrayBuffer);
-      writer.releaseLock();
+      if (this.port && this.port.writable) {
+        const writer = this.port.writable.getWriter();
+        writer.write(dataArrayBuffer);
+        //alert(dataArrayBuffer);
+        writer.releaseLock();
 
-      //  (<HTMLInputElement> document.getElementById("getport")).disabled = false;//tuhin changes 29-08-2022
-      // (<HTMLInputElement> document.getElementById("fetchport")).disabled = true;//tuhin changes 29-08-2022
-      //getport
-      this.fetchstatus = true;
-      this.getstatus = false;
-    }
-
+        //  (<HTMLInputElement> document.getElementById("getport")).disabled = false;//tuhin changes 29-08-2022
+        // (<HTMLInputElement> document.getElementById("fetchport")).disabled = true;//tuhin changes 29-08-2022
+        //getport
+        this.fetchstatus = true;
+        this.getstatus = false;
+      }
+    }); //Camera image Show 
   }
   async getReader() {
     //alert("avi");
@@ -2129,6 +2147,9 @@ export class UnloadWeighmentComponent implements OnInit {
     //var abc="hello";
     //alert("val  : " +  parseInt(val.substring(2,10)));
     //alert( 'Value Fetched'+parseInt(val.substring(2,10)));
+
+    this.fetchAndSetImage();      //Camera image Show 
+
     let tare_wt = val.substring(2, 10);
     this.userForm.patchValue({ port_value: parseInt(tare_wt) });
     let checkweight1: any = this.userForm.get("weight1").value as FormControl;
@@ -2536,7 +2557,7 @@ export class UnloadWeighmentComponent implements OnInit {
     this.status = false;
     this.DropDownListService.searchWeighmentFast("orderno=" + order1_no + "&fromdate=" + fromdate + "&todate=" + todate + "&customer_name1=" + customer_name1 + "&supplier_name1=" + supplier_name1 + "&finyear=" + finyear).subscribe(data => {
       console.log("here data comses " + JSON.stringify(data))
-      console.log("Party  " + data[0]["partyname"])
+      //console.log("Party  " + data[0]["partyname"])
       this.listUnloadWeightment = data;
       this.listUnloadWeightment.forEach(element => {
         let partyid = element["partyname"];
@@ -2594,7 +2615,49 @@ export class UnloadWeighmentComponent implements OnInit {
     });
   }
 
-  
+  fetchAndSetImage(): void {
+    const reader = new FileReader();
+    reader.onload = () => {
+      this.images.push(reader.result as string);
+    };
+
+    let imagename1 = this.cameraserial + '_1.jpg';
+    let imagename2 = this.cameraserial + '_2.jpg';
+
+    this.http
+      //.get(this.imgURL+ imagename1, {
+      .get(this.imgURL+this.bridge_location+"/"+imagename1, {
+        responseType: 'blob',
+      })
+      .subscribe((img) => {
+        reader.readAsDataURL(img);
+        this.images = [];
+        this.sanitizer.bypassSecurityTrustUrl(
+          this.images[0]
+        );
+        this.http
+          //.get(this.imgURL + imagename2, {
+          .get(this.imgURL+this.bridge_location+"/"+imagename2, {
+            responseType: 'blob',
+          })
+          .subscribe((img) => {
+            console.log(img);
+            reader.readAsDataURL(img);
+            this.sanitizer.bypassSecurityTrustUrl(
+              this.images[1]
+            );
+          });
+      });
+
+    return;
+  }
+
+  onViewImg(src: string) {
+    let dialogRef = this.dialog.open(ImageViewModalComponent, {
+      data: { src },
+      backdropClass: "img-backdrop",
+      panelClass: "img-panel",
+    });
+    dialogRef.afterClosed().subscribe();
+  }
 }
-
-
