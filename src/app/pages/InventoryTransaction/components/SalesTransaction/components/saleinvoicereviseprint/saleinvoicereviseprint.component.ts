@@ -377,7 +377,7 @@ export class SaleinvoicereviseprintComponent implements OnInit {
       let v = 0;
       this.ItemAllData.forEach(element => {
        // this.HsnCode.push(element.hsn_code);
-       this.HsnCode.push(element.hsnm_code); //hard code for party 'itc' 10019910,others normal
+       this.HsnCode.push(element.hsnm_code); //hard code for party 'LDC'  100190 else all party 10019910
         this.taxtotal += Number(element.amount);
         this.cgsttotal += Number(element.cgstamt);
         this.sgsttotal += Number(element.sgstamt);
