@@ -4571,10 +4571,20 @@ export class CreditNoteComponent implements OnInit {
       })
 
       this.SellerDtls.patchValue({
-        Gstin: '10AATCA7447B1ZV',
+        /*Gstin: '10AATCA7447B1ZV',
         LglNm: 'AAYOG AGRO PRIVATE LIMITED',
         TrdNm: 'AAYOG AGRO PRIVATE LIMITED',
         Addr1: '802 MAHUA ROAD BELKUNDA',
+        Addr2: 'BHOJPATTI VAISHALI',
+        Loc: 'HAJIPUR',
+        Pin: '844125',
+        Stcd: '10',
+        Ph: null,
+        Em: null*/
+        Gstin: '10AADCA2518H1ZD',
+        LglNm: 'ANKIT INDIA LIMITED',
+        TrdNm: 'ANKIT INDIA LIMITED',
+        Addr1: 'PLOT NO-802, MAHUA ROAD',
         Addr2: 'BHOJPATTI VAISHALI',
         Loc: 'HAJIPUR',
         Pin: '844125',
@@ -4727,19 +4737,33 @@ export class CreditNoteComponent implements OnInit {
               OthChrg: 0,
               TotItemVal: item.total_amt
             })
-
-            if (item.price_based_on == "Packing") {
-              this.ItemList.at(k).patchValue({ Qty: item.squantity, Unit: item.suom })
+        /*if (item.price_based_on == "Packing") {
+            this.ItemList1.at(k).patchValue({ quantity: item.squantity, qtyUnit: item.suom })
+          }
+          else {
+            if (item.uom == "QTLS") {
+              this.ItemList1.at(k).patchValue({ quantity: item.quantity, qtyUnit: 'QTL' })
             }
             else {
-              if (item.uom == "QTLS") {
-                this.ItemList.at(k).patchValue({ Qty: item.quantity, Unit: 'QTL' })
+              this.ItemList1.at(k).patchValue({ quantity: item.quantity, qtyUnit: item.uom })
+            }
+          }*/
+            if (creditNoteData.creditnotetype == 'Acceptance of Lower Rate') {
+              this.ItemList.at(k).patchValue({ Qty: 0, Unit: 'QTL' })
+            }
+            else {
+              if (item.price_based_on == "Packing") {
+                this.ItemList.at(k).patchValue({ Qty: item.squantity, Unit: item.suom })
               }
               else {
-                this.ItemList.at(k).patchValue({ Qty: item.quantity, Unit: item.uom })
+                if (item.uom == "QTLS") {
+                  this.ItemList.at(k).patchValue({ Qty: item.quantity, Unit: 'QTL' })
+                }
+                else {
+                  this.ItemList.at(k).patchValue({ Qty: item.quantity, Unit: item.uom })
+                }
               }
             }
-
 
             k++;
           }
@@ -4949,9 +4973,17 @@ export class CreditNoteComponent implements OnInit {
         actFromStateCode: partydetails.gst_no.substring(0, 2),
         fromStateCode: partydetails.gst_no.substring(0, 2),
 
-        toGstin: '10AATCA7447B1ZV',
+        /*toGstin: '10AATCA7447B1ZV',
         toTrdName: 'AAYOG AGRO PRIVATE LIMITED',
         toAddr1: '802 MAHUA ROAD BELKUNDA',
+        toAddr2: 'BHOJPATTI VAISHALI',
+        toPlace: 'HAJIPUR',
+        toPincode: '844125',
+        actToStateCode: 10,
+        toStateCode: 10,*/
+        toGstin: '10AADCA2518H1ZD',
+        toTrdName: 'ANKIT INDIA LIMITED',
+        toAddr1: 'PLOT NO-802, MAHUA ROAD',
         toAddr2: 'BHOJPATTI VAISHALI',
         toPlace: 'HAJIPUR',
         toPincode: '844125',
@@ -5076,7 +5108,7 @@ export class CreditNoteComponent implements OnInit {
             cessNonAdvol: 0,
           })
 
-          if (item.price_based_on == "Packing") {
+          /*if (item.price_based_on == "Packing") {
             this.ItemList1.at(k).patchValue({ quantity: item.squantity, qtyUnit: item.suom })
           }
           else {
@@ -5085,6 +5117,22 @@ export class CreditNoteComponent implements OnInit {
             }
             else {
               this.ItemList1.at(k).patchValue({ quantity: item.quantity, qtyUnit: item.uom })
+            }
+          }*/
+          if (creditNoteData.creditnotetype == 'Acceptance of Lower Rate') {
+            this.ItemList.at(k).patchValue({ Qty: 0, Unit: 'QTL' })
+          }
+          else {
+            if (item.price_based_on == "Packing") {
+              this.ItemList.at(k).patchValue({ Qty: item.squantity, Unit: item.suom })
+            }
+            else {
+              if (item.uom == "QTLS") {
+                this.ItemList.at(k).patchValue({ Qty: item.quantity, Unit: 'QTL' })
+              }
+              else {
+                this.ItemList.at(k).patchValue({ Qty: item.quantity, Unit: item.uom })
+              }
             }
           }
           k++;
