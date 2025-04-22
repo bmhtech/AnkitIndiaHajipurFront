@@ -4669,7 +4669,27 @@ export class SalesInvoiceComponent implements OnInit {
       })
 
       this.SellerDtls.patchValue({
-        Gstin: '10AATCA7447B1ZV',
+        /* Gstin: '34AACCC1596Q002',
+        LglNm: 'NIC company pvt ltd',
+        TrdNm: 'NIC Industries',
+        Addr1: '5th block, kuvempu layout',
+        Addr2: 'kuvempu layout',
+        Loc: 'GANDHINAGAR',
+        Pin: '605001',
+        Stcd: '34',
+        Ph: '9000000000',
+        Em: 'abc@gmail.com'*/
+        Gstin: '10AADCA2518H1ZD,',
+        LglNm: 'ANKIT INDIA LIMITED',
+        TrdNm: 'ANKIT INDIA LIMITED',
+        Addr1: 'PLOT NO-802, MAHUA ROAD',
+        Addr2: 'BHOJPATTI VAISHALI',
+        Loc: 'HAJIPUR',
+        Pin: '844125',
+        Stcd: '10',
+        Ph: null,
+        Em: null
+       /* Gstin: '10AATCA7447B1ZV',
         LglNm: 'AAYOG AGRO PRIVATE LIMITED',
         TrdNm: 'AAYOG AGRO PRIVATE LIMITED',
         Addr1: '802 MAHUA ROAD BELKUNDA',
@@ -4678,7 +4698,7 @@ export class SalesInvoiceComponent implements OnInit {
         Pin: '844125',
         Stcd: '10',
         Ph: null,
-        Em: null
+        Em: null*/
       })
       let address: any;
       if (customeraddress["add1"].legth > 103) {
@@ -4705,6 +4725,8 @@ export class SalesInvoiceComponent implements OnInit {
       this.ValDtls.patchValue({
         AssVal: SalesInvoiceData.item_total,
         //IgstVal: taxData[0]["cgst"]+taxData[0]["sgst"],
+        //CgstVal: taxData[0]["igst"],
+        //SgstVal: taxData[0]["igst"],
         IgstVal: taxData[0]["igst"],
         CgstVal: taxData[0]["cgst"],
         SgstVal: taxData[0]["sgst"],
@@ -4740,7 +4762,9 @@ export class SalesInvoiceComponent implements OnInit {
             PreTaxVal: '0',
             AssAmt: this.round(Number(serviceitem[0].tax_value), 2),
             GstRt: serviceitem[0].igst_tax,
-            // IgstAmt:serviceitem[0].cgst_amt+serviceitem[0].sgst_amt,
+            //IgstAmt:serviceitem[0].cgst_amt+serviceitem[0].sgst_amt,
+            //CgstAmt: serviceitem[0].igst_amt,
+            //SgstAmt: serviceitem[0].igst_amt,
             IgstAmt: serviceitem[0].igst_amt,
             CgstAmt: serviceitem[0].cgst_amt,
             SgstAmt: serviceitem[0].sgst_amt,
@@ -4807,6 +4831,9 @@ export class SalesInvoiceComponent implements OnInit {
               PreTaxVal: 0,
               AssAmt: this.round(Number(item.amount + item.discount_amt), 2),
               GstRt: item.tax_rate,
+              //IgstAmt:item.cgstamt+item.sgstamt,
+              //CgstAmt: item.igstamt,
+              //SgstAmt: item.igstamt,
               IgstAmt: item.igstamt,
               CgstAmt: item.cgstamt,
               SgstAmt: item.sgstamt,
@@ -4863,6 +4890,8 @@ export class SalesInvoiceComponent implements OnInit {
 
 
   einvoiceCencel(invoice_id, id) {
+    this.status=false;
+    if (confirm("Are you sure to CANCEL this E-Invoice of this Sales Invoice ?")) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -4898,7 +4927,9 @@ export class SalesInvoiceComponent implements OnInit {
           this.status = true;
         });
       })
-    });
+     });
+    }
+    this.status=true;
   }
 
   trans_name:any;
@@ -4956,6 +4987,8 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   ewaybill_cancel(invoice_id, id) {
+    this.status=false;
+    if (confirm("Are you sure to CANCEL this E-WayBill of this Sales Invoice ?")) {
     const dialogConfig = new MatDialogConfig();
     dialogConfig.disableClose = true;
     dialogConfig.autoFocus = true;
@@ -4989,14 +5022,11 @@ export class SalesInvoiceComponent implements OnInit {
           this.ngOnInit();
           this.status = true;
         });
-
       })
-
-    });
-
+     });
+    }
+    this.status=true;
   }
-
-
 
   ewaybill_wo_invoice_create(id, invoice_id, party,bunit) {
     this.status = false;
@@ -5015,6 +5045,7 @@ export class SalesInvoiceComponent implements OnInit {
       // console.log("transporter:"+JSON.stringify(transporter))
       this.company_state=companystate["state_name"];
       let address: any;
+      let gstin="";
       if (customeraddress["add1"].legth > 103) {
         address = customeraddress["add1"].substring(101, 200);
       }
@@ -5022,16 +5053,31 @@ export class SalesInvoiceComponent implements OnInit {
        // address = "Not Required";
         address = null;
       }
+      let docty:any;
+      if(SalesInvoiceData.invoice_type== 'INV00002')
+      {
+        docty='INV'
+      }
+      if(SalesInvoiceData.invoice_type== 'INV00001')
+      {
+        docty='BIL'
+      }
+      if(partydetails.registered===true)
+      {
+        gstin=partydetails.gst_no;
+      }else{
+        gstin='URP';
+      }
       //console.log("address:"+address)
       this.ewaybillWOInvoiceGen.patchValue({
         supplyType: 'O',
         subSupplyType: '1',
         subSupplyDesc: null,
-        docType: 'INV',
+        docType: docty,
         docNo: SalesInvoiceData.invoice_no,
         docDate: formatDate(SalesInvoiceData.invoice_date, 'dd/MM/yyyy', 'en'),
        
-       /* fromGstin: '34AACCC1596Q002',
+        /*fromGstin: '34AACCC1596Q002',
         fromTrdName: 'NIC company pvt ltd',
         fromAddr1: '5th block, kuvempu layout',
         fromAddr2: 'kuvempu layout',
@@ -5039,17 +5085,26 @@ export class SalesInvoiceComponent implements OnInit {
         fromPincode: '605001',
         actFromStateCode: 34,
         fromStateCode: 34,*/
-         fromGstin: '10AATCA7447B1ZV',
+        fromGstin: '10AADCA2518H1ZD',
+        fromTrdName: 'ANKIT INDIA LIMITED',
+        fromAddr1: 'PLOT NO-802, MAHUA ROAD',
+        fromAddr2: 'BHOJPATTI VAISHALI',
+        fromPlace: 'HAJIPUR',
+        fromPincode: '844125',
+        actFromStateCode: 10,
+        fromStateCode: 10,
+        /* fromGstin: '10AATCA7447B1ZV',
         fromTrdName: 'AAYOG AGRO PRIVATE LIMITED',
         fromAddr1: '802 MAHUA ROAD BELKUNDA',
         fromAddr2: 'BHOJPATTI VAISHALI',
         fromPlace: 'HAJIPUR',
         fromPincode: '844125',
         actFromStateCode: 10,
-        fromStateCode: 10,
+        fromStateCode: 10,*/
         
         //toGstin: partydetails.gst_no,
-        toGstin: 'URP',
+       //toGstin: 'URP',  // commented on 02042025, as disscussed with kishan sir, ewaybill gst will show if registred and vice-versa (URP)
+        toGstin: gstin,
         toTrdName: SalesInvoiceData["partyname"],
         toAddr1: customeraddress["add1"].substring(0, 100),
         toAddr2: address,
@@ -5069,6 +5124,9 @@ export class SalesInvoiceComponent implements OnInit {
         cgstValue: taxData[0]["cgst"],
         sgstValue: taxData[0]["sgst"],
         igstValue: taxData[0]["igst"],
+        /*cgstValue: taxData[0]["igst"],
+        sgstValue: taxData[0]["igst"],
+        igstValue: taxData[0]["cgst"]+taxData[0]["sgst"],*/
         cessValue: 0,
         cessNonAdvolValue: 0,
         totInvValue: SalesInvoiceData["grand_total"],
@@ -5203,6 +5261,9 @@ export class SalesInvoiceComponent implements OnInit {
             else {
               if (item.uom == "QTLS") {
                 this.ItemList1.at(k).patchValue({ quantity: item.quantity, qtyUnit: 'QTL' })
+              }
+              else if (item.uom == "MT") {
+                this.ItemList1.at(k).patchValue({ quantity: item.quantity, qtyUnit: 'TON' })
               }
               else {
                 this.ItemList1.at(k).patchValue({ quantity: item.quantity, qtyUnit: item.uom })
