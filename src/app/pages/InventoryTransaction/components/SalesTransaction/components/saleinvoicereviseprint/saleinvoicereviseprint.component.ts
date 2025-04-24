@@ -158,6 +158,23 @@ export class SaleinvoicereviseprintComponent implements OnInit {
       this.DropDownListService.getGatepassByChallan(this.invoiceid)
     ).subscribe(([Details, Itemdata, words, taxsum, paymentdtls,compdetails,companystate,gatepassData]) => {
       console.log("Details:" + JSON.stringify(Details));
+
+      console.log("group_type Before:"+this.partyGroup);
+      this.DropDownListService.partynameListById(Details["party"]).subscribe((custGrp)=>
+      { 
+        console.log("partyGroup print:"+JSON.stringify(custGrp));
+        this.partyGroup = custGrp["group_type"];
+        
+        console.log("group_type Before EWAY BILL SET:"+this.partyGroup);
+        if(Details["invoice_type"] == 'INV00001' && this.partyGroup=='CG00019')
+        {
+          this.DropDownListService.geteinvoicedetails(this.invoiceid).subscribe(eWayDtls=>{
+            this.ewayvalidupto = eWayDtls["eway_valid_upto"];
+          });
+        }
+      });
+      console.log("group_type After:"+this.partyGroup);
+
       this.cgst = Number(taxsum[0]['tax_rate']) / 2
       this.sgst = Number(taxsum[0]['tax_rate']) / 2
       this.igst = taxsum[0]['tax_rate']
@@ -183,6 +200,7 @@ export class SaleinvoicereviseprintComponent implements OnInit {
         this.gststat = false;
         this.gststatno = true;
       }*/
+
       //console.log("mobile:"+Details["mobile"].length);
        
        // console.log("gatepassData print:"+JSON.stringify(gatepassData));
@@ -238,7 +256,6 @@ export class SaleinvoicereviseprintComponent implements OnInit {
 
       console.log("waybill " + this.waybill)
       if (Details["e_invoice_no"] == null || Details["e_invoice_no"] == '') {
-
         this.einvoicetype = false;
         this.einvelse = true;
         console.log("length:" + Details["waybill"].length + "//" + Details["invoice_type"])
@@ -251,10 +268,12 @@ export class SaleinvoicereviseprintComponent implements OnInit {
             //this.distance = eWayDtls["distance"];
           });
         }
+
         if(Details["invoice_type"] == 'INV00005')
         {
           this.e_invoice_no = Details["e_invoice_no"];
         }
+
       }
       else {
 
@@ -349,11 +368,11 @@ export class SaleinvoicereviseprintComponent implements OnInit {
       this.refchallanno = Details["refchallanno"];
       this.refchallandate = Details["refchallandate"];
 
-      this.DropDownListService.partynameListById(Details["party"]).subscribe((custGrp)=>
+      /*this.DropDownListService.partynameListById(Details["party"]).subscribe((custGrp)=>
       { 
         console.log("partyGroup print:"+JSON.stringify(custGrp));
         this.partyGroup = custGrp["group_type"];
-      });
+      });*/ // called before Ewaybill details
 
       if (Details["gst_no"] == null || Details["gst_no"] == '') {
         this.gstinno = "URP";
