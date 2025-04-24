@@ -116,11 +116,18 @@
                           </td>
                         </tr>
 
-                        <tr *ngIf="waybillshow">
-                          <td> <span style="font-size: small;"><b>E-Way Bill Date:</b></span><br>
-                            <span style="font-size: small;">{{ewaybilldate}}</span>
+                        <tr *ngIf ="partyGroup=='CG00019';else elseBlockW">
+                          <td> <span style="font-size: small;"><b>E-Way Bill Valid Upto:</b></span><br>
+                            <span style="font-size: small;">{{ewayvalidupto}}</span>
                           </td>
                         </tr>
+                        <ng-template #elseBlockW>
+                          <tr *ngIf="waybillshow">
+                            <td> <span style="font-size: small;"><b>E-Way Bill Date:</b></span><br>
+                              <span style="font-size: small;">{{ewaybilldate}}</span>
+                            </td>
+                          </tr>
+                        </ng-template>
 
                         <!-- <tr *ngIf="waybillshow">
                           <td> <span style="font-size: small;"><b>E-Way Bill Distance:</b></span><br>

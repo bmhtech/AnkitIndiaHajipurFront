@@ -280,7 +280,7 @@ p.sign{ padding: 10px 0 0 0; }
 .top_h4{font-size: 13px; line-height: 20px; text-align: center;}
 .top_div{font-size: 12px; line-height: 18px; text-align: left;}
 .top_div table td{border: none;}
-.comp_adrs{ font-size: 11px; font-weight: 600;}
+.comp_adrs{ font-size: 12px; font-weight: 600;}
 .bxx-top table.table_top .brdr_right{ border-right: 1px solid #000;}
 .table-bordered { border: 1px solid #000;}
 .table{color: #000;}
@@ -303,3 +303,12 @@ table > thead:first-child > tr:first-child > th{background: #333;}
 .bxx-toppest ul{text-align: center;}
 .top_div .table > tbody > tr > td{text-align: left;}
 .ftr_btm{font-size: 12px;}
+.choco_text {
+    color: chocolate !important;
+}
+.lightcoral_text {
+    color: lightcoral !important;
+}
+.red_text {
+    color: red !important;
+}
