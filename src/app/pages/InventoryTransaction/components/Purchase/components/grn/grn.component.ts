@@ -4232,13 +4232,28 @@ export class GrnComponent implements OnInit {
 
   onChangeSoNo(sono)
   {
-    let refno=this.userForm.get("referance_id").value;
-    console.log("ref no check",refno)
-    if (refno == 0 || refno == "0" || refno == "" || refno == null) 
-      {
-        alert("Please !");
-        this.status = true; 
-      }
+    if(sono && !Array.isArray(sono)){
+    //  console.log("inside if")
+      let refno=this.userForm.get("referance_id").value;
+     // console.log("ref no check",refno)
+      if (refno == 0 || refno == "" || refno == null) 
+        {
+          alert("Please Press Show Button First!");
+          this.status = true; 
+        }
+      else{
+        forkJoin([
+          this.DropDownListService.getSoRestQtyCheckWithGrn(sono,refno)
+        ]).subscribe(([checkdata]) => {
+         // console.log("sales Order List:: ",checkdata.status);
+          if (checkdata.status == 'No') {
+            alert("Item Quantity Exceeded From Sales Order Quantity,Please Choose another Sales Order.");
+            this.userForm.patchValue({sales_order:''});
+          }
+          this.status=true;
+        });
+      }      
+    }
   }
 
   /*ngOnDestroy(): void {

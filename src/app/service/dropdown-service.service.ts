@@ -6421,4 +6421,9 @@ export class DropdownServiceService {
   getSecondkataSrlnoCamera(bridge_location): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getSecondkataSrlnoCamera/' + bridge_location ).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+
+  getSoRestQtyCheckWithGrn(sono,unloadid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSoRestQtyCheckWithGrn/' + sono + "/" + unloadid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
 }
