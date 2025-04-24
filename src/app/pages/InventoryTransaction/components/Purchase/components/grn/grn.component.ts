@@ -4230,6 +4230,17 @@ export class GrnComponent implements OnInit {
       }
   }
 
+  onChangeSoNo(sono)
+  {
+    let refno=this.userForm.get("referance_id").value;
+    console.log("ref no check",refno)
+    if (refno == 0 || refno == "0" || refno == "" || refno == null) 
+      {
+        alert("Please !");
+        this.status = true; 
+      }
+  }
+
   /*ngOnDestroy(): void {
     if(this.salesProcessValChangeSub)
       this.salesProcessValChangeSub.unsubscribe();
