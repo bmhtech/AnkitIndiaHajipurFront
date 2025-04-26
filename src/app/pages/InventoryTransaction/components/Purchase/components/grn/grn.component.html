@@ -157,7 +157,8 @@
                 [value]="'order_id'"
                 [multiple]='false'
                 ngDefaultControl
-                [formControl]="userForm.controls['sales_order']">
+                [formControl]="userForm.controls['sales_order']"
+                (selectionChange)="onChangeSoNo($event)">
                 </mat-select-autocomplete>
               </div>
             </div>
