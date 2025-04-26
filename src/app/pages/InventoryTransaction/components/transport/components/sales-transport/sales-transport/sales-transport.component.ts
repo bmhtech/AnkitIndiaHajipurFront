@@ -9,6 +9,7 @@ import { ExcelService } from '../../../../../../../service/excel.service';
 import { TransportjvpostingComponent } from '../../transportjvposting/transportjvposting.component';
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { SalestransportimagepopupComponent } from '../../salestransportimagepopup/salestransportimagepopup.component';
+import { DeletesalestransportremarkpopupComponent } from '../deletesalestransportremarkpopup/deletesalestransportremarkpopup.component';
 
 @Component({
   selector: 'app-sales-transport',
@@ -614,7 +615,7 @@ console.log("balance "+balance)
        act_amt=Number(Number(this.userForm.get("price").value)*1)-Number(mt_amt);
     }
 
-console.log("act_amt  "+act_amt)
+    console.log("act_amt  "+act_amt)
     let totalchargematrix:number=0;
 
     for(let v=0;v<this.salestransport_app_chgs.length;v++)
@@ -1090,4 +1091,19 @@ console.log("act_amt  "+act_amt)
     this.excelService.exportAsExcelFile(element, 'Transportation Statement As On '+formatDate(new Date(), 'dd-MM-yyyy', 'en')+' At '+ new Date().toString().substr(16, 5)+' Report From ' + formatDate(this.userForm3.get("fromdate").value, 'dd-MM-yyyy', 'en') +' To ' + formatDate(this.userForm3.get("todate").value, 'dd-MM-yyyy', 'en'));
   }
 
+  onDelete(id) {
+    this.status = false;
+    if (confirm("Are you sure to delete this Sales Transport ?")) {
+      this.userForm.patchValue({ username: localStorage.getItem("username") });
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = { id: id, obj: this.userForm.getRawValue() };
+      const dialogRef = this.dialog.open(DeletesalestransportremarkpopupComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(data => {
+        this.ngOnInit();
+      });
+    }
+    this.status = true;
+  }
 }

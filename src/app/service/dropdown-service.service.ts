@@ -6413,8 +6413,8 @@ export class DropdownServiceService {
     return this.httpClient.get(this.url + 'getWhPeriQCReport/' + fromdate + "/" + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
-  getWhQCReport(fromdate, todate,basedon): Observable<any> {
-    return this.httpClient.get(this.url + 'getWhQCReport/' + fromdate + "/" + todate + "/" + basedon).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  getWhQCReport(fromdate, todate, process): Observable<any> {
+    return this.httpClient.get(this.url + 'getWhQCReport/' + fromdate + "/" + todate + "/" + process).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
   /* QC REPORTS API ENDS */
 

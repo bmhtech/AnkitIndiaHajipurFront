@@ -2812,6 +2812,10 @@ export class Master {
     return this.httpClient.put<salestransport>(this.url + 'updateSalesTransport/' + id, salestransport).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
   }
 
+  public deleteSalesTransport(salestransport, id,reason): Observable<salestransport> {
+    return this.httpClient.put<salestransport>(this.url + 'deleteSalesTransport/'+id+'/'+reason,salestransport).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
   public createAccGroups(Accounts_group_master): Observable<Accounts_group_master> {
     return this.httpClient.post<Accounts_group_master>(this.url + "createAccGroups", Accounts_group_master).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
   }

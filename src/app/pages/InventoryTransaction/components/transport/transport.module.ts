@@ -12,6 +12,7 @@ import { NgxPrintModule } from 'ngx-print';
 import { TransportjvpostingComponent } from './components/transportjvposting/transportjvposting.component';
 import { SalestransportimagepopupComponent } from './components/salestransportimagepopup/salestransportimagepopup.component';
 import { NgxImageZoomModule } from 'ngx-image-zoom';
+import { DeletesalestransportremarkpopupComponent } from './components/sales-transport/deletesalestransportremarkpopup/deletesalestransportremarkpopup.component';
 
 @NgModule({
   declarations: [
@@ -19,7 +20,8 @@ import { NgxImageZoomModule } from 'ngx-image-zoom';
     SalesTransportComponent,
     PurchaseTransportComponent,
     TransportjvpostingComponent,
-    SalestransportimagepopupComponent
+    SalestransportimagepopupComponent,
+    DeletesalestransportremarkpopupComponent
   ],
   imports: [
     CommonModule,
@@ -38,7 +40,7 @@ import { NgxImageZoomModule } from 'ngx-image-zoom';
     NgxImageZoomModule.forRoot(),
     routing
   ],
-  entryComponents:[TransportjvpostingComponent,SalestransportimagepopupComponent],
+  entryComponents:[TransportjvpostingComponent,SalestransportimagepopupComponent,DeletesalestransportremarkpopupComponent],
   exports: [MatAutocompleteModule,MatInputModule, SelectAutocompleteModule],
   bootstrap:    [ SalestransportimagepopupComponent ],
 })
