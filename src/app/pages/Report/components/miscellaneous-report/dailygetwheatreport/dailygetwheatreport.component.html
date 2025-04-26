@@ -83,6 +83,17 @@
                 </mat-select-autocomplete>
                 </div>
               </div>
+
+              <div class="col-lg-2 col-md-2 col-sm-6 col-12">
+                <div class="form-group">
+                    <mat-label>Person Type<span class="red">*</span></mat-label>
+                    <mat-select class="form-control" formControlName="person_type" (selectionChange)="onChangePersonType($event.value)">
+                        <mat-option value="Ramesh Sir">Ramesh Sir</mat-option>
+                        <mat-option value="All">All</mat-option>
+                    </mat-select>
+                </div>
+              </div>
+            
             <div class="col-lg-12" >
                 <div class="form-group">
                 <button type="submit" class="btn btn-primary" (click)="search()" >Search</button>
@@ -102,55 +113,62 @@
                     <table class="table table-bordered" id="dynamictable" >
                     <thead>
                         <tr>
-                            
+                            <td colspan="22" align="center" *ngIf="AllFieldShow; else RameshSirField">
+                                <b>ANKIT INDIA LTD. (HAJIPUR)</b>
+                            </td>
+                            <ng-template #RameshSirField>
+                                <td colspan="9" align="center"><b>ANKIT INDIA LTD. (HAJIPUR)</b></td>
+                            </ng-template>
+                        </tr>
+                        <tr>
                             <th>Gate Sl No.</th>
-                            <th>Advice No.</th>
-                            <th>Purchase Order No.</th>
+                            <th *ngIf="AllFieldShow">Advice No.</th>
+                            <th *ngIf="AllFieldShow">Purchase Order No.</th>
                             <th>Name of Party</th>
                             <th>Vehicle No.</th>
-                            <th>Bill/Challan No.</th>
-                            <th>Description of Goods</th>
+                            <th *ngIf="AllFieldShow">Bill/Challan No.</th>
+                            <th *ngIf="AllFieldShow">Description of Goods</th>
                             <th>Bags</th>
-                            <th>Party Slip No</th>
+                            <th *ngIf="AllFieldShow">Party Slip No</th>
                             <th>Weighment Date</th>
-                            <th>Gross Date</th>
-                            <th>Time in</th>
-                            <th>Tare Date</th>
-                            <th>Time out</th>
+                            <th *ngIf="AllFieldShow">Gross Date</th>
+                            <th *ngIf="AllFieldShow">Time in</th>
+                            <th *ngIf="AllFieldShow">Tare Date</th>
+                            <th *ngIf="AllFieldShow">Time out</th>
                             <th>Gross Wt.</th>
                             <th>Gross Remark</th>
                             <th>Tare Wt.</th>
-                            <th>Tare Remark</th>
+                            <th *ngIf="AllFieldShow">Tare Remark</th>
                             <th>Net Wt.</th>
-                            <th>Digital Wt.1</th>
-                            <th>Digital Wt.2</th>
-                            <th>Remarks</th>
+                            <th *ngIf="AllFieldShow">Digital Wt.1</th>
+                            <th *ngIf="AllFieldShow">Digital Wt.2</th>
+                            <th *ngIf="AllFieldShow">Remarks</th>
                         </tr>
                     </thead>
                     <tbody>
                         <tr *ngFor="let inward of inwardlist; let pointIndex=index">
                             <td>{{pointIndex+1}}</td>
-                            <td>{{inward.advicenumber}}</td>
-                            <td>{{inward.pur_order_no}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.advicenumber}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.pur_order_no}}</td>
                             <td>{{inward.partyname}}</td>
                             <td>{{inward.vehicleno}}</td>
-                            <td>{{inward.supp_ref_docno}}</td>
-                            <td>{{inward.description}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.supp_ref_docno}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.description}}</td>
                             <td>{{inward.tarebags}}</td>
-                            <td>{{inward.slipnumber}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.slipnumber}}</td>
                             <td>{{inward.weighmentdate}}</td>
-                            <td>{{inward.gw_date}}</td>
-                            <td>{{inward.timein}}</td>
-                            <td>{{inward.tw_date}}</td>
-                            <td>{{inward.timeout}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.gw_date}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.timein}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.tw_date}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.timeout}}</td>
                             <td>{{inward.grossweight}}</td>
                             <td>{{inward.gw_remarks}}</td>
                             <td>{{inward.tareweight}}</td>
-                            <td>{{inward.tw_remarks}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.tw_remarks}}</td>
                             <td>{{inward.netweight}}</td> 
-                            <td>{{inward.digital_weight}}</td>
-                            <td>{{inward.digital_weight1}}</td>
-                            <td>{{inward.remarks}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.digital_weight}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.digital_weight1}}</td>
+                            <td *ngIf="AllFieldShow">{{inward.remarks}}</td>
                             
                         </tr>
                     </tbody>

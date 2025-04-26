@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pop UP</title>
+  </head>
+  <body>
+    <div class="container-fluid modal_box">
+      <form [formGroup]="userForm">
+        <div class="row">
+          <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+            <fieldset>
+              <legend>Reason of Deletion</legend>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="form-group">
+                  <label><strong>Reason</strong></label>
+                  <textarea formControlName="del_remarks" class="form-control"></textarea>
+                </div>
+              </div>
+            </fieldset>
+          </div>
+
+          <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+        </div>
+        <mat-dialog-actions align="end">
+          <button class="btn btn-info" mat-button [mat-dialog-close]="true"
+            (click)="SendDataToDifferentComponenet()">Submit</button>
+        </mat-dialog-actions>
+      </form>
+    </div>
+  </body>
+</html>

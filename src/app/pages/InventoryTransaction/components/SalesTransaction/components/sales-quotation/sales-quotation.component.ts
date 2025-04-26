@@ -2259,14 +2259,22 @@ import { constants } from 'zlib';
       else
       {
         this.Userroles=false;
-        if(this.custGroup=="CG00019"){
-          //this.Quotationcheckpoint="Yes";
-          this.userForm.patchValue({quotationcheckpoint: "Yes"});
-        }
-        else{
-          //this.Quotationcheckpoint="No";
-          this.userForm.patchValue({quotationcheckpoint: "No"});
-        }
+        console.log("Custome_id:: "+this.userForm.get('customer').value+" ::CUSTOMER_GROUP:: "+this.custGroup);
+        this.DropDownListService.partynameListById(this.userForm.get('customer').value).subscribe(custDtls =>{
+          console.log(" ::CUSTOMER_GROUP API:: "+custDtls["group_type"]);
+          this.custGroup=custDtls["group_type"];
+          if(this.custGroup=="CG00019"){
+            console.log(" ::SAVE YES ARMY:: ");
+            this.Quotationcheckpoint="Yes";
+            this.userForm.patchValue({quotationcheckpoint: "Yes"});
+          }
+          else{
+            console.log(" ::SAVE NO OTHERS:: ");
+            this.Quotationcheckpoint="No";
+            this.userForm.patchValue({quotationcheckpoint: "No"});
+          }
+        });
+        
         //this.userForm.patchValue({quotationcheckpoint: "No"});
       }
       if(!this.userForm.valid) 

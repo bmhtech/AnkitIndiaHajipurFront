@@ -43,6 +43,7 @@ import { UnloadAdviceJobworkComponent } from './components/unload-advice-jobwork
 import { WeighmentterminatepopupComponent } from './components/weighmentterminatepopup/weighmentterminatepopup.component';
 import { WeightmentKata1BillPrintComponent } from './components/weightment-kata1-bill-print/weightment-kata1-bill-print.component';
 import { ImageViewModalComponent } from './components/image-view-modal/image-view-modal.component';
+import { UnloadItcBillPrintComponent } from './components/unload-itc-bill-print/unload-itc-bill-print.component';
 
 @NgModule({
     imports: [
@@ -89,6 +90,7 @@ import { ImageViewModalComponent } from './components/image-view-modal/image-vie
         WeighmentterminatepopupComponent,
         WeightmentKata1BillPrintComponent,
         ImageViewModalComponent,
+        UnloadItcBillPrintComponent
        ],
 
     declarations: [
@@ -123,6 +125,7 @@ import { ImageViewModalComponent } from './components/image-view-modal/image-vie
         WeighmentterminatepopupComponent,
         WeightmentKata1BillPrintComponent,
         ImageViewModalComponent,
+        UnloadItcBillPrintComponent,
     ]
 })
 export class weighmentModule { }
