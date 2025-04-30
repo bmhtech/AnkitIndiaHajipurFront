@@ -1,6 +1,6 @@
 import { Component, OnInit, Injectable, ElementRef, ViewChild } from '@angular/core';
 import { MatDialog, MatDialogConfig } from '@angular/material/dialog';
-import { Observable } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { FormControl, FormGroup, FormBuilder, FormArray, Validators } from '@angular/forms';
 import { cust_bussiness_partner } from '../../../../../../Models/CustomerModel/cust_bussiness_partner';
 import { Master } from '../../../../../../service/master.service';
@@ -110,6 +110,8 @@ export class CustomersMasterComponent implements OnInit {
   shipping_sl_no = 1;
   districtsListOfShip: any = [];
   selectedDistrictName:any=[];
+  partyList: any = [];
+  selectedPartyName: any = [];
 
   @ViewChild('iCodeInput') _CustCode: ElementRef;
 
@@ -256,16 +258,18 @@ export class CustomersMasterComponent implements OnInit {
         transportername: ''
       })
       ]),
+
       cust_bussiness_partner_shipping_addr_dtls: this.fb.array([this.fb.group({
-        slno: this.shipping_sl_no,
+        slno: 1,
         shipping_name: '',
-        country_shipping: 'INDIA',
+        country_shipping: '',
         state_shipping: '',
         dist_code: '',
         city: '',
         pincode: '',
+        ship_gst: '',
         address: ''
-      })])
+      })]),
 
     });
 
@@ -405,6 +409,11 @@ export class CustomersMasterComponent implements OnInit {
     this.status = true;
     this.DropDownListService.payTermNameList().subscribe(data => { this.payTerms = data; }, (error) => { this.status = true; console.log("ERROR get: " + JSON.stringify(error)); alert("something error is occured please try again...."); this.ngOnInit() });
 
+    this.DropDownListService.customerNameActiveBlockAllList(this.company_name).subscribe(data => {
+      this.partyList = data;
+      console.log("party list:" + JSON.stringify(this.partyList))
+    }, (error) => { this.status = true; console.log("ERROR get: " + JSON.stringify(error)); alert("something error is occured please try again...."); this.ngOnInit() });
+
     this.isBrokerDtlsChecked = true;
   }
 
@@ -442,7 +451,7 @@ export class CustomersMasterComponent implements OnInit {
       }
       else {
         this.nameExist = "";
-        this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({shipping_name:cname });
+        //this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({shipping_name:cname });
       }
     }
   }
@@ -505,13 +514,13 @@ export class CustomersMasterComponent implements OnInit {
     if (tcs_appl == 'YES') {
       this.isTcsAppIsYes = "Yes";
       this.err_message = "You have selected TCS applicable('Yes') so, here PAN No. is must..";
-      this.cust_bussiness_partner_statutory.patchValue({ registered: true });
-      this.isRegisteredChecked = true;
+      //this.cust_bussiness_partner_statutory.patchValue({ registered: true });
+      //this.isRegisteredChecked = true;
     }
     else {
       this.err_message = "";
-      this.cust_bussiness_partner_statutory.patchValue({ registered: false });
-      this.isRegisteredChecked = false;
+      //this.cust_bussiness_partner_statutory.patchValue({ registered: false });
+      //this.isRegisteredChecked = false;
       this.isTcsAppIsYes = "No";
     }
   }
@@ -782,18 +791,19 @@ export class CustomersMasterComponent implements OnInit {
         transporterid: '',
         transportercode: '',
         transportername: ''
-      })
-      ]),
+      })]),
+
       cust_bussiness_partner_shipping_addr_dtls: this.fb.array([this.fb.group({
-        slno: this.shipping_sl_no,
+        slno: 1,
         shipping_name: '',
         country_shipping: '',
         state_shipping: '',
         dist_code: '',
         city: '',
         pincode: '',
+        ship_gst: '',
         address: ''
-      })]) 
+      })]),
 
     });
   }
@@ -1035,6 +1045,42 @@ export class CustomersMasterComponent implements OnInit {
     else { alert("can't delete all rows"); }
   }
 
+  selectedParty(partyId, index) {
+
+    if (partyId.length && partyId != "0") {
+      for (let p = 0; p < this.cust_bussiness_partner_shipping_addr_dtls.length; p++) {
+        //new
+        if ((this.cust_bussiness_partner_shipping_addr_dtls.at(p).get("shipping_name").value == partyId)) {
+          alert("Duplicate Name in Shipping Details Tab...");
+          this.selectedPartyName[index] = '';
+          this.deleteSA(index);
+        }
+        else {
+          this.selectedPartyName[index] = partyId;
+          this.status = false;
+          forkJoin([
+            this.DropDownListService.custStatutoryRetriveList(partyId),
+            this.DropDownListService.getCustomerAddressDetails(partyId)
+          ]).subscribe({
+            next:([custStatutoryData, data12]) => {
+              this.cust_bussiness_partner_shipping_addr_dtls.at(index).patchValue({
+                shipping_name: partyId, country_shipping: data12["country"],
+                state_shipping: data12["state"], dist_code: data12["district"],
+                city: data12["city"], pincode: data12["pincode"], address: data12["add1"],
+                ship_gst: (custStatutoryData.registered ? custStatutoryData.gst_no : "URP"),
+              })
+              this.status = true;
+            },
+            error(err) {
+              console.error(err);
+              this.status = true;
+            },
+          });
+        }
+      }
+    }
+  }
+
   onChangeCountry(country_name) {
     // this.selectedPostOffice = [];
     this.statesList = [], this.districtsList = [], this.citiesList = [];
@@ -1049,13 +1095,14 @@ export class CustomersMasterComponent implements OnInit {
     }
   }
 
- selectedDistrict(distId,index){
+ /*selectedDistrict(distId,index){
    // console.log("distId:"+distId)
     if (distId.length && distId != "0") {
       this.selectedDistrictName[index]=distId;
       this.cust_bussiness_partner_shipping_addr_dtls.at(index).patchValue({ dist_code: distId });
     }
-  }
+  }*/
+
   selectedCity: any = [];
   selectedDist: any = [];
   stateName:any="";
@@ -1083,7 +1130,7 @@ export class CustomersMasterComponent implements OnInit {
         }
       });
       //console.log("State Name: "+this.stateName);
-      this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({state_shipping:this.stateName });
+      //this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({state_shipping:this.stateName });
 
       this.DropDownListService.getDistrictThruState(state_name).subscribe(data => {
         this.districtsList = data;
@@ -1103,7 +1150,7 @@ export class CustomersMasterComponent implements OnInit {
      // this.status = false;
       //console.log("district_name:"+district_name)
       this.selectedDistrictName[0] =district_name;
-      this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({dist_code:district_name });
+      //this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({dist_code:district_name });
       // this.DropDownListService.getCityListThruDistrict(district_name).subscribe(data => {
       //   this.citiesList = data;
       //   this.status = true;
@@ -1120,20 +1167,20 @@ export class CustomersMasterComponent implements OnInit {
   getCity(city) {
     if (city.target.value.length) {
       //console.log("city:"+city.target.value)
-      this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({city:city.target.value });
+      //this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({city:city.target.value });
     }
   }
   getPincode(pincode) {
     if (pincode.target.value.length) {
       //console.log("pincode:"+pincode.target.value)
-      this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({pincode:pincode.target.value});
+      //this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({pincode:pincode.target.value});
     }
   }
   getAddress(address) {
    
     if (address.target.value.length) {
       //console.log("address:"+address.target.value)
-      this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({address:address.target.value});
+      //this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({address:address.target.value});
     }
   }
   
@@ -1543,7 +1590,34 @@ export class CustomersMasterComponent implements OnInit {
           alert(" Please Enter Contact Person & Mob No. In Billing Address Tab!!!");
           this.status = true;
         }
-
+        else if (this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("shipping_name").value == null || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("shipping_name").value == "" || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("shipping_name").value == "0") {
+          alert("Please Enter Shipping Name In Shipping Address Tab!!");
+          this.status = true;
+        }
+        else if (this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("country_shipping").value == null || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("country_shipping").value == "" || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("country_shipping").value == "0") {
+          alert("Please Enter Country Name In Shipping Address Tab!!");
+          this.status = true;
+        }
+        else if (this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("state_shipping").value == null || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("state_shipping").value == "" || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("state_shipping").value == "0") {
+          alert("Please Enter State Name In Shipping Address Tab!!");
+          this.status = true;
+        }
+        else if (this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("dist_code").value == null || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("dist_code").value == "" || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("dist_code").value == "0") {
+          alert("Please Enter Distict Name In Shipping Address Tab!!");
+          this.status = true;
+        }
+        else if (this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("city").value == null || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("city").value == "" || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("city").value == "0") {
+          alert("Please Enter City Name In Shipping Address Tab!!");
+          this.status = true;
+        }
+        else if (this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("pincode").value == null || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("pincode").value == "" || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("pincode").value == "0") {
+          alert("Please Enter Pincode In Shipping Address Tab!!");
+          this.status = true;
+        }
+        else if (this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("address").value == null || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("address").value == "" || this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("address").value == "0") {
+          alert("Please Enter Address In Shipping Address Tab!!");
+          this.status = true;
+        }
         else if (this.cust_bussiness_partner_statutory.get('pan_no').value == "") {
           alert("Please Select PAN no. In statutory Details Tab!!!");
           this.status = true;
@@ -1711,6 +1785,10 @@ export class CustomersMasterComponent implements OnInit {
     this.selectedCityBill = [];
     this.selectedDistBill = [];
     this.selectedDistrictName=[];
+    this.selectedPartyName = [];
+
+    this.deleteSA();
+    this.addSA();
 
     if (action == 'view') { this.action = 'view'; }
     else { this.action = 'update'; }
@@ -1851,23 +1929,27 @@ export class CustomersMasterComponent implements OnInit {
     });*/
 
     this.Service.custShipAddDtlsRetriveList(cp_Id).subscribe(data => {
-          let k = 0;
-         // console.log(JSON.stringify(data))
-          this.addSAUpdate()
-          
-          while (this.cust_bussiness_partner_shipping_addr_dtls.length > 0 && data.length > 0) 
-            { 
-              this.cust_bussiness_partner_shipping_addr_dtls.removeAt(0); 
-            }
-          for (let data12 of data) {
-            this.addSAUpdate();
-            this.selectedDistrictName[k] = data12["dist_code"];
-            this.cust_bussiness_partner_shipping_addr_dtls.at(k).patchValue({ slno: data12["slno"], shipping_name: data12["shipping_name"], country_shipping: data12["country_shipping"],
-            state_shipping: data12["state_shipping"],dist_code: data12["dist_code"],city: data12["city"],pincode: data12["pincode"],address: data12["address"]})
-            k = k + 1;
+      let k = 0;
+      console.log("SHIPPING:: " + JSON.stringify(data))
+      //this.addSAUpdate();
+      this.addSA();
+      //this.shipping_sl_no = 1;
+      while (this.cust_bussiness_partner_shipping_addr_dtls.length > 0 && data.length > 0) {
+        this.cust_bussiness_partner_shipping_addr_dtls.removeAt(0);
+      }
+      for (let data12 of data) {
+        //this.addSAUpdate();
+        this.addSA();
+        this.selectedPartyName[k] = data12["shipping_name"];
+        // this.selectedDistrictName[k] = data12["dist_code"];
+        this.cust_bussiness_partner_shipping_addr_dtls.at(k).patchValue({
+          slno: data12["slno"], shipping_name: data12["shipping_name"], country_shipping: data12["country_shipping"],
+          state_shipping: data12["state_shipping"], dist_code: data12["dist_code"], city: data12["city"], pincode: data12["pincode"], ship_gst: data12.ship_gst, address: data12["address"]
+        })
+        k = k + 1;
 
-          }
-        });
+      }
+    });
 
 
     this.Service.findCustDelvFromList(cp_Id).subscribe(data => {
@@ -2075,20 +2157,22 @@ export class CustomersMasterComponent implements OnInit {
   }
 
   addSA() {
-    this.shipping_sl_no = this.shipping_sl_no + 1;
+    //this.ShippingAddressAdd=false;
     this.cust_bussiness_partner_shipping_addr_dtls.push(this.fb.group({
-      slno: this.shipping_sl_no,
+      slno: this.cust_bussiness_partner_shipping_addr_dtls.length + 1,
       shipping_name: '',
-      country_shipping: 'INDIA',
-      state_shipping: this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("state_shipping").value,
+      country_shipping: '',
+      //state_shipping: this.cust_bussiness_partner_shipping_addr_dtls.at(0).get("state_shipping").value,
+      state_shipping: '',
       dist_code: '',
       city: '',
       pincode: '',
+      ship_gst: '',
       address: ''
     }));
   }
 
-  addSAUpdate() {
+  /*addSAUpdate() {
     this.shipping_sl_no = this.shipping_sl_no + 1;
     this.cust_bussiness_partner_shipping_addr_dtls.push(this.fb.group({
       slno: this.shipping_sl_no,
@@ -2100,22 +2184,25 @@ export class CustomersMasterComponent implements OnInit {
       pincode: '',
       address: ''
     }));
-  }
+  }*/
 
-  deleteSA(index) {
-    if (this.shipping_sl_no > 1) {
-      this.cust_bussiness_partner_shipping_addr_dtls.removeAt(index);
-      this.shipping_sl_no = this.shipping_sl_no - 1;
+    deleteSA(index = undefined) {
+      if(index === undefined) {
+        console.log("Cleared all cust_bussiness_partner_shipping_addr_dtls");
+        while(this.cust_bussiness_partner_shipping_addr_dtls.length)
+          this.cust_bussiness_partner_shipping_addr_dtls.removeAt(this.cust_bussiness_partner_shipping_addr_dtls.length - 1);
+        return;
+      }
+      console.log("Index Delete:: ",index," /Sl/ ",this.shipping_sl_no);
+      if (this.cust_bussiness_partner_shipping_addr_dtls.length > 1)
+        this.cust_bussiness_partner_shipping_addr_dtls.removeAt(index);
+      else {
+        alert("Can't Delete All Rows");
+        this.cust_bussiness_partner_shipping_addr_dtls.reset();
+        this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({ slno: 1 });
+      }
+  
+      while (index < this.cust_bussiness_partner_shipping_addr_dtls.length)
+        this.cust_bussiness_partner_shipping_addr_dtls.at(index).patchValue({ slno: ++index });
     }
-    else {
-      this.shipping_sl_no = 1;
-      alert("Can't Delete All Rows");
-      this.cust_bussiness_partner_shipping_addr_dtls.reset();
-      this.cust_bussiness_partner_shipping_addr_dtls.at(0).patchValue({ slno: this.shipping_sl_no });
-    }
-
-    for (let i = 1; i <= this.shipping_sl_no; i++) {
-      this.cust_bussiness_partner_shipping_addr_dtls.at(i - 1).patchValue({ slno: i });
-    }
-  }
 }

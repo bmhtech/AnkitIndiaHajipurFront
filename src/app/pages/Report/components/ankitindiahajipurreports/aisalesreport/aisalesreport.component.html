@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Sales Reports</title>
+</head>
+<body>
+  <div class="progress_loader_box" *ngIf="!status">
+    <div class="progress-loader">
+        <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+    </div>
+  </div>
+
+  <div>
+    <form [formGroup]="userForm">
+      <fieldset>
+        <legend>Sales Transportation Report </legend>
+
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+            <div class="form-group">
+                <mat-label>From Date<span class="red"> *</span></mat-label>
+                <input type="date" class="form-control" formControlName="salestransfromdate">
+            </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+          <div class="form-group">
+              <mat-label>To Date<span class="red"> *</span></mat-label>
+              <input type="date" class="form-control" formControlName="salestranstodate">
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+          <div class="form-group ht_59">
+              <mat-label>Transported To<span class="red"> *</span></mat-label>
+              <mat-select formControlName="trans_to" class="form-control">
+                  <mat-option value="Army">ARMY</mat-option>
+                  <mat-option value="Other">OTHER</mat-option>
+                  <mat-option value="All">ALL</mat-option>
+              </mat-select>
+          </div>
+        </div>
+
+        <div class="col-lg-12">
+            <div class="form-group">
+                <button type="submit" class="btn btn-primary" (click)="searchSalesTrans()">Search</button>
+            </div>
+        </div>
+
+        <fieldset class="table_container">
+            <div class="col-lg-12" style="float: right;"> 
+                <div class="form-group">
+                    <button mat-raised-button (click)="exportAsXLSX()" color="primary">Excel</button>
+
+                    <mat-dialog-actions align="center">
+                        <button [useExistingCss]="true" printSectionId="print-section" mat-button ngxPrint
+                            class="btn btn-info">Print</button>
+                    </mat-dialog-actions>
+                </div>
+            </div>
+
+            <div class="table_content" id="print-section">
+                <table class="table table-bordered" id="dynamictable">
+                    <thead>
+                        <tr class="tr_thead">
+                            <td colspan="14" align="center"><b>ANKIT INDIA LTD. (HAJIPUR)</b></td>
+                        </tr>
+                        <tr class="tr_thead">
+                            <td colspan="14" align="center"><u>SALES TRANSPORTATION OF {{TransTo | uppercase}} FROM:
+                                    {{SalesTransFromDate | date:'dd-MM-yyyy'}} TO: {{SalesTransToDate | date:'dd-MM-yyyy'}}</u>
+                            </td>
+                        </tr>
+                        <tr class="tr_thead">
+                            <th>Date</th>
+                            <th>Invoice No.</th>
+                            <th>Truck No.</th>
+                            <th>Dispatch To</th>
+                            <th>Dispatch Date</th>
+                            <th>Eway Bill No.</th>
+                            <th>Eway Bill Gen. Date</th>
+                            <th>Eway Bill Expiry Date</th>
+                            <th>Transporter</th>
+                            <th>Transport To</th>
+                            <th>Dispatch Quantity (in MT)</th>
+                            <th>Transp. Rate/Ton</th>
+                            <th>Base Transport Charges</th>
+                            <th>Advances (If Any)</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let sales of SalesTransportation">
+                            <td>{{sales.date | date:'dd-MM-yyyy'}}</td>
+                            <td>{{sales.invoice}}</td>
+                            <td>{{sales.truck}}</td>
+                            <td>{{sales.dispatch_to}}</td>
+                            <td>{{sales.dispatch_date | date:'dd-MM-yyyy'}}</td>
+                            <!-- <td>{{sales.eway_bill_no | number:'1.0-0'}}</td> -->
+                            <td>{{sales.eway_bill_no && (sales.eway_bill_no !== 'NA' || sales.eway_bill_no !== '') ? (sales.eway_bill_no) : '' }}</td>
+                            <td>{{sales.eway_bill_date}}</td>
+                            <td>{{sales.eway_valid_upto}}</td>
+                            <td>{{sales.transporter_name}}</td>
+                            <td>{{sales.transport_to}}</td>
+                            <td>{{sales.dispatch_qty}}</td>
+                            <td>{{sales.trans_rate_per_uom}}</td>
+                            <td>{{sales.trans_rate_per_truck}}</td>
+                            <td>{{sales.adv_paid}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </fieldset>
+      </fieldset>
+    </form>
+  </div>
+</body>
+</html>

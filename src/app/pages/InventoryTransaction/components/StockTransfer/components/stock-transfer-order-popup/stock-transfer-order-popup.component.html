@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Stock Transfer Order Popup</title>
+</head>
+<body>
+  <div class="progress_loader_box" *ngIf="status == false">
+    <div class="progress-loader" >
+      <mat-progress-spinner [mode]="'indeterminate'" ></mat-progress-spinner>
+    </div>
+  </div>
+  
+  <div class="container-fluid modal_box">
+    <form [formGroup]="userForm">
+      <div class="row">
+        <div class="col-lg-5 col-md-12 col-sm-12 col-12">
+          <mat-dialog-content class="mat-typography">
+            <fieldset>
+              <legend>Document List</legend>
+              <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+                <div class="table_content">
+                  <table class="table table-bordered">
+                    <thead>
+                      <tr>
+                        <th style="width: 50px;">&nbsp;</th>
+                        <th>Sl No.</th>
+                        <th>Stock Transfer No</th>
+                        <th>Stock Transfer Date</th>              
+                        <!-- <th>Imserted By</th>   -->
+                      </tr>  
+                    </thead>
+                    <tbody>
+                      <tr *ngFor="let i of stockDocsList; let poinIndex = index">
+  
+                        <td *ngIf="showbutton;else elseBlockupdate">
+                          <mat-radio-button (change)="check1(i)"></mat-radio-button></td>
+  
+                          <ng-template #elseBlockupdate>
+                           <td >
+                             <mat-radio-button  [checked] ="true" [disabled]="true"></mat-radio-button>
+                           </td>
+                       </ng-template>
+  
+                        <!-- <td><mat-radio-button (change)="check1(i)"></mat-radio-button></td> -->
+                        <td>{{poinIndex+1}}</td>
+                        <td>{{i.order_no}}</td>
+                        <td>{{i.order_date}}</td>
+                        <!-- <td>{{i.inserted_by}}</td>    -->
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
+              </div>           
+            </fieldset>
+          </mat-dialog-content>
+        </div>
+        <div class="col-lg-7 col-md-12 col-sm-12 col-12">
+          <mat-dialog-content class="mat-typography">
+            <fieldset>
+              <legend>Document List</legend>
+              
+  
+              <div class="dyn_table_conent">
+                  <div class="dyn_table_header">
+                    <label class="label_col"><h3>Select</h3></label>
+                    <label class="label_col"><h3>Item</h3></label>
+                    <label class="label_col"><h3>Packing</h3></label>
+                    <label class="label_col"><h3>Packing Qty.</h3></label>
+                    <label class="label_col"><h3>Packing Uom</h3></label>
+                    <label class="label_col"><h3>Item Qty.</h3></label>
+                    <label class="label_col"><h3>Item Uom</h3></label>
+                    <label class="label_col"><h3>Mat.Wt</h3></label>
+                    <label class="label_col"><h3>Price</h3></label>
+                    <label class="label_col"><h3>Price Based On</h3></label>
+                    <label class="label_col"><h3>Amount</h3></label>
+                    <label class="label_col"><h3>Gross Amount</h3></label>
+                    <label class="label_col"><h3>Tax Id</h3></label>
+                    <label class="label_col"><h3>Tax Rate(%)</h3></label>
+                    <label class="label_col"><h3>Tax Amount</h3></label>
+                    <label class="label_col"><h3>Net Amount</h3></label>
+                    <label class="label_col"><h3>QC</h3></label>
+                    
+                  </div>
+                  <div class="dyn_table_data_cont" formArrayName="StkTransferDetail">
+                    <div class="dyn_table" *ngFor="let item of StkTransferDetail.controls; let pointIndex=index" [formGroupName]="pointIndex">
+  
+                      <div class="label_col" *ngIf="showbutton;else elseBlockupdatedynamic"><mat-checkbox class="form-control" formControlName="checkbox"></mat-checkbox></div>
+                      
+                      <ng-template #elseBlockupdatedynamic>
+                        <div class="label_col" ><mat-checkbox class="form-control" style="width: 53px;" formControlName="checkbox" [disabled] ="true"></mat-checkbox></div>
+                     </ng-template>
+  
+                     
+                      <!-- <div class="label_col"><mat-checkbox class="form-control" formControlName="checkbox"></mat-checkbox></div> -->
+                      <div class="label_col"><input formControlName="item_name" class="form-control" readonly/></div>                  
+                      <div class="label_col"><input formControlName="packing_name" class="form-control" readonly/></div>
+                      <div class="label_col"><input formControlName="quantity" class="form-control" readonly/></div>                  
+                      <div class="label_col"><input formControlName="uom" class="form-control" readonly/></div>
+                      <div class="label_col"><input formControlName="squantity" class="form-control" readonly/></div>                  
+                      <div class="label_col"><input formControlName="suom" class="form-control" readonly/></div>
+                      <div class="label_col"><input formControlName="mat_wt" class="form-control" readonly/></div>                  
+                      <div class="label_col"><input formControlName="price" class="form-control" readonly/></div>
+                      <div class="label_col"><input formControlName="price_based_on" class="form-control" readonly/></div>                  
+                      <div class="label_col"><input formControlName="amount" class="form-control" readonly/></div>
+                      <div class="label_col"><input formControlName="gross_amt" class="form-control" readonly/></div>                  
+                      <div class="label_col"><input formControlName="tax_id" class="form-control" readonly/></div>
+                      <div class="label_col"><input formControlName="tax_rate" class="form-control" readonly/></div>                  
+                      <div class="label_col"><input formControlName="tax_amt" class="form-control" readonly/></div>
+                      <div class="label_col"><input formControlName="net_amt" class="form-control" readonly/></div>
+                      <div class="label_col"><input formControlName="acc_norms" class="form-control" readonly/></div>
+                   
+                    </div>
+                  </div>  
+                </div>
+            </fieldset>
+          </mat-dialog-content>
+        </div>
+        <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+      </div>
+        <mat-dialog-actions align="end" *ngIf="showbutton">
+            <button class="btn btn-info" (click)="SendDataToDifferentComponenet()" mat-button [mat-dialog-close]="true" cdkFocusInitial>Submit</button>
+          </mat-dialog-actions>
+    </form>
+  </div>
+</body>
+</html>

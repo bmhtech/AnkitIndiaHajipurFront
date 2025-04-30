@@ -4,7 +4,7 @@ import { FormControl, FormGroup, FormBuilder,FormArray, Validators } from '@angu
 import { DropdownServiceService } from '../../../../../../service/dropdown-service.service';
 import {MatDialog, MatDialogConfig} from '@angular/material/dialog';
 import { formatDate } from '@angular/common';
-import { StockTransfer} from '../../../../../../models/StockTransfer/stock-transfer';
+import { StockTransfer} from '../../../../../../Models/StockTransfer/stock-transfer';
 import { StockQcPopupComponent } from '../stock-qc-popup/stock-qc-popup.component';
 import { StockItemPopupComponent } from '../stock-item-popup/stock-item-popup.component';
 import { StockTaxPopupComponent } from '../stock-tax-popup/stock-tax-popup.component';
@@ -517,8 +517,21 @@ import { forkJoin } from 'rxjs';
       {
         this.status = false;
         this.DropDownListService.getItemNameById(event.target.value,this.company_name).subscribe(data=>
-        {       
-          this.DropDownListService.getUomName(data.mstock_unit).subscribe(data=>
+        {    
+          forkJoin(
+            this.DropDownListService.getUomName(data.mstock_unit),
+            this.DropDownListService.getItemMasterPackMat(event.target.value),
+            this.DropDownListService.retriveItemMasterStatInfo(event.target.value,this.company_name),
+            this.DropDownListService.getItemQCDetails(event.target.value,this.company_name),
+          )
+          .subscribe(([data, data1, data2, data3]) => {
+            this.stock_Transfer_Item_Dtls.at(index).patchValue({uom:data.description});
+            this.packingItem[index] = data1;
+            this.stock_Transfer_Item_Dtls.at(index).patchValue({tax_id:data2[0].tax_code, tax_rate:data2[0].tax_rate});
+            this.stock_Transfer_Item_Dtls.at(index).patchValue({acc_norms:data3[0].qc_code});
+          });   
+
+          /*this.DropDownListService.getUomName(data.mstock_unit).subscribe(data=>
           {this.stock_Transfer_Item_Dtls.at(index).patchValue({uom:data.description}); });
           
           this.DropDownListService.getItemMasterPackMat(event.target.value).subscribe(data1=>
@@ -528,7 +541,7 @@ import { forkJoin } from 'rxjs';
           {this.stock_Transfer_Item_Dtls.at(index).patchValue({tax_id:data[0].tax_code, tax_rate:data[0].tax_rate}); });
     
           this.DropDownListService.getItemQCDetails(event.target.value,this.company_name).subscribe(data=>
-          {this.stock_Transfer_Item_Dtls.at(index).patchValue({acc_norms:data[0].qc_code})});  
+          {this.stock_Transfer_Item_Dtls.at(index).patchValue({acc_norms:data[0].qc_code})});*/
 
           this.status = true;
         });   
@@ -538,28 +551,57 @@ import { forkJoin } from 'rxjs';
     itemId: any;
     packingQty:any;
     empty_bag_wt:any = [];
+    tolerance:any = [];
+
     onChangePackingItem(index,event,)
     {
       if(event.target.value != "0")
       {
-        this.status = false;
+        /*this.status = false;
         this.itemId =  this.stock_Transfer_Item_Dtls.at(index).get("item_code").value as FormControl;
         this.packingQty =  this.stock_Transfer_Item_Dtls.at(index).get("squantity").value as FormControl;
         this.DropDownListService.getItemPackUom(this.itemId, event.target.value,this.company_name).subscribe(data=>
         { 
+          console.log("PACKING DTLS:: ",JSON.stringify(data));
           this.capacity[index] = data.capacity; 
           this.empty_bag_wt[index] = data.empty_big_wt;
           this.stock_Transfer_Item_Dtls.at(index).patchValue({suom: data.uom1, 
             quantity: this.capacity[index] * this.packingQty, mat_wt: Number(this.capacity[index] * this.packingQty - (this.empty_bag_wt * this.packingQty)).toFixed(2)}); 
           this.status = true;
+        });*/
+
+        console.log("itempacking:: "+this.stock_Transfer_Item_Dtls.at(index).get("item_code").value," /packing/ ",event.target.value," /index/ ",index)
+        this.status = false;
+        this.stock_Transfer_Item_Dtls.at(index).patchValue({ packing: event.target.value })
+        this.itemId =  this.stock_Transfer_Item_Dtls.at(index).get("item_code").value as FormControl;
+        this.packingQty =  this.stock_Transfer_Item_Dtls.at(index).get("squantity").value as FormControl;
+        console.log("itemid:: "+this.itemId," /packingQty/ ",this.packingQty," /packing/ ",this.stock_Transfer_Item_Dtls.at(index).get("packing").value)
+        forkJoin(
+          this.DropDownListService.getItemPackUom(this.itemId, event.target.value, this.company_name),
+          this.DropDownListService.getItemNameByIdNew(event.target.value, this.company_name)
+        )
+          .subscribe(([data, packingdata]) => {
+          console.log("Packing Item UOM :" + JSON.stringify(data))
+          console.log("Packing UOM Stock:" + JSON.stringify(packingdata))
+          this.capacity[index] = data.capacity; 
+          this.empty_bag_wt[index] = data.empty_big_wt;
+          this.tolerance[index] = data["tolerance"];
+          console.log("Capacity:" +this.capacity[index] ," /emptybagwt/ ",this.empty_bag_wt[index]);
+          this.stock_Transfer_Item_Dtls.at(index).patchValue({//suom: data.uom1, 
+            quantity: this.capacity[index] * this.packingQty, mat_wt: Number(this.capacity[index] * this.packingQty - (this.empty_bag_wt * this.packingQty)).toFixed(2)}); 
+          
+          this.stock_Transfer_Item_Dtls.at(index).patchValue({ suom: packingdata.mstock_unit_name, packing: event.target.value });
+          this.status = true;
         });
+
       }
     }
 
     calItemQty(packing_qty, index)
     {
-      let itemQty = this.capacity * packing_qty.target.value
-      this.stock_Transfer_Item_Dtls.at(index).patchValue({quantity: itemQty, mat_wt: Number(itemQty - this.empty_bag_wt[index]).toFixed(2)});
+      console.log("pQty:: " +packing_qty.target.value," /capicty/ ",this.capacity[index]," /empwt/ ",this.empty_bag_wt[index]);
+      let itemQty = this.capacity[index] * packing_qty.target.value;
+      this.stock_Transfer_Item_Dtls.at(index).patchValue({quantity: Number(itemQty).toFixed(3), mat_wt: Number(itemQty - this.empty_bag_wt[index]).toFixed(3)});
     }
 
     amt:any;

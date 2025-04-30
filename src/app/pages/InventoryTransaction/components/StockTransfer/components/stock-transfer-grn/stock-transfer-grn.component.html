@@ -29,6 +29,23 @@
 
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
               <div class="form-group ">
+                <mat-label>Reference Type<span class="red">*</span></mat-label>
+                <mat-select class="form-control" formControlName="ref_type" [(ngModel)]="model.ref_type" (selectionChange)="onChangeRefType($event.value)">
+                  <mat-option value="Stock Transfer Order">Stock Transfer Order (Army)</mat-option>
+                  <mat-option value="Other">Other</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="model.ref_type == 'Stock Transfer Order'">
+              <div class="form-group shs">
+                <label>&nbsp;</label>
+                <button class="btn btn-info" style="margin-top: 20px;" (click)="onClickShow()">Show</button>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+              <div class="form-group ">
                 <mat-label>Vehicle No<span class="red">*</span></mat-label>
                 <mat-select class="form-control" formControlName="vehicle_id"  (selectionChange)="onChangeVechileNo()">
                  
@@ -82,7 +99,6 @@
                 <input type="text" [(ngModel)]="seq_no" formControlName="stk_grn_no" class="form-control" readonly>
               </div>
             </div>
-            
            
             <div class="col-lg-3 col-md-4 col-sm-6 col-12">
               <div class="form-group">
@@ -94,6 +110,7 @@
                 </mat-select>
               </div>
             </div>
+
           </fieldset>
         </div>
         <div class="col-lg-12">
@@ -147,33 +164,96 @@
                       <div class="label_col"><input class="form-control srln" type="number" min="0" formControlName="slno"  /></div>
                       <div class="label_col"><select formControlName="adv_item_code" class="form-control i_nam" (change)="onchangeItemName(pointIndex, $event)"><option value="0">-Select-</option> <option *ngFor="let item_code of item_codes" [value]="item_code.item_id">{{item_code.item_name}}</option></select></div>                    
                       <div class="label_col"><select formControlName="adv_packing" class="form-control i_nam" (change)="onchangePackingItem(pointIndex, $event)"><option value="0">-Select-</option> <option *ngFor="let packingitm of packingItem[pointIndex]" [value]="packingitm.item_code">{{packingitm.item_name}}</option></select></div>                      
-                      <div class="label_col"><input class="form-control" type="number" min="0" formControlName="adv_pack_qty" (keyup)="getAdvPackingQty($event, pointIndex)"/></div>
-                      <div class="label_col"><input class="form-control" formControlName="adv_pack_uom"  /></div>                     
-                      <div class="label_col"><input class="form-control" type="number" formControlName="adv_item_qty" (keyup)="getAdvItemQty($event, pointIndex)"/></div>
-                      <div class="label_col"><input class="form-control" formControlName="adv_mat_wt"  /></div>
-                      <div class="label_col"><input class="form-control" formControlName="adv_item_uom"  /></div>
+                      <div class="label_col">
+                        <input class="form-control" type="number" min="0" formControlName="adv_pack_qty" (keyup)="getAdvPackingQty($event, pointIndex)" readonly *ngIf="stockTranferArmy; else others"/>
+                        <ng-template #others>
+                          <input class="form-control" type="number" min="0" formControlName="adv_pack_qty" (keyup)="getAdvPackingQty($event, pointIndex)"/>
+                        </ng-template>
+                      </div>
+                      <div class="label_col">
+                        <input class="form-control" formControlName="adv_pack_uom"   readonly *ngIf="stockTranferArmy; else others1" />
+                        <ng-template #others1>
+                          <input class="form-control" formControlName="adv_pack_uom"/>
+                        </ng-template>
+                      </div>                     
+                      <div class="label_col">
+                        <input class="form-control" type="number" formControlName="adv_item_qty" (keyup)="getAdvItemQty($event, pointIndex)"  readonly *ngIf="stockTranferArmy; else others2"/>
+                        <ng-template #others2>
+                          <input class="form-control" type="number" formControlName="adv_item_qty" (keyup)="getAdvItemQty($event, pointIndex)"/>
+                        </ng-template>
+                      </div>
+                      <div class="label_col">
+                        <input class="form-control" formControlName="adv_mat_wt"  readonly *ngIf="stockTranferArmy; else others3"/>
+                        <ng-template #others3>
+                          <input class="form-control" formControlName="adv_mat_wt"/>
+                        </ng-template>
+                      </div>
+                      <div class="label_col">
+                        <input class="form-control" formControlName="adv_item_uom"   readonly *ngIf="stockTranferArmy; else others4" />
+                        <ng-template #others4>
+                          <input class="form-control" formControlName="adv_item_uom" />
+                        </ng-template>
+                      </div>
                       <div class="label_col"><input class="form-control" type="number" min="0" formControlName="rcv_pack_qty" (keyup)="getRcvPackingQty($event, pointIndex)"/></div>
-                      <div class="label_col"><input class="form-control" formControlName="rcv_pack_uom"  /></div>                     
+                      <div class="label_col"><input class="form-control" formControlName="rcv_pack_uom" readonly/></div>                     
                       <div class="label_col"><input class="form-control" type="number" formControlName="rcv_item_qty" (keyup)="getRcvItemQty($event, pointIndex)"/></div>
                       <div class="label_col"><input class="form-control" formControlName="rcv_mat_wt"  /></div>
-                      <div class="label_col"><input class="form-control" formControlName="rcv_item_uom"  /></div>
-                      <div class="label_col"><input class="form-control" type="number" min="0" formControlName="pssd_pack_qty" (keyup)="getPssdPackingQty($event, pointIndex)"/></div>
-                      <div class="label_col"><input class="form-control" formControlName="pssd_pack_uom"  /></div>                     
-                      <div class="label_col"><input class="form-control" type="number" formControlName="pssd_item_qty" (keyup)="getPssdItemQty($event, pointIndex)"/></div>
-                      <div class="label_col"><input class="form-control" formControlName="pssd_mat_wt"  /></div>
-                      <div class="label_col"><input class="form-control" formControlName="pssd_item_uom"  /></div>
-                      <div class="label_col"><input class="form-control" type="number" min="0" formControlName="unit_rate" (keyup)="getUnitRate($event, pointIndex)"/></div>
-                      <div class="label_col"><select class="form-control" formControlName="price_based_on" (change)="getPriceBasedOn($event, pointIndex)">
-                        <!-- <option value="0">-Select-</option>
-                        <optgroup label="Packing">
-                          <option value="Packing">Packing</option>
-                        </optgroup>
-                        <optgroup label="Item">
-                          <option value="With Packing">ItemWithPacking</option>
-                          <option value="Without Packing">ItemWithoutPacking</option>
-                        </optgroup> -->
-                        <option value="Packing">Packing</option><option value="Item">Item</option>
-                    </select></div>
+                      <div class="label_col"><input class="form-control" formControlName="rcv_item_uom" readonly /></div>
+                      <div class="label_col">
+                        <input class="form-control" type="number" min="0" formControlName="pssd_pack_qty" (keyup)="getPssdPackingQty($event, pointIndex)"  readonly *ngIf="stockTranferArmy; else others5"/>
+                        <ng-template #others5>
+                          <input class="form-control" type="number" min="0" formControlName="pssd_pack_qty" (keyup)="getPssdPackingQty($event, pointIndex)"/>
+                        </ng-template>
+                      </div>
+                      <div class="label_col">
+                        <input class="form-control" formControlName="pssd_pack_uom" readonly *ngIf="stockTranferArmy; else others6"/>
+                        <ng-template #others6>
+                          <input class="form-control" formControlName="pssd_pack_uom"/>
+                        </ng-template>
+                      </div>                     
+                      <div class="label_col">
+                        <input class="form-control" type="number" formControlName="pssd_item_qty" (keyup)="getPssdItemQty($event, pointIndex)" readonly *ngIf="stockTranferArmy; else others7"/>
+                        <ng-template #others7>
+                          <input class="form-control" type="number" formControlName="pssd_item_qty" (keyup)="getPssdItemQty($event, pointIndex)"/>
+                        </ng-template>
+                      </div>
+                      <div class="label_col">
+                        <input class="form-control" formControlName="pssd_mat_wt" readonly *ngIf="stockTranferArmy; else others8"/>
+                        <ng-template #others8>
+                          <input class="form-control" formControlName="pssd_mat_wt"/>
+                        </ng-template>
+                      </div>
+                      <div class="label_col">
+                        <input class="form-control" formControlName="pssd_item_uom" readonly *ngIf="stockTranferArmy; else others9"/>
+                        <ng-template #others9>
+                          <input class="form-control" formControlName="pssd_item_uom"/>
+                        </ng-template>
+                      </div>
+                      <div class="label_col">
+                        <input class="form-control" type="number" min="0" formControlName="unit_rate" (keyup)="getUnitRate($event, pointIndex)"  readonly *ngIf="stockTranferArmy; else others10"/>
+                        <ng-template #others10>
+                          <input class="form-control" type="number" min="0" formControlName="unit_rate" (keyup)="getUnitRate($event, pointIndex)"/>
+                        </ng-template>
+                      </div>
+                      <div class="label_col">
+                        <select class="form-control" formControlName="price_based_on" (change)="getPriceBasedOn($event, pointIndex)" disabled *ngIf="stockTranferArmy; else others11">
+                          <!-- <option value="0">-Select-</option>
+                          <optgroup label="Packing">
+                            <option value="Packing">Packing</option>
+                          </optgroup>
+                          <optgroup label="Item">
+                            <option value="With Packing">ItemWithPacking</option>
+                            <option value="Without Packing">ItemWithoutPacking</option>
+                          </optgroup> -->
+                          <option value="Packing">Packing</option><option value="Item">Item</option>
+                        </select>
+                        <ng-template #others11>
+                          <select class="form-control" formControlName="price_based_on" (change)="getPriceBasedOn($event, pointIndex)"> 
+                            <option value="Packing">Packing</option>
+                            <option value="Item">Item</option>
+                          </select>
+                        </ng-template>
+                      </div>
 
                       <div class="label_col"><input class="form-control" type="number" formControlName="amount"  /></div>
                       <div class="label_col"><input class="form-control" type="number" formControlName="discount" (keyup)="getdiscount($event, pointIndex)"/></div>

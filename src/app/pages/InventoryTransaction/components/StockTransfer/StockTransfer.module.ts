@@ -33,6 +33,7 @@ import { StockTransferChallanPrintPopUpComponent } from './components/stock-tran
 import { StockTransferSaleInvoicePrintoptionComponent } from './components/stock-transfer-sale-invoice-printoption/stock-transfer-sale-invoice-printoption.component';
 import { StockTransferSaleInvoicePrintComponent } from './components/stock-transfer-sale-invoice-print/stock-transfer-sale-invoice-print.component';
 import {NgxPrintModule} from 'ngx-print';
+import { StockTransferOrderPopupComponent } from './components/stock-transfer-order-popup/stock-transfer-order-popup.component';
 
 @NgModule({
   imports: [
@@ -69,7 +70,7 @@ import {NgxPrintModule} from 'ngx-print';
     StockTransferChallanPrintPopUpComponent,
     StockTransferSaleInvoicePrintoptionComponent,
     StockTransferSaleInvoicePrintComponent,
-
+    StockTransferOrderPopupComponent
 ],
 
   declarations: [
@@ -81,7 +82,6 @@ import {NgxPrintModule} from 'ngx-print';
     StockTaxPopupComponent,
     StockTransferChallanComponent,
     StockTransferInvoiceComponent,
-
     StockTransferChallanPopUpComponent,
     StkChallanStkTransferPopupComponent,
     StockTransferLoadingAdvicePopupComponent,
@@ -96,7 +96,7 @@ import {NgxPrintModule} from 'ngx-print';
     StockTransferChallanPrintPopUpComponent,
     StockTransferSaleInvoicePrintoptionComponent,
     StockTransferSaleInvoicePrintComponent,
- 
+    StockTransferOrderPopupComponent,
   ]
 })
 export class StockTransferModule { }

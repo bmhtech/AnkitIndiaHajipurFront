@@ -6,6 +6,7 @@ export class StockTransferGrn
 		stk_grn_no: any;
 		b_unit: any;
 		b_unitname :any;
+		ref_type :any;
 		vehicle_id: any;	
 		company_id: any;
 		fin_year: any;

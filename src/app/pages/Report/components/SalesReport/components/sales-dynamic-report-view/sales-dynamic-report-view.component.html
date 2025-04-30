@@ -2233,39 +2233,39 @@
                   <th>VEHICLE</th>
                   <th>ITEM</th>
                   <th>PACKING</th>
-                  <th>MAT QTY</th>
+                  <th>QTY</th>
 
                   <th>QC DATE</th>
-                  <th>MOIS.</th>
+                  <th>MOIS</th>
                   <th>HLW</th>
-                  <th>INFES.</th>
-                  <th>ODR.</th>
-                  <th>STONE</th>
-                  <th>POTIA</th>
+                  <th>INF</th>
+                  <th>ODR</th>
+                  <th>STN</th>
+                  <th>POT</th>
                   <th>KB</th>
                   
                   <th>NO.</th>
                   <th>DATE</th>
-                  <th>MAT QTY</th>
+                  <th>QTY</th>
 
                   <th>QC DATE</th>
-                  <th>MOIS.</th>
+                  <th>MOIS</th>
                   <th>HLW</th>
-                  <th>INFES.</th>
-                  <th>ODR.</th>
-                  <th>STONE</th>
-                  <th>POTIA</th>
+                  <th>INF</th>
+                  <th>ODR</th>
+                  <th>STN</th>
+                  <th>POT</th>
                   <th>KB</th>
-                  <th>(-) 2.5 MM</th>
+                  <th>(-)2.5</th>
                   <th>OFG</th>
                   <th>IDK</th>
-                  <th>SV (ML)</th>
-                  <th>BROKEN & SHIRVILLED</th>
-                  <th>WEIGHT GLUTEN</th>
-                  <th>TOTAL IMPURITES</th>
-                  <th>(+) 6MM</th>
+                  <th>SV</th>
+                  <th>BRKN</th>
+                  <th>GLUT</th>
+                  <th>TOTAL</th>
+                  <th>(+)6</th>
 
-                  <th>PROCESS</th>
+                  <th>PRC</th>
 
                   <th>NO.</th>
                   <th>DATE</th>
@@ -2277,13 +2277,13 @@
               </thead>
               <tbody>
                 <tr *ngFor="let qc of WhQCReport; let pointIndex=index">
-                  <td>{{qc.unload_date | date:'dd-MM-yyyy'}}</td>
+                  <td>{{ qc.unload_date && qc.unload_date !== 'NA' ? (qc.unload_date | date:'dd-MM-yyyy') : 'NA' }}</td>
                   <td>{{qc.vehicle}}</td>
                   <td>{{qc.item}}</td>
                   <td>{{qc.sh_pack}}</td>
                   <td>{{qc.ul_mat_weight}}</td>
 
-                  <td>{{qc.qc_date | date:'dd-MM-yyyy'}}</td>
+                  <td>{{ qc.qc_date && qc.qc_date !== 'NA' ? (qc.qc_date | date:'dd-MM-yyyy') : 'NA' }}</td>
                   <td>{{qc.MOIS}}</td>
                   <td>{{qc.HLW}}</td>
                   <td>{{qc.INFES}}</td>
@@ -2293,10 +2293,10 @@
                   <td>{{qc.KB}}</td>
 
                   <td>{{qc.grn_no}}</td>
-                  <td>{{qc.grn_date | date:'dd-MM-yyyy'}}</td>
+                  <td>{{ qc.grn_date && qc.grn_date !== 'NA' ? (qc.grn_date | date:'dd-MM-yyyy') : 'NA' }}</td>
                   <td>{{qc.grn_pssd_mat_weight}}</td>
 
-                  <td>{{qc.mas_qc_date | date:'dd-MM-yyyy'}}</td>
+                  <td>{{ qc.mas_qc_date && qc.mas_qc_date !== 'NA' ? (qc.mas_qc_date | date:'dd-MM-yyyy') : 'NA' }}</td>
                   <td>{{qc.M_MOIS}}</td>
                   <td>{{qc.M_HLW}}</td>
                   <td>{{qc.M_INFES}}</td>
@@ -2316,7 +2316,7 @@
                   <td>{{qc.sales_process}}</td>
 
                   <td>{{qc.challan_no}}</td>
-                  <td>{{qc.challan_date | date:'dd-MM-yyyy'}}</td>
+                  <td>{{ qc.challan_date && qc.challan_date !== 'NA' ? (qc.challan_date | date:'dd-MM-yyyy') : 'NA' }}</td>
                   <td>{{qc.partyname}}</td>
 
                   <td>{{qc.warehouse_name}}</td>

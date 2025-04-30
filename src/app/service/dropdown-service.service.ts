@@ -1010,6 +1010,10 @@ export class DropdownServiceService {
     return this.httpClient.get<StockTransfer[]>(this.url + 'getStkTrans').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getStkTranswtoutVch(): Observable<StockTransfer[]> {
+    return this.httpClient.get<StockTransfer[]>(this.url + 'getStkTranswtoutVch').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
   getStockTransDtls(stock_id: string): Observable<StockTransfer> {
     return this.httpClient.get<StockTransfer>(this.url + 'getStockTransDtls/' + stock_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
@@ -1605,7 +1609,6 @@ export class DropdownServiceService {
   getStkChallanVehicleNo(advice_id: String): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getStkChallanVehicleNo/' + advice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
-
 
   getLoadingAdvPartyDtls(advice_id: String): Observable<wm_loading_advice_Party_Dtls[]> {
     return this.httpClient.get<wm_loading_advice_Party_Dtls[]>(this.url + 'getLoadingAdvPartyDtls/' + advice_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
@@ -6426,4 +6429,29 @@ export class DropdownServiceService {
     return this.httpClient.get<any>(this.url + 'getSoRestQtyCheckWithGrn/' + sono + "/" + unloadid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  customerNameActiveBlockAllList(comp): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'customerNameActiveBlockAllList/' + comp).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  /* ANKIT INDIA REPORT STARTS */
+  
+  getSalesTransportationReport(fromdate, todate, trans_to): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesTransportationReport/' + fromdate + "/" + todate + "/" + trans_to).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  /* ANKIT INDIA REPORT ENDS */
+
+  /* STOCK TRANSFER ORDER TO GRN STARTS */
+  getStkTransOrderItemDlts(stockTransOrder_id: string): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.url + 'getStkTransOrderItemDlts/' + stockTransOrder_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getStkOrderVehicleNo(st_order_id: String): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getStkOrderVehicleNo/' + st_order_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getstockOrderdetails(stockTrans_id: string): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getstockOrderdetails/' + stockTrans_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  /* STOCK TRANSFER ORDER TO GRN ENDS */
 }

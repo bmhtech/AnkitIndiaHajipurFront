@@ -4,11 +4,12 @@ import { MatDialogRef, MatDialog, MatDialogConfig} from '@angular/material/dialo
 import { formatDate } from '@angular/common';
 import { forkJoin } from 'rxjs';
 import { FormControl, FormGroup, FormBuilder,FormArray, Validators } from '@angular/forms';
-import { StockTransferGrn} from '../../../../../../models/StockTransfer/stock-transfer-grn';
+import { StockTransferGrn} from '../../../../../../Models/StockTransfer/stock-transfer-grn';
 import { Master } from '../../../../../../service/master.service';
 import { StockQcPopupComponent } from '../stock-qc-popup/stock-qc-popup.component';
 import { StockTaxPopupComponent } from '../stock-tax-popup/stock-tax-popup.component';
 import { StockTransferGrnPrintPopUpComponent } from '../stock-transfer-grn-print-pop-up/stock-transfer-grn-print-pop-up.component';
+import { StockTransferOrderPopupComponent } from '../stock-transfer-order-popup/stock-transfer-order-popup.component';
 
 @Component({
   selector: 'app-stock-transfer-grn',
@@ -77,6 +78,7 @@ export class StockTransferGrnComponent implements OnInit
         b_unit: [''],
         stk_grn_date: [''],
         stk_grn_no: [''],
+        ref_type: [''],
         vehicle_id: [''],
         applicable_charges_id:[''],
         remarks: [''],
@@ -201,6 +203,7 @@ export class StockTransferGrnComponent implements OnInit
     get b_unit(){ return this.userForm.get("b_unit") as FormControl }
     get rec_b_unit(){ return this.userForm.get("rec_b_unit") as FormControl }
     get receipt_criteria(){ return this.userForm.get("receipt_criteria") as FormControl }
+    get ref_type(){ return this.userForm.get("ref_type") as FormControl }
     get reference_status(){ return this.userForm.get("reference_status") as FormControl }
     get stk_grn_date(){ return this.userForm.get("stk_grn_date") as FormControl }
     get stk_grn_no(){ return this.userForm.get("stk_grn_no") as FormControl }
@@ -218,236 +221,397 @@ export class StockTransferGrnComponent implements OnInit
     get stk_transfer_grn_docs() { return this.userForm.get('stk_transfer_grn_docs') as FormArray;}
    
     ngOnInit() 
-      {    
-        //For User Role
-    let accessdata=JSON.stringify(JSON.parse(localStorage.getItem("useraccessname")));
-    
-    this.stocktransfergrnsave = false;
-    this.stocktransfergrnupdate = false;
-    this.stocktransfergrnview = false;
-    this.stocktransfergrndelete=false;
-    this.stocktransfergrnprint=false;
+    {    
+      //For User Role
+      let accessdata=JSON.stringify(JSON.parse(localStorage.getItem("useraccessname")));
+      
+      this.stocktransfergrnsave = false;
+      this.stocktransfergrnupdate = false;
+      this.stocktransfergrnview = false;
+      this.stocktransfergrndelete=false;
+      this.stocktransfergrnprint=false;
+      this.stockTranferArmy=false;
 
-    if(accessdata.includes('stock_transfer_grn.save'))
-    {
-     this.stocktransfergrnsave = true;
-    }
-    if(accessdata.includes('stock_transfer_grn.view'))
-    { 
-      this.stocktransfergrnview=true;
-    }
-    if(accessdata.includes('stock_transfer_grn.delete'))
-    { 
-      this.stocktransfergrndelete=true;
-    }
-    if(accessdata.includes('stock_transfer_grn.print'))
-    { 
-      this.stocktransfergrnprint=true;
-    }
-    
-        this.company_name = localStorage.getItem("company_name");
-        this.financialYear = localStorage.getItem("financial_year");
-        this.transBrone=["Own Account","party Account"];
-        this.modeOfTransport=["By Road","By Train","By Ship","By Air","N/A"];
-        this.transRate=["per UOM","per Truck"];
-        this.userForm.patchValue({b_unit: "0"});
-        //this.currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
-        this.currentDate =  formatDate(new Date(localStorage.getItem("CurrentDate")), 'yyyy-MM-dd', 'en');
-        this.payModes=["Cash","RTGS","DD","Cheque","NEFT"];
-        this.status = true;
-        forkJoin(     
-          this.DropDownListService.customUOMList(),
-          this.DropDownListService.payTermNameList(),
-          this.DropDownListService.getChargeMasterList(),
-          this.DropDownListService.custometrBusList( this.company_name),
-          this.DropDownListService.itemTypeList(this.company_name),  
-          //this.DropDownListService.itemNamesList(),
-          this.DropDownListService.itemNamesNewList(),
-          this.DropDownListService.transporterNamesList(),
-          this.Service.getStkTranGrns("company="+this.company_name+"&finyear="+this.financialYear),
-          
-        ).subscribe(([customUOMData,paytermData,chargesMasterData, companyBUMNCList,itemTypeData,itemNameData, TransData,StkTransGrnList])=>
-          {
-            this.customUOMDyns  = customUOMData;
-            
-            this.payTerms = paytermData;
-            this.payTerms = paytermData;
-            this.chargesIdList  = chargesMasterData;
-            this.bussiness_unit_list  = companyBUMNCList;           
-            this.itemtypes  = itemTypeData;
-            this.item_codes = itemNameData;
-            this.trans_codes = TransData;
-            this.listStockTransferGrn = StkTransGrnList;
-            this.status=true;
-          }, (error) => {this.status=true;console.log("ERROR get: "+JSON.stringify(error));alert("something error is occured please try again....");
-          this.ngOnInit()});   
+      if(accessdata.includes('stock_transfer_grn.save'))
+      {
+      this.stocktransfergrnsave = true;
+      }
+      if(accessdata.includes('stock_transfer_grn.view'))
+      { 
+        this.stocktransfergrnview=true;
+      }
+      if(accessdata.includes('stock_transfer_grn.delete'))
+      { 
+        this.stocktransfergrndelete=true;
+      }
+      if(accessdata.includes('stock_transfer_grn.print'))
+      { 
+        this.stocktransfergrnprint=true;
+      }
+  
+      this.company_name = localStorage.getItem("company_name");
+      this.financialYear = localStorage.getItem("financial_year");
+      this.transBrone=["Own Account","party Account"];
+      this.modeOfTransport=["By Road","By Train","By Ship","By Air","N/A"];
+      this.transRate=["per UOM","per Truck"];
+      this.userForm.patchValue({b_unit: "0"});
+      //this.currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en');
+      this.currentDate =  formatDate(new Date(localStorage.getItem("CurrentDate")), 'yyyy-MM-dd', 'en');
+      this.payModes=["Cash","RTGS","DD","Cheque","NEFT"];
+      this.status = true;
+      forkJoin(     
+        this.DropDownListService.customUOMList(),
+        this.DropDownListService.payTermNameList(),
+        this.DropDownListService.getChargeMasterList(),
+        this.DropDownListService.custometrBusList( this.company_name),
+        this.DropDownListService.itemTypeList(this.company_name),  
+        //this.DropDownListService.itemNamesList(),
+        this.DropDownListService.itemNamesNewList(),
+        this.DropDownListService.transporterNamesList(),
+        this.Service.getStkTranGrns("company="+this.company_name+"&finyear="+this.financialYear),
         
-      }
+      ).subscribe(([customUOMData,paytermData,chargesMasterData, companyBUMNCList,itemTypeData,itemNameData, TransData,StkTransGrnList])=>
+        {
+          this.customUOMDyns  = customUOMData;
+          
+          this.payTerms = paytermData;
+          this.payTerms = paytermData;
+          this.chargesIdList  = chargesMasterData;
+          this.bussiness_unit_list  = companyBUMNCList;           
+          this.itemtypes  = itemTypeData;
+          this.item_codes = itemNameData;
+          this.trans_codes = TransData;
+          this.listStockTransferGrn = StkTransGrnList;
+          this.status=true;
+        }, (error) => {this.status=true;console.log("ERROR get: "+JSON.stringify(error));alert("something error is occured please try again....");
+        this.ngOnInit()});
+    }
 
-      showList(s:string)
+    showList(s:string)
+    {
+      if(this.stocktransfergrnsave == true  && this.stocktransfergrnupdate == true)//true exist  false not exist 
       {
-        if(this.stocktransfergrnsave == true  && this.stocktransfergrnupdate == true)//true exist  false not exist 
-        {
-          if(s=="add")
-          {     
-            this.isHidden=true;   
-            this.DropDownListService.getVehiclesFromVehicleLoadUnload().subscribe(newVehicle=>{
-              this.newVehicleList  = newVehicle;
-              }); 
-           // this.userForm.reset(this.ResetAllValues().value);
-          }
-        }
-        if(this.stocktransfergrnsave == true  && this.stocktransfergrnupdate == false)
-        {
-          if(s=="add")
-          {     
-            this.isHidden=true;     
-            this.DropDownListService.getVehiclesFromVehicleLoadUnload().subscribe(newVehicle=>{
-              this.newVehicleList  = newVehicle;
-              });   
-           // this.userForm.reset(this.ResetAllValues().value);
-          }
-        }
-       
-        if(s=="list")
+        if(s=="add")
         {     
-           this.userForm.reset(this.ResetAllValues().value);
-          this.isHidden=false;   
-          this.stocktransfergrnsave = true; 
-          //this.currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en'); 
-          this.currentDate = formatDate(new Date(localStorage.getItem("CurrentDate")), 'yyyy-MM-dd', 'en');
-          this.newVehicleList=[];
-
-         
+          this.isHidden=true;   
+          this.DropDownListService.getVehiclesFromVehicleLoadUnload().subscribe(newVehicle=>{
+            this.newVehicleList  = newVehicle.concat([{vehicle_id:'No Vehicle',vehicle_no:'No Vehicle'}]);
+            }); 
+          // this.userForm.reset(this.ResetAllValues().value);
         }
       }
-  
-      ResetAllValues()
+      if(this.stocktransfergrnsave == true  && this.stocktransfergrnupdate == false)
       {
-        return this.userForm=this.fb.group({
-          id: [''],
-          stk_grn_id: [''],
-          b_unit: [''],
-          rec_b_unit: [''],
-          stk_grn_date: [''],
-          stk_grn_no: [''],
-          vehicle_id: [''],
-          applicable_charges_id:[''],
-          remarks: [''],
-          reference_id:[''],
-          company_id: [''],
-          fin_year: [''],
-          username: [''],
-          receipt_criteria: [''],
-          reference_status:[''],
-    
-          stk_transfer_grn_bu_dtls: this.fb.group({
-            businessunit_name:'',
-            mobile_no: '',
-            email_id: '',
-            work_address: ''}),
-  
-           stk_transfer_grn_item_details: this.fb.array([this.fb.group({	
-            slno:this. item_sl_no,
-            adv_item_code:'',
-            adv_item_name:'',
-            adv_packing:'',
-            adv_pack_qty:'',
-            adv_pack_uom:'',
-            adv_item_qty:'',
-            adv_mat_wt:'',
-            adv_item_uom:'',
-            rcv_pack_qty:'',
-            rcv_pack_uom:'',
-            rcv_item_qty:'',
-            rcv_mat_wt:'',
-            rcv_item_uom:'',
-            pssd_pack_qty:'',
-            pssd_pack_uom:'',
-            pssd_item_qty:'',
-            pssd_mat_wt:'',
-            pssd_item_uom:'',
-            unit_rate: '',
-            price_based_on: '',	
-            amount: '', 
-            discount:'',
-            discount_based_on:'',
-            discount_amt:'',
-            net_amt:'',
-            qc_deduction: '',
-            net_amt_after_qc: '',
-            tax_code: '',
-            tax_rate:'',	
-            tax_amt:'',
-            gross_amt:'',
-            qc_norms:'',
-            warehouse_name:'',	
-            warehouse:'',
-            rack:'',
-            rack_name:'',
-            stack_uom:'',
-            stack_qty:'',})]),
-  
-           stk_transfer_grn_trans_info: this.fb.group({
-            trans_borne_by:'',	
-            mode_of_trans:'',	
-            transporter_code:'',	
-            transportation_rate:'', 
-            payment_mode:'',
-            payment_term:'',
-            bank_name:'',
-            cash_limit: '',
-            acc_name:'',
-            acc_no:'',
-            branch:'',
-            iban:'',
-            bic_swift_code:''}),
-  
-          stk_transfer_grn_other_info: this.fb.group({
-            pty_gross_wt: '',	
-            pty_gross_uom: '',
-            pty_tare_wt: '',
-            pty_tare_uom: '',
-            pty_net_wt: '',	
-            pty_net_uom: '',
-            pty_weigh_bridge_name: '',
-            pty_weigh_slip_no: '',
-            pty_weigh_date: '',
-            own_gross_wt: '',
-            own_gross_uom: '', 
-            own_tare_wt: '',
-            own_tare_uom: '',
-            own_net_wt: '', 
-            own_net_uom: '',		
-            own_weigh_bridge_name: '',	
-            own_weigh_slip_no: '',
-            own_weigh_date: '',
-            adv_freight_charge: '', 	
-            freight_paid_amt: '',	
-            dc_no: '',	
-            dc_date: '',	
-            cn_no: '',	
-            cn_date: '',	
-            arg_tax_dtl: '',	
-            arg_tax_amt: '',	
-            vehicle_id: '',	
-            bill_amt: '',	
-            checkpost_name: '', 	
-            entry_date: '',
-            remarks: ''}),
-  
-          stk_transfer_grn_docs: this.fb.array([this.fb.group({
-            doc_name : ''})]),
-  
-          stk_transfer_grn_resource_cost: this.fb.array([this.fb.group({	
-            charge_name:'',
-            rate_cal_method:'',
-            amount:'',
-            tax_rate: '',
-            tax_amt: '',
-            gross_amt: '',})])
+        if(s=="add")
+        {     
+          this.isHidden=true;     
+          this.DropDownListService.getVehiclesFromVehicleLoadUnload().subscribe(newVehicle=>{
+            this.newVehicleList  = newVehicle.concat([{vehicle_id:'No Vehicle',vehicle_no:'No Vehicle'}]);
+            });   
+          // this.userForm.reset(this.ResetAllValues().value);
+        }
+      }
+      
+      if(s=="list")
+      {     
+          this.userForm.reset(this.ResetAllValues().value);
+        this.isHidden=false;   
+        this.stocktransfergrnsave = true; 
+        //this.currentDate = formatDate(new Date(), 'yyyy-MM-dd', 'en'); 
+        this.currentDate = formatDate(new Date(localStorage.getItem("CurrentDate")), 'yyyy-MM-dd', 'en');
+        this.newVehicleList=[].concat([{vehicle_id:'No Vehicle',vehicle_no:'No Vehicle'}]);
+      }
+    }
+
+    stockTranferArmy:boolean = false;
+
+    onChangeRefType(event){
+      if(event.length){
+        console.log("REFTYPE:: ",event);
+        if(event=="Stock Transfer Order"){
+          this.stockTranferArmy=true;
+        }
+        else{
+          this.stockTranferArmy=false;
+        }
+        console.log("REFTYPE STATUS:: ",this.stockTranferArmy);
+      }
+    }
+
+    reference_type:any;
+    onClickShow()
+    {
+      this.reference_type=this.userForm.get("ref_type").value as FormControl;
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      this.StkGrnId=this.userForm.get("id").value;
+      console.log("tuhin here12345stewtrw :: "+this.StkGrnId)
+      if(this.StkGrnId == null || this.StkGrnId =='')
+      {
+        this.StkGrnId=0;
+        console.log("tuhin here12345 :: "+this.StkGrnId)
+      }
+      dialogConfig.data = {id:this.StkGrnId }; //from id
+      if (this.reference_type=="Stock Transfer Order")
+      {
+        const dialogRef = this.dialog.open(StockTransferOrderPopupComponent, dialogConfig);
+        dialogRef.afterClosed().subscribe(data =>
+        {
+          console.log(" STO DATA :: ",JSON.stringify(data));
+          if(data["order_id"] != "0" && data["order_id"] != '' && data["order_id"] != undefined)
+          {
+            this.userForm.patchValue({reference_id:data["order_id"],reference_status:this.reference_type,referance_type:''});
+                forkJoin(
+                  this.DropDownListService.getStkTransOrderItemDlts(data["order_id"]),
+                  this.DropDownListService.getStkOrderVehicleNo(data["order_id"]),
+                  this.DropDownListService.getstockOrderdetails(data["order_id"])
+                ).subscribe(([itemData,TransData,stockchallan])=>
+                  {
+                    console.log(" STO ITEM :: ",JSON.stringify(itemData));
+                    console.log(" STO VCH :: ",JSON.stringify(TransData));
+                    console.log(" STO DTLS :: ",JSON.stringify(stockchallan));
+                    this.userForm.patchValue({b_unit:stockchallan["business_unit"],rec_b_unit:stockchallan["delivery_business_unit"],
+                      vehicle_id:stockchallan["shipment_mode"],receipt_criteria:stockchallan["passing_wt"]});
+                    this.OnChangeStkDate(this.userForm.get("stk_grn_date").value,"save");
+                      //starts here
+                      let k = 0
+                      this.item_sl_no = 0;
+                      this.packingItem = [];
+                      while(this.stk_transfer_grn_item_details.length)
+                      {this.stk_transfer_grn_item_details.removeAt(0);}
+                      for(let data1 of itemData)
+                      {
+                        this.status = false;
+                        this.DropDownListService.getItemMasterPackMat(data1.item_code).subscribe(packingList=>
+                        { 
+                          this.status = true;
+                          this.packingItem[k] = packingList;
+                        
+                          this.addItem();
+                          this.stk_transfer_grn_item_details.at(k).patchValue({
+                            adv_item_code: data1["item_code"], adv_item_name: data1["item_name"], adv_item_uom: data1["uom"], adv_item_qty: data1["quantity"],
+                            adv_packing: data1["packing"], adv_pack_qty: data1["squantity"],  adv_pack_uom: data1["suom"], adv_mat_wt: data1["mat_wt"],
+                            rcv_pack_uom: data1["suom"],rcv_pack_qty: data1["squantity"],rcv_mat_wt: data1["mat_wt"],
+                            rcv_item_uom: data1["uom"],rcv_item_qty: data1["quantity"],
+                            pssd_pack_uom: data1["suom"],pssd_pack_qty: data1["squantity"], pssd_mat_wt: data1["mat_wt"],
+                            pssd_item_uom: data1["uom"],pssd_item_qty: data1["quantity"],
+                            warehouse: data1["wearhouse"], unit_rate:data1["price"],price_based_on:data1["price_based_on"],
+                            amount: data1["amount"],net_amt: data1["net_amt"],net_amt_after_qc: data1["amount"],
+                            tax_code: data1["tax_id"],tax_rate: data1["tax_rate"],tax_amt: data1["tax_amt"],
+                            gross_amt: data1["gross_amt"], qc_norms: data1["acc_norms"]});
+                          k = k + 1;       
+                        })
+                      }
+                       
+                      this.stk_transfer_grn_trans_info.patchValue({trans_borne_by:TransData["trans_borne_by"],transporter_code:TransData["transporter_name"],
+                      mode_of_trans:TransData["mode_of_trans"]});
+                 
+                      //ends here  
+                    this.status=true;
+                  });
+
+              /*//this.receiving_bu_status=true;
+              this.packingItem = [];
+              let  k=0;
+              this.item_sl_no = 0;
+              //this.grandTotal = 0;
+              console.log("chk order no:"+data["order_no"])
+              this.userForm.patchValue({grand_total: null}); 
+              this.userForm.patchValue({reference_id: data["order_id"],delivery_business_unit:data["rcv_bu"]});
+
+              while(this.stk_transfer_grn_item_details.length)
+              this.stk_transfer_grn_item_details.removeAt(0); 
+              this.stk_transfer_grn_item_details.reset();
+
+              for(let data1 of data.StkTransferDetail)
+              {
+                if(data1.checkbox == true || data1.checkbox == 'true')
+                {
+                  this.status = false;
+                  //this.stockId = data["order_id"];
+                  //this.stockNo = data["order_no"];
+                  this.DropDownListService.getItemMasterPackMat(data1.item_code).subscribe(packingList=>
+                  {  
+                    this.status = true;
+                    this.packingItem[k] = packingList; 
+                    this.addItem();
+                    //  console.log("data1::"+JSON.stringify(data1)) 
+                    this.stk_transfer_grn_item_details.at(k).patchValue(
+                    {
+                      item_code: data1.item_code, packing: data1.packing, suom: data1.suom, mat_wt: Number(data1.mat_wt).toFixed(2),
+                      squantity: data1.squantity, uom: data1.uom, quantity: data1.quantity, price: data1.price,
+                      price_based_on: data1.price_based_on, amount: data1.amount,
+                      tax_code: data1.tax_id, tax_rate: data1.tax_rate, tax_amt: data1.tax_amt,
+                      total_amt: data1.net_amt, acc_norms: data1.acc_norms
+                    });
+                    //this.grandTotal = this.grandTotal + data1.net_amt;
+                    //this.userForm.patchValue({grand_total: this.grandTotal}); 
+                    k = k + 1;              
+                  }); 
+                }
+              }
+              
+              // this.DropDownListService.getStockTransDtls(this.stockId).subscribe(data=>
+              forkJoin(
+              this.DropDownListService.getStockTransDtls(data["order_id"]),
+              this.DropDownListService.getStkTransTranInfo(data["order_id"])
+              ).subscribe(([transData,transInfo])=>
+              {
+                //this.onChangeShipToAddId(transData.business_unit);
+                  //this.onChangePayToAddId(transData.delivery_business_unit);
+                  //this.stk_Transfer_Challan_Shipment_Dtls.patchValue({ship_addr: transData.business_unit, pay_addr: transData.delivery_business_unit}); 
+                  this.userForm.patchValue({order_point:transData["order_point"],passing_wt:transData["passing_wt"],billing_req:transData["billing_req"],weighment_required:transData["weightment_req"],vehicle_type:transData["shipment_mode"]});
+
+                  //this.onChangeTransporterName(transInfo.trans_code);
+                  //this.stk_Transfer_Challan_Trans_Info.patchValue(transInfo);
+
+              });
+
+              /*this.DropDownListService.getStockTransDtls(data["order_id"]).subscribe(data=>
+                { 
+                  this.onChangeShipToAddId(data.business_unit);
+                  this.onChangePayToAddId(data.delivery_business_unit);
+                  this.stk_Transfer_Challan_Shipment_Dtls.patchValue({ship_addr: data.business_unit, pay_addr: data.delivery_business_unit}); 
+                });
+
+              this.DropDownListService.getStkTransTranInfo(this.stockId).subscribe(data=>
+              { 
+                this.onChangeTransporterName(data.trans_code);
+                this.stk_Transfer_Challan_Trans_Info.patchValue(data)});
+              */
+          }
         });
       }
+    }
+
+    ResetAllValues()
+    {
+      return this.userForm=this.fb.group({
+        id: [''],
+        stk_grn_id: [''],
+        b_unit: [''],
+        rec_b_unit: [''],
+        ref_type: [''],
+        stk_grn_date: [''],
+        stk_grn_no: [''],
+        vehicle_id: [''],
+        applicable_charges_id:[''],
+        remarks: [''],
+        reference_id:[''],
+        company_id: [''],
+        fin_year: [''],
+        username: [''],
+        receipt_criteria: [''],
+        reference_status:[''],
+  
+        stk_transfer_grn_bu_dtls: this.fb.group({
+          businessunit_name:'',
+          mobile_no: '',
+          email_id: '',
+          work_address: ''}),
+
+          stk_transfer_grn_item_details: this.fb.array([this.fb.group({	
+          slno:this. item_sl_no,
+          adv_item_code:'',
+          adv_item_name:'',
+          adv_packing:'',
+          adv_pack_qty:'',
+          adv_pack_uom:'',
+          adv_item_qty:'',
+          adv_mat_wt:'',
+          adv_item_uom:'',
+          rcv_pack_qty:'',
+          rcv_pack_uom:'',
+          rcv_item_qty:'',
+          rcv_mat_wt:'',
+          rcv_item_uom:'',
+          pssd_pack_qty:'',
+          pssd_pack_uom:'',
+          pssd_item_qty:'',
+          pssd_mat_wt:'',
+          pssd_item_uom:'',
+          unit_rate: '',
+          price_based_on: '',	
+          amount: '', 
+          discount:'',
+          discount_based_on:'',
+          discount_amt:'',
+          net_amt:'',
+          qc_deduction: '',
+          net_amt_after_qc: '',
+          tax_code: '',
+          tax_rate:'',	
+          tax_amt:'',
+          gross_amt:'',
+          qc_norms:'',
+          warehouse_name:'',	
+          warehouse:'',
+          rack:'',
+          rack_name:'',
+          stack_uom:'',
+          stack_qty:'',})]),
+
+          stk_transfer_grn_trans_info: this.fb.group({
+          trans_borne_by:'',	
+          mode_of_trans:'',	
+          transporter_code:'',	
+          transportation_rate:'', 
+          payment_mode:'',
+          payment_term:'',
+          bank_name:'',
+          cash_limit: '',
+          acc_name:'',
+          acc_no:'',
+          branch:'',
+          iban:'',
+          bic_swift_code:''}),
+
+        stk_transfer_grn_other_info: this.fb.group({
+          pty_gross_wt: '',	
+          pty_gross_uom: '',
+          pty_tare_wt: '',
+          pty_tare_uom: '',
+          pty_net_wt: '',	
+          pty_net_uom: '',
+          pty_weigh_bridge_name: '',
+          pty_weigh_slip_no: '',
+          pty_weigh_date: '',
+          own_gross_wt: '',
+          own_gross_uom: '', 
+          own_tare_wt: '',
+          own_tare_uom: '',
+          own_net_wt: '', 
+          own_net_uom: '',		
+          own_weigh_bridge_name: '',	
+          own_weigh_slip_no: '',
+          own_weigh_date: '',
+          adv_freight_charge: '', 	
+          freight_paid_amt: '',	
+          dc_no: '',	
+          dc_date: '',	
+          cn_no: '',	
+          cn_date: '',	
+          arg_tax_dtl: '',	
+          arg_tax_amt: '',	
+          vehicle_id: '',	
+          bill_amt: '',	
+          checkpost_name: '', 	
+          entry_date: '',
+          remarks: ''}),
+
+        stk_transfer_grn_docs: this.fb.array([this.fb.group({
+          doc_name : ''})]),
+
+        stk_transfer_grn_resource_cost: this.fb.array([this.fb.group({	
+          charge_name:'',
+          rate_cal_method:'',
+          amount:'',
+          tax_rate: '',
+          tax_amt: '',
+          gross_amt: '',})])
+      });
+    }
 
     addItem() 
     {
@@ -1083,7 +1247,16 @@ getRcvPackingQtyautocalculate(rcv_packing_qty, index)
       { this.rcvMatWt = this.rcvItemQty - (this.Empty_bagWt[index] * this.rcvPackQty);}
       else{this.rcvMatWt = this.rcvItemQty - (this.rcvItemQty * this.Empty_bagWt[index])/100;}
 
-      this.stk_transfer_grn_item_details.at(index).patchValue({rcv_item_qty: this.rcvItemQty, rcv_mat_wt: (Math.round(this.rcvMatWt * 1000)/1000).toFixed(3)}); 
+      if(this.reference_type=="Stock Transfer Order"){
+        this.stk_transfer_grn_item_details.at(index).patchValue({rcv_item_qty: this.rcvItemQty, 
+          rcv_mat_wt: (Math.round(this.rcvMatWt * 1000)/1000).toFixed(3),adv_pack_qty:this.rcvPackQty,
+          adv_item_qty:this.rcvItemQty,adv_mat_wt:(Math.round(this.rcvMatWt * 1000)/1000).toFixed(3),
+          pssd_pack_qty:this.rcvPackQty,pssd_item_qty:this.rcvItemQty,pssd_mat_wt:(Math.round(this.rcvMatWt * 1000)/1000).toFixed(3)});
+      }
+      else{
+        this.stk_transfer_grn_item_details.at(index).patchValue({rcv_item_qty: this.rcvItemQty, rcv_mat_wt: (Math.round(this.rcvMatWt * 1000)/1000).toFixed(3)}); 
+      }
+      
       this.advPackQty = this.stk_transfer_grn_item_details.at(index).get("adv_pack_qty").value as FormControl;
       this.advItemQty = this.stk_transfer_grn_item_details.at(index).get("adv_item_qty").value as FormControl;
       this.advMatWt = this.stk_transfer_grn_item_details.at(index).get("adv_mat_wt").value as FormControl;
@@ -1474,7 +1647,7 @@ getRcvPackingQtyautocalculate(rcv_packing_qty, index)
       this.packingItem = [];
       this.selectedItemName = [];
       this.selectedPackingItem = [];
-      this.newVehicleList=[];
+      this.newVehicleList=[].concat([{vehicle_id:'No Vehicle',vehicle_no:'No Vehicle'}]);
        if(action == 'view')
        {
         this.stocktransfergrnsave = false;
@@ -1493,10 +1666,13 @@ getRcvPackingQtyautocalculate(rcv_packing_qty, index)
       ).subscribe(([StkTransGRNData, itemData,otherInfoData,transInfoData,bUData,ResourceCostdata,DocData,vehicleAllData])=>
         {
           //this.userForm.patchValue(StkTransGRNData[0]);
+          this.onChangeRefType(StkTransGRNData["ref_type"]);
+          this.reference_type=StkTransGRNData["ref_type"];
           console.log("vehicle:"+JSON.stringify(vehicleAllData));
-          this.newVehicleList=vehicleAllData;
+          console.log("StkTransGRNData:"+JSON.stringify(StkTransGRNData));
+          this.newVehicleList=vehicleAllData.concat([{vehicle_id:'No Vehicle',vehicle_no:'No Vehicle'}]);
           this.userForm.patchValue({id:StkTransGRNData["id"],stk_grn_id:StkTransGRNData["stk_grn_id"],
-          b_unit:StkTransGRNData["b_unit"],stk_grn_date:StkTransGRNData["stk_grn_date"],
+          b_unit:StkTransGRNData["b_unit"],stk_grn_date:StkTransGRNData["stk_grn_date"],ref_type:StkTransGRNData["ref_type"],
           stk_grn_no:StkTransGRNData["stk_grn_no"],vehicle_id:StkTransGRNData["vehicle_id"],
           applicable_charges_id:StkTransGRNData["applicable_charges_id"],remarks:StkTransGRNData["remarks"],
           reference_id:StkTransGRNData["reference_id"],company_id:StkTransGRNData["company_id"],
