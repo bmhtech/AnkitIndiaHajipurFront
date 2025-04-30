@@ -8,7 +8,11 @@
 .config-switch{ background: #fca400 !important; border-radius: 5px;}
 .dyn_table_conent .mat-tab-label{ background: olive; }
 .dyn_table_conent .mat-tab-group.mat-primary .mat-ink-bar{background-color:#d2980e;}
-
+.d-flex{ display: flex;}
+.flex-column{ flex-direction: column;}
+.justify-content-between{ justify-content: space-between;}
+.text-right{ text-align: end;}
+.align-items-center{align-items: center;}
 // Ankit India End theme color
 
 // colors for BD Corporates
@@ -194,6 +198,7 @@ input.form-control, select.form-control .fa.form-control{ height: 34px; border-t
 .dyn_table_conent::-webkit-scrollbar {
   height: 10px;
 }
+.dyn_table_data_cont_y{max-height: 255px; overflow-y: auto;}
 .dyn_table_data_cont{max-height: 255px; overflow: auto; float: left; clear: both;}
 .dyn_table_data_cont1{max-height: 255px; overflow-y: scroll;}
 .dyn_table{ padding:3px 0 ; margin: 0; border: 1px solid #ccc; float: left; clear: both; }
@@ -630,6 +635,7 @@ mat-select-autocomplete.form-control.ats{padding-bottom: 8px;}
 .cdk-global-overlay-wrapper{overflow: auto;}
 
 .red{color: red;}
+.text-green{color: green;}
 .madate{display: block; float: right; padding-right: 15px;}
 
 // for dynamic menu structure
@@ -718,16 +724,6 @@ div.dataTables_length label { text-align: left; font-weight: 400; padding-top: .
 ::-webkit-scrollbar {
   width: 1.25ch;
   height:1.25ch;
-}
-
-.choco_text {
-  color: chocolate !important;
-}
-.lightcoral_text {
-  color: lightcoral !important;
-}
-.red_text {
-  color: red !important;
 }
 
 // index.html used google link css
@@ -927,6 +923,20 @@ div.dataTables_length label { text-align: left; font-weight: 400; padding-top: .
   font-weight: 500;
   src: url("KFOlCnqEu92Fr1MmEU9fBBc4.woff2") format('woff2');
   unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+2074, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+.img-backdrop {
+  background-color: #ffffff50;
+  backdrop-filter: blur(5px);
+}
+
+.img-panel {
+  height: 90dvh;
+  max-width: 95dvw;
+}
+
+.img-panel .mat-dialog-container {
+  padding: 0;
 }
 
 @import '~ngx-toastr/toastr.css'
