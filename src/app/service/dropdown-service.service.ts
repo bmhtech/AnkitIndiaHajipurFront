@@ -1022,6 +1022,10 @@ export class DropdownServiceService {
     return this.httpClient.get<stock_transfer_Item_Dtls[]>(this.url + 'getStockTransItemDlts/' + stock_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getStockTransItemDltsArmy(stock_id): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.url + 'getStockTransItemDltsArmy/' + stock_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
   getStkIndentOrderDetailsList(_indent_id: string): Observable<IndentorderDetail[]> {
     return this.httpClient.get<IndentorderDetail[]>(this.url + 'getStkIndentOrdItemDtlsList/' + _indent_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
