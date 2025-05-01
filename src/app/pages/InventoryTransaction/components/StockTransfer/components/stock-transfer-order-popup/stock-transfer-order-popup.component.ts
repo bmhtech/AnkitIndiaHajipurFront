@@ -145,11 +145,40 @@ public userForm:FormGroup;
     
     this._rcv_bu = stockList.delivery_business_unit;
     this.status = false;
-    this.DropDownListService.getStockTransItemDlts(this._order_id).subscribe(data=>
+    this.DropDownListService.getStockTransItemDltsArmy(this._order_id).subscribe(data=>
     {
+      console.log("ARMY ST ITEM:: ",JSON.stringify(data));
       while (this.StkTransferDetail.length ) {this.StkTransferDetail.removeAt(0);}
-      for(let i=0;i<data.length;i++){this.add(); }
-      this.StkTransferDetail.patchValue(data);
+      for(let i=0;i<data.length;i++){
+        this.add(); 
+        this.StkTransferDetail.at(i).patchValue({item_name:data[i]["item_name"],packing_name:data[i]["packing_name"],
+                item_code:data[i]["item_code"],packing:data[i]["packing"],quantity:data[i]["st_rest_wt"],
+                uom:data[i]["uom"],squantity:data[i]["st_rest_bag"],suom:data[i]["suom"],mat_wt:data[i]["st_rest_wt"],
+                price:data[i]["price"],price_based_on:data[i]["price_based_on"],
+                tax_id:data[i]["tax_id"],tax_rate:data[i]["tax_rate"],
+                //gross_amt:data[i]["gross_amt"],tax_amt:data[i]["tax_amt"],
+                //amount:data[i]["amount"],net_amt:data[i]["net_amt"],
+                acc_norms:data[i]["acc_norms"],order_id:data[i]["order_id"],order_no:data[i]["order_no"]
+        });
+      if(data[i]["price_based_on"]=="Item"){
+        this.StkTransferDetail.at(i).patchValue({
+          amount:data[i]["st_rest_wt"]*data[i]["price"],
+          gross_amt:data[i]["st_rest_wt"]*data[i]["price"],
+          tax_amt:((data[i]["st_rest_wt"]*data[i]["price"])*data[i]["tax_rate"])/100,
+          net_amt:data[i]["st_rest_wt"]*data[i]["price"]
+        });
+      }
+      else{
+        this.StkTransferDetail.at(i).patchValue({
+          amount:data[i]["st_rest_bag"]*data[i]["price"],
+          gross_amt:data[i]["st_rest_bag"]*data[i]["price"],
+          tax_amt:((data[i]["st_rest_bag"]*data[i]["price"])*data[i]["tax_rate"])/100,
+          net_amt:data[i]["st_rest_bag"]*data[i]["price"]
+        });
+      }
+      }
+      //this.StkTransferDetail.patchValue(data);
+
       this.status = true;
       for(let k=0;k<this.StkTransferDetail.length;k++)
       {
