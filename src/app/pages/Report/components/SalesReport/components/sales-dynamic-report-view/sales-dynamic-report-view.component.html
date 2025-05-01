@@ -2158,3 +2158,175 @@
     </form>
   </div>
   <!-- PERIPHERAL QC REPORT ENDS -->
+
+  <!-- WHEAT QC REPORT STARTS -->
+<div>
+    <form [formGroup]="userForm1b">
+      <fieldset>
+        <legend>Wheat QC Report</legend>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+          <div class="form-group">
+            <mat-label>From Date<span class="red"> *</span></mat-label>
+            <input type="date" class="form-control" formControlName="whqcfromdate">
+          </div>
+        </div>
+        <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+          <div class="form-group">
+            <mat-label>To Date<span class="red"> *</span></mat-label>
+            <input type="date" class="form-control" formControlName="whqctodate">
+          </div>
+        </div>
+
+        <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+            <div class="form-group ht_59">
+              <mat-label>Process<span class="red">*</span></mat-label>
+              <mat-select formControlName="process" class="form-control" >
+                <mat-option value="0">-Select-</mat-option>
+                <mat-option value="All">ALL</mat-option>
+                <mat-option value="Stock">STOCK</mat-option>
+                <mat-option value="Sale">SALE</mat-option> 
+                <mat-option value="Job Work">JOB WORK</mat-option>
+              </mat-select>
+            </div>
+        </div>
+        
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" class="btn btn-primary" (click)="searchWhQCReport()">Search</button>
+          </div>
+        </div>
+
+        <fieldset class="table_container">
+          <div class="col-lg-12" style="float: right;">
+            <div class="form-group">
+              <button mat-raised-button (click)="exportAsXLSX1b()" color="primary">Export To Excel</button>
+
+              <mat-dialog-actions align="center">
+                <button [useExistingCss]="true" printSectionId="print-section1b" mat-button ngxPrint
+                  class="btn btn-info">Print</button>
+              </mat-dialog-actions>
+
+            </div>
+          </div>
+
+          <div class="table_content" id="print-section1b">
+            <table class="table table-bordered" id="dynamictable1b">
+              <thead>
+                <tr class="tr_thead">
+                  <td colspan="38" align="center"><b>ANKIT INDIA LTD. (HAJIPUR)</b></td>
+                </tr>
+                <tr class="tr_thead">
+                  <td colspan="38" align="center"><u>DETAILS OF WHEAT QC FROM: {{WhQCfromdate | date:'dd-MM-yyyy'}}
+                      TO: {{WhQCtodate | date:'dd-MM-yyyy'}} FOR: {{Process | uppercase}}</u></td>
+                </tr>
+                <tr class="tr_thead">
+                    <td colspan="5" align="center">UNLOAD</td>
+                    <td colspan="8" align="center">PERIPHERAL</td>
+                    <td colspan="3" align="center">GRN</td>
+                    <td colspan="16" align="center">MASTER</td>
+                    <td align="center"></td>
+                    <td colspan="3" align="center">CHALLAN</td>
+                    <td colspan="2" align="center">STORAGE</td>
+                </tr>
+                <tr class="tr_thead">
+                  <th>DATE</th>
+                  <th>VEHICLE</th>
+                  <th>ITEM</th>
+                  <th>PACKING</th>
+                  <th>QTY</th>
+
+                  <th>QC DATE</th>
+                  <th>MOIS</th>
+                  <th>HLW</th>
+                  <th>INF</th>
+                  <th>ODR</th>
+                  <th>STN</th>
+                  <th>POT</th>
+                  <th>KB</th>
+                  
+                  <th>NO.</th>
+                  <th>DATE</th>
+                  <th>QTY</th>
+
+                  <th>QC DATE</th>
+                  <th>MOIS</th>
+                  <th>HLW</th>
+                  <th>INF</th>
+                  <th>ODR</th>
+                  <th>STN</th>
+                  <th>POT</th>
+                  <th>KB</th>
+                  <th>(-)2.5</th>
+                  <th>OFG</th>
+                  <th>IDK</th>
+                  <th>SV</th>
+                  <th>BRKN</th>
+                  <th>GLUT</th>
+                  <th>TOTAL</th>
+                  <th>(+)6</th>
+
+                  <th>PRC</th>
+
+                  <th>NO.</th>
+                  <th>DATE</th>
+                  <th>PARTY</th>
+
+                  <th>WAREHOUSE</th>
+                  <th>STACK</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr *ngFor="let qc of WhQCReport; let pointIndex=index">
+                  <td>{{ qc.unload_date && qc.unload_date !== 'NA' ? (qc.unload_date | date:'dd-MM-yyyy') : 'NA' }}</td>
+                  <td>{{qc.vehicle}}</td>
+                  <td>{{qc.item}}</td>
+                  <td>{{qc.sh_pack}}</td>
+                  <td>{{qc.ul_mat_weight}}</td>
+
+                  <td>{{ qc.qc_date && qc.qc_date !== 'NA' ? (qc.qc_date | date:'dd-MM-yyyy') : 'NA' }}</td>
+                  <td>{{qc.MOIS}}</td>
+                  <td>{{qc.HLW}}</td>
+                  <td>{{qc.INFES}}</td>
+                  <td>{{qc.ODOUR}}</td>
+                  <td>{{qc.STONE}}</td>
+                  <td>{{qc.POTIA}}</td>
+                  <td>{{qc.KB}}</td>
+
+                  <td>{{qc.grn_no}}</td>
+                  <td>{{ qc.grn_date && qc.grn_date !== 'NA' ? (qc.grn_date | date:'dd-MM-yyyy') : 'NA' }}</td>
+                  <td>{{qc.grn_pssd_mat_weight}}</td>
+
+                  <td>{{ qc.mas_qc_date && qc.mas_qc_date !== 'NA' ? (qc.mas_qc_date | date:'dd-MM-yyyy') : 'NA' }}</td>
+                  <td>{{qc.M_MOIS}}</td>
+                  <td>{{qc.M_HLW}}</td>
+                  <td>{{qc.M_INFES}}</td>
+                  <td>{{qc.M_ODOUR}}</td>
+                  <td>{{qc.M_STONE}}</td>
+                  <td>{{qc.M_POTIA}}</td>
+                  <td>{{qc.M_KB}}</td>
+                  <td>{{qc.M_2_5MM}}</td>
+                  <td>{{qc.M_OFG}}</td>
+                  <td>{{qc.M_IDK}}</td>
+                  <td>{{qc.M_SVINML}}</td>
+                  <td>{{qc.M_BR_SH}}</td>
+                  <td>{{qc.M_WETGLUTEN}}</td>
+                  <td>{{qc.M_TOTALIMPURITES}}</td>
+                  <td>{{qc.M_6MM}}</td>
+
+                  <td>{{qc.sales_process}}</td>
+
+                  <td>{{qc.challan_no}}</td>
+                  <td>{{ qc.challan_date && qc.challan_date !== 'NA' ? (qc.challan_date | date:'dd-MM-yyyy') : 'NA' }}</td>
+                  <td>{{qc.partyname}}</td>
+
+                  <td>{{qc.warehouse_name}}</td>
+                  <td>{{qc.stack}}</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </fieldset>
+    </form>
+  </div>
+  <!-- WHEAT QC REPORT ENDS -->

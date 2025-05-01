@@ -41,6 +41,7 @@ export class DailygetwheatreportComponent implements OnInit {
           unloadtodate:[''],
           wei_type:[''],
           order_type:[''],
+          person_type:[''],
           customer:[''],
           supplier:[''],
           party_name:['']
@@ -69,6 +70,7 @@ export class DailygetwheatreportComponent implements OnInit {
   get unloadtodate(){return this.userForm.get("unloadtodate") as FormControl};
   get wei_type(){return this.userForm.get("wei_type") as FormControl};
   get order_type(){return this.userForm.get("order_type") as FormControl};
+  get person_type(){return this.userForm.get("person_type") as FormControl};
   get customer(){return this.userForm.get("customer") as FormControl};
   get supplier(){return this.userForm.get("supplier") as FormControl};
   get party_name(){return this.userForm.get("party_name") as FormControl};
@@ -141,6 +143,21 @@ export class DailygetwheatreportComponent implements OnInit {
     }
   }
 
+  AllFieldShow:boolean=true;
+
+  onChangePersonType(person)
+  {
+    console.log("Type:: ",person," :AllFieldShow: ",this.AllFieldShow);
+    if(person=="Ramesh Sir"){
+      this.AllFieldShow=false;
+      console.log("Type:: ",person," :AllFieldShow IF: ",this.AllFieldShow);
+    }
+    else{
+      this.AllFieldShow=true;
+      console.log("Type:: ",person," :AllFieldShow else: ",this.AllFieldShow);
+    }
+  }
+
   search()
   {
     this.status=false;
@@ -150,6 +167,7 @@ export class DailygetwheatreportComponent implements OnInit {
     let unloadtodate=this.userForm.get("unloadtodate").value;
     let order_type=this.userForm.get("order_type").value;
     let party_name=this.userForm.get("party_name").value;
+    let person_type=this.userForm.get("person_type").value;
     let party='';
     console.log("cust :"+customer+"//"+supplier)
     if(this.userForm.get("wei_type").value == '' || this.userForm.get("wei_type").value == null)
@@ -157,7 +175,10 @@ export class DailygetwheatreportComponent implements OnInit {
           alert("Please Select Type");
           this.status=true;
         }
-
+    else if(person_type==''||person_type==null||person_type==0||person_type=='0'){
+      alert("Please Select Person Type !!");
+      this.status=true;
+    }
     else{
       if(this.userForm.get("wei_type").value=='Weighment')
         {
@@ -230,19 +251,21 @@ export class DailygetwheatreportComponent implements OnInit {
   exportAsXLSX():void 
   {
     let element = document.getElementById('dynamictable'); 
-    this.excelService.exportAsExcelFile(element, 'Daily Gate Wheat Inward Report as on ' + this.userForm.get("unloaddate").value);
- }
+    //this.excelService.exportAsExcelFile(element, 'Daily Gate Wheat Inward Report as on ' + this.userForm.get("unloaddate").value);
+    this.excelService.tableToExcelwtFormat(element, 'Daily Gate Wheat Inward Report as on ' + this.userForm.get("unloaddate").value);
+  }
+
  exportAsXLSXOther():void 
   {
     let element = document.getElementById('otherkataexport'); 
     this.excelService.exportAsExcelFile(element, 'Other Weighment Report as on ' + this.userForm.get("unloaddate").value);
- }
+  }
  
  exportAsXLSX2():void 
  {
    let element = document.getElementById('dynamictable2'); 
    this.excelService.exportAsExcelFile(element, 'Daily Gate Wheat Outward Report  From ' + this.userForm1.get("fromdate").value +'to' + this.userForm1.get("todate").value);
-}
+ }
 
   search1()
   {

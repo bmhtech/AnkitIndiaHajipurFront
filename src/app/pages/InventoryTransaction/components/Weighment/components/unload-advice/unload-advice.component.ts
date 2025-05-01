@@ -17,6 +17,7 @@ import { PageEvent } from '@angular/material';
 import { Console } from 'console';
 import { jsonpCallbackContext } from '@angular/common/http/src/module';
 import { UnloadAdviceJobworkComponent } from '../unload-advice-jobwork/unload-advice-jobwork.component';
+import { UnloadItcBillPrintComponent } from '../unload-itc-bill-print/unload-itc-bill-print.component';
 
 @Component({
   selector: 'app-unload-advice',
@@ -471,6 +472,7 @@ export class UnloadAdviceComponent implements OnInit {
       this.DropDownListService.getUnloaDataListfastapi(this.currentDate, this.financialYear)
     ).subscribe(([data, unloadData]) => {
       this.business_Partner_List = data;
+      console.log("UNLOAD DATA:: ",JSON.stringify(unloadData));
       this.listUnloadAdvice = unloadData;
     });
 
@@ -2963,6 +2965,21 @@ export class UnloadAdviceComponent implements OnInit {
     dialogConfig.data = {};
     let comp = this.company_name;
     let dialogRef = this.dialog.open(UnloadBillPrintComponent, {
+      data: { alldata: id, unloadid: unloadid, company_name: comp }, height: '80%',
+      width: '80%'
+    });
+    dialogRef.afterClosed().subscribe(data => {
+      // this.sales_Invoice_Item_Dtls.at(index).patchValue({acc_norms: data["qc_code"]});
+    });
+  }
+
+  onClickITCBillPrint(id, unloadid) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = {};
+    let comp = this.company_name;
+    let dialogRef = this.dialog.open(UnloadItcBillPrintComponent, {
       data: { alldata: id, unloadid: unloadid, company_name: comp }, height: '80%',
       width: '80%'
     });

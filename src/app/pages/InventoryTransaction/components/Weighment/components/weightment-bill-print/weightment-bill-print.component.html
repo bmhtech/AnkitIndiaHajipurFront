@@ -44,13 +44,13 @@
 
                 <!-- tOP COMPANY NAME STARTS -->
                 <!-- <h1 class="uc" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname"> -->
-                  <h1 class="uc" *ngIf ="partyGroup=='CG00019';else elseBlock1">
+                  <h1 class="uc red_text" *ngIf ="partyGroup=='CG00019';else elseBlock1">
                     {{company_name}}
                   </h1>
                   <ng-template #elseBlock1>
-                    <h1 class="uc" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
                     <ng-template #elseBlock>
-                    <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text">{{company_name}} ({{Businessunit}})</h1>
                     </ng-template>
                   </ng-template>
                   
@@ -63,10 +63,10 @@
                 <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
                 </ng-template> -->
                 <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
-                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                  <div class="top_h4 choco_text" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
                     {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     <ng-template #elseBlockf>
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     </ng-template>
                     <div class="top_h4">
@@ -76,7 +76,7 @@
                 </div>
                 <ng-template #WBname1>
                   <div class="top_h4">
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
                     MAHUA ROAD, BELKUNDA, BHOJPATTI, HAJIPUR, VAISHALI, BIHAR - 844125
@@ -84,7 +84,7 @@
                 </ng-template>
                 
                   
-                <h1 class="uc">Weighment Slip</h1>
+                <h1 class="uc lightcoral_text">Weighment Slip</h1>
 
                 <!-- <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname2"></div>
                 <ng-template #WBname2>
@@ -271,13 +271,13 @@
 
                 <!-- tOP COMPANY NAME STARTS -->
                 <!-- <h1 class="uc" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname"> -->
-                  <h1 class="uc" *ngIf ="partyGroup=='CG00019';else elseBlock1">
+                  <h1 class="uc red_text" *ngIf ="partyGroup=='CG00019';else elseBlock1">
                     {{company_name}}
                   </h1>
                   <ng-template #elseBlock1>
-                    <h1 class="uc" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
                     <ng-template #elseBlock>
-                    <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text">{{company_name}} ({{Businessunit}})</h1>
                     </ng-template>
                   </ng-template>
                 <!-- </h1>
@@ -289,10 +289,10 @@
                 <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
                 </ng-template> -->
                 <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
-                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                  <div class="top_h4 choco_text" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
                     {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     <ng-template #elseBlockf>
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     </ng-template>
                     <div class="top_h4">
@@ -302,7 +302,7 @@
                 </div>
                 <ng-template #WBname1>
                   <div class="top_h4">
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
                     MAHUA ROAD, BELKUNDA, BHOJPATTI, VAISHALI, HAJIPUR, BIHAR - 844125
@@ -310,7 +310,7 @@
                 </ng-template>
                 
                   
-                <h1 class="uc">Weighment Slip</h1>
+                <h1 class="uc lightcoral_text">Weighment Slip</h1>
 
                 <!-- <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname2"></div>
                 <ng-template #WBname2>
@@ -500,13 +500,13 @@
 
                 <!-- tOP COMPANY NAME STARTS -->
                 <!-- <h1 class="uc" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname"> -->
-                  <h1 class="uc" *ngIf ="partyGroup=='CG00019';else elseBlock1">
+                  <h1 class="uc red_text" *ngIf ="partyGroup=='CG00019';else elseBlock1">
                     {{company_name}}
                   </h1>
                   <ng-template #elseBlock1>
-                    <h1 class="uc" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
                     <ng-template #elseBlock>
-                    <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text">{{company_name}} ({{Businessunit}})</h1>
                     </ng-template>
                   </ng-template>
                 <!-- </h1>
@@ -518,10 +518,10 @@
                 <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
                 </ng-template> -->
                 <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
-                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                  <div class="top_h4 choco_text" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
                     {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     <ng-template #elseBlockf>
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     </ng-template>
                     <div class="top_h4">
@@ -531,7 +531,7 @@
                 </div>
                 <ng-template #WBname1>
                   <div class="top_h4">
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
                     MAHUA ROAD, BELKUNDA, BHOJPATTI, HAJIPUR, VAISHALI, BIHAR - 844125
@@ -539,7 +539,7 @@
                 </ng-template>
                 
                   
-                <h1 class="uc">Weighment Slip</h1>
+                <h1 class="uc lightcoral_text">Weighment Slip</h1>
 
                 <!-- <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname2"></div>
                 <ng-template #WBname2>
@@ -746,13 +746,13 @@
 
                   <!-- tOP COMPANY NAME STARTS -->
                 <!-- <h1 class="uc" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname"> -->
-                  <h1 class="uc" *ngIf ="partyGroup=='CG00019';else elseBlock1">
+                  <h1 class="uc red_text" *ngIf ="partyGroup=='CG00019';else elseBlock1">
                     {{company_name}}
                   </h1>
                   <ng-template #elseBlock1>
-                    <h1 class="uc" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
                     <ng-template #elseBlock>
-                    <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text">{{company_name}} ({{Businessunit}})</h1>
                     </ng-template>
                   </ng-template>
                 <!-- </h1>
@@ -764,10 +764,10 @@
                 <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
                 </ng-template> -->
                 <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
-                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                  <div class="top_h4 choco_text" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
                     {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     <ng-template #elseBlockf>
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     </ng-template>
                     <div class="top_h4">
@@ -777,14 +777,14 @@
                 </div>
                 <ng-template #WBname1>
                   <div class="top_h4">
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
                     MAHUA ROAD, BELKUNDA, BHOJPATTI, HAJIPUR, VAISHALI, BIHAR - 844125
                   </div>
                 </ng-template>
                   
-                <h1 class="uc">Weighment Slip</h1>
+                <h1 class="uc lightcoral_text">Weighment Slip</h1>
 
                 <!-- <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname2"></div>
                 <ng-template #WBname2>
@@ -969,13 +969,13 @@
 
                   <!-- tOP COMPANY NAME STARTS -->
                 <!-- <h1 class="uc" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname"> -->
-                  <h1 class="uc" *ngIf ="partyGroup=='CG00019';else elseBlock1">
+                  <h1 class="uc red_text" *ngIf ="partyGroup=='CG00019';else elseBlock1">
                     {{company_name}}
                   </h1>
                   <ng-template #elseBlock1>
-                    <h1 class="uc" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
                     <ng-template #elseBlock>
-                    <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text">{{company_name}} ({{Businessunit}})</h1>
                     </ng-template>
                   </ng-template>
                 <!-- </h1>
@@ -987,10 +987,10 @@
                 <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
                 </ng-template> -->
                 <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
-                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                  <div class="top_h4 choco_text" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
                     {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     <ng-template #elseBlockf>
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     </ng-template>
                     <div class="top_h4">
@@ -1000,7 +1000,7 @@
                 </div>
                 <ng-template #WBname1>
                   <div class="top_h4">
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
                     MAHUA ROAD, BELKUNDA, BHOJPATTI, HAJIPUR, VAISHALI, BIHAR - 844125
@@ -1008,7 +1008,7 @@
                 </ng-template>
                 
                   
-                <h1 class="uc">Weighment Slip</h1>
+                <h1 class="uc lightcoral_text">Weighment Slip</h1>
 
                 <!-- <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname2"></div>
                 <ng-template #WBname2>
@@ -1195,13 +1195,13 @@
                   <!-- tOP COMPANY NAME STARTS -->
                 <!-- <h1 class="uc" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname"> -->
                   <!-- <h1 class="uc" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1> -->
-                  <h1 class="uc" *ngIf ="partyGroup=='CG00019';else elseBlock1">
+                  <h1 class="uc red_text" *ngIf ="partyGroup=='CG00019';else elseBlock1">
                     {{company_name}}
                   </h1>
                   <ng-template #elseBlock1>
-                    <h1 class="uc" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text" *ngIf ="weighmentfor;else elseBlock">{{company_name}} ({{Businessunit}})</h1>
                     <ng-template #elseBlock>
-                    <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
+                    <h1 class="uc red_text">{{company_name}} ({{Businessunit}})</h1>
                     </ng-template>
                   </ng-template>
                 <!-- </h1>
@@ -1213,10 +1213,10 @@
                 <h1 class="uc">{{company_name}} ({{Businessunit}})</h1>
                 </ng-template> -->
                 <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname1">
-                  <div class="top_h4" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
+                  <div class="top_h4 choco_text" *ngIf="company_name=='NORTHERN FLOUR MILLS';else elseBlockf">(FRN : {{cin_no}})<br>
                     {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     <ng-template #elseBlockf>
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     </ng-template>
                     <div class="top_h4">
@@ -1226,7 +1226,7 @@
                 </div>
                 <ng-template #WBname1>
                   <div class="top_h4">
-                    <div class="top_h4">(CIN : {{cin_no}})<br>
+                    <div class="top_h4 choco_text">(CIN : {{cin_no}})<br>
                       {{work_address}},{{city_name}},{{state_name}},{{pin_no}}</div>
                     W.B. OWNER :- AAYOG AGRO PVT. LTD.<br>
                     MAHUA ROAD, BELKUNDA, BHOJPATTI, HAJIPUR, VAISHALI, BIHAR - 844125
@@ -1234,7 +1234,7 @@
                 </ng-template>
                 
                   
-                <h1 class="uc">Weighment Slip</h1>
+                <h1 class="uc lightcoral_text">Weighment Slip</h1>
 
                 <!-- <div class="top_h4" *ngIf ="weighBridgeLocation=='Weight Bridge 1';else WBname2"></div>
                 <ng-template #WBname2>

@@ -1551,7 +1551,7 @@
                   <!-- <th>Weighment Req</th> -->
                   <th>Advice Type</th>
                   <th>PO No.</th>
-                  <th colspan="4">Action</th>
+                  <th colspan="5">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -1591,6 +1591,8 @@
                   <td><button class="btn btn-info" (click)="onClickBillPrint(UnloadAdvice.id,UnloadAdvice.unadviceid)"
                       *ngIf="unloadadvicebillprint">Print</button></td>
 
+                  <td><button class="btn"  style="background-color: chocolate;" (click)="onClickITCBillPrint(UnloadAdvice.id,UnloadAdvice.unadviceid)"
+                    *ngIf="unloadadvicebillprint">ITC Print</button></td>
                 </tr>
               </tbody>
             </table>

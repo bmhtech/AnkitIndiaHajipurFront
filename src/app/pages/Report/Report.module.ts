@@ -48,6 +48,10 @@ import { MatSelectModule } from '@angular/material';
         
         ReportComponents,
         
+        //AnkitindiahajipurComponent,
+        
+        //AnkitindiahajipurreportsComponent,
+        
        // SpecialreportsComponent,
         
        // PurchaseReportComponent,

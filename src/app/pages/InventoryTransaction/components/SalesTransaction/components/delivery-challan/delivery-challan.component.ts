@@ -469,6 +469,9 @@ export class DeliveryChallanComponent implements OnInit {
         //alert(localStorage.getItem("sid")+"//"+localStorage.getItem("sno"));
         this.grn_id=localStorage.getItem("sid");
         this.sale_order_id=localStorage.getItem("sno");
+
+        localStorage.removeItem("sid");
+        localStorage.removeItem("sno");
         //this.ngOnInit();
         this.showList("add");
       }

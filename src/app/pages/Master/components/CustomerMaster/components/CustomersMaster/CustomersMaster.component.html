@@ -601,10 +601,13 @@
                         <h3>Pin Code<span class="red">*</span></h3>
                       </label>
                       <label class="label_col">
+                        <h3>GSTIN<span class="red">*</span></h3>
+                      </label>
+                      <label class="label_col">
                         <h3 class="i_nam">Address<span class="red">*</span></h3>
                       </label>
                     </div>
-                    <div class="dyn_table_data_cont" formArrayName="cust_bussiness_partner_shipping_addr_dtls">
+                    <div formArrayName="cust_bussiness_partner_shipping_addr_dtls">
                       <div class="dyn_table"
                         *ngFor="let addr of cust_bussiness_partner_shipping_addr_dtls.controls; let pointIndex=index"
                         [formGroupName]="pointIndex">
@@ -614,38 +617,46 @@
                         <div class="label_col">
                           <input class="form-control srln" formControlName="slno" type="number" readonly />
                         </div>
-                        <div class="label_col">
-                          <input type="text" class="form-control ats i_nam" formControlName="shipping_name">
-                        </div>
-                        <div class="label_col">
-                          <input type="text" class="form-control" formControlName="country_shipping" readonly>
-                        </div>
-                        <div class="label_col">
-                          <input type="text" class="form-control" formControlName="state_shipping" readonly>
-                        </div>
+
                         <div class="label_col" >
-                          <mat-select-autocomplete class="form-control ats" 
-                          [options]="districtsListOfShip"
-                          [display]="'dist_name'"
-                          [value]="'dist_code'"
+                          <mat-select-autocomplete class="form-control i_nam" 
+                          [options]="partyList"
+                          [display]="'cp_name'"
+                          [value]="'cp_Id'"
                           [multiple]='false'
-                          [selectedOptions]="selectedDistrictName[pointIndex]"
-                          (selectionChange)="selectedDistrict($event,pointIndex)"
+                          [selectedOptions]="selectedPartyName[pointIndex]"
+                          (selectionChange)="selectedParty($event,pointIndex)"
                           ngDefaultControl
-                          [formControlName] = "'dist_code'">
+                          [formControlName] ="'shipping_name'">
                         </mat-select-autocomplete>
                         </div>
 
                         <div class="label_col">
-                          <input type="text" class="form-control" formControlName="city">
+                          <input type="text" class="form-control" formControlName="country_shipping" readonly>
                         </div>
 
                         <div class="label_col">
-                          <input type="number" min="0" class="form-control" formControlName="pincode">
+                          <input type="text" class="form-control" formControlName="state_shipping"> <!-- [readonly]="ShippingAddressAdd" -->
                         </div>
 
                         <div class="label_col">
-                          <textarea class="form-control ats i_nam" formControlName="address"></textarea>
+                          <input type="text" class="form-control" formControlName="dist_code">  <!-- [readonly]="ShippingAddressAdd" -->
+                        </div>
+
+                        <div class="label_col">
+                          <input type="text" class="form-control" formControlName="city">  <!-- [readonly]="ShippingAddressAdd" -->
+                        </div>
+                        
+                        <div class="label_col">
+                          <input type="number" min="0" class="form-control" formControlName="pincode">  <!-- [readonly]="ShippingAddressAdd" -->
+                        </div>
+
+                        <div class="label_col">
+                          <input type="text" class="form-control" formControlName="ship_gst">  <!-- [readonly]="ShippingAddressAdd" -->
+                        </div>
+
+                        <div class="label_col">
+                          <textarea class="form-control ats i_nam" formControlName="address"></textarea>  <!-- [readonly]="ShippingAddressAdd" -->
                         </div>
                       </div>
                     </div>

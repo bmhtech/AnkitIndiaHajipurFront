@@ -1,5 +1,6 @@
 npm install file-saver                      // Without Version
 npm install xlsx                            // Without Version
+npm install xlsx-js-style                   // Without Version
 npm install ng-multiselect-dropdown         // Without Version
 
 npm i angular-dual-listbox@4.6.0

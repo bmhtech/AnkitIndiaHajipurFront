@@ -1,4 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, Inject, OnInit, ViewEncapsulation } from '@angular/core';
 import { FormBuilder, FormGroup } from '@angular/forms';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { Console } from 'console';
@@ -13,7 +13,8 @@ import { DomSanitizer } from '@angular/platform-browser';
 @Component({
   selector: 'app-weightment-bill-print',
   templateUrl: './weightment-bill-print.component.html',
-  styleUrls: ['./weightment-bill-print.component.scss']
+  styleUrls: ['./weightment-bill-print.component.scss'],
+  //encapsulation: ViewEncapsulation.None, // ← Add this line, allow global styles to apply to your component DOM
 })
 export class WeightmentBillPrintComponent implements OnInit {
 

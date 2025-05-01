@@ -1,6 +1,4 @@
-
-import * as FileSaver from 'file-saver';
-import * as XLSX from 'xlsx';
+import * as XLSX from 'xlsx-js-style';
 import { Injectable } from '@angular/core';
 
 const EXCEL_TYPE = 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet;charset=UTF-8';
@@ -60,4 +58,80 @@ export class ExcelService {
       }
     })()
 
+  tableToExcelwtFormat(element: HTMLElement, fileName: string): void {
+    const ws: XLSX.WorkSheet = XLSX.utils.table_to_sheet(element);
+
+    const thead = element.querySelector('thead');
+    let theadRowCount = 0;
+    if (thead) {
+      theadRowCount = thead.querySelectorAll('tr').length;
+    }
+
+    const range = XLSX.utils.decode_range(ws['!ref']!);
+
+    // 1. Apply border, font, alignment to every cell (including blank)
+    for (let R = range.s.r; R <= range.e.r; ++R) {
+      for (let C = range.s.c; C <= range.e.c; ++C) {
+        const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
+
+        // Create missing cell
+        if (!ws[cellRef]) {
+          ws[cellRef] = { t: 's', v: '' };
+        }
+
+        // Apply style
+        ws[cellRef].s = {
+          font: {
+            bold: R < theadRowCount,
+            name: 'Arial',
+            sz: 11,
+          },
+          alignment: {
+            horizontal: 'center',
+            vertical: 'center',
+            //wrapText: true,
+          },
+          border: {
+            top:    { style: 'thin', color: { rgb: '000000' } },
+            bottom: { style: 'thin', color: { rgb: '000000' } },
+            left:   { style: 'thin', color: { rgb: '000000' } },
+            right:  { style: 'thin', color: { rgb: '000000' } },
+          },
+        };
+      }
+    }
+
+    /*
+    // 2. Freeze header rows
+    ws['!freeze'] = { xSplit: 0, ySplit: theadRowCount };
+
+    // 3. Auto Column Width
+    const colWidths: { wch: number }[] = [];
+    for (let C = range.s.c; C <= range.e.c; ++C) {
+      let maxLen = 6; // Minimum width
+      for (let R = range.s.r; R <= range.e.r; ++R) {
+        const cellRef = XLSX.utils.encode_cell({ r: R, c: C });
+        const cell = ws[cellRef];
+        if (cell && cell.v != null) {
+          const cellText = String(cell.v);
+          maxLen = Math.max(maxLen, cellText.length);
+        }
+      }
+      colWidths.push({ wch: maxLen + 2 }); // Add some padding
+    }
+    ws['!cols'] = colWidths;
+
+    // 4. Auto Row Height
+    const rowHeights: { hpt: number }[] = [];
+    for (let R = range.s.r; R <= range.e.r; ++R) {
+      rowHeights.push({ hpt: 14 }); // 14 points = decent height
+    }
+    ws['!rows'] = rowHeights;
+    */ // commented auto fit and freeze on 26042025 for excel export
+
+    // 5. Create Workbook and Save
+    const wb: XLSX.WorkBook = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');
+    XLSX.writeFile(wb, fileName + '.xlsx');
+  }
 }

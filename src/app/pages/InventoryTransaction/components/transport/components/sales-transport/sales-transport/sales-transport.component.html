@@ -693,6 +693,7 @@
                   <th>Balance Amt</th>
                   <th>Update</th>
                   <th>Posting</th>
+                  <th>Delete</th>
                 </tr>
               </thead>
               <tbody>
@@ -724,9 +725,23 @@
                         (click)="onUpdate(transport.id)">Update
                         </button>
                       </td>
-                      <td>
+                      <!-- <td>
                         <button class="btn btn-warning" 
                         (click)="accountpostingpopup(transport.id,transport.sales_tranport_id)">Print
+                        </button>
+                      </td> -->
+                      <td *ngIf="transport.export == 0;else elseBlock12" >
+                        <button class="btn btn-warning" 
+                        (click)="accountpostingpopup(transport.id,transport.sales_tranport_id)">Print</button>
+                      </td>
+                      <ng-template #elseBlock12>
+                        <td><button class="btn btn-success"
+                        (click)="accountpostingpopup(transport.id,transport.sales_tranport_id)">Print</button></td>
+                      </ng-template>
+
+                      <td>
+                        <button class="btn btn-danger" 
+                        (click)="onDelete(transport.id)">Delete
                         </button>
                       </td>
                     </tr>

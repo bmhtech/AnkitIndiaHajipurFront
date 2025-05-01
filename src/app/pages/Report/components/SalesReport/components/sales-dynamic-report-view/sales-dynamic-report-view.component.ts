@@ -34,6 +34,7 @@ export class SalesDynamicReportViewComponent implements OnInit {
   public userForm17: FormGroup;
   public userForm18: FormGroup;
   public userForm1a: FormGroup;
+  public userForm1b: FormGroup;
 
   status = false;
   reportnamelists: any = [];
@@ -77,6 +78,11 @@ export class SalesDynamicReportViewComponent implements OnInit {
   
   WhPeriQCfromdate:any;
   WhPeriQCtodate:any;
+
+  WhQCReport: any = [];
+  WhQCfromdate:any;
+  WhQCtodate:any;
+  Process:any;
 
   constructor(public fb: FormBuilder, private DropDownListService: DropdownServiceService, private excelService: ExcelService) {
     this.userForm = fb.group
@@ -214,6 +220,12 @@ export class SalesDynamicReportViewComponent implements OnInit {
         whperiqctodate: ['']
       });
 
+    this.userForm1b = fb.group(
+      {
+        whqcfromdate: [''],
+        whqctodate: [''],
+        process: [''],
+      });
   }
   get reportname() { return this.userForm.get("reportname") as FormControl }
   get fromdate() { return this.userForm.get("fromdate") as FormControl }
@@ -289,9 +301,11 @@ export class SalesDynamicReportViewComponent implements OnInit {
   get whperiqcfromdate() { return this.userForm1a.get("whperiqcfromdate") as FormControl };
   get whperiqctodate() { return this.userForm1a.get("whperiqctodate") as FormControl };
 
+  get whqcfromdate() { return this.userForm1a.get("whqcfromdate") as FormControl };
+  get whqctodate() { return this.userForm1a.get("whqctodate") as FormControl };
+  get process() { return this.userForm1a.get("process") as FormControl };
 
   ngOnInit() {
-
     this.status = true;
     forkJoin(
       this.DropDownListService.getSalesRegDynamicList(),
@@ -894,4 +908,45 @@ export class SalesDynamicReportViewComponent implements OnInit {
     this.excelService.tableToExcel(element, 'Wheat Peri QC Report from '+this.WhPeriQCfromdate+' to '+ this.WhPeriQCtodate);
   }
 
+  searchWhQCReport() {
+    this.WhQCfromdate = this.userForm1b.get("whqcfromdate").value;
+    this.WhQCtodate = this.userForm1b.get("whqctodate").value;
+    this.Process = this.userForm1b.get("process").value;
+    this.status = false;
+
+    if (this.WhQCfromdate == null || this.WhQCfromdate == '' || this.WhQCfromdate == 0) {
+      alert("Select From Date ....");
+      this.status = true;
+    }
+    else if (this.WhQCtodate == null || this.WhQCtodate == '' || this.WhQCtodate == 0) {
+      alert("Select To Date ....");
+      this.status = true;
+    }
+    else if (this.Process == null || this.Process == '' || this.Process == 0 || this.Process == "0") {
+      alert("Select Process ....");
+      this.status = true;
+    }
+    else {
+      this.DropDownListService.getWhQCReport(this.WhQCfromdate,this.WhQCtodate,this.Process).subscribe(whqcdata => {
+        console.log(" Wheat QC:: " + JSON.stringify(whqcdata))
+        this.WhQCReport = whqcdata;
+        this.status = true;
+      });
+    }
+
+  }
+
+  /*exportAsXLSX1b(): void {
+    let element = document.getElementById('dynamictable1b');
+    this.excelService.tableToExcel(element, 'Wheat QC Report from '+this.WhQCfromdate+' to '+ this.WhQCtodate+' for '+this.Process);
+  }*/
+    
+  exportAsXLSX1b(): void {
+    const element = document.getElementById('dynamictable1b') as HTMLElement;
+    const fileName = `Wheat QC Report from ${this.WhQCfromdate} to ${this.WhQCtodate} for ${this.Process}`;
+  
+    // Call the tableToExcel method from excelService
+    this.excelService.tableToExcelwtFormat(element, fileName);
+  }
+    
 }
