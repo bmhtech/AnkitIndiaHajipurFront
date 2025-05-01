@@ -2341,6 +2341,10 @@ export class DropdownServiceService {
     return this.httpClient.get<PurchaseOrder[]>(this.url + 'getPurOrdAdvThruSupp/' + supplier_id + '/' + business_unit).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getPurOrdAdvThruSuppFast(supplier_id, business_unit): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getPurOrdAdvThruSuppFast/' + supplier_id + '/' + business_unit).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
   getGrnThroughPurOrd(business_unit, purtype): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getGrnThroughPurOrd/' + business_unit + '/' + purtype).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
