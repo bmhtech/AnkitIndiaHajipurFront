@@ -127,7 +127,8 @@ export class PurchaseOrdPopUpModalComponent implements OnInit {
     }
     else
     {
-      this.DropDownListService.getPurOrdAdvThruSupp(this.supplierId, this.business_unit).subscribe(data => {
+      //this.DropDownListService.getPurOrdAdvThruSupp(this.supplierId, this.business_unit).subscribe(data => {
+      this.DropDownListService.getPurOrdAdvThruSuppFast(this.supplierId, this.business_unit).subscribe(data => {
         this.list = data;
         this.status = true;
         //console.log("PO : : "+JSON.stringify(data));
