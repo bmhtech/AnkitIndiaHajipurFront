@@ -464,6 +464,11 @@ export class DeliveryChallanComponent implements OnInit {
       if (localStorage.getItem("svalue") == 'true') {
         //alert(localStorage.getItem("sid")+"//"+localStorage.getItem("sno")+"//"+localStorage.getItem("saction"));
         this.onUpdate(localStorage.getItem("sid"), localStorage.getItem("sno"), localStorage.getItem("saction"));
+
+        localStorage.removeItem("sid");
+        localStorage.removeItem("sno");
+        localStorage.removeItem("saction");
+        localStorage.removeItem("svalue");
       }
       if (localStorage.getItem("svalue") == 'Yes') {  // For Delivery Challan with GRN & Sale Order id
         //alert(localStorage.getItem("sid")+"//"+localStorage.getItem("sno"));
@@ -472,6 +477,7 @@ export class DeliveryChallanComponent implements OnInit {
 
         localStorage.removeItem("sid");
         localStorage.removeItem("sno");
+        localStorage.removeItem("svalue");
         //this.ngOnInit();
         this.showList("add");
       }
@@ -1394,7 +1400,8 @@ export class DeliveryChallanComponent implements OnInit {
           else {
             this.statestatus = 1;
           }
-          //console.log("CustState:: ",CustAddress["state"]+" ::invType:: "+this.userForm.get("inv_type").value);
+          console.log("CustState:: ",CustAddress["state"]+" ::invType:: "+this.userForm.get("inv_type").value);
+          console.log("pay_details:: ",CustAddress["address"]+" ::pay_addr:: "+this.partyId);
           //this.onChangeSalesInvoiceType(this.userForm.get("inv_type").value);
           this.customerDelvAddList = custDelvData;
           this.delivery_challan_Shipment_Dtls.patchValue({ pay_addr: this.partyId, pay_details: CustAddress["address"] });
@@ -1700,8 +1707,14 @@ export class DeliveryChallanComponent implements OnInit {
             this.item_sl_no = 0;
             while (this.delivery_challan_Item_Dtls.length) { this.delivery_challan_Item_Dtls.removeAt(0); }
 
+            const sortedData = data.Wm_loading_advice_itm_dtls.sort((a, b) => {
+              // Sort by item_code or any other property that ensures the correct order
+              return String(a.slno).localeCompare(String(b.slno));  // Or any other sorting criteria
+            });
+            console.log('Sorted Data: ', sortedData);
 
-            for (let data1 of data.Wm_loading_advice_itm_dtls) {
+            //for (let data1 of data.Wm_loading_advice_itm_dtls) {
+            for (let data1 of sortedData) {
               if (data1.checkbox == true || data1.checkbox == "true") {
                 console.log("TEST :: " + JSON.stringify(data1))
                 this.status = false;
@@ -2076,7 +2089,7 @@ export class DeliveryChallanComponent implements OnInit {
                   this.status = true;
                 });
               }
-              console.log("Ship Data:" + JSON.stringify(shipDtlsData))
+              console.log("Ship Data GRN:" + JSON.stringify(shipDtlsData))
               this.delivery_challan_Shipment_Dtls.patchValue(shipDtlsData);
               
               this.addBroker();
@@ -2724,7 +2737,7 @@ export class DeliveryChallanComponent implements OnInit {
         ship_addr: shipmentData["ship_addr"],
         ship_details: shipmentData["ship_details"], pay_addr: shipmentData["pay_addr"], pay_details: shipmentData["pay_details"],
       });
-      //  console.log("shipmentData: "+  JSON.stringify(shipmentData));
+      console.log("shipmentData: "+  JSON.stringify(shipmentData));
 
       let j = 0;
       this.addBroker();

@@ -121,7 +121,10 @@
                             </ng-template>
                         </tr>
                         <tr>
-                            <th>Gate Sl No.</th>
+                            <th *ngIf="AllFieldShow; else RameshSir">Gate Sl No.</th>
+                            <ng-template #RameshSir>
+                                <th>Sl</th>
+                            </ng-template>
                             <th *ngIf="AllFieldShow">Advice No.</th>
                             <th *ngIf="AllFieldShow">Purchase Order No.</th>
                             <th>Name of Party</th>

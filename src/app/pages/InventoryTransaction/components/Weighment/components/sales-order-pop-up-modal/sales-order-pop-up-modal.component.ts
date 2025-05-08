@@ -54,6 +54,7 @@ export class SalesOrderPopUpModalComponent implements OnInit {
 
         sales_Order_Item_Dtls: this.fb.array([this.fb.group({
           order_id: '',
+          slno:'',
           hsn_code: '',
           item_code: '',
           item_name: '',
@@ -121,6 +122,7 @@ export class SalesOrderPopUpModalComponent implements OnInit {
   add() {
     this.sales_Order_Item_Dtls.push(this.fb.group({
       order_id: '',
+      slno: '',
       item_code: '',
       item_name: '',
       hsn_code: '',

@@ -3398,7 +3398,13 @@ export class SalesOrderComponent implements OnInit {
           while (this.sales_Order_Item_Dtls.length)
             this.sales_Order_Item_Dtls.removeAt(0);
 
-          for (let data1 of data.sales_Quotation_Item_Dtls) {
+          const sortedData = data.sales_Quotation_Item_Dtls.sort((a, b) => {
+            // Sort by item_code or any other property that ensures the correct order
+            return String(a.slno).localeCompare(String(b.slno));  // Or any other sorting criteria
+          });
+          console.log('Sorted Data Item: ', sortedData);
+          //for (let data1 of data.sales_Quotation_Item_Dtls) {
+          for (let data1 of sortedData) {
             if (data1.checkbox == true) {
               this.status = false;
               forkJoin(
