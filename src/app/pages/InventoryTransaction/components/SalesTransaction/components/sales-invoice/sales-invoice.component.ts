@@ -3127,8 +3127,15 @@ export class SalesInvoiceComponent implements OnInit {
                   this.userForm.patchValue({ policyno: '0000000000000000' });
                 }
 
+                const sortedData = data.delivery_challan_Item_Dtls.sort((a, b) => {
+                  // Sort by item_code or any other property that ensures the correct order
+                  return String(a.slno).localeCompare(String(b.slno));  // Or any other sorting criteria
+                });
+                console.log('Sorted Data: ', sortedData);
+
                 //let ItemGr=[];
-                for (let data1 of data.delivery_challan_Item_Dtls) {
+                //for (let data1 of data.delivery_challan_Item_Dtls) {
+                for (let data1 of sortedData) {
 
 
                   this.status = false;
@@ -3489,7 +3496,18 @@ export class SalesInvoiceComponent implements OnInit {
                   }
                   //this.sales_Invoice_Payment_Dtls.patchValue({ mode_of_payment: loadingtrans["mode_of_payment"], payment_term: loadingtrans["payment_term"], days: loadingtrans["days"] })
                   
-                  this.sales_Invoice_Shipment_Dtls.patchValue({ paytoaddr: shipmentdata.pay_addr, paytodtls: shipmentdata.pay_details, shipaddr: shipmentdata.ship_addr, shipdtls: shipmentdata.ship_details });
+                  console.log("Ship Data SIDC:" + JSON.stringify(shipmentdata))
+                  // COMEENTED FOR NORMAL PATCHING
+                  //this.sales_Invoice_Shipment_Dtls.patchValue({ paytoaddr: shipmentdata.pay_addr, paytodtls: shipmentdata.pay_details, shipaddr: shipmentdata.ship_addr, shipdtls: shipmentdata.ship_details });
+                  
+                  // PATCH TO BYPASS NULL VALUE IN INVOICE PAGE
+                  this.sales_Invoice_Shipment_Dtls.patchValue({
+                    paytoaddr: shipmentdata.pay_addr || '',
+                    paytodtls: shipmentdata.pay_details || '',
+                    shipaddr: shipmentdata.ship_addr || '',
+                    shipdtls: shipmentdata.ship_details || ''
+                  });
+
                  /* this.sales_Invoice_Shipment_Dtls.patchValue({ paytoaddr: shipmentdata.pay_addr, paytodtls: shipmentdata.pay_details});
                   this.customerDelvAddList.forEach(element => {
                     if (element.shipping_name == this.userForm.get("party").value) {

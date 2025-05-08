@@ -960,7 +960,7 @@ selectssiapp(s:string)
   }
   
   delete1(index) {
-    if(index)
+    if(this.trans_bussiness_partner_vehicle_dtls.length > 1)
     {
      this.trans_bussiness_partner_vehicle_dtls.removeAt(index);
     }
