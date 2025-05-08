@@ -197,7 +197,7 @@
                       <div class="label_col"><input class="form-control" type="number" min="0" formControlName="rcv_pack_qty" (keyup)="getRcvPackingQty($event, pointIndex)"/></div>
                       <div class="label_col"><input class="form-control" formControlName="rcv_pack_uom" readonly/></div>                     
                       <div class="label_col"><input class="form-control" type="number" formControlName="rcv_item_qty" (keyup)="getRcvItemQty($event, pointIndex)"/></div>
-                      <div class="label_col"><input class="form-control" formControlName="rcv_mat_wt"  /></div>
+                      <div class="label_col"><input class="form-control" formControlName="rcv_mat_wt" (keyup)="getRcvMatQty($event, pointIndex)"/></div>
                       <div class="label_col"><input class="form-control" formControlName="rcv_item_uom" readonly /></div>
                       <div class="label_col">
                         <input class="form-control" type="number" min="0" formControlName="pssd_pack_qty" (keyup)="getPssdPackingQty($event, pointIndex)"  readonly *ngIf="stockTranferArmy; else others5"/>
@@ -795,7 +795,7 @@
                   <th>Stock Transfer GRN Date</th>
                   <th>Business Unit</th>
                   <th>Vehcle No</th>
-                  <th colspan="3">Action</th>
+                  <th colspan="4">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -809,8 +809,13 @@
                     <ng-template #elseBlock>
                       <td><button class="btn btn-danger"  [disabled] ="true">Delete</button></td>  
                     </ng-template>
-
                     <td><button class="btn btn-success" (click)="onclickprint(StockTransferGrn.id, StockTransferGrn.stk_grn_id,StockTransferGrn.b_unit,StockTransferGrn.reference_status,StockTransferGrn.reference_id)" *ngIf="stocktransfergrnprint">Print</button></td>
+                    <td *ngIf="StockTransferGrn.ref_type==='Stock Transfer Order' && StockTransferGrn.sale_inv_status!='Yes';else stockGrnBlock"><button class="btn" style="background-color: chocolate;" (click)="onClickSalesInvoice(StockTransferGrn.id, StockTransferGrn.stk_grn_id,StockTransferGrn.ref_type,StockTransferGrn.stk_grn_date,StockTransferGrn.b_unit)">Loose Bran Invoice</button></td>
+                    <ng-template #stockGrnBlock>
+                      <td *ngIf="StockTransferGrn.ref_type==='Stock Transfer Order'">
+                        <button class="btn" style="background-color: rgb(5, 177, 62);" disabled>Loose Bran Invoice</button>
+                      </td>
+                    </ng-template>
                 </tr>
               </tbody>
             </table>

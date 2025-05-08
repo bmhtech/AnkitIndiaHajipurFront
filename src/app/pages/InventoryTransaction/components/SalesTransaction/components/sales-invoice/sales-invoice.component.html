@@ -187,13 +187,21 @@
                 <mat-checkbox formControlName="jobwork" (change)="jobworkshow($event)">Job Work Service</mat-checkbox>
               </div>
             </div>
-
-            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="action == 'update'">
+            
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="salesOrdShow;else challanshow">
               <div class="form-group">
-                <mat-label>Ref Delivery Challan</mat-label>
-                <button class="btn btn-success" (click)=" onClickShow()" type="submit">Show Challan</button>
+                <mat-label>Sales Order For Loose Bran</mat-label>
+                <button class="btn btn-success" (click)=" onOrderShow()" type="submit">Show Order</button>
               </div>
             </div>
+            <ng-template #challanshow>
+              <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="action == 'update'">
+                <div class="form-group">
+                  <mat-label>Ref Delivery Challan</mat-label>
+                  <button class="btn btn-success" (click)=" onClickShow()" type="submit">Show Challan</button>
+                </div>
+              </div>
+            </ng-template>
 
           </fieldset>
         </div>

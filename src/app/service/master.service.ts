@@ -1112,6 +1112,7 @@ export class Master {
   }
 
   getStkTranGrns(companyId_FinencialYear): Observable<StockTransferGrn[]> { return this.httpClient.get<StockTransferGrn[]>(this.url + 'getStkTranGrns?' + companyId_FinencialYear).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); })) }
+  
   public createStkTranGrn(StockTransferGrn): Observable<StockTransferGrn> {
     //alert();
     return this.httpClient.post<StockTransferGrn>(this.url + "createStkTranGrn", StockTransferGrn).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }));
