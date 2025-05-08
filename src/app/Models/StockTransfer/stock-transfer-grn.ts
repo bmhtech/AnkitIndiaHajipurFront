@@ -17,7 +17,8 @@ export class StockTransferGrn
 		reference_status:any;
 		receipt_criteria:any;
 		rec_b_unit:any;
-
+		sale_inv_status:any;
+		
 		stk_transfer_grn_item_details: Stk_Trans_grn_item_details[];
         stk_transfer_grn_trans_info: Stk_Trans_grn_trans_info;
         stk_transfer_grn_bu_dtls:Stk_Transfer_grn_bu_dtls;

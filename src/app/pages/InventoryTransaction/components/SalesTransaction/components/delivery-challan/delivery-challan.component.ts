@@ -19,6 +19,7 @@ import { DelChallanDistancePopUpComponent } from '../del-challan-distance-pop-up
 import { DelChallanSalesOrdByGrnPopupComponent } from '../del-challan-sales-ord-by-grn-popup/del-challan-sales-ord-by-grn-popup.component';
 import { DchallanWeighmentFromGrnPrintComponent } from '../dchallan-weighment-from-grn-print/dchallan-weighment-from-grn-print.component';
 import { DelChallanSalesOrdByGrnJobworkPopupComponent } from '../del-challan-sales-ord-by-grn-jobwork-popup/del-challan-sales-ord-by-grn-jobwork-popup.component';
+import { UpdateGatepassComponent } from '../update-gatepass/update-gatepass.component';
 
 @Component({
   selector: 'app-delivery-challan',
@@ -3369,5 +3370,19 @@ export class DeliveryChallanComponent implements OnInit {
 
     });
   }
+  onUpdateGatepass(id,challan,gatepass) {
+      const dialogConfig = new MatDialogConfig();
+      dialogConfig.disableClose = true;
+      dialogConfig.autoFocus = true;
+      dialogConfig.data = { id: id, challan: challan,gatepass:gatepass};
+      const dialogRef = this.dialog.open(UpdateGatepassComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(data => {
+        //console.log("close:"+JSON.stringify(data))
+        if(data==true)
+        {
+          alert("Gatepass Updated Successfully..");
+        }
+      });
+    }
 }
 

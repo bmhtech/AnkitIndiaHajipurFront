@@ -6461,5 +6461,54 @@ export class DropdownServiceService {
   getstockOrderdetails(stockTrans_id: string): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getstockOrderdetails/' + stockTrans_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+  
+  getStkTransferGrnRestQty(orderid,item,pack): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getStkTransferGrnRestQty/' + orderid+'/'+item+'/'+pack).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getStkTranGrnsFast(comp,fyear): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getStkTranGrnsFast/' + comp+'/'+fyear).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getSalesInvFromStkTransGrn(stk_grn_id): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesInvFromStkTransGrn/' + stk_grn_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
   /* STOCK TRANSFER ORDER TO GRN ENDS */
+  
+  getSoSiList(): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSoSiList').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getSOItemDltsArmy(orderid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSOItemDltsArmy/' + orderid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getsalesOrderDtls(orderid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getsalesOrderDtls/' + orderid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getSalesOrdShipDtlsFast(orderid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesOrdShipDtlsFast/' + orderid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
+  getSalesOrdTransInfoFast(orderid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesOrdTransInfoFast/' + orderid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+ 
+  getSalesOrdBrokerDtlsFast(orderid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesOrdBrokerDtlsFast/' + orderid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getSalesOrdDocsFast(orderid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesOrdDocsFast/' + orderid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getSalesOrdTermsConFast(orderid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesOrdTermsConFast/' + orderid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  updateGatepass(id,gatepass): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'updateGatepass/'+id+'/'+gatepass).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
 }
