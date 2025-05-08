@@ -2332,19 +2332,25 @@ export class LoadingAdviceComponent implements OnInit {
               this.selectedItemName = [];
               let j = 0;
               this.userForm.patchValue({ referance_id: data["order_id"], staticuom: data["salesuom"] });
-
+              console.log('Received Data: ', data.sales_Order_Item_Dtls);
               this.addItem();
               this.item_sl_no = 0;
               while (this.wm_loading_advice_itm_dtls.length)
                 this.wm_loading_advice_itm_dtls.removeAt(0);
 
-              for (let data1 of data.sales_Order_Item_Dtls) {
+              const sortedData = data.sales_Order_Item_Dtls.sort((a, b) => {
+                // Sort by item_code or any other property that ensures the correct order
+                return String(a.slno).localeCompare(String(b.slno));  // Or any other sorting criteria
+              });
+              console.log('Sorted Data: ', sortedData);
+              for (let data1 of sortedData) {
+              //for (let data1 of data.sales_Order_Item_Dtls) {
                 // console.log("here tuhin "+data1["item_code"] + " / " +  data1["packing"] + " / " + this.company_name + " / "+ data1.checkbox)
                 if (data1.checkbox == true || data1["checkbox"] == "true" || data1["checkbox"] == true) {
                   this.Service.getSalesOrdItemDtlsnew(data["order_id"]).subscribe(itemdata => {
-                    console.log("itemdata:" + JSON.stringify(itemdata))
+                    //console.log("itemdata:" + JSON.stringify(itemdata))
                     this.item_codes = itemdata;
-
+                    console.log('Received Data Item: ', data1);
                     this.status = false;
                     forkJoin(
                       this.DropDownListService.getItemPackUom(data1["item_code"], data1["packing"], this.company_name),
@@ -2384,6 +2390,53 @@ export class LoadingAdviceComponent implements OnInit {
                   });
                 }
               }
+
+              /*for (let data1 of data.sales_Order_Item_Dtls) {
+                // console.log("here tuhin "+data1["item_code"] + " / " +  data1["packing"] + " / " + this.company_name + " / "+ data1.checkbox)
+                if (data1.checkbox == true || data1["checkbox"] == "true" || data1["checkbox"] == true) {
+                  this.Service.getSalesOrdItemDtlsnew(data["order_id"]).subscribe(itemdata => {
+                    //console.log("itemdata:" + JSON.stringify(itemdata))
+                    this.item_codes = itemdata;
+                    console.log('Received Data Item: ', data1);
+                    this.status = false;
+                    forkJoin(
+                      this.DropDownListService.getItemPackUom(data1["item_code"], data1["packing"], this.company_name),
+                      this.DropDownListService.getItemMasterPackMat(data1["item_code"]),
+                      this.DropDownListService.getAlternativeItemList(data1["item_code"])
+                    ).subscribe(([packUomData, packingList, alteritem]) => {
+                      this.status = true;
+                      // this.item_codes[j]=alteritem;
+                      this.alter_item_codes[j] = alteritem;
+                      this.addItem();
+                      this.capacity[j] = packUomData["capacity"];
+
+                      this.empty_bag_wt[j] = packUomData["empty_big_wt"];
+
+                      this.packingItem[j] = packingList;
+                      this.alter_packingItem[j] = packingList;
+                      this.selectedPackingItem[j] = data1["packing"];
+                      this.selectedItemName[j] = data1["item_code"];
+                      this.selectedAlterItemName[j] = data1["item_code"];
+                      this.selectedAlterPackingItem[j] = data1["packing"];
+
+                      //console.log(" abcd " + data1["item_code"])
+                      this.wm_loading_advice_itm_dtls.at(j).patchValue({
+                        item_code: data1["item_code"], packing: data1["packing"], alter_item_code: data1["item_code"], alter_packing: data1["packing"], quantity: data1["quantity"],
+                        uom: data1["uom"], s_quantity: data1["squantity"], s_uom: data1["suom"], mat_wt: data1["mat_wt"],
+                        price: data1["price"], pricecal: data1["price"], price_based_on: data1["price_based_on"], amount: data1["amount"],
+                        discount_rate: data1["discount_rate"], discount_type: data1["discount_type"], discount_amt: data1["discount_amt"],
+                        tax_code: data1["tax_code"], tax_rate: data1["tax_rate"], hsn_code: data1["hsn_code"],
+                        tax_amt: data1["tax_amt"], total_amt: data1["total_amt"], acc_norms: data1["acc_norms"],
+                        tolerance: data1["tolerance"], item_tolerance: packUomData["tolerance"], tolerance_qty: data1["quantity"]
+                      });
+                      this.calculateItemData(j);
+                      console.log(" after patch " + this.wm_loading_advice_itm_dtls.at(j).get("alter_item_code").value)
+                      j = j + 1;
+
+                    });
+                  });
+                }
+              }*/
               //trans_borne_by_chgs
 
               this.status = false;

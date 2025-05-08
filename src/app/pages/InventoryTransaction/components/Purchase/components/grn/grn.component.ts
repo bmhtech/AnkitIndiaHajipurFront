@@ -3634,8 +3634,8 @@ export class GrnComponent implements OnInit {
                 if (this.popupstatus == true) {
                   this.status = false;
 
-                  this.DropDownListService.purchasechecktotaltranslimitupdate(totalamount, this.userForm.get("supplier_name").value, localStorage.getItem("financial_year"), this.GrnId).subscribe(limit => {
-                    if (limit["status"] == "No") {
+                  /*this.DropDownListService.purchasechecktotaltranslimitupdate(totalamount, this.userForm.get("supplier_name").value, localStorage.getItem("financial_year"), this.GrnId).subscribe(limit => {
+                    if (limit["status"] == "No") {*/
                       this.Service.updatePurchaseGoodReceipt(this.userForm.getRawValue(), this.GrnId).subscribe(data => {
                         this.status = true;
                         console.log(this.userForm.value);
@@ -3666,13 +3666,13 @@ export class GrnComponent implements OnInit {
                         this.status = true; console.log("ERROR get: " + JSON.stringify(error)); alert("something error is occured please try again....");
                         this.ngOnInit()
                       });
-                    }
+                    /*}
                     else {
                       alert("Amount exceeded 50 Lakh !!!!!!!!!");
                       this.status;
                     }
 
-                  });
+                  });*/
 
 
                 }
@@ -4239,6 +4239,7 @@ export class GrnComponent implements OnInit {
       if (refno == 0 || refno == "" || refno == null) 
         {
           alert("Please Press Show Button First!");
+          this.userForm.patchValue({sales_order:''});
           this.status = true; 
         }
       else{

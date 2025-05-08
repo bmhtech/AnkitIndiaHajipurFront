@@ -36,6 +36,7 @@ import { DropdownServiceService } from '../../../../../../service/dropdown-servi
       {
         advice_id:[''],
         Wm_loading_advice_itm_dtls: this.fb.array([this.fb.group({
+          slno: '',
           item_code: '',  
           item_name: '',  
           alter_item_code: '',  
@@ -112,6 +113,7 @@ import { DropdownServiceService } from '../../../../../../service/dropdown-servi
     add()
     {
       this.Wm_loading_advice_itm_dtls.push(this.fb.group({
+        slno: '',
         item_code: '',  
         item_name: '',  
         packing:  '', 
