@@ -1443,6 +1443,7 @@ export class DeliveryChallanComponent implements OnInit {
   partyid: any;
   sales_order_id = "0";
   Challan_Date: any;
+  empty_bag_wt_priceBasedOn: any = [];
   onClickShow() {
     this.reference_type = this.userForm.get("ref_type").value as FormControl;
     this.partyid = this.userForm.get("party").value as FormControl;
@@ -1831,18 +1832,13 @@ export class DeliveryChallanComponent implements OnInit {
                   }
                   this.delivery_challan_Party_Dtls.patchValue(partyData);
                   this.delivery_challan_Shipment_Dtls.patchValue({ shipmentData });
-
                   this.status = true;
                 });
               }
-
             });
           }
         });
-
       }
-
-
     }
 
     else if (this.reference_type == "GRN") {
@@ -2017,6 +2013,7 @@ export class DeliveryChallanComponent implements OnInit {
                   this.DropDownListService.getItemThruSalesThruBU_inv_type(data.b_unit, this.company_name, data.inv_type),
                 ).subscribe(([packingList, capacityEmptyWt, alteritem, hsn,itemlist]) => {
                   //console.log("Sales Item:" + JSON.stringify(data.sales_Order_Item_Dtls))
+                  console.log("Sales Item capacityEmptyWt:" + JSON.stringify(capacityEmptyWt))
                   //this.item_codes[i] = alteritem;
                   this.item_codes[i] = itemlist;
                   this.addItem();
@@ -2027,13 +2024,14 @@ export class DeliveryChallanComponent implements OnInit {
                   this.capacity[i] = capacityEmptyWt["capacity"];
                   this.empty_bag_wt[i] = capacityEmptyWt["empty_big_wt"];
                   this.grandTotal = this.grandTotal + data1["total_amt"];
+                  this.empty_bag_wt_priceBasedOn[i] = capacityEmptyWt["empbagwt_based_on"];
 
                   let alluom: any = [];
                   alluom = JSON.parse(localStorage.getItem("ALLUOM"));
 
                   if (data1.uom == "PCS") {
                     this._item_qty = Math.round(this.capacity[i] * data1.squantity);
-                   // console.log("_item_qty1:",this._item_qty,"//",this.capacity[i],"//",data1.squantity)
+                    console.log("_item_qty1: ",this._item_qty,"//",this.capacity[i],"//",data1.squantity)
                   }
                   else {
                     alluom.forEach(element => {
@@ -2041,9 +2039,21 @@ export class DeliveryChallanComponent implements OnInit {
                         this._item_qty = Number(this.capacity[i] * data1.squantity).toFixed(Number(element.decimalv));
                       }
                     });
-                    //console.log("_item_qty2:",this._item_qty,"//",this.capacity[i],"//",data1.squantity)
+                    console.log("_item_qty2: ",this._item_qty,"//",this.capacity[i],"//",data1.squantity)
                   }
-                  //console.log("_item_qty:",this._item_qty)
+                  console.log("_item_qty: ",this._item_qty)
+
+                  if (this.empty_bag_wt_priceBasedOn[i] == 'UOM') {
+                    this.delivery_challan_Item_Dtls.at(i).patchValue({ mat_wt: (Number((data1["quantity"] - (this.empty_bag_wt[i] * data1["squantity"])))).toFixed(3) });
+                    console.log("Mat Qt UoM: " + (data1["quantity"] - (this.empty_bag_wt[i] * data1["squantity"])));
+                  }
+                  else {
+                    this.delivery_challan_Item_Dtls.at(i).patchValue({ mat_wt: ((Number((data1["quantity"] - (data1["quantity"] * this.empty_bag_wt[i]) / 100)))).toFixed(3) });
+                    console.log("Mat Qt %: " + ((Number((data1["quantity"] - (data1["quantity"] * this.empty_bag_wt[i]) / 100)))).toFixed(3));
+                  }
+                  
+                  console.log(this._item_qty + " / " + data1["quantity"] + " / " + this.empty_bag_wt[i] + " / " + data1["squantity"] + " / " + Number(this.empty_bag_wt[i] * data1["squantity"]) + " // " + this.capacity[i]);
+
                   if (data1.price_based_on == "Packing") { this.amt = data1.price * data1.squantity }
 
                   if (data1.price_based_on == "Item") { this.amt = data1.price * data1.quantity }
@@ -2051,7 +2061,8 @@ export class DeliveryChallanComponent implements OnInit {
                   this.delivery_challan_Item_Dtls.at(i).patchValue({
                     item_code: data1["item_code"], hsn_code: hsn["hsn_code"],
                     packing: data1["packing"], quantity: data1["quantity"], uom: data1["uom"], squantity: data1["squantity"],
-                    suom: data1["suom"], mat_wt: Number(this._item_qty).toFixed(2), price: data1["price"].toFixed(2), price_based_on: data1["price_based_on"],
+                    suom: data1["suom"], price: data1["price"].toFixed(2), price_based_on: data1["price_based_on"],
+                    //mat_wt: Number(this._item_qty).toFixed(2), 
                     amount: Number(this.amt).toFixed(2), discount_rate: data1["discount_rate"].toFixed(2), discount_type: data1["discount_type"],
                     discount_amt: 0, tax_code: data1["tax_code"], tax_rate: data1["tax_rate"].toFixed(2),
                     tax_amt: data1["tax_amt"].toFixed(2), total_amt: Number(this._item_qty).toFixed(2), acc_norms: data1["acc_norms"]
