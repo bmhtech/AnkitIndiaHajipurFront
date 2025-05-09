@@ -77,6 +77,8 @@ import { UpdateArnNoComponent } from './components/update-arn-no/update-arn-no.c
 import { DelChallanSalesOrdByGrnPopupComponent } from './components/del-challan-sales-ord-by-grn-popup/del-challan-sales-ord-by-grn-popup.component';
 import { DchallanWeighmentFromGrnPrintComponent } from './components/dchallan-weighment-from-grn-print/dchallan-weighment-from-grn-print.component';
 import { DelChallanSalesOrdByGrnJobworkPopupComponent } from './components/del-challan-sales-ord-by-grn-jobwork-popup/del-challan-sales-ord-by-grn-jobwork-popup.component';
+import { SalesOrderSalesInvoicePopupComponent } from './components/sales-order-sales-invoice-popup/sales-order-sales-invoice-popup.component';
+import { UpdateGatepassComponent } from './components/update-gatepass/update-gatepass.component';
 
 
 @NgModule({
@@ -152,6 +154,8 @@ import { DelChallanSalesOrdByGrnJobworkPopupComponent } from './components/del-c
         DelChallanSalesOrdByGrnPopupComponent,
         DchallanWeighmentFromGrnPrintComponent,
         DelChallanSalesOrdByGrnJobworkPopupComponent,
+        SalesOrderSalesInvoicePopupComponent,
+        UpdateGatepassComponent
     ],
 
 
@@ -220,6 +224,8 @@ import { DelChallanSalesOrdByGrnJobworkPopupComponent } from './components/del-c
        DelChallanSalesOrdByGrnPopupComponent,
        DchallanWeighmentFromGrnPrintComponent,
        DelChallanSalesOrdByGrnJobworkPopupComponent,
+       SalesOrderSalesInvoicePopupComponent,
+       UpdateGatepassComponent,
        
        
       

@@ -89,6 +89,7 @@ export class StockTransferGrnComponent implements OnInit
         receipt_criteria: [''],
         reference_status:[''],
         rec_b_unit:[''],
+        sale_inv_status:[''],
   
         stk_transfer_grn_bu_dtls: this.fb.group({
           businessunit_name:'',
@@ -202,6 +203,7 @@ export class StockTransferGrnComponent implements OnInit
     get stk_grn_id(){ return this.userForm.get("stk_grn_id") as FormControl }
     get b_unit(){ return this.userForm.get("b_unit") as FormControl }
     get rec_b_unit(){ return this.userForm.get("rec_b_unit") as FormControl }
+    get sale_inv_status(){ return this.userForm.get("sale_inv_status") as FormControl }
     get receipt_criteria(){ return this.userForm.get("receipt_criteria") as FormControl }
     get ref_type(){ return this.userForm.get("ref_type") as FormControl }
     get reference_status(){ return this.userForm.get("reference_status") as FormControl }
@@ -267,13 +269,14 @@ export class StockTransferGrnComponent implements OnInit
         this.DropDownListService.itemTypeList(this.company_name),  
         //this.DropDownListService.itemNamesList(),
         this.DropDownListService.itemNamesNewList(),
-        this.DropDownListService.transporterNamesList(),
-        this.Service.getStkTranGrns("company="+this.company_name+"&finyear="+this.financialYear),
-        
-      ).subscribe(([customUOMData,paytermData,chargesMasterData, companyBUMNCList,itemTypeData,itemNameData, TransData,StkTransGrnList])=>
+        //this.DropDownListService.transporterNamesList(),
+        this.DropDownListService.getTransporterMNCListFast(),
+       // this.Service.getStkTranGrns("company="+this.company_name+"&finyear="+this.financialYear),
+        this.DropDownListService.getStkTranGrnsFast(this.company_name,this.financialYear),
+      ).subscribe(([customUOMData,paytermData,chargesMasterData, companyBUMNCList,
+        itemTypeData,itemNameData, TransData,StkTransGrnList])=>
         {
           this.customUOMDyns  = customUOMData;
-          
           this.payTerms = paytermData;
           this.payTerms = paytermData;
           this.chargesIdList  = chargesMasterData;
@@ -284,7 +287,7 @@ export class StockTransferGrnComponent implements OnInit
           this.listStockTransferGrn = StkTransGrnList;
           this.status=true;
         }, (error) => {this.status=true;console.log("ERROR get: "+JSON.stringify(error));alert("something error is occured please try again....");
-        this.ngOnInit()});
+        });
     }
 
     showList(s:string)
@@ -339,6 +342,7 @@ export class StockTransferGrnComponent implements OnInit
     }
 
     reference_type:any;
+    orderid:any;
     onClickShow()
     {
       this.reference_type=this.userForm.get("ref_type").value as FormControl;
@@ -346,11 +350,11 @@ export class StockTransferGrnComponent implements OnInit
       dialogConfig.disableClose = true;
       dialogConfig.autoFocus = true;
       this.StkGrnId=this.userForm.get("id").value;
-      console.log("tuhin here12345stewtrw :: "+this.StkGrnId)
+     // console.log("tuhin here12345stewtrw :: "+this.StkGrnId)
       if(this.StkGrnId == null || this.StkGrnId =='')
       {
         this.StkGrnId=0;
-        console.log("tuhin here12345 :: "+this.StkGrnId)
+       // console.log("tuhin here12345 :: "+this.StkGrnId)
       }
       dialogConfig.data = {id:this.StkGrnId }; //from id
       if (this.reference_type=="Stock Transfer Order")
@@ -361,9 +365,11 @@ export class StockTransferGrnComponent implements OnInit
           console.log(" STO DATA :: ",JSON.stringify(data));
           if(data["order_id"] != "0" && data["order_id"] != '' && data["order_id"] != undefined)
           {
+            this.orderid=data.order_id;
             this.userForm.patchValue({reference_id:data["order_id"],reference_status:this.reference_type,referance_type:''});
                 forkJoin(
-                  this.DropDownListService.getStkTransOrderItemDlts(data["order_id"]),
+                 // this.DropDownListService.getStkTransOrderItemDlts(data["order_id"]),
+                  this.DropDownListService.getStockTransItemDltsArmy(data["order_id"]),
                   this.DropDownListService.getStkOrderVehicleNo(data["order_id"]),
                   this.DropDownListService.getstockOrderdetails(data["order_id"])
                 ).subscribe(([itemData,TransData,stockchallan])=>
@@ -390,16 +396,34 @@ export class StockTransferGrnComponent implements OnInit
                         
                           this.addItem();
                           this.stk_transfer_grn_item_details.at(k).patchValue({
-                            adv_item_code: data1["item_code"], adv_item_name: data1["item_name"], adv_item_uom: data1["uom"], adv_item_qty: data1["quantity"],
-                            adv_packing: data1["packing"], adv_pack_qty: data1["squantity"],  adv_pack_uom: data1["suom"], adv_mat_wt: data1["mat_wt"],
-                            rcv_pack_uom: data1["suom"],rcv_pack_qty: data1["squantity"],rcv_mat_wt: data1["mat_wt"],
-                            rcv_item_uom: data1["uom"],rcv_item_qty: data1["quantity"],
-                            pssd_pack_uom: data1["suom"],pssd_pack_qty: data1["squantity"], pssd_mat_wt: data1["mat_wt"],
-                            pssd_item_uom: data1["uom"],pssd_item_qty: data1["quantity"],
+                            adv_item_code: data1["item_code"], adv_item_name: data1["item_name"], adv_item_uom: data1["uom"], adv_item_qty: data1["st_rest_wt"],
+                            adv_packing: data1["packing"], adv_pack_qty: data1["st_rest_bag"],  adv_pack_uom: data1["suom"], adv_mat_wt: data1["st_rest_wt"],
+                            rcv_pack_uom: data1["suom"],rcv_pack_qty: data1["st_rest_bag"],rcv_mat_wt: data1["st_rest_wt"],
+                            rcv_item_uom: data1["uom"],rcv_item_qty: data1["st_rest_wt"],
+                            pssd_pack_uom: data1["suom"],pssd_pack_qty: data1["st_rest_bag"], pssd_mat_wt: data1["st_rest_wt"],
+                            pssd_item_uom: data1["uom"],pssd_item_qty: data1["st_rest_wt"],
                             warehouse: data1["wearhouse"], unit_rate:data1["price"],price_based_on:data1["price_based_on"],
-                            amount: data1["amount"],net_amt: data1["net_amt"],net_amt_after_qc: data1["amount"],
-                            tax_code: data1["tax_id"],tax_rate: data1["tax_rate"],tax_amt: data1["tax_amt"],
-                            gross_amt: data1["gross_amt"], qc_norms: data1["acc_norms"]});
+                            tax_code: data1["tax_id"],tax_rate: data1["tax_rate"],qc_norms: data1["acc_norms"]});
+
+                            if(data1["price_based_on"]=="Item"){
+                              this.stk_transfer_grn_item_details.at(k).patchValue({
+                                amount:data1["st_rest_wt"]*data1["price"],
+                                gross_amt:data1["st_rest_wt"]*data1["price"],
+                                tax_amt:((data1["st_rest_wt"]*data1["price"])*data1["tax_rate"])/100,
+                                net_amt:data1["st_rest_wt"]*data1["price"],
+                                net_amt_after_qc: data1["st_rest_wt"]*data1["price"]
+                              });
+                            }
+                            else{
+                              this.stk_transfer_grn_item_details.at(k).patchValue({
+                                amount:data1["st_rest_bag"]*data1["price"],
+                                gross_amt:data1["st_rest_bag"]*data1["price"],
+                                tax_amt:((data1["st_rest_bag"]*data1["price"])*data1["tax_rate"])/100,
+                                net_amt:data1["st_rest_bag"]*data1["price"],
+                                net_amt_after_qc: data1["st_rest_bag"]*data1["price"]
+                              });
+                            }
+
                           k = k + 1;       
                         })
                       }
@@ -504,7 +528,8 @@ export class StockTransferGrnComponent implements OnInit
         username: [''],
         receipt_criteria: [''],
         reference_status:[''],
-  
+        sale_inv_status:[''],
+
         stk_transfer_grn_bu_dtls: this.fb.group({
           businessunit_name:'',
           mobile_no: '',
@@ -1026,15 +1051,58 @@ getRcvPackingQtyautocalculate(rcv_packing_qty, index)
         });  
       }
     }
+    getRcvMatQty(rcv_mat_qty, index)
+    {
+      this.rcvMatWt = rcv_mat_qty.target.value;
+      this.ItemId =  this.stk_transfer_grn_item_details.at(index).get("adv_item_code").value as FormControl; 
+      this.Pack = this.stk_transfer_grn_item_details.at(index).get('adv_packing').value as FormControl;  
+
+      if(this.reference_type=="Stock Transfer Order"){
+        this.DropDownListService.getStkTransferGrnRestQty(this.orderid,this.ItemId,this.Pack).subscribe(restdata=>
+        {
+          if(restdata.rest_wt<this.rcvMatWt)
+          {
+            alert("Rest Mat. Qty is Less than Mat. Qty,Please check!");
+            this.stk_transfer_grn_item_details.at(index).patchValue({rcv_pack_qty: 0,rcv_item_qty: 0,rcv_mat_wt: 0});    
+            this.rcvMatWt=0;
+          }
+          else{
+           
+          }
+        });
+      }
+    }
 
     getRcvItemQty(rcv_item_qty, index)
     {
       this.rcvPackQty = this.stk_transfer_grn_item_details.at(index).get("rcv_pack_qty").value as FormControl;
       this.rcvItemQty = rcv_item_qty.target.value;
 
-      if(this.empty_bag_wt_priceBasedOn[index] == 'UOM')
-      { this.rcvMatWt = this.rcvItemQty - (this.Empty_bagWt[index] * this.rcvPackQty);}
-      else{this.rcvMatWt = this.rcvItemQty - (this.rcvItemQty * this.Empty_bagWt[index])/100;}
+      this.ItemId =  this.stk_transfer_grn_item_details.at(index).get("adv_item_code").value as FormControl; 
+      this.Pack = this.stk_transfer_grn_item_details.at(index).get('adv_packing').value as FormControl;  
+
+      if(this.reference_type=="Stock Transfer Order"){
+        this.DropDownListService.getStkTransferGrnRestQty(this.orderid,this.ItemId,this.Pack).subscribe(restdata=>
+        {
+          if(restdata.rest_wt<this.rcvItemQty)
+          {
+            alert("Rest Item Qty is Less than Item Qty,Please check!");
+            this.stk_transfer_grn_item_details.at(index).patchValue({rcv_pack_qty: 0,rcv_item_qty: 0,rcv_mat_wt: 0});    
+            this.rcvMatWt=0;
+          }
+          else{
+            if(this.empty_bag_wt_priceBasedOn[index] == 'UOM')
+              { this.rcvMatWt = this.rcvItemQty - (this.Empty_bagWt[index] * this.rcvPackQty);}
+              else{this.rcvMatWt = this.rcvItemQty - (this.rcvItemQty * this.Empty_bagWt[index])/100;}   
+          }
+        });
+      }
+      else{
+        if(this.empty_bag_wt_priceBasedOn[index] == 'UOM')
+          { this.rcvMatWt = this.rcvItemQty - (this.Empty_bagWt[index] * this.rcvPackQty);}
+          else{this.rcvMatWt = this.rcvItemQty - (this.rcvItemQty * this.Empty_bagWt[index])/100;}
+      }
+      
 
       this.stk_transfer_grn_item_details.at(index).patchValue({rcv_mat_wt: (Math.round(this.rcvMatWt * 1000)/1000).toFixed(3)}); 
       this.advPackQty = this.stk_transfer_grn_item_details.at(index).get("adv_pack_qty").value as FormControl;
@@ -1248,10 +1316,22 @@ getRcvPackingQtyautocalculate(rcv_packing_qty, index)
       else{this.rcvMatWt = this.rcvItemQty - (this.rcvItemQty * this.Empty_bagWt[index])/100;}
 
       if(this.reference_type=="Stock Transfer Order"){
-        this.stk_transfer_grn_item_details.at(index).patchValue({rcv_item_qty: this.rcvItemQty, 
-          rcv_mat_wt: (Math.round(this.rcvMatWt * 1000)/1000).toFixed(3),adv_pack_qty:this.rcvPackQty,
-          adv_item_qty:this.rcvItemQty,adv_mat_wt:(Math.round(this.rcvMatWt * 1000)/1000).toFixed(3),
-          pssd_pack_qty:this.rcvPackQty,pssd_item_qty:this.rcvItemQty,pssd_mat_wt:(Math.round(this.rcvMatWt * 1000)/1000).toFixed(3)});
+        this.DropDownListService.getStkTransferGrnRestQty(this.orderid,this.ItemId,this.Pack).subscribe(restdata=>
+        {
+          console.log("rest bag:",restdata.rest_bag,":pack qty:",this.rcvPackQty)
+          if(restdata.rest_bag<this.rcvPackQty)
+          {
+            alert("Rest Bag is Less than Packing Qty,Please check!");
+            this.stk_transfer_grn_item_details.at(index).patchValue({rcv_pack_qty: 0,rcv_item_qty: 0,rcv_mat_wt: 0});    
+          }
+          else{
+            this.stk_transfer_grn_item_details.at(index).patchValue({rcv_item_qty: this.rcvItemQty, 
+              rcv_mat_wt: (Math.round(this.rcvMatWt * 1000)/1000).toFixed(3),adv_pack_qty:this.rcvPackQty,
+              adv_item_qty:this.rcvItemQty,adv_mat_wt:(Math.round(this.rcvMatWt * 1000)/1000).toFixed(3),
+              pssd_pack_qty:this.rcvPackQty,pssd_item_qty:this.rcvItemQty,pssd_mat_wt:(Math.round(this.rcvMatWt * 1000)/1000).toFixed(3)});    
+          }
+        });
+       
       }
       else{
         this.stk_transfer_grn_item_details.at(index).patchValue({rcv_item_qty: this.rcvItemQty, rcv_mat_wt: (Math.round(this.rcvMatWt * 1000)/1000).toFixed(3)}); 
@@ -1677,7 +1757,8 @@ getRcvPackingQtyautocalculate(rcv_packing_qty, index)
           applicable_charges_id:StkTransGRNData["applicable_charges_id"],remarks:StkTransGRNData["remarks"],
           reference_id:StkTransGRNData["reference_id"],company_id:StkTransGRNData["company_id"],
           fin_year:StkTransGRNData["fin_year"],username:StkTransGRNData["username"],
-          receipt_criteria:StkTransGRNData["receipt_criteria"],rec_b_unit:StkTransGRNData["rec_b_unit"]});
+          receipt_criteria:StkTransGRNData["receipt_criteria"],rec_b_unit:StkTransGRNData["rec_b_unit"],
+          sale_inv_status:StkTransGRNData["sale_inv_status"]});
 
          // this.OnChangeStkDate(StkTransGRNData["stk_grn_date"], 'create');
 
@@ -1791,4 +1872,18 @@ getRcvPackingQtyautocalculate(rcv_packing_qty, index)
             });
     
         }
+        onClickSalesInvoice(id, stk_grn_id,ref_type,stk_grn_date,b_unit) 
+        {
+          console.log("/id/ ",id,"/stk_grn_id/ ",stk_grn_id,"/ref_type/ ",ref_type,"/stk_grn_date/",stk_grn_date);
+          if(ref_type=='Stock Transfer Order')
+            {
+              window.open("#/pages/invTrans/salestransaction/SalesInvoice");
+              localStorage.setItem("svalue",'Hello');
+              localStorage.setItem("stkgrnid",stk_grn_id);
+              localStorage.setItem("stkreftypr",ref_type);
+              localStorage.setItem("stkgrndate",stk_grn_date);
+              localStorage.setItem("stkbunit",b_unit);
+            }
+        }
+
   }

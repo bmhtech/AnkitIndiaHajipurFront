@@ -21,6 +21,7 @@ import { SaleinvoicejobworkprintComponent } from '../saleinvoicejobworkprint/sal
 import { eInvoiceGenerate } from '../../../../../../Models/SalesTransaction/eInvoiceGenerate';
 import { SalesInvoiceEinvoiceCancelComponent } from '../sales-invoice-einvoice-cancel/sales-invoice-einvoice-cancel.component';
 import { UpdateArnNoComponent } from '../update-arn-no/update-arn-no.component';
+import { SalesOrderSalesInvoicePopupComponent } from '../sales-order-sales-invoice-popup/sales-order-sales-invoice-popup.component';
 
 @Component({
   selector: 'app-sales-invoice',
@@ -116,6 +117,12 @@ export class SalesInvoiceComponent implements OnInit {
   isOpenPolicy: boolean = false;
   onday: boolean = false;
   company_state:any;
+  stk_grn_id:any;
+  stk_ref_type:any;
+  stk_grn_date:any;
+  stk_bunit:any;
+  salesOrdShow:boolean=false;
+  tax_list:any=[];
 
   constructor(public fb: FormBuilder, public dialog: MatDialog,
     private Service: Master, private DropDownListService: DropdownServiceService) {
@@ -631,6 +638,7 @@ export class SalesInvoiceComponent implements OnInit {
     this.salesinvoicedelete = false;
     this.salesinvoiceprint = false;
     this.salesinvoiceposting = false;
+    this.salesOrdShow=false;
 
     if (accessdata.includes('sales_invoice.save')) {
       this.salesinvoicesave = true;
@@ -736,8 +744,9 @@ export class SalesInvoiceComponent implements OnInit {
       this.vehicleNoList = vehNoData;
       this.vehicleTypeList = vehTypeList;
       this.chargesIdList = ChargeMasterData;
-      console.log("list data:" + JSON.stringify(salesInvoiceDataList))
-      this.userForm.patchValue({ party: "0", invoice_type: "0", reference_id: "0" });
+     // console.log("list data:" + JSON.stringify(salesInvoiceDataList))
+     // this.userForm.patchValue({ party: "0", invoice_type: "0", reference_id: "0" });
+      this.userForm.patchValue({ party: "0", reference_id: "0" });
       this.sales_Invoice_Shipment_Dtls.patchValue({ paytoaddr: "0" });
       this.sales_Invoice_Payment_Dtls.patchValue({ payment_term: "0" })
       this.sales_Invoice_Item_Dtls.at(0).patchValue({
@@ -757,12 +766,85 @@ export class SalesInvoiceComponent implements OnInit {
       this.status = true;
     }, (error) => {
       this.status = true; console.log("ERROR get: " + JSON.stringify(error)); alert("something error is occured please try again....");
-      this.ngOnInit()
-    });
+      });
 
     if (localStorage.getItem("svalue") == 'true') {
       this.onUpdate(localStorage.getItem("sid"), localStorage.getItem("sno"), localStorage.getItem("saction"));
     }
+
+     //Store Transfer GRN to sales invoice Starts
+       if (localStorage.getItem("svalue") == 'Hello') {
+        
+        this.stk_grn_id=localStorage.getItem("stkgrnid");
+        this.stk_ref_type=localStorage.getItem("stkreftypr");
+        this.stk_grn_date=localStorage.getItem("stkgrndate");
+        this.stk_bunit=localStorage.getItem("stkbunit"); 
+
+        localStorage.removeItem("svalue");
+        localStorage.removeItem("stkgrnid");
+        localStorage.removeItem("stkreftypr");
+        localStorage.removeItem("stkgrndate");
+        localStorage.removeItem("stkbunit");
+
+        this.showList("add");
+       // this.currentDate=this.stk_grn_date;
+       timer(1500).subscribe
+       (x => {
+          forkJoin([
+            this.DropDownListService.getSalesInvFromStkTransGrn(this.stk_grn_id),
+            this.DropDownListService.getSISequenceId(this.financialYear + "/" + 'INV00006')
+          ]).subscribe(([stockgrnItemData,sqedata]) => {
+            //console.log("orddata data::",orddata)
+            this.packingItem = [];
+              let  k=0;
+              this.item_sl_no = 0;
+
+              this.salesOrdShow=true;
+              this.onChangeInvoiceType('INV00006'); //for inv type 'ARMY LOOSE BRAN'
+              this.onChangeBuUnit(this.stk_bunit);
+
+              this.userForm.patchValue({invoice_type:'INV00006',reference_id:this.stk_grn_id,business_unit:this.stk_bunit,
+                invoice_date:this.currentDate,refchallandate:this.currentDate,refchallanno:sqedata.sequenceid,grand_total: 0,});
+
+              while(this.sales_Invoice_Item_Dtls.length)
+              this.sales_Invoice_Item_Dtls.removeAt(0); 
+              this.sales_Invoice_Item_Dtls.reset();
+             
+                  forkJoin(
+                    this.DropDownListService.getItemMasterPackMatNew(stockgrnItemData["adv_item_code"]),
+                    this.DropDownListService.getItemPackUomNew(stockgrnItemData["adv_item_code"], stockgrnItemData["adv_packing"],this.company_name),
+                    this.DropDownListService.taxList()
+                  ).subscribe(([packingList, capacityEmptyWt,taxdata])=>
+                  {  
+                    this.status = true;
+                    this.packingItem[0] = packingList; 
+                    this.addItem();
+
+                    this.capacity[0] = capacityEmptyWt.capacity;
+                    this.empty_bag_wt[0] =  capacityEmptyWt.empty_big_wt;
+                   
+                    //console.log("data1::"+stockgrnItemData.rcv_pack_qty) 
+                    this.sales_Invoice_Item_Dtls.at(0).patchValue(
+                    {
+                      item_code: stockgrnItemData.adv_item_code,item_group:stockgrnItemData.item_group,
+                       packing: stockgrnItemData.adv_packing,
+                       suom: stockgrnItemData.rcv_pack_uom, mat_wt: Number(stockgrnItemData.rcv_mat_wt).toFixed(2),
+                      squantity: stockgrnItemData.rcv_pack_qty, uom: stockgrnItemData.rcv_item_uom,
+                       quantity: stockgrnItemData.rcv_item_qty,
+                      price_based_on: stockgrnItemData.price_based_on,tax_rate:stockgrnItemData.tax_rate,
+                      tax_code:stockgrnItemData.tax_code,hsn_code:stockgrnItemData.hsn_code,
+                      discount_rate:stockgrnItemData.discount,discount_type:stockgrnItemData.discount_based_on,
+                      discount_amt:stockgrnItemData.discount_amt});
+                      
+                      this.tax_list = taxdata;
+                      
+                  });
+              });
+          });
+          this.status=true; 
+       }
+       else{ this.salesOrdShow=false;}
+    //Store Transfer GRN to sales invoice Ends
   }
 
   showList(s: string) {
@@ -817,6 +899,7 @@ export class SalesInvoiceComponent implements OnInit {
     }
 
     if (s == "list") {
+      //console.log("ENTER LIST")
       this.isHidden = false;
       this.einvoiceshow = false;
       this.Jobworkshow = false;
@@ -994,14 +1077,21 @@ export class SalesInvoiceComponent implements OnInit {
       }
       if (event == 'INV00003') {
         this.isOpenJobwork = true;
+        this.salesOrdShow=false;
         this.Service.taxCodeDtlsRetriveList("TC00002").subscribe(taxlist => {
           this.taxcodelist = taxlist;
           this.status = true;
         });
 
       }
+      else if(event == 'INV00006') //for inv type 'ARMY LOOSE BRAN'
+      {
+        this.isOpenJobwork = false;
+        this.salesOrdShow=true;
+      }
       else {
         this.isOpenJobwork = false;
+        this.salesOrdShow=false;
       }
     }
   }
@@ -1077,6 +1167,7 @@ export class SalesInvoiceComponent implements OnInit {
   }
 
   addItem() {
+    console.log("ENTER aditem0")
     this.item_sl_no = this.item_sl_no + 1;
     this.sales_Invoice_Item_Dtls.push(this.fb.group({
       slno: this.item_sl_no,
@@ -1727,6 +1818,525 @@ export class SalesInvoiceComponent implements OnInit {
   TaxCodee: any;
   Percentage: any;
   TcsAmt: any;
+  cgstvalue: any;
+  sgstvalue: any;
+  igstvalue: any;
+  totalAmt:any;
+
+  onOrderShow(){
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    this.Id = this.userForm.get("id").value;
+    if (this.Id == null || this.Id == '') {
+      this.Id = 0;
+    }
+    
+    let itemgrpmulti = "";
+    dialogConfig.data = {id: this.Id };
+    this._invoiceType=this.userForm.get("invoice_type").value;
+    this._customerId=this.userForm.get("party").value;
+    if (this._invoiceType != "0" && this._customerId != "0") {
+      let itemtoal: number = 0;
+      const dialogRef = this.dialog.open(SalesOrderSalesInvoicePopupComponent, dialogConfig);
+      dialogRef.afterClosed().subscribe(data => {
+        if (data != '' && data.order_no != "0") {
+          console.log("Data Comes",JSON.stringify(data))
+          this.ledgerNames.forEach(element => {
+            if (element.ledgername == this.userForm.get("party").value) {
+              this.userForm.patchValue({ payable_amt_gl_ac: element.ledgerid });
+            }
+          });
+
+          let PartyName = this.userForm.get("party").value;
+          this.invoicePopupStatus = true;
+          this.userForm.patchValue({ reference_id:this.stk_grn_id, brokage_app: 'true' });
+          this.totalItem = 0;
+          this.totalDiscount = 0;
+          this.totalTaxAmt = 0;
+          this.grandTotal = 0;
+          this.packingItem = [];
+          let i = 0;
+          let k = 0;
+         
+          if (this.userForm.get("state").value == this.company_state) {
+            this.isOpenPolicy = false;
+            this.userForm.patchValue({ policyno: '' })
+          }
+          else {
+            this.isOpenPolicy = true;
+            //this.userForm.patchValue({ policyno: '0000000034939414' });  // Commented for Army
+            this.userForm.patchValue({ policyno: '0000000000000000' });
+          }
+
+          let si_item = this.sales_Invoice_Item_Dtls.at(0).get("item_code").value;
+          let si_packing = this.sales_Invoice_Item_Dtls.at(0).get("packing").value;
+          let si_pricebasedon = this.sales_Invoice_Item_Dtls.at(0).get("price_based_on").value;
+          let si_taxrate = this.sales_Invoice_Item_Dtls.at(0).get("tax_rate").value;
+          let si_taxcode = this.sales_Invoice_Item_Dtls.at(0).get("tax_code").value;
+          let si_hsncode = this.sales_Invoice_Item_Dtls.at(0).get("hsn_code").value;
+          let si_itemqty = this.sales_Invoice_Item_Dtls.at(0).get("quantity").value;
+          let si_packingqty = this.sales_Invoice_Item_Dtls.at(0).get("squantity").value;
+
+          for (let data1 of data.SoDetail) {
+
+            this.status = false;
+            if(si_item==data1["item_code"] && si_packing==data1["packing"]){
+            forkJoin(
+
+              this.DropDownListService.getItemMasterPackMat(data1["item_code"]),
+              this.DropDownListService.getItemPackUom(data1["item_code"], data1["packing"], this.company_name),
+              this.DropDownListService.getItemNameById(data1["item_code"], this.company_name),
+              this.Service.custAccountRetriveList(PartyName)
+            ).subscribe(([packingList, capacityEmptyWt, ItemGrp, tcs]) => {
+
+              this.status = true;
+              this.show_Row = true;
+              this.capacity[i] = capacityEmptyWt.capacity;
+              this.empty_bag_wt[i] = capacityEmptyWt.empty_big_wt;
+              this.packingItem[i] = packingList;
+              
+              this.sales_Invoice_Item_Dtls.at(i).patchValue({ item_group: ItemGrp["item_group"],
+                price:data1.price,discount_rate:data1.discount_rate, })
+
+
+              if(si_pricebasedon=="Item"){
+                this.sales_Invoice_Item_Dtls.at(i).patchValue({
+                  amount:si_itemqty*data1["price"],
+                  tax_amt:((si_itemqty*data1["price"])*si_taxrate)/100
+                });
+                itemtoal = itemtoal + Number(si_itemqty*data1["price"]);
+                this._taxAmt = ((si_itemqty*data1["price"])*si_taxrate)/100;
+              }
+              else{
+                this.sales_Invoice_Item_Dtls.at(i).patchValue({
+                  amount:si_packingqty*data1["price"],
+                  tax_amt:((si_packingqty*data1["price"])*si_taxrate)/100
+                });
+                itemtoal = itemtoal + Number(si_packingqty*data1["price"]);
+                this._taxAmt = ((si_packingqty*data1["price"])*si_taxrate)/100;
+              }
+
+               //console.log("second " + itemtoal);
+               this.amt = itemtoal;
+               //this.einvoiceshow=true;
+ 
+               this.totalItem = itemtoal;
+               this.discountAmt = 0;
+               this.totalDiscount = this.totalDiscount + this.discountAmt;
+               
+               this.totalTaxAmt = this.totalTaxAmt + this._taxAmt;
+               let Amt = this.totalItem;
+ 
+               let netAmt = this.totalItem - this.totalDiscount;
+               //let totalAmt = netAmt + this.totalTaxAmt;
+
+              let taxdata: any = [];
+              taxdata = this.tax_list;
+              //console.log("taxcode"+JSON.stringify(this.tax_list)+" //////// "+JSON.stringify(taxdata))
+              taxdata.forEach(element => {
+                //console.log("taxname:"+element.tax_id+"//"+this.delivery_challan_Item_Dtls.at(index).get("tax_code").value)
+                if (element.tax_id == this.sales_Invoice_Item_Dtls.at(0).get("tax_code").value) {
+                  //console.log("statestatus:"+this.statestatus)
+                  if (this.userForm.get("state").value == this.company_state)  {
+                    // this.cgstvalue=(Number(netAmt*element["cgst_act_val"])/100).toFixed(2);
+                    //this.sgstvalue=(Number(netAmt*element["sgst_act_val"])/100).toFixed(2);
+                    this.cgstvalue = Number(this.round((Number(netAmt * element["cgst_act_val"]) / 100), 2));
+                    this.sgstvalue = Number(this.round((Number(netAmt * element["sgst_act_val"]) / 100), 2));
+
+                    this.igstvalue = "0";
+                    // console.log("netAmt"+netAmt+"//"+this.cgstvalue+"//"+this.sgstvalue)
+                  }
+                  else {
+                    this.cgstvalue = '0';
+                    this.sgstvalue = '0';
+                    //this.igstvalue=Number(netAmt *(this.delivery_challan_Item_Dtls.at(index).get("tax_rate").value/100)).toFixed(2);
+                    this.igstvalue = Number(this.round(Number(netAmt * (this.sales_Invoice_Item_Dtls.at(0).get("tax_rate").value / 100)), 2));
+                    // console.log("netAmt"+netAmt+"//"+this.igstvalue)
+                  }
+                  let taxamt = Number(this.cgstvalue) + Number(this.sgstvalue) + Number(this.igstvalue);
+                  //console.log(netAmt+"taxamt::"+taxamt)
+                  this.totalAmt = taxamt + netAmt;
+                  this.sales_Invoice_Item_Dtls.at(0).patchValue({
+                    cgstamt: this.cgstvalue, sgstamt: this.sgstvalue, igstamt: this.igstvalue, amount: (Math.round(this.amt * 100) / 100).toFixed(2),
+                    discount_amt: (Math.round(this.discountAmt * 100) / 100).toFixed(2), net_amt_after_qc: (Math.round(Number(netAmt) * 100) / 100).toFixed(2),
+                    net_amt: (Math.round(netAmt * 100) / 100).toFixed(2), tax_amt: taxamt,
+                    total_amt: (Number(taxamt) + Number(netAmt)).toFixed(2), gross_amt: (Math.round(Number(netAmt + Number(taxamt)) * 100) / 100).toFixed(2)
+                  });
+                }
+              });
+
+              //console.log("first " + itemtoal);
+              
+             
+              //console.log("totalAmt " + totalAmt);
+              let finalBillamount = this.totalAmt + this.appCharges + this.adj1 - this.adj2;
+              this.userForm.patchValue({
+                item_total: Amt.toFixed(2),
+                discount: this.totalDiscount.toFixed(2),
+                //tax_total:  this.totalTaxAmt.toFixed(2)});
+                tax_total: Number(this.round(this.totalTaxAmt, 2))
+              });
+
+              let totlround = Math.round(finalBillamount);
+             // console.log("totlround " + totlround);
+              let totlWithoutround = finalBillamount.toFixed(2);
+              this.RoundOff = (totlround - Number(totlWithoutround)).toFixed(2);
+
+             // console.log("this.RoundOff " + this.RoundOff);
+
+              this.TcsAmt1 = (Number(totlround * tcs.tcs_rate) / 100).toFixed(2);
+
+             // console.log(totlround," this.TcsAmt1  " + this.TcsAmt1);
+
+              this.userForm.patchValue({ tcsamt: this.TcsAmt1 });
+
+              let t = Number(totlround) + Number(this.TcsAmt1)
+
+              if (this.einvoiceshow == true) {
+                this.userForm.patchValue({ payable_amt: finalBillamount.toFixed(2), roundoff_amt: 0 })
+
+
+              }
+              else {
+                this.userForm.patchValue({ payable_amt: totlround.toFixed(2) })
+
+                let roundOfAmt = Math.round(finalBillamount * 100) % 100;
+                if (roundOfAmt >= 50) {
+                  roundOfAmt = 100 - roundOfAmt;
+                  this.userForm.patchValue({ roundoff_amt: Number(Number(roundOfAmt) / 100).toFixed(2) })
+                }
+                else {
+                  this.userForm.patchValue({ roundoff_amt: Number(0 - Number(roundOfAmt) / 100).toFixed(2) });
+                };
+
+              }
+              
+              this.grandTotal = Number(this.grandTotal) + Number(itemtoal);
+
+              //HERE MAKING
+
+              if (this.userForm.get("discount").value > 0) {
+                //this.userForm.patchValue({});
+                //discount add later
+              }
+              if (this.userForm.get("tax_total").value > 0) {
+                //this.userForm.patchValue({});
+                //tax_total add later
+              }
+              if (this.userForm.get("applicable_amt").value > 0) {
+                //this.userForm.patchValue({});
+                //applicable_gl_ac add later
+              }
+              if (this.userForm.get("adj1_amt").value > 0) {
+                //this.userForm.patchValue({});
+                //adj1_gl_ac add later
+              }
+              if (this.userForm.get("adj2_amt").value > 0) {
+                //this.userForm.patchValue({});
+                //adj2_gl_ac add later
+              }
+              if (this.userForm.get("roundoff_amt").value > 0) {
+                this.userForm.patchValue({ roundoff_gl_ac: 'IB00001' });
+                //tax_total add later
+              }
+              if (this.userForm.get("tcsamt").value > 0) {
+                //this.userForm.patchValue({});
+                //tcsglac add later
+              }
+
+
+              this.userForm.patchValue({ grand_total: this.grandTotal.toFixed(2) });
+
+
+              this.ItemGr.push(ItemGrp["item_group"]);
+
+              this.TaxCode.push(si_taxcode);
+              this.HsnCode.push(si_hsncode);
+              this.TaxRate.push(si_taxrate);
+              //  console.log("////////"+JSON.stringify(data1))
+              //this.sales_Invoice_Item_Dtls.at(i).patchValue({price:data1.price});
+
+              itemgrpmulti += ItemGrp["item_group"];
+              if (this.userForm.get("invoice_type").value == 'INV00003') {
+                // alert(itemgrpmulti)
+                this.DropDownListService.getGroupItemLedgerForJob(itemgrpmulti).subscribe(data => {
+                  console.log("ledger group::" + JSON.stringify(data))
+                  this.status = true;
+                });
+              }
+              else {
+                itemgrpmulti = "";
+              }
+              //for hsn
+              timer(0).subscribe
+                (x => {
+                  const distinctArrayHsnCode: any = [] = this.HsnCode.filter((n, i) => this.HsnCode.indexOf(n) === i);
+
+                  this.addItemGrpHsn();
+                  while (this.item_groupwise_hsnsumm.length)
+                    this.item_groupwise_hsnsumm.removeAt(0);
+                  for (let j = 0; j < distinctArrayHsnCode.length; j++) {
+                    let DiscountAmt = 0;
+                    for (let k = 0; k < this.sales_Invoice_Item_Dtls.length; k++) {
+
+                      if (this.sales_Invoice_Item_Dtls.at(k).get("hsn_code").value == distinctArrayHsnCode[j]) {
+                        DiscountAmt += this.sales_Invoice_Item_Dtls.at(k).get("amount").value - this.sales_Invoice_Item_Dtls.at(k).get("discount_amt").value;
+
+                      }
+                    }
+                    this.addItemGrpHsn();
+
+                    this.item_groupwise_hsnsumm.at(j).patchValue({ hsn_code: distinctArrayHsnCode[j], amount: DiscountAmt });
+                  }
+                }
+                )
+
+              timer(0).subscribe
+                (x => {
+
+
+                  const distinctArray: any = [] = this.ItemGr.filter((n, i) => this.ItemGr.indexOf(n) === i);
+
+                  this.addItemGrp();
+                  while (this.item_groupwise_summ.length)
+                    this.item_groupwise_summ.removeAt(0)
+                  for (let j = 0; j < distinctArray.length; j++) {
+                    let Amt = 0;
+                    let Discount = 0;
+
+                    for (let k = 0; k < this.sales_Invoice_Item_Dtls.length; k++) {
+                  //  console.log("item group :",this.sales_Invoice_Item_Dtls.at(k).get("item_group").value,"==",distinctArray[j])
+                      if (this.sales_Invoice_Item_Dtls.at(k).get("item_group").value == distinctArray[j]) {
+                        Amt += this.sales_Invoice_Item_Dtls.at(k).get("amount").value;
+                        Discount += this.sales_Invoice_Item_Dtls.at(k).get("discount_amt").value;
+
+                      }
+                    }
+                    this.addItemGrp();
+
+                    this.item_groupwise_summ.at(j).patchValue({ item_group: distinctArray[j], item_total: Amt, discount_amt: Discount });
+
+                    forkJoin(
+                      this.Service.getItemGroupSalesAcc(distinctArray[j]),
+                    ).subscribe(([ItemgrpLedger]) => {
+                      this.item_groupwise_summ.at(j).patchValue({ item_ledger: ItemgrpLedger.item_total, discount_ledger: ItemgrpLedger.discount });
+
+                      this.status = true;
+                    });
+                  }
+                }
+                )
+
+              timer(0).subscribe
+                (x => {
+                  this.StateName = this.userForm.get("state").value;
+
+                  const distinctArrayTax: any = [] = this.TaxCode.filter((n, i) => this.TaxCode.indexOf(n) === i);
+
+
+                  this.addItemGrpTax();
+                  while (this.item_groupwise_taxsumm.length)
+                    this.item_groupwise_taxsumm.removeAt(0)
+                  for (let j = 0; j < distinctArrayTax.length; j++) {
+                    let TaxRate = 0;
+                    let TaxAmt = 0;
+
+                    for (let k = 0; k < this.sales_Invoice_Item_Dtls.length; k++) {
+
+                      if (this.sales_Invoice_Item_Dtls.at(k).get("tax_code").value == distinctArrayTax[j]) {
+                        TaxRate = this.sales_Invoice_Item_Dtls.at(k).get("tax_rate").value;
+                        TaxAmt += this.sales_Invoice_Item_Dtls.at(k).get("tax_amt").value;
+
+                      }
+                    }
+                    this.addItemGrpTax();
+
+
+                    this.item_groupwise_taxsumm.at(j).patchValue({ tax_code: distinctArrayTax[j], tax_rate: TaxRate.toFixed(2), tax_amt: TaxAmt.toFixed(2) });
+
+                    if (distinctArrayTax[j] != '' && distinctArrayTax[j] != null) {
+                      forkJoin(
+                        this.DropDownListService.getTaxCodeDetails(distinctArrayTax[j]),
+                      ).subscribe(([TaxData]) => {
+
+                        if (TaxData) {
+                          this.item_groupwise_taxsumm.at(j).patchValue({
+                            percentage: TaxData.cgst, cgstledgerid: TaxData.cgst_output_ledger
+                            , sgstledgerid: TaxData.output_ledger, igstledgerid: TaxData.igst_output_ledger
+                          });
+
+                          this.status = true;
+
+                          this.Tax_Rate = this.item_groupwise_taxsumm.at(j).get("tax_rate").value;
+                          this.StateName = this.userForm.get("state").value;
+                          this.Tax_Amt = this.item_groupwise_taxsumm.at(j).get("tax_amt").value as FormControl;
+
+                          //if (this.StateName == 'BIHAR') {
+                          if (this.StateName == this.company_state) {
+                            let Cgst = (this.Tax_Amt * (TaxData.cgst / 100));
+                            let Sgst = (this.Tax_Amt - Cgst);
+                            //  this.item_groupwise_taxsumm.at(j).patchValue({igst:0, cgst: Cgst.toFixed(2), sgst: Sgst.toFixed(2)});
+                            this.item_groupwise_taxsumm.at(j).patchValue({ igst: 0, cgst: Number(this.round(Cgst, 2)), sgst: Number(this.round(Sgst, 2)) });
+                          }
+                          else { this.item_groupwise_taxsumm.at(j).patchValue({ igst: this.Tax_Amt, cgst: 0, sgst: 0 }); }
+
+
+                          const distinctArrayTaxRate: any = [] = this.TaxRate.filter((n, i) => this.TaxRate.indexOf(n) === i);
+                          
+                          for (let j = 0; j < distinctArrayTaxRate.length; j++) {
+                            let Amount = 0;
+                            let DiscountAmt = 0;
+                            let Taxable_Amnt = 0;
+
+                            for (let k = 0; k < this.sales_Invoice_Item_Dtls.length; k++) {
+                             // console.log("Final Tax Total",this.sales_Invoice_Item_Dtls.at(k).get("tax_rate").value,"==",distinctArrayTaxRate[j])
+                              if (this.sales_Invoice_Item_Dtls.at(k).get("tax_rate").value == distinctArrayTaxRate[j]) {
+                                Amount += this.sales_Invoice_Item_Dtls.at(k).get("amount").value;
+                                DiscountAmt += this.sales_Invoice_Item_Dtls.at(k).get("discount_amt").value;
+                                Taxable_Amnt = Number(Amount) - Number(DiscountAmt);
+
+                              }
+                            }
+                            console.log("enter tax sum:",Taxable_Amnt.toFixed(2))
+                            this.item_groupwise_taxsumm.at(j).patchValue({ taxable_amt: Taxable_Amnt.toFixed(2) });
+                          }
+                        }
+
+                        else {
+
+                          alert("something error is happened");
+                        }
+
+                      }, (error) => {
+                        this.status = true; console.log("ERROR get: " + JSON.stringify(error)); alert("something error is occured please try again....");
+
+
+                      });
+                    }
+                    if (data.taxdif == true || data.taxdif == 'true' || data.taxdif == 1) {
+
+
+
+                    }
+
+                  }
+                })
+              //this.item_groupwise_summ.at(i).patchValue({item_group:ItemGrp.item_group,item_total:this.amt});
+              i = i + 1;
+            });
+           }
+          }
+
+         
+          // console.log("1")
+          let Party = this.userForm.get("party").value;
+          forkJoin(
+            this.DropDownListService.getsalesOrderDtls(data["order_id"]),
+            this.DropDownListService.getSalesOrdShipDtlsFast(data["order_id"]),
+            this.DropDownListService.getSalesOrdTransInfoFast(data["order_id"]),
+            this.DropDownListService.getSalesOrdBrokerDtlsFast(data["order_id"]),
+            this.DropDownListService.getSalesOrdDocsFast(data["order_id"]),
+            this.Service.custAccountRetriveList(Party),
+            //this.DropDownListService.getChargesMatrixSalesdetails(data["delivery_cid"]),
+            this.DropDownListService.getSalesOrdTermsConFast(data["order_id"])
+          ).subscribe(([orderdata, shipmentdata, transData, brokerData, docsData,
+             PartyTcs, loadingtrans]) => {
+           // console.log("orderdata:: " + JSON.stringify(orderdata));
+            this.userForm.patchValue({
+              salesorderno: orderdata["order_no"], salesorderdate: orderdata["order_date"],
+               app_chgs_id: 0,cust_refdocno: orderdata["cust_refdocno"],
+               cust_ref_doc_date: orderdata["cust_ref_doc_date"]
+            });
+            // this.customerDelvAddList= custDelvData;
+            let PayableAmount: any;
+            let Tcs_rate: any;
+            PayableAmount = this.userForm.get("payable_amt").value as FormControl;
+
+            Tcs_rate = PartyTcs.tcs_rate;
+
+            this.TcsAmt = (Number(PayableAmount * Tcs_rate) / 100).toFixed(2);
+            //this.userForm.patchValue({tcsamt:this.TcsAmt});
+            //console.log("shipmentdata" + JSON.stringify(shipmentdata));
+            if (loadingtrans["payment_term"] == 'APT00001') {
+              this.onday = false;
+            }
+            else {
+              this.onday = true;
+            }
+            //console.log("loadingtransPAYMENT : : " + JSON.stringify(loadingtrans));
+            this.sales_Invoice_Payment_Dtls.patchValue({ mode_of_payment: loadingtrans["mode_of_payment"],
+               payment_term: loadingtrans["payment_term"], days: loadingtrans["days"]});
+            
+            this.sales_Invoice_Shipment_Dtls.patchValue({ paytoaddr: shipmentdata.pay_addr, paytodtls: shipmentdata.pay_details, shipaddr: shipmentdata.ship_addr, shipdtls: shipmentdata.ship_details });
+         
+            // console.log("2")
+            let i = 0;
+            this.addBrokers();
+            this.broker_sl_no = 0;
+            while (this.sales_Invoice_Broker_Dtls.length)
+              this.sales_Invoice_Broker_Dtls.removeAt(0);
+
+            for (let data1 of brokerData) {
+              this.addBrokers();
+              this.sales_Invoice_Broker_Dtls.at(i).patchValue({
+                brokercode: data1.broker_code,
+                basis: data1.basis, rate: data1.rate,
+              });
+              i = i + 1;
+            }
+
+            let k = 0;
+            this.addTransporter();
+            this.transporter_sl_no = 0;
+            while (this.sales_Invoice_Trans_Dtls.length)
+              this.sales_Invoice_Trans_Dtls.removeAt(0);
+
+            for (let data1 of transData) {
+              this.addTransporter();
+              this.sales_Invoice_Trans_Dtls.at(k).patchValue({
+                transname: data1.transname,
+                vehicletype: data1.vehicletype, vehicleid: data1.vehicleno, ewaybillno: data1.ewaybillno
+              });
+              k = k + 1;
+            }
+
+
+            let j = 0;
+            this.addDocument();
+            while (this.sales_Invoice_Docs.length)
+              this.sales_Invoice_Docs.removeAt(0)
+
+            for (let data1 of docsData) {
+              this.addDocument();
+              this.sales_Invoice_Docs.at(j).patchValue({ doc_name: data1.doc_name });
+              j = j + 1;
+            }
+
+            let p = 0;
+            this.addAppCharfes();
+            /*while (this.sales_Invoice_app_chgs.length)
+              this.sales_Invoice_app_chgs.removeAt(0)
+            for (let appchargedata of chargesData) {
+              this.addAppCharfes();
+
+              this.sales_Invoice_app_chgs.at(p).patchValue({ charges_name: appchargedata["charge_name"], add_less: appchargedata["add_less"], rate_cal_method: appchargedata["rate_cal_method"], app_rate: appchargedata["app_rate"], tax_rate: appchargedata["tax_rate"] });
+              p = p + 1;
+            }*/
+            this.chargematrixdata();
+          })
+
+        }
+      });
+    }
+    else {
+      alert("Select Party and Invoice Type First!")
+    }
+    //ends here
+
+
+  }
+
   //START HERE
   onClickShow() {
     const dialogConfig = new MatDialogConfig();
@@ -1747,11 +2357,9 @@ export class SalesInvoiceComponent implements OnInit {
     }
     else {
       this.Id = this.userForm.get("id").value;
-      //  console.log("tuhin here  :: "+this.Id)
 
       if (this.Id == null || this.Id == '') {
         this.Id = 0;
-        //  console.log("tuhin here12345 :: "+this.Id)
       }
       if (this.userForm.get("challan").value == 'Multiple') {
 
@@ -3835,6 +4443,11 @@ export class SalesInvoiceComponent implements OnInit {
       this.currentDate = SalesInvoiceData["invoice_date"];
 
       //console.log(" Check :: "+ SalesInvoiceData["e_invoice_no"]);
+        if(SalesInvoiceData.invoice_type==='')
+        {
+          this.salesOrdShow=true;
+        }
+        else{this.salesOrdShow=false;}
 
       this.userForm.patchValue({
         id: SalesInvoiceData["id"], invoice_id: SalesInvoiceData["invoice_id"], invoice_type: SalesInvoiceData["invoice_type"], brokage_app: SalesInvoiceData["brokage_app"],

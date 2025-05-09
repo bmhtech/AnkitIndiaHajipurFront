@@ -1898,7 +1898,7 @@
                   <th>Reference Type</th>
 
                   <th>Price Term</th>
-                  <th colspan="6">Action</th>
+                  <th colspan="7">Action</th>
                 </tr>
               </thead>
               <tbody>
@@ -1926,6 +1926,7 @@
 
                   <td *ngIf="DeliveryChallan.ref_type =='GRN'"><button class="btn" style="background-color: chocolate;" (click)="onWeighmentPrint(DeliveryChallan.referance_id)">Kata Print</button></td>
                   
+                  <td *ngIf="DeliveryChallan.ref_type =='GRN' && DeliveryChallan.party == 'CBP00004'"><button class="btn" style="background-color: rgb(10, 160, 47);" (click)="onUpdateGatepass(DeliveryChallan.id,DeliveryChallan.challan_no,DeliveryChallan.gatepass)">Update Gatepass</button></td>
                   
                   <!-- *ngIf=";else elseBlock1 " -->
                   <!-- <td *ngIf="DeliveryChallan.trans_borne_by ='FOR';else elseBlock1 ">   -->
