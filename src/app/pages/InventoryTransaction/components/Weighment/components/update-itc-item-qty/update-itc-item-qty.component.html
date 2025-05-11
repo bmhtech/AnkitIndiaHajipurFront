@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ITC ITEM QTY</title>
+</head>
+<body>
+  <mat-dialog-content class="mat-typography">
+    <div class="modal_main_content">
+      <div class="progress_loader_box" *ngIf="status == false">
+        <div class="progress-loader"> <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+        </div>
+      </div>
+      <form [formGroup]="userForm" autocomplete="off">
+        <section class="master_container">
+          <div class="container-fluid">
+            <div class="row">
+              <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+            <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+              <fieldset class="axd">
+                <legend>Unload Details</legend>
+                <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+                  <div style="margin-bottom: 20px;">
+                    <label ><strong>Unload No.</strong></label>  
+                    <input type="text" class="form-control" formControlName="unload_no" readonly/>  
+                  </div>  
+                </div>
+              </fieldset>
+              <fieldset class="axd">
+                  <legend>Unload Item Details</legend>
+                  <div class="dyn_table_conent" style="padding-left: 20px;">
+                    <div class="dyn_table_header">
+                      <label class="label_col">
+                        <h3 class="i_nam">Item Name</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3 class="i_nam">Packing Name</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Packing Qty</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>Item Qty</h3>
+                      </label>
+                      <label class="label_col">
+                        <h3>ITC Item Qty</h3>
+                      </label>
+                    </div>
+                    <div class="dyn_table_data_cont" formArrayName="unload_Advice_Item_Dtls">
+                      <div class="dyn_table" *ngFor="let item of unload_Advice_Item_Dtls.controls; let pointIndex=index" [formGroupName]="pointIndex">
+                        <div class="label_col"><input class="form-control ats i_nam" type="text" formControlName="item_name" readonly/></div>
+                        <div class="label_col"><input class="form-control ats i_nam" type="text" formControlName="packing_name"  readonly/></div>
+                        <div class="label_col"><input class="form-control" type="number" formControlName="squantity" readonly/></div>
+                        <div class="label_col"><input class="form-control" type="number" formControlName="quantity" readonly/></div>
+                        <div class="label_col"><input class="form-control" type="number" formControlName="itc_item_qty" /></div>
+                      </div>
+                    </div>
+                    </div>
+                    
+                </fieldset>
+              </div>
+            </div>
+          </div>
+        </section>
+      </form>
+
+    </div>
+
+  </mat-dialog-content>
+
+  <mat-dialog-actions align="end">
+    <button   mat-button mat-dialog-close class="btn btn-info" (click)="SendDataToDifferentComponenet()">Submit</button>
+  </mat-dialog-actions>
+</body>
+</html>

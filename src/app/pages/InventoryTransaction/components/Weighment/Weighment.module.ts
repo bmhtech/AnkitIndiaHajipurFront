@@ -44,6 +44,7 @@ import { WeighmentterminatepopupComponent } from './components/weighmentterminat
 import { WeightmentKata1BillPrintComponent } from './components/weightment-kata1-bill-print/weightment-kata1-bill-print.component';
 import { ImageViewModalComponent } from './components/image-view-modal/image-view-modal.component';
 import { UnloadItcBillPrintComponent } from './components/unload-itc-bill-print/unload-itc-bill-print.component';
+import { UpdateItcItemQtyComponent } from './components/update-itc-item-qty/update-itc-item-qty.component';
 
 @NgModule({
     imports: [
@@ -90,7 +91,8 @@ import { UnloadItcBillPrintComponent } from './components/unload-itc-bill-print/
         WeighmentterminatepopupComponent,
         WeightmentKata1BillPrintComponent,
         ImageViewModalComponent,
-        UnloadItcBillPrintComponent
+        UnloadItcBillPrintComponent,
+        UpdateItcItemQtyComponent
        ],
 
     declarations: [
@@ -126,6 +128,7 @@ import { UnloadItcBillPrintComponent } from './components/unload-itc-bill-print/
         WeightmentKata1BillPrintComponent,
         ImageViewModalComponent,
         UnloadItcBillPrintComponent,
+        UpdateItcItemQtyComponent,
     ]
 })
 export class weighmentModule { }
