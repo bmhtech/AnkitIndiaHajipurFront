@@ -18,6 +18,8 @@ import { Console } from 'console';
 import { jsonpCallbackContext } from '@angular/common/http/src/module';
 import { UnloadAdviceJobworkComponent } from '../unload-advice-jobwork/unload-advice-jobwork.component';
 import { UnloadItcBillPrintComponent } from '../unload-itc-bill-print/unload-itc-bill-print.component';
+import { UpdateItcItemQtyComponent } from '../update-itc-item-qty/update-itc-item-qty.component';
+import { ToastrService } from 'ngx-toastr';
 
 @Component({
   selector: 'app-unload-advice',
@@ -135,7 +137,7 @@ export class UnloadAdviceComponent implements OnInit {
 
   potype_packing: boolean = false;
 
-  constructor(public fb: FormBuilder, private Service: Master,
+  constructor(public fb: FormBuilder, private Service: Master,private toast:ToastrService,
     private DropDownListService: DropdownServiceService, private dialog: MatDialog) {
     this.userForm = fb.group({
       pur_orderid: [''],
@@ -4410,6 +4412,24 @@ export class UnloadAdviceComponent implements OnInit {
       mat_wt: '',
       tolerance: ''
     }));
+  }
+
+  onClickITCItemQty(id,unadviceid,unadviceno) {
+    const dialogConfig = new MatDialogConfig();
+    dialogConfig.disableClose = true;
+    dialogConfig.autoFocus = true;
+    dialogConfig.data = { id: id, unadviceid: unadviceid,unadviceno: unadviceno};
+    const dialogRef = this.dialog.open(UpdateItcItemQtyComponent, dialogConfig);
+    dialogRef.afterClosed().subscribe(data => {
+      console.log("closeItcQty:"+JSON.stringify(data))
+      if(data=="Yes")
+      {
+        this.toast.success("ITC Item Qty for Print Updated Successfully...","Success");
+      }
+      else{
+         this.toast.error("ITC Item Qty for Print Unsuccessfully...","Error");
+      }
+    });
   }
 
   round(num, decimalPlaces = 0) {

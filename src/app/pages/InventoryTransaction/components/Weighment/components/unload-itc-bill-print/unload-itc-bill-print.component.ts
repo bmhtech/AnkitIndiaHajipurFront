@@ -98,14 +98,13 @@ unload_id: any;
             console.log(JSON.stringify(checkPurOrd))
             console.log(checkPurOrd[0]["ord_date"])
             this.purchase_order_date = checkPurOrd[0]["ord_date"];
-
           });
 
           this.tareweight = partyData.tare_wt;
           this.grossweight = partyData.gross_wt;
           this.netweight = partyData.net_wt;
           this.slipno = partyData.slip_no;
-
+          console.table(itemData);
           this.purchaseitemList = itemData;
 
           let loadingtime = UnloadingAdviceData["inserted_on"];
@@ -133,9 +132,6 @@ unload_id: any;
               this.dist = suppdetails["district"];
             });
           }
-
-
-
         });
       }
       else {
@@ -197,6 +193,7 @@ unload_id: any;
           this.netweight = partyData.net_wt;
           this.slipno = partyData.slip_no;
 
+          console.table(itemData);
           this.purchaseitemList = itemData;
 
           let loadingtime = UnloadingAdviceData["inserted_on"];

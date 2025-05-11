@@ -91,6 +91,7 @@
 
     pur_dyn_id:any;
     price_based_on:any;
+    itc_item_qty:any;
   }
 
   export class Wm_unload_advice_party_wm

@@ -3389,7 +3389,7 @@ export class DeliveryChallanComponent implements OnInit {
       const dialogRef = this.dialog.open(UpdateGatepassComponent, dialogConfig);
       dialogRef.afterClosed().subscribe(data => {
         //console.log("close:"+JSON.stringify(data))
-        if(data==true)
+        if(data=="Yes")
         {
           alert("Gatepass Updated Successfully..");
         }
