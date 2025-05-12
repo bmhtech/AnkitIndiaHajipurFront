@@ -141,8 +141,9 @@
                               <!-- <td>{{i.}}</td> -->
                               <td>{{i.packing_name}}</td>
                               <td>{{i.s_qty}}</td>
-                              <td>{{i.quantity}}</td>
+                              <!-- <td>{{i.quantity}}</td> -->
                               <!-- <td>429.30</td> -->
+                              <td>{{(i.itc_item_qty || i.itc_item_qty === 0) && i.itc_item_qty !== 0 ? i.itc_item_qty : i.quantity}}</td>
                               <td>{{i.uom}}</td>
                               <!-- <td>{{i.}}</td> -->
                             </tr>
@@ -324,8 +325,9 @@
                               <!-- <td>{{i.}}</td> -->
                               <td>{{i.packing_name}}</td>
                               <td>{{i.s_qty}}</td>
-                              <td>{{i.quantity}}</td>
+                              <!-- <td>{{i.quantity}}</td> -->
                               <!-- <td>429.30</td> -->
+                              <td>{{(i.itc_item_qty || i.itc_item_qty === 0) && i.itc_item_qty !== 0 ? i.itc_item_qty : i.quantity}}</td>
                               <td>{{i.uom}}</td>
                               <!-- <td>{{i.}}</td> -->
                             </tr>
@@ -485,8 +487,9 @@
                               <td>{{i.item_name}}</td>
                               <td>{{i.packing_name}}</td>
                               <td>{{i.s_qty}}</td>
-                              <td>{{i.quantity}}</td>
+                              <!-- <td>{{i.quantity}}</td> -->
                               <!-- <td>429.30</td> -->
+                              <td>{{(i.itc_item_qty || i.itc_item_qty === 0) && i.itc_item_qty !== 0 ? i.itc_item_qty : i.quantity}}</td>
                               <td>{{i.uom}}</td>
                             </tr>
 

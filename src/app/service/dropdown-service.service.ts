@@ -6510,5 +6510,12 @@ export class DropdownServiceService {
   updateGatepass(id,gatepass): Observable<any> {
     return this.httpClient.get<any>(this.url + 'updateGatepass/'+id+'/'+gatepass).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+  
+  getUnloadItemDtls(id, unadviceid): Observable<any> {
+    return this.httpClient.get(this.url + 'getUnloadItemDtls/'+id+'/'+unadviceid).pipe(catchError((err) => { console.log("Error in Service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 
+  updateItcitemQty(unadviceid, itc_qty): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'updateItcitemQty/'+unadviceid+'/'+itc_qty).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 }
