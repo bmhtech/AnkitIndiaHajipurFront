@@ -179,6 +179,7 @@
     export class wm_loading_advice_Shipment_Dtls
     {
         ship_addr:any;
+        ship_addr_code:any;
         ship_details:any;
         pay_addr:any;
         pay_details:any;

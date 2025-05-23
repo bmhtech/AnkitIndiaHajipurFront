@@ -106,6 +106,8 @@ export class LoadingAdviceComponent implements OnInit {
   onday: boolean = true;
   document_no_list: any = [];
   DocNo:any;
+  shipinformal:boolean=false;
+  customerShipDtlsList:any=[];
 
   public userForm1: FormGroup;
 
@@ -275,6 +277,7 @@ export class LoadingAdviceComponent implements OnInit {
 
       wm_loading_advice_Shipment_Dtls: this.fb.group({
         ship_addr: '',
+        ship_addr_code:'',
         ship_details: '',
         pay_addr: '',
         pay_details: ''
@@ -345,6 +348,7 @@ export class LoadingAdviceComponent implements OnInit {
     this.loadingadviceprint = false;
     this.jobtransaction = true;
     this.jobtransaction1 = false;
+    this.shipinformal=false;
 
     if (accessdata.includes('loading_advice.save')) {
       this.loadingadvicesave = true;
@@ -829,6 +833,7 @@ export class LoadingAdviceComponent implements OnInit {
 
       wm_loading_advice_Shipment_Dtls: this.fb.group({
         ship_addr: '',
+        ship_addr_code:'',
         ship_details: '',
         pay_addr: '',
         pay_details: ''
@@ -1064,11 +1069,13 @@ export class LoadingAdviceComponent implements OnInit {
         this.DropDownListService.getAddrById(suppid),
         this.DropDownListService.getSuppAddrById(suppid),
         this.DropDownListService.getDeliveryAddrById(suppid),
-      ).subscribe(([brokerData, sData, customerList, cPersonData]) => {
+        this.Service.custShipAddDtlsRetriveList(suppid),
+      ).subscribe(([brokerData, sData, customerList, cPersonData,custshippingdata]) => {
         this.brokerCodeList = brokerData;
         this.wm_loading_advice_bp_dtls.patchValue({ supp_address: sData["address"] });
         this.customerNameList = customerList;
         this.contactPersonNameList = cPersonData;
+        this.customerShipDtlsList=custshippingdata;
         this.status = true;
       });
       this.DropDownListService.getSuppBPStat(suppid).subscribe(gstdata => {
@@ -1083,7 +1090,7 @@ export class LoadingAdviceComponent implements OnInit {
     }
   }
 
-  GetDeliveryBuisnessUnit(businessunit_code: string) {
+  /*GetDeliveryBuisnessUnit(businessunit_code: string) {
     let Bus_Partner = this.userForm.get("bus_partner").value;
     //alert(businessunit_code+","+this.sales_Order_Shipment_Dtls.get("pay_addr").value);
     if (businessunit_code != '0') {
@@ -1094,7 +1101,8 @@ export class LoadingAdviceComponent implements OnInit {
         this.status = true;
       });
     }
-  }
+  }*/
+  
 
   onChangeCustomerName(name: string) {
     this.wm_loading_advice_bp_dtls.patchValue({ cust_ph: null, cust_fax: null, cust_mail: null });
@@ -2051,6 +2059,18 @@ export class LoadingAdviceComponent implements OnInit {
       });
     }
   }
+   GetDeliveryBusinessUnit(businessunit_code: string) {
+    //alert(businessunit_code+","+businessunit_code);
+      if (businessunit_code != '0') {
+        this.status = false;
+        //this.DropDownListService.getCustDelvFromAdd(this.sales_Order_Shipment_Dtls.get("pay_addr").value, businessunit_code).subscribe(data => {
+        this.DropDownListService.getCustomershipdtls(this.userForm.get("bus_partner").value,businessunit_code).subscribe(data => {
+          console.log("shipping dtls:"+JSON.stringify(data))
+          this.wm_loading_advice_Shipment_Dtls.patchValue({ship_addr_code:data.shipping_name,ship_details: data["address"] });
+          this.status = true;
+        });
+      }
+    }
   Ad_date: any;
   BUnit: any;
   Party: any;
@@ -2232,7 +2252,8 @@ export class LoadingAdviceComponent implements OnInit {
                   //   this.DropDownListService.getSalesOrdTransInfo(data["order_id"]),
                   this.DropDownListService.getSalesOrdBrokerDtls(data["order_id"]),
                   this.DropDownListService.getSalesOrdPartyDtls(data["order_id"]),
-                  this.DropDownListService.getSalesOrdShipDtls(data["order_id"]),
+                  //this.DropDownListService.getSalesOrdShipDtls(data["order_id"]),
+                  this.DropDownListService.getSalesOrdShipDtlsNew(data["order_id"]),
                   this.DropDownListService.transporterNamesList(),
                   this.DropDownListService.getSalesOrdTermsCon(data["order_id"]),
                   //this.DropDownListService.transporterNameChgsList(data["order_id"]),         //// ,tranchgslist,transChgs
@@ -2293,7 +2314,9 @@ export class LoadingAdviceComponent implements OnInit {
                     this.addParty();
                   this.wm_loading_advice_Party_Dtls.patchValue(partyData);
   
-                  this.wm_loading_advice_Shipment_Dtls.patchValue(shipDtlsData)
+                  //this.wm_loading_advice_Shipment_Dtls.patchValue(shipDtlsData)
+                   this.wm_loading_advice_Shipment_Dtls.patchValue({ship_addr: shipDtlsData['cp_name'],ship_addr_code:shipDtlsData['ship_addr'],
+                  ship_details: shipDtlsData['ship_details'], pay_addr: shipDtlsData['pay_addr'], pay_details: shipDtlsData['pay_details']});
                   this.status = true;
                 });
               }
@@ -2445,13 +2468,16 @@ export class LoadingAdviceComponent implements OnInit {
                 this.DropDownListService.getSalesOrdTransInfo(data["order_id"]),
                 this.DropDownListService.getSalesOrdBrokerDtls(data["order_id"]),
                 this.DropDownListService.getSalesOrdPartyDtls(data["order_id"]),
-                this.DropDownListService.getSalesOrdShipDtls(data["order_id"]),
+                //this.DropDownListService.getSalesOrdShipDtls(data["order_id"]),
+                this.DropDownListService.getSalesOrdShipDtlsNew(data["order_id"]),
                 this.DropDownListService.transporterNamesList(),
                 //this.DropDownListService.getTransporterMNCListFast(), //check letter for applying
                 this.DropDownListService.getSalesOrdTermsCon(data["order_id"]),
                 //this.DropDownListService.transporterNameChgsList(data["order_id"]),         //// ,tranchgslist,transChgs
-                //this.Service.getSalesOrdTransChgsDynList(data["order_id"])
-              ).subscribe(([saleOrdData, transData, brokerData, partyData, shipDtlsData, transport, termscon]) => {
+                //this.Service.getSalesOrdTransChgsDynList(data["order_id"]),
+                this.Service.custShipAddDtlsRetriveList(this.userForm.get("bus_partner").value)
+              ).subscribe(([saleOrdData, transData, brokerData, partyData, shipDtlsData, transport,
+                termscon,custshippingdata]) => {
                 console.log("termscon:: " + JSON.stringify(termscon))
                 this.onChangeBussinessPartner(this.Party);
                 this.onChangeBussinessUnit(saleOrdData["business_unit"])
@@ -2506,7 +2532,24 @@ export class LoadingAdviceComponent implements OnInit {
                   this.addParty();
                 this.wm_loading_advice_Party_Dtls.patchValue(partyData);
 
-                this.wm_loading_advice_Shipment_Dtls.patchValue(shipDtlsData)
+                //this.wm_loading_advice_Shipment_Dtls.patchValue(shipDtlsData)
+                 console.log("Shipment :: " + JSON.stringify(shipDtlsData))
+                console.log("Shipment12 :: " + JSON.stringify(custshippingdata))
+                console.log("Order Type :: " + data["order_type"])
+                if(data["order_type"]=='Informal')
+                {
+                  this.customerShipDtlsList=custshippingdata;
+                  this.shipinformal=true;
+                  this.wm_loading_advice_Shipment_Dtls.patchValue({ship_addr: '',ship_addr_code:'',ship_details: ''})
+                }
+                else{
+                  this.shipinformal=false;
+                  this.wm_loading_advice_Shipment_Dtls.patchValue({
+                    //ship_addr: shipDtlsData['shipaddr'],
+                    ship_addr: shipDtlsData['cp_name'],ship_addr_code:shipDtlsData['ship_addr'],
+                    ship_details: shipDtlsData['ship_details']    //, pay_addr: shipDtlsData['payaddr'], pay_details: shipDtlsData['paydetails']
+                  })
+                }
                 this.status = true;
               });
             }
@@ -2831,6 +2874,10 @@ export class LoadingAdviceComponent implements OnInit {
           alert("Delivery Term 'FOR' , Please Select Transporter Name in Transport Information Tab!!");
           this.status = true;
         }
+        else if (this.userForm.get("advice_type").value !='Stock Transfer' && (this.wm_loading_advice_Shipment_Dtls.get("ship_addr").value == null || this.wm_loading_advice_Shipment_Dtls.get("ship_addr").value == '' || this.wm_loading_advice_Shipment_Dtls.get("ship_addr").value == 0)) {
+          alert("Please Select Address Id into 'Ship To' Block in Shipment Details Tab!!");
+          this.status = true;
+        }
         /* else if(this.trans_borne_by_chgs ==true && (this.wm_loading_advice_trans_info.get("transporter_name").value == null|| this.wm_loading_advice_trans_info.get("transporter_name").value == '' || this.wm_loading_advice_trans_info.get("transporter_name").value == 0) )
         {
           alert("Please Select Transport Name  in TRANSPORT INFORMATION Tab");
@@ -3079,6 +3126,7 @@ export class LoadingAdviceComponent implements OnInit {
   onUpdate(id: any, advice_id: string, action) {
     this.userForm.patchValue({ id: id });
     this.loadingadvicesave = true;
+    this.shipinformal=false;
     this.status = false;
     this.isHidden = true;
     this.packingItem = [];
@@ -3190,6 +3238,9 @@ export class LoadingAdviceComponent implements OnInit {
       this.currentDate = loadingAdviceData["advice_date"];
       if (loadingAdviceData["advice_type"] != 'Stock Transfer') {
         this.onChangeBussinessPartner(loadingAdviceData["bus_partner"]);
+         this.Service.custShipAddDtlsRetriveList(loadingAdviceData["bus_partner"]).subscribe(custshippingdata => {
+          this.customerShipDtlsList=custshippingdata;
+        });
       }
       else {
         if (loadingAdviceData["delivery_business_unit"] != "0" && loadingAdviceData["delivery_business_unit"] != null) {

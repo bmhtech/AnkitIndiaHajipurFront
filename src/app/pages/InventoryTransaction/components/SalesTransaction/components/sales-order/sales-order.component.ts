@@ -151,6 +151,7 @@ export class SalesOrderComponent implements OnInit {
   taxcodelist: any = [];
   orderdatevisiable: boolean = true;
   submitsave: boolean = true;
+  customerShipDtlsList:any=[];
 
   onday: boolean = true;
 
@@ -934,8 +935,10 @@ export class SalesOrderComponent implements OnInit {
         this.DropDownListService.custBrokerRetriveList(cpId),
         this.DropDownListService.getTransporterThruCustomer(cpId),
         this.DropDownListService.custAccountRetriveList(cpId, this.company_name),
-        this.DropDownListService.getCustDelvFromList(cpId)
-      ).subscribe(([brokerData, transporterList, custAccData, custDelvData]) => {
+        this.DropDownListService.getCustDelvFromList(cpId),
+        this.Service.custShipAddDtlsRetriveList(cpId),
+      ).subscribe(([brokerData, transporterList, custAccData, custDelvData,custshippingdata]) => {
+         this.customerShipDtlsList=custshippingdata;
         this.brokerNames[0] = brokerData;
         this.trans_codes = transporterList;
         // console.log("transporterList: "+JSON.stringify(transporterList))
@@ -3320,7 +3323,7 @@ export class SalesOrderComponent implements OnInit {
             // alert( data["cp_Id"]);
             this.partyNameList = data["Customer_list"];
             this.sales_Order_Broker_Dtls.at(0).patchValue({ p_code: data["cp_Id"] });
-            this.sales_Order_Shipment_Dtls.patchValue({ pay_addr: data.cp_Id });
+            this.sales_Order_Shipment_Dtls.patchValue({ pay_addr: data.cp_Id, ship_addr: "0", ship_details: '' }); // to empty shipping added every time customer change
             this.addParty();
             this.party_sl_no = 0;
             while (this.sales_Order_Party_Dtls.length)
@@ -3574,11 +3577,21 @@ export class SalesOrderComponent implements OnInit {
 
             if (salesQuoData["customer"] != "0") {
               this.status = false;
-              this.DropDownListService.getCustDelvFromList(salesQuoData["customer"]).subscribe(custDelvAddList => {
+             /* this.DropDownListService.getCustDelvFromList(salesQuoData["customer"]).subscribe(custDelvAddList => {
                 this.customerDelvAddList = custDelvAddList;
                 this.sales_Order_Shipment_Dtls.patchValue(shipData);
                 this.status = true;
-              })
+              })*/
+              forkJoin(
+                this.DropDownListService.getCustDelvFromList(salesQuoData["customer"]),
+                this.Service.custShipAddDtlsRetriveList(salesQuoData["customer"])
+              )
+                .subscribe(([custDelvAddList, custshippingdata]) => {
+                  this.customerDelvAddList = custDelvAddList;
+                  this.customerShipDtlsList=custshippingdata;
+                  this.sales_Order_Shipment_Dtls.patchValue(shipData);
+                  this.status = true;
+                })
             }
             else { this.sales_Order_Shipment_Dtls.patchValue(shipData) }
             this.status = true;
@@ -3749,8 +3762,10 @@ export class SalesOrderComponent implements OnInit {
     if (businessunit_code != '0') {
       this.status = false;
 
-      this.DropDownListService.getCustDelvFromAdd(this.sales_Order_Shipment_Dtls.get("pay_addr").value, businessunit_code).subscribe(data => {
-        this.sales_Order_Shipment_Dtls.patchValue({ ship_details: data["ship_to"] });
+      //this.DropDownListService.getCustDelvFromAdd(this.sales_Order_Shipment_Dtls.get("pay_addr").value, businessunit_code).subscribe(data => {
+      this.DropDownListService.getCustomershipdtls(this.userForm.get("customer").value,businessunit_code).subscribe(data => {
+        //console.log("shipping dtls:"+JSON.stringify(data))
+        this.sales_Order_Shipment_Dtls.patchValue({ ship_details: data["address"] });
         this.status = true;
       });
     }
@@ -4142,6 +4157,10 @@ export class SalesOrderComponent implements OnInit {
           alert("Please Enter Days in PARTY DETAILS Tab");
           this.status = true;
         }
+        else if (this.sales_Order_Shipment_Dtls.get("ship_addr").value == null || this.sales_Order_Shipment_Dtls.get("ship_addr").value == '' || this.sales_Order_Shipment_Dtls.get("ship_addr").value == 0) {
+          alert("Please Select Ship To Address in SHIPMENT DETAILS Tab");
+          this.status = true;
+        }
         else if (brokerpartychk == true) {
           alert("Please Select PARTY NAME in Broker Details Tab!!!"); this.status = true;
         }
@@ -4393,7 +4412,7 @@ export class SalesOrderComponent implements OnInit {
   }
 
   OrderStatusList: any = [];
-  onUpdate(id: any, order_id: string, action) {
+  onUpdate(id: any, order_id: string, action,party_id) {
     this.salesordersave = true;
     this.deliverychallanstatus = true;
     this.userForm.patchValue({ id: id });
@@ -4459,13 +4478,14 @@ export class SalesOrderComponent implements OnInit {
       this.Service.getSalesOrdTransChgsDynList(order_id),
       this.DropDownListService.areaList(),
       this.DropDownListService.getCustomUOMs("WUOM"),
+      this.Service.custShipAddDtlsRetriveList(party_id),
       //  this.DropDownListService.customerNameCodeList(this.company_name)
     ).subscribe(([salesOrderData, transData, brokerData,
       partyData, docData, termsConditionData, shipmentData, bUnitData, invoiceData, payTermData, customUomData, bankLedgerData, CustomerData,
       // reasonData, channelData, employeeData, chargeData, bunitData, TransporterData,PartyallData])=>
-      reasonData, channelData, employeeData, chargeData, TransporterData, chgDyndata, area, uomdata]) => {
+      reasonData, channelData, employeeData, chargeData, TransporterData, chgDyndata, area, uomdata,custshippingdata]) => {
       console.log("chgDyndata:" + JSON.stringify(chgDyndata));
-
+      this.customerShipDtlsList=custshippingdata;
       this.typeOnUpdate = true; // Type Disabled onUpdate
 
       this.bussiness_unit_list = bUnitData;

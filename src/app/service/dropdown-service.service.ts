@@ -1663,6 +1663,10 @@ export class DropdownServiceService {
     return this.httpClient.get<any>(this.url + 'getSalesOrderDetailsthdeliverchallan/' + deliverychallan).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getSalesOrderDetailsthdeliverchallan_fast(deliverychallan): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesOrderDetailsthdeliverchallan_fast/' + deliverychallan).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
   getSalesOrderTransDtlswtGRN(delivery_id): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getSalesOrderTransDtlswtGRN/' + delivery_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
@@ -1775,6 +1779,10 @@ export class DropdownServiceService {
 
   getSalesOrdTermsCon(order_id: String): Observable<sales_Order_Terms_Con> {
     return this.httpClient.get<sales_Order_Terms_Con>(this.url + 'getSalesOrdTermsCon/' + order_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getSalesOrdShipDtlsNew(order_id): Observable<any> {
+    return this.httpClient.get(this.url + 'getSalesOrdShipDtlsNew/'+order_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
   salesOrderByParty(party_id: String): Observable<SalesOrder[]> {
@@ -2811,8 +2819,16 @@ export class DropdownServiceService {
     return this.httpClient.get<any>(this.url + 'getChargesMatrixSalesdetails/' + delivery_cid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getChargesMatrixSalesdetailsFast(delivery_cid: string): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getChargesMatrixSalesdetailsFast/' + delivery_cid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
   getAppChargesSalesdetails(delivery_cid: string): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getAppChargesSalesdetails/' + delivery_cid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getAppChargesSalesdetailsFast(delivery_cid: string): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getAppChargesSalesdetailsFast/' + delivery_cid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
   getSupplierDetailsByCode(supplierCode: string): Observable<Supp_bussiness_partner_bill_addr_dyn[]> {
@@ -6129,6 +6145,10 @@ export class DropdownServiceService {
     return this.httpClient.get(this.url + 'getLoadingAdviceTransDtls/' + delvid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  getLoadingAdviceTransDtlsFast(delvid): Observable<any> {
+    return this.httpClient.get(this.url + 'getLoadingAdviceTransDtlsFast/' + delvid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+  
   getSalesInvPayDtls(invid): Observable<any> {
     return this.httpClient.get(this.url + 'getSalesInvPayDtls/' + invid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
@@ -6518,4 +6538,9 @@ export class DropdownServiceService {
   updateItcitemQty(unadviceid, itc_qty): Observable<any> {
     return this.httpClient.get<any>(this.url + 'updateItcitemQty/'+unadviceid+'/'+itc_qty).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+
+  getCustomershipdtls(mainid,custid): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getCustomershipdtls/' + mainid+'/'+custid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
 }
