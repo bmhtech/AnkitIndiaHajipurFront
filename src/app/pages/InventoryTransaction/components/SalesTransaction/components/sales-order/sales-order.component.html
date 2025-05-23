@@ -1365,7 +1365,7 @@
                 </div>
               </mat-tab>
 
-              <mat-tab label="Shipment Details" *ngIf="isHide==true">
+              <mat-tab label="Shipment Details" >   <!-- *ngIf="isHide==true"-->
                 <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                   <fieldset>
                     <legend>Ship To</legend>
@@ -1394,8 +1394,8 @@
                           <mat-select class="form-control" formControlName="ship_addr"
                             (selectionChange)="GetDeliveryBuisnessUnit($event.value)">
                             <!-- <mat-option *ngFor="let list of customerDelvAddList" [value]="list.b_unit_name">{{list.b_unit_name}}</mat-option> -->
-                            <mat-option *ngFor="let list of customerDelvAddList"
-                              [value]="list.b_unit_name">{{list.b_unit_name}}</mat-option>
+                            <mat-option *ngFor="let list of customerShipDtlsList"
+                              [value]="list.shipping_name">{{list.party_name}}</mat-option>
                           </mat-select>
                           <!-- <mat-select class="form-control"  formControlName="pay_addr" (selectionChange)="onChangePaymentFromAddId($event.value)">
                             <mat-option *ngFor="let list of bussiness_unit_list" [value]="list.businessunit_id">{{list.businessunit_name}}</mat-option>
@@ -2983,7 +2983,7 @@
                   <!-- <td>{{salesOrder.loading_status}}</td> 
                       <td>{{salesOrder.terminate}}</td>  -->
                   <td>
-                    <button class="btn btn-success" (click)="onUpdate(salesOrder.id,salesOrder.order_id, 'view')"
+                    <button class="btn btn-success" (click)="onUpdate(salesOrder.id,salesOrder.order_id, 'view',salesOrder.customer)"
                       *ngIf="salesorderview">View</button>
                   </td>
 
@@ -2997,7 +2997,7 @@
                     </td>
                     <ng-template #terminateupdate>
                       <td>
-                        <button class="btn btn-info" (click)="onUpdate(salesOrder.id,salesOrder.order_id, 'update')"
+                        <button class="btn btn-info" (click)="onUpdate(salesOrder.id,salesOrder.order_id, 'update',salesOrder.customer)"
                           *ngIf="salesorderupdate">Update</button>
                       </td>
                     </ng-template>

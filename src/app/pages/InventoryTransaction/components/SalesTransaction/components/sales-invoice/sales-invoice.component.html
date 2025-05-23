@@ -947,12 +947,18 @@
 
                   <div formGroupName="sales_Invoice_Shipment_Dtls">
 
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                       <div class="form-group">
                         <mat-select-autocomplete class="form-control ats" [options]="customerDelvAddList"
                           [display]="'b_unit_name'" [value]="'b_unit_name'" [multiple]='false' ngDefaultControl
                           [formControl]="sales_Invoice_Shipment_Dtls.controls['shipaddr']">
                         </mat-select-autocomplete>
+                      </div>
+                    </div> -->
+
+                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div class="form-group">
+                        <input class="form-control" formControlName="shipaddr" type="text" readonly>
                       </div>
                     </div>
 
