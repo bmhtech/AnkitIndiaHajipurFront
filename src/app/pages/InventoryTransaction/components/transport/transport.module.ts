@@ -38,7 +38,9 @@ import { DeletesalestransportremarkpopupComponent } from './components/sales-tra
     NgxPrintModule,
     MatPaginatorModule,
     NgxImageZoomModule.forRoot(),
-    routing
+    routing,
+    MatInputModule,
+    MatAutocompleteModule
   ],
   entryComponents:[TransportjvpostingComponent,SalestransportimagepopupComponent,DeletesalestransportremarkpopupComponent],
   exports: [MatAutocompleteModule,MatInputModule, SelectAutocompleteModule],

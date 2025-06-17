@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Wheat Fumigation Record List</title>
+</head>
+<body>
+  <div class="progress_loader_box" *ngIf="!status">
+    <div class="progress-loader">
+      <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+    </div>
+  </div>
+
+  <div class="master_containerr">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12">
+          <fieldset class="table_container">
+            <legend>Wheat Fumigation Record List</legend>
+            <div class="table_content">
+              <div class="search-sec">
+                <div class="col-lg-3 col-sm-4 col-12">
+                  <label>Type</label>
+                  <mat-select class="form-control" [(ngModel)]="typeField">
+                    <mat-option value="all">All</mat-option>
+                    <mat-option value="fumigated stack"
+                      >Fumigated Stack</mat-option
+                    >
+                    <mat-option value="stack open after fumigation"
+                      >Opened Stack</mat-option
+                    >
+                  </mat-select>
+                </div>
+              </div>
+              <div class="search-button-container">
+                <button class="btn btn-info" (click)="onSearch()">Search</button>
+              </div>
+
+              <table class="table table-bordered">
+                <thead>
+                  <tr>
+                    <th>Fumigation No</th>
+                    <th>Fumigation Date</th>
+                    <!-- <th>ABD/Trader</th> -->
+                    <th>Warehouse</th>
+                    <th>Stack</th>
+                    <th>Variety</th>
+                    <th>Bags</th>
+                    <th>Qty(MT)</th>
+                    <th>Fumigation By</th>
+                    <th>Expected Stack Opening Date</th>
+                    <th>Stack Opening Date</th>
+                    <th>Action</th>
+                  </tr>
+                </thead>
+
+                <tbody>
+                  <tr
+                    *ngFor="
+                      let fumi of fumigationStkOpnDateList;
+                      let pointIndex = index
+                    "
+                  >
+                    <td>{{ fumi.fumigation_no }}</td>
+                    <td>{{ fumi.fumigation_date | date : "dd/MM/yyyy" }}</td>
+                    <!-- <td>{{ fumi.abd_trader }}</td> -->
+                    <td>{{ fumi.warehouse_name }}</td>
+                    <td>{{ fumi.stack }}</td>
+                    <td>{{ fumi.variety }}</td>
+                    <td>{{ fumi.bags }}</td>
+                    <td>{{ fumi.qty_mt }}</td>
+                    <td>{{ fumi.fumigation_by }}</td>
+                    <td>
+                      {{ fumi.expected_stack_opening_date | date : "dd/MM/yyyy" }}
+                    </td>
+                    <td>{{ fumi.stack_open_date | date : "dd/MM/yyyy" }}</td>
+                    <td>
+                      <button
+                        class="btn btn-info"
+                        (click)="onSave(fumi.id, fumi.fumigation_id,fumi.fumigation_no,fumi.fumigation_date,fumi.warehouse_name,fumi.stack,'Save',fumi.stack_open_date,fumi.allocate_status,fumi.pcmw_sign_name,fumi.supervisor_sign_name,fumi.lab_sign_name,fumi.manpower,fumi.degassing_date,fumi.degassing_time,fumi.wheat_fumi_qc)"
+                        *ngIf="fumi.stack_use === 'No'" >
+                        Open Stack
+                      </button>
+                      <button
+                        class="btn btn-warning"
+                        (click)="onSave(fumi.id, fumi.fumigation_id,fumi.fumigation_no,fumi.fumigation_date,fumi.warehouse_name,fumi.stack,'Undo',fumi.stack_open_date,fumi.allocate_status,fumi.pcmw_sign_name,fumi.supervisor_sign_name,fumi.lab_sign_name,fumi.manpower,fumi.degassing_date,fumi.degassing_time,fumi.wheat_fumi_qc)"
+                        *ngIf="fumi.stack_use === 'Yes'" >
+                        Undo
+                      </button>
+                    </td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+    </div>
+  </div>
+</body>
+</html>

@@ -3949,7 +3949,9 @@ export class DropdownServiceService {
     return this.httpClient.get(this.url + 'getSupplierThruBUnew/' + business_id).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
-
+  getTransporterListFastbp_Id(): Observable<any> {
+    return this.httpClient.get(this.url + 'getTransporterListFastbp_Id').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
 
   transporterNamesList(): Observable<any> {
     return this.httpClient.get(this.url + 'getTransporterMNCList').pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
@@ -5602,8 +5604,8 @@ export class DropdownServiceService {
     return this.httpClient.get<any>(this.url + 'getspecialProdOutputReport/' + business_unit + "/" + shop_floor + "/" + fromdate + "/" + todate).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
-  getSalesTransportReport(business_unit, fromdate, todate, inv_type, trans_type, transporter_code): Observable<any> {
-    return this.httpClient.get<any>(this.url + 'getSalesTransportReport/' + business_unit + "/" + fromdate + "/" + todate + "/" + inv_type + "/" + trans_type + "/" + transporter_code).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  getSalesTransportReport(business_unit, fromdate, todate, inv_type, trans_type, transporter_code, customer): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'getSalesTransportReport/' + business_unit + "/" + fromdate + "/" + todate + "/" + inv_type + "/" + trans_type + "/" + transporter_code+'/'+customer).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
   getPurchaseTransportReport(business_unit, fromdate, todate, pur_inv_type, trans_type): Observable<any> {
@@ -6518,4 +6520,32 @@ export class DropdownServiceService {
   updateItcitemQty(unadviceid, itc_qty): Observable<any> {
     return this.httpClient.get<any>(this.url + 'updateItcitemQty/'+unadviceid+'/'+itc_qty).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
+
+  /* WHEAT FUMIGATION STARTS */
+
+  getFumigationSequenceId(companyName: string): Observable<SequenceId> {
+    return this.httpClient.get<SequenceId>(this.url + 'getFumigationSequenceId/' + companyName);
+  }
+
+  getWheatFumigationList(finyear: string): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.url + 'getWheatFumigationList/' + finyear);
+  }
+
+  retriveWheatFumigation(id: number): Observable<any> {
+    return this.httpClient.get<any>(this.url + 'retriveWheatFumigation/' + id);
+  }
+
+  getWheatFumigationDetails(fumigationId: string): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.url + 'getWheatFumigationDetails/' + fumigationId);
+  }
+
+  getAllWheatFumiDtlsList(typeData: string): Observable<any[]> {
+    return this.httpClient.get<any[]>(this.url + 'getAllWheatFumiDtlsList/' + typeData)
+  }
+
+  updateWheatFumiDetails(id,fumigation_id,opendate,company,finyear,username,action,allocate,pcmw_sign_name,supervisor_sign_name,lab_sign_name,manpower,degassing_date,degassing_time,wheat_fumi_qc): Observable<any> {
+    return this.httpClient.get(this.url + 'updateWheatFumiDetails/' + id +'/'+ fumigation_id +'/'+ opendate +'/'+ company +'/'+ finyear +'/'+ username +'/'+ action +'/'+ allocate +'/'+ pcmw_sign_name +'/'+ supervisor_sign_name +'/'+ lab_sign_name +'/'+ manpower +'/'+ degassing_date +'/'+ degassing_time +'/'+ wheat_fumi_qc)
+  }
+
+  /* WHEAT FUMIGATION ENDS */
 }

@@ -562,7 +562,23 @@ export let MENU_ITEM = [
 
                 ]
             },
-                     
+            {
+                path: "invTrans/fumigation-record",
+                title: "Fumigation Record",
+                icon: "icon-file-text",
+                children: [
+                {
+                    path: "wheat-fumigation-record",
+                    title: "Wheat Fumigation Record",
+                    icon: "angle-right",
+                },
+                {
+                    path: "fumigation-stk-opn-date",
+                    title: "Fumigation Stack Open Date",
+                    icon: "angle-right",
+                },
+                ],
+            },       
             {
               //  path: 'invTrans/weighment',//no
               path: 'weighment',

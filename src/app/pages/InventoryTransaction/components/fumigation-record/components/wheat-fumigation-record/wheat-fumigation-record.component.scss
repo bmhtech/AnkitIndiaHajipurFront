@@ -1,0 +1,23 @@
+.dyn-date-label {
+  width: 15rem !important;
+}
+
+.dyn-date-data {
+  width: 15rem !important;
+  margin: 1px !important;
+}
+
+.search-sec {
+  width: 100%;
+  overflow: hidden;
+
+  form {
+    text-align: left !important;
+    margin-inline: -1.3rem;
+    margin-bottom: 2rem;
+
+    label {
+      margin-left: 3px;
+    }
+  }
+}
