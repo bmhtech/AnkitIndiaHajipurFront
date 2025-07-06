@@ -424,14 +424,21 @@
                     </div>
                   </div>  -->
 
-                  <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                     <div class="form-group">
                       <mat-label>Address Id</mat-label>   
                       <mat-select class="form-control"  formControlName="ship_addr" (selectionChange)="GetDeliveryBuisnessUnit($event.value)">
                         <mat-option *ngFor="let list of customerDelvAddList" [value]="list.b_unit_name">{{list.b_unit_name}}</mat-option>
                       </mat-select>
                     </div>
-                  </div> 
+                  </div>  -->
+
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <mat-label>Address Id</mat-label>
+                      <input class="form-control" formControlName="ship_addr" type="text" readonly>
+                    </div>
+                  </div>
 
                   <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                     <div class="form-group">
@@ -459,7 +466,7 @@
                   <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                     <div class="form-group">                   
                     <mat-label>Address Id</mat-label>
-                      <mat-select class="form-control"  formControlName="pay_addr" [disabled]="_deliveryTerm == 'Ex Factory'">
+                      <mat-select class="form-control"  formControlName="pay_addr" >
                         <mat-option *ngFor="let list of PartyAllList" [value]="list.cp_Id">{{list.cp_name}}</mat-option>
                       </mat-select> 
                     </div>

@@ -1194,28 +1194,42 @@
             </div>
           </mat-tab> -->
            
-            <mat-tab label="Shipment Details" *ngIf="false">
+            <mat-tab label="Shipment Details"> <!-- *ngIf="false" -->
               <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                 <fieldset>
                   <legend>Ship To</legend>
                   <div formGroupName="wm_loading_advice_Shipment_Dtls">
   
-                    <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                      <div class="form-group">
-                        <mat-label>Address Id</mat-label>
-                        <input class="form-control" formControlName="ship_addr" type="text">
-                      </div>
-                    </div> -->
-
+                  <div class="col-lg-6 col-md-6 col-sm-12 col-12" *ngIf="shipinformal==true;else elseBlockship">
+                    <div class="form-group">
+                      <mat-label>Address Id</mat-label>
+                      <mat-select class="form-control" formControlName="ship_addr"
+                        (selectionChange)="GetDeliveryBusinessUnit($event.value)">
+                        <mat-option *ngFor="let list of customerShipDtlsList"
+                          [value]="list.shipping_name">{{list.party_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div>
+                  <ng-template #elseBlockship>
                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                       <div class="form-group">
                         <mat-label>Address Id</mat-label>
-                        <mat-select class="form-control"  formControlName="ship_addr" (selectionChange)="GetDeliveryBuisnessUnit($event.value)">
-                          <mat-option *ngFor="let list of customerDelvAddList" [value]="list.b_unit_name">{{list.b_unit_name}}</mat-option>
-                        </mat-select>
+                        <input class="form-control" formControlName="ship_addr" type="text" readonly>
                       </div>
-                    </div> 
-  
+                    </div>
+                  </ng-template>
+
+                  <!-- <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                    <div class="form-group">
+                      <mat-label>Address Id</mat-label>
+                      <mat-select class="form-control" formControlName="ship_addr"
+                        (selectionChange)="GetDeliveryBuisnessUnit($event.value)">
+                        <mat-option *ngFor="let list of customerDelvAddList"
+                          [value]="list.b_unit_name">{{list.b_unit_name}}</mat-option>
+                      </mat-select>
+                    </div>
+                  </div> -->
+
                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
                       <div class="form-group">
                         <textarea class="form-control" formControlName="ship_details" type="text" style="height: 65px;"></textarea>
@@ -1228,12 +1242,13 @@
                 <fieldset>
                   <legend>Payment From</legend>
                   <div formGroupName="wm_loading_advice_Shipment_Dtls">
-                    <div class="col-lg-6 col-md-6 col-sm-12 col-12">
-                      <div class="form-group">                   
-                      <mat-label>Address Id</mat-label>
-                        <mat-select class="form-control"  formControlName="pay_addr" [disabled]="_deliveryTerm == 'Ex Factory'">
-                          <mat-option *ngFor="let list of listcust_bussiness_partner" [value]="list.cp_Id">{{list.cp_name}}</mat-option>
-                        </mat-select> 
+                     <div class="col-lg-6 col-md-6 col-sm-12 col-12">
+                      <div class="form-group">
+                        <mat-label>Address Id</mat-label>
+                        <mat-select class="form-control" formControlName="pay_addr">
+                          <mat-option *ngFor="let list of listcust_bussiness_partner"
+                            [value]="list.cp_Id">{{list.cp_name}}</mat-option>
+                        </mat-select>
                       </div>
                     </div>
 

@@ -2998,10 +2998,14 @@ export class SalesInvoiceComponent implements OnInit {
                   this.DropDownListService.getDlvChallanBrokerDtls(data["delivery_cid"]),
                   this.DropDownListService.getDlvChallanDoc(data["delivery_cid"]),
                   this.Service.custAccountRetriveList(Party),
-                  this.DropDownListService.getChargesMatrixSalesdetails(data["delivery_cid"]),
-                  this.DropDownListService.getAppChargesSalesdetails(data["delivery_cid"]),
-                  this.DropDownListService.getSalesOrderDetailsthdeliverchallan(data["delivery_cid"]),
-                  this.DropDownListService.getLoadingAdviceTransDtls(data["delivery_cid"]),
+                  //this.DropDownListService.getChargesMatrixSalesdetails(data["delivery_cid"]),
+                  this.DropDownListService.getChargesMatrixSalesdetailsFast(data["delivery_cid"]),
+                  //this.DropDownListService.getAppChargesSalesdetails(data["delivery_cid"]),
+                  this.DropDownListService.getAppChargesSalesdetailsFast(data["delivery_cid"]),
+                  //this.DropDownListService.getSalesOrderDetailsthdeliverchallan(data["delivery_cid"]),
+                  this.DropDownListService.getSalesOrderDetailsthdeliverchallan_fast(data["delivery_cid"]),
+                  //this.DropDownListService.getLoadingAdviceTransDtls(data["delivery_cid"]),
+                  this.DropDownListService.getLoadingAdviceTransDtlsFast(data["delivery_cid"]),
 
                 ).subscribe(([challanData, shipmentdata, transData, brokerData, docsData, PartyTcs, chargesData, appcharges, saleorderdetails, loadingtrans]) => {
 
@@ -3441,7 +3445,8 @@ export class SalesInvoiceComponent implements OnInit {
                 // console.log("1")
                 let Party = this.userForm.get("party").value;
                 forkJoin(
-                  this.DropDownListService.getDeliveryChallanDtls("delivery_cid=" + data["delivery_cid"]),
+                  this.DropDownListService.getDeliveryChallanDtlsFast(data["delivery_cid"]),
+                  //this.DropDownListService.getDeliveryChallanDtls("delivery_cid=" + data["delivery_cid"]),
                   //this.DropDownListService.getDlvChallanShipmentDtls(data["delivery_cid"]),
                   this.DropDownListService.getDlvChallanShipmentDtlsFast(data["delivery_cid"]),
                   this.DropDownListService.getDlvChlnTransInfo(data["delivery_cid"]),
@@ -3449,10 +3454,14 @@ export class SalesInvoiceComponent implements OnInit {
                   this.DropDownListService.getDlvChallanBrokerDtls(data["delivery_cid"]),
                   this.DropDownListService.getDlvChallanDoc(data["delivery_cid"]),
                   this.Service.custAccountRetriveList(Party),
-                  this.DropDownListService.getChargesMatrixSalesdetails(data["delivery_cid"]),
-                  this.DropDownListService.getAppChargesSalesdetails(data["delivery_cid"]),
-                  this.DropDownListService.getSalesOrderDetailsthdeliverchallan(data["delivery_cid"]),
-                  this.DropDownListService.getLoadingAdviceTransDtls(data["delivery_cid"]),
+                  //this.DropDownListService.getChargesMatrixSalesdetails(data["delivery_cid"]),
+                  this.DropDownListService.getChargesMatrixSalesdetailsFast(data["delivery_cid"]),
+                  //this.DropDownListService.getAppChargesSalesdetails(data["delivery_cid"]),
+                  this.DropDownListService.getAppChargesSalesdetailsFast(data["delivery_cid"]),
+                  //this.DropDownListService.getSalesOrderDetailsthdeliverchallan(data["delivery_cid"]),
+                  this.DropDownListService.getSalesOrderDetailsthdeliverchallan_fast(data["delivery_cid"]),
+                  //this.DropDownListService.getLoadingAdviceTransDtls(data["delivery_cid"]),
+                  this.DropDownListService.getLoadingAdviceTransDtlsFast(data["delivery_cid"]),
                   // ).subscribe(([challanData, shipmentdata, transData, partyData, brokerData, docsData, PartyTcs]) =>
                 ).subscribe(([challanData, shipmentdata, transData, brokerData, docsData, PartyTcs, chargesData, appcharges, saleorderdetails, loadingtrans]) => {
                   console.log("challanData:: " + JSON.stringify(challanData));
