@@ -120,6 +120,7 @@ export class UnloadWeighmentComponent implements OnInit {
   cameraserial: string = "";
   imgURL: string = "";
   images: string[] = [];
+  jobwork:boolean=false;
 
   //end
   constructor(public fb: FormBuilder, private Service: Master,
@@ -1253,7 +1254,7 @@ export class UnloadWeighmentComponent implements OnInit {
             this.userForm.patchValue({ gw_unit: data[0]["staticuom"], tw_unit: data[0]["staticuom"], nw_unit: data[0]["staticuom"] });//need to be done later
             //this.userForm.patchValue({gw_unit:'CUM00003',tw_unit:'CUM00003'});
 
-            this.DropDownListService.checkLooseItem(this.reference_id).subscribe(looseitem => {
+            /*this.DropDownListService.checkLooseItem(this.reference_id).subscribe(looseitem => {
               console.log(" looseitem here Vehicle W1 " + looseitem.status)
               if (looseitem.status == 'YES') {
                 this.bulksupplyshow = true;
@@ -1261,8 +1262,20 @@ export class UnloadWeighmentComponent implements OnInit {
               else {
                 this.bulksupplyshow = false;
               }
-            });
-
+            });*/
+            forkJoin([
+              this.DropDownListService.checkLooseItem(this.reference_id),
+              this.DropDownListService.loadAdviceDetails(this.reference_id),
+            ]).subscribe(([looseitem,loaddata]) => {
+                //console.log(" Loading Data: " + loaddata.jobwork)
+                this.jobwork=loaddata.jobwork;
+                if (looseitem.status == 'YES') {
+                  this.bulksupplyshow = true;
+                }
+                else {
+                  this.bulksupplyshow = false;
+                }
+              });
 
             this.status = true;
             let k = 0;
@@ -1346,7 +1359,7 @@ export class UnloadWeighmentComponent implements OnInit {
                   this.getWeighmentNo(this._weighmentFor, weigmtData["wgment_date"], this._weight2)
                 }
 
-                this.DropDownListService.checkLooseItem(this.reference_id).subscribe(looseitem => {
+                /*this.DropDownListService.checkLooseItem(this.reference_id).subscribe(looseitem => {
                   console.log(" looseitem here Vehicle " + looseitem.status)
                   if (looseitem.status == 'YES') {
                     this.bulksupplyshow = true;
@@ -1354,8 +1367,20 @@ export class UnloadWeighmentComponent implements OnInit {
                   else {
                     this.bulksupplyshow = false;
                   }
-                });
-
+                });*/
+                forkJoin([
+                  this.DropDownListService.checkLooseItem(this.reference_id),
+                  this.DropDownListService.loadAdviceDetails(this.reference_id),
+                ]).subscribe(([looseitem,loaddata]) => {
+                    //console.log(" Loading Data: " + loaddata.jobwork)
+                    this.jobwork=loaddata.jobwork;
+                    if (looseitem.status == 'YES') {
+                      this.bulksupplyshow = true;
+                    }
+                    else {
+                      this.bulksupplyshow = false;
+                    }
+                  });
 
                 this.status = true;
               })
@@ -1433,7 +1458,7 @@ export class UnloadWeighmentComponent implements OnInit {
         dialogref.afterClosed().subscribe(result => { });
       }
       if (this.weighmentFor == 'Sale' || this.weighmentFor == 'Stock Transfer Loading' || this.weighmentFor == 'Purchase Return') {
-        let dialogref = this.dialog.open(LoadingAdviceItemListPopUpComponent, { data: { advice_id: te.at(index).get("advice").value } });
+        let dialogref = this.dialog.open(LoadingAdviceItemListPopUpComponent, { data: { advice_id: te.at(index).get("advice").value,jobwork:this.jobwork } });
         dialogref.afterClosed().subscribe(result => { });
       }
     } else { alert("Select Vehicle No. First !") }
@@ -1937,9 +1962,10 @@ export class UnloadWeighmentComponent implements OnInit {
       //this.DropDownListService.supplierNamesList(this.company_name),
       //this.Service.getCustomerBussinessPartner()
       this.DropDownListService.supplierNamesNewList(this.company_name),
-      this.DropDownListService.newcustomerList(this.company_name)
+      this.DropDownListService.newcustomerList(this.company_name),
+      this.DropDownListService.getLoadingDtlsByWeighmentId(wgmentid),
 
-    ).subscribe(([vehicleData, wgmntData, wgmntDtls, customUomData, bunitData, supplierData, customerData]) => {
+    ).subscribe(([vehicleData, wgmntData, wgmntDtls, customUomData, bunitData, supplierData, customerData,loaddata]) => {
       this.bridge_location = wgmntData['weight_bridge_location'];
       this.cameraserial = wgmntData['wgment_id'];
       this.fetchAndSetImage();  //Camera image Show 
@@ -1948,10 +1974,10 @@ export class UnloadWeighmentComponent implements OnInit {
       this.weighmentFor = wgmntData["wgment_for"];
       this.customList = customUomData;
       this.businesslists = bunitData;
-      console.log("hello here " +wgmntData["wgment_for"])
-      console.log("weighmentFor M " +this._weighmentFor)
-      console.log("WeighmentFor POPup " +this.weighmentFor)
-
+      //console.log("hello here " +wgmntData["wgment_for"])
+     // console.log("weighmentFor M " +this._weighmentFor)
+     // console.log("WeighmentFor POPup " +this.weighmentFor)
+      this.jobwork=loaddata.jobwork;
       if(wgmntData.outside_weighment==='Yes')
         {
           this.outsideShow=true;

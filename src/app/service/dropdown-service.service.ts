@@ -6566,11 +6566,17 @@ export class DropdownServiceService {
   updateWheatFumiDetails(id,fumigation_id,opendate,company,finyear,username,action,allocate,pcmw_sign_name,supervisor_sign_name,lab_sign_name,manpower,degassing_date,degassing_time,wheat_fumi_qc): Observable<any> {
     return this.httpClient.get(this.url + 'updateWheatFumiDetails/' + id +'/'+ fumigation_id +'/'+ opendate +'/'+ company +'/'+ finyear +'/'+ username +'/'+ action +'/'+ allocate +'/'+ pcmw_sign_name +'/'+ supervisor_sign_name +'/'+ lab_sign_name +'/'+ manpower +'/'+ degassing_date +'/'+ degassing_time +'/'+ wheat_fumi_qc)
   }
-
   /* WHEAT FUMIGATION ENDS */
 
   getCustomershipdtls(mainid,custid): Observable<any> {
     return this.httpClient.get<any>(this.url + 'getCustomershipdtls/' + mainid+'/'+custid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
   }
 
+  loadAdviceDetails(adviceid): Observable<any> {
+    return this.httpClient.get(this.url + 'loadAdviceDetails/' + adviceid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+  }
+
+  getLoadingDtlsByWeighmentId(wid): Observable<any> {
+      return this.httpClient.get(this.url + 'getLoadingDtlsByWeighmentId/' + wid).pipe(catchError((err) => { console.log("error in service: " + JSON.stringify(err)); return throwError(err.status); }))
+    }
 }

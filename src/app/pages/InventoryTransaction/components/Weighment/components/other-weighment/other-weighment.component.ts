@@ -935,6 +935,22 @@ export class OtherWeighmentComponent implements OnInit {
       alert("Please Enter Item Name");
       this.status = true;
     }
+    else if ((this.userForm.get("weight1").value == 'weight1' && this.userForm.get("wgment_for").value == 'Unloading') && (this.userForm.get("gross_weight").value == 0 || this.userForm.get("gross_weight").value == '' || this.userForm.get("gross_weight").value == null)) {
+      alert("Please Enter Gross Weight..");
+      this.status = true;
+    }
+    else if ((this.userForm.get("weight2").value == 'weight2' && this.userForm.get("wgment_for").value == 'Unloading') && (this.userForm.get("tare_weight").value == 0 || this.userForm.get("tare_weight").value == '' || this.userForm.get("tare_weight").value == null)) {
+      alert("Please Enter Tare Weight..");
+      this.status = true;
+    }
+    else if ((this.userForm.get("weight1").value == 'weight1' && this.userForm.get("wgment_for").value == 'Loading') && (this.userForm.get("tare_weight").value == 0 || this.userForm.get("tare_weight").value == '' || this.userForm.get("tare_weight").value == null)) {
+      alert("Please Enter Tare Weight..");
+      this.status = true;
+    }
+    else if ((this.userForm.get("weight2").value == 'weight2' && this.userForm.get("wgment_for").value == 'Loading') && (this.userForm.get("gross_weight").value == 0 || this.userForm.get("gross_weight").value == '' || this.userForm.get("gross_weight").value == null)) {
+      alert("Please Enter Gross Weight..");
+      this.status = true;
+    }
     else if (this.userForm.get("wgment_for").value == 'Loading' && this.userForm.get("weight1").value == 'weight1' && (this.userForm.get("tw_unit").value == 0 || this.userForm.get("tw_unit").value == '' || this.userForm.get("tw_unit").value == null)) {
       alert("Please Select Tare Uom");
       this.status = true;
