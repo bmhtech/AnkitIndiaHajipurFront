@@ -1,0 +1,339 @@
+<section class="master_container">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <div class="button_row d-flex">
+          <ul>
+            <li><button mat-button class="btn btn-info" (click)="changeMode('add')"><i
+                  class="material-icons">add</i>Add</button></li>
+            <li><button mat-button class="btn btn-success" (click)="changeMode('list')"><i
+                  class="material-icons">list</i>List</button></li>
+          </ul>
+          <button mat-icon-button style="margin-block: auto; margin-inline-start: auto;" (click)="ngOnInit()"><i class="material-icons">refresh</i></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<div class="progress_loader_box" *ngIf="!status">
+  <div class="progress-loader"> <mat-progress-spinner [mode]="'indeterminate'"></mat-progress-spinner>
+  </div>
+</div>
+<form [formGroup]="userForm" autocomplete="off" *ngIf="isHidden">
+  <section class="master_container">
+    <div class="container-fluid">
+      <div class="row">
+        <div class="col-lg-12 col-md-12 col-sm-12 col-12">
+          <fieldset class="axd" style="padding-top:15px;">
+            <legend>Wheat Fumigation Details</legend>
+
+            <div class="ht_15"></div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Order No.">Fumigation Number</label>
+                <input type="text" class="form-control" formControlName="fumigation_no" readonly />
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <label for="Date">Fumigation Date</label>
+                <input type="date" class="form-control" formControlName="fumigation_date">
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+              <div class="form-group">
+                <label>Bussiness Unit<span class="red">*</span></label>
+                <mat-select-autocomplete class="form-control ats" [options]="bussinessUnitList"
+                  [display]="'businessunit_name'" [value]="'businessunit_id'" [multiple]='false' ngDefaultControl
+                  [formControl]="business_unit">
+                </mat-select-autocomplete>
+              </div>
+            </div>
+          </fieldset>
+        </div>
+      </div>
+
+      <div class="dyn_table_conent" style="border: none;">
+        <mat-tab-group animationDuration="1000ms">
+          <mat-tab label="Wheat Fumigation Record">
+            <div class="dyn_table_conent">
+              <div class="dyn_table_header">
+                <label class="label_col">
+                  <h3>Action</h3>
+                </label>
+                <label class="label_col">
+                  <h3>SL NO</h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="dyn-date-label">Date<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Time<span class="red">*</span></h3>
+                </label>
+                <!-- <label class="label_col">
+                  <h3 class="i_nam">ABD/Trader<span class="red">*</span></h3>
+                </label> -->
+                <label class="label_col">
+                  <h3 class="i_nam">Warehouse<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="dt_nam">Stack<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Variety<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Bags<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Qty(MT)<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="dt_nam">Fumigation By<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="dt_nam">Reactant<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Volume<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Dose - g/MT or g/M3<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Total Dose<br>Rect. Qty Used<span class="red">*</span></h3>
+                </label>
+                <label class="label_col dyn-date-label">
+                  <h3 class="dyn-date-label">Degassing Date<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Degassing Time<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3>Manpower/<br>Labour<span class="red">*</span></h3>
+                </label>
+                <label class="label_col dyn-date-label">
+                  <h3 class="dyn-date-label">Expected Stack Opening Date<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="i_nam">PCMW Sign<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="i_nam">Supervisor Sign<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="i_nam">Lab Sign<span class="red">*</span></h3>
+                </label>
+                <label class="label_col">
+                  <h3 class="i_nam">Remarks</h3>
+                </label>
+              </div>
+              <div class="dyn_table_data_cont" formArrayName="wheat_fumigation_details">
+                <div class="dyn_table" *ngFor="let item of wheatFumigationRecord.controls; let pointIndex=index"
+                  [formGroupName]="pointIndex">
+                  <div class="label_col"><i class="fa fa-trash form-control action"
+                      (click)="deleteItem(pointIndex)"></i></div>
+                  <div class="label_col"><input formControlName="slno" class="form-control" type="text" readonly />
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control dyn-date-data" type="date" formControlName="wf_date" />
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control" type="time" formControlName="wf_time" />
+                  </div>
+
+                  <!-- <div class="label_col">
+                    <input class="form-control i_nam" type="text" formControlName="abd_trader" />
+                  </div> -->
+
+                  <div class="label_col">
+                    <mat-select class="form-control i_nam" formControlName="warehouse">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let warehouse of warehouses"
+                        [value]="warehouse.warehouse_code">{{warehouse.warehouse_name}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+
+                  <div class="label_col">
+                    <mat-select class="form-control dt_nam" formControlName="stack">
+                      <mat-option value="0">-Select-</mat-option>
+                      <mat-option *ngFor="let stack of getStacks(pointIndex)" [value]="stack.stack_no">
+                        {{stack.stack_no}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control" type="text" formControlName="variety" />
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control" type="number" formControlName="bags" />
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control" type="number" formControlName="qty_mt" />
+                  </div>
+
+                  <div class="label_col">
+                    <mat-select class="form-control dt_nam" formControlName="fumigation_by">
+                      <mat-option value="Self">SELF</mat-option>
+                      <mat-option value="Agency">AGENCY</mat-option>
+                    </mat-select>
+                  </div>
+
+                  <div class="label_col">
+                    <!-- <input class="form-control i_nam" type="text" formControlName="reactant" /> -->
+                    <mat-select class="form-control dt_nam" formControlName="reactant">
+                      <mat-option value="ALP">ALP</mat-option>
+                      <mat-option value="MB">MB</mat-option>
+                    </mat-select>
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control" type="number" formControlName="volume" />
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control" type="number" formControlName="dose" />
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control" type="number" formControlName="total_dose" />
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control dyn-date-data" type="date" formControlName="degassing_date" />
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control" type="time" formControlName="degassing_time" />
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control" type="number" formControlName="manpower" />
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control dyn-date-data" type="date"
+                      formControlName="expected_stack_opening_date" />
+                  </div>
+
+                  <div class="label_col">
+                    <mat-select class="form-control i_nam" formControlName="pcmw_sign">
+                      <mat-option *ngFor="let emp of employeeList" [value]="emp.emp_id">
+                        {{emp.emp_name}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+
+                  <div class="label_col">
+                    <mat-select class="form-control i_nam" formControlName="supervisor_sign">
+                      <mat-option *ngFor="let emp of employeeList" [value]="emp.emp_id">
+                        {{emp.emp_name}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+
+                  <div class="label_col">
+                    <mat-select class="form-control i_nam" formControlName="lab_sign">
+                      <mat-option *ngFor="let emp of employeeList" [value]="emp.emp_id">
+                        {{emp.emp_name}}
+                      </mat-option>
+                    </mat-select>
+                  </div>
+
+                  <div class="label_col">
+                    <input class="form-control i_nam" type="text" formControlName="remarks" />
+                  </div>
+
+                </div>
+              </div>
+            </div>
+
+            <div class="btm_btn_content">
+              <button type="button" (click)="addItem()" class="btn btn-success">Add Row</button>
+              <div class="clr"></div>
+            </div>
+
+          </mat-tab>
+
+        </mat-tab-group>
+      </div>
+
+      <div class="row">
+        <div class="col-lg-12">
+          <div class="form-group">
+            <button type="submit" (click)="send()" class="btn btn-primary" *ngIf="saveEnabled">Submit</button>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </section>
+</form>
+
+
+<div class="master_containerr" *ngIf="!isHidden">
+  <div class="container-fluid">
+    <div class="row">
+      <div class="col-lg-12">
+        <fieldset class="table_container">
+          <legend>Wheat Fumigation Record List</legend>
+          <div class="table_content">
+            <section class="search-sec">
+              <form [formGroup]="searchForm">
+                <div class="col-lg-3 col-sm-4 col-12">
+                  <div class="form-group">
+                    <label>Fumigation Date</label>
+                    <input type="date" class="form-control" formControlName="fumigationDate">
+                  </div>
+                </div>
+
+                <div class="col-lg-3 col-sm-4 col-12">
+                  <div class="form-group">
+                    <label>Bussiness Unit</label>
+                    <mat-select-autocomplete class="form-control ats" [options]="bussinessUnitList"
+                      [display]="'businessunit_name'" [value]="'businessunit_id'" [multiple]='false' ngDefaultControl
+                      [formControl]="searchForm.controls['businessUnit']">
+                    </mat-select-autocomplete>
+                  </div>
+                </div>
+              </form>
+            </section>
+
+            <table class="table table-bordered">
+              <thead>
+                <tr>
+                  <th>Fumigation No</th>
+                  <th>Fumigation Date</th>
+                  <th>Business Unit</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+
+              <tbody>
+                <tr *ngFor="let wfr of filteredWfrList">
+                  <td>{{wfr.fumigation_no}}</td>
+                  <td>{{wfr.fumigation_date | date:'dd/MM/yyyy'}}</td>
+                  <td>{{getBusinessUnitName(wfr.business_unit)}}</td>
+                  <td>
+                    <button class="btn btn-success" (click)="changeMode('view', wfr.fumigation_id, wfr.id)">View</button>
+                    <button class="btn btn-info" (click)="changeMode('update', wfr.fumigation_id, wfr.id)">Update</button>
+                    <button class="btn btn-danger" (click)="onDeleteWfr(wfr.fumigation_id, wfr.id)">Delete</button>
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </fieldset>
+      </div>
+    </div>
+  </div>
+</div>

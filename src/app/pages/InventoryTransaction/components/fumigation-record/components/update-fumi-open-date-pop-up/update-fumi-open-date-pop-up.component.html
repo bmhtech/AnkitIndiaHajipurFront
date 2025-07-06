@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Update Fumigation Allocation</title>
+</head>
+<body>
+  <div class="container-fluid modal_box">
+    <form [formGroup]="userForm">
+        <fieldset>
+          <legend>Update Fumigation Allocation</legend>
+            
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Fumigation No</strong></label>  
+            <input type="text" class="form-control" formControlName="fumi_no" readonly/>  
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Fumigation Date</strong></label>  
+            <input type="text" class="form-control" formControlName="fumi_date" readonly/>  
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Warehouse</strong></label>  
+            <input type="text" class="form-control" formControlName="warehouse_name" readonly/>  
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Stack No</strong></label>  
+            <input type="text" class="form-control" formControlName="stackno" readonly/>  
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Manpower/Labour</strong></label>  
+            <input type="text" class="form-control" formControlName="manpower" readonly/>  
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Degassing Date</strong></label>  
+            <input type="text" class="form-control" formControlName="degassing_date" readonly/>  
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Degassing Time</strong></label>  
+            <input type="text" class="form-control" formControlName="degassing_time" readonly/>  
+          </div>
+          <div class="col-lg-3 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Fumigation Date</strong></label>  
+            <input type="text" class="form-control" formControlName="fumi_date" readonly/>  
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Pcmw Sign</strong></label>  
+            <input type="text" class="form-control" formControlName="pcmw_sign_name" readonly/>  
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Supervisor Sign</strong></label>  
+            <input type="text" class="form-control" formControlName="supervisor_sign_name" readonly/>  
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Lab Sign</strong></label>  
+            <input type="text" class="form-control" formControlName="lab_sign_name" readonly/>  
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <label ><strong>Open Date<span class="red">*</span></strong></label>  
+            <input type="date" class="form-control" formControlName="opendate"/>  
+          </div>
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <mat-label>Allocated<span class="red">*</span></mat-label>
+              <mat-select formControlName="allocate"  class="form-control">
+                <mat-option value="NA">NA</mat-option>
+                <mat-option value="Re-Fumigate">Re-Fumigate</mat-option>
+                <mat-option value="Open For Production">Open For Production</mat-option>
+              </mat-select>
+          </div>
+
+          <div class="col-lg-4 col-md-6 col-sm-6 col-12" style="margin-bottom: 20px;">
+            <mat-label>Quality Check<span class="red">*</span></mat-label>
+              <mat-select formControlName="wheat_fumi_qc"  class="form-control">
+                <mat-option value="Ok">Ok</mat-option>
+                <mat-option value="Reject">Reject</mat-option>
+              </mat-select>
+          </div>
+        </fieldset>
+
+      <button class="close_btn" mat-button mat-dialog-close><i class="fa fa-close icon"></i></button>
+      <mat-dialog-actions align="center" style="margin-bottom: 1rem;">
+        <button class="btn btn-info" mat-button [mat-dialog-close]="true" (click)="SendDataToDifferentComponenet()">Submit</button>
+      </mat-dialog-actions>
+    </form>
+  </div>
+</body>
+</html>

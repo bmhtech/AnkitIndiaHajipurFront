@@ -16,7 +16,8 @@ const childRoutes: Routes = [
             { path: 'gatepass', loadChildren: './components/gate-pass/gate-pass.module#GatePassModule' },
             { path: 'jobwork', loadChildren: './components/jobwork/jobwork.module#JobworkModule' },
             { path: 'transport', loadChildren: './components/transport/transport.module#TransportModule' },
-            { path: 'storetransaction', loadChildren: './components/store-transaction/store-transaction.module#StoreTransactionModule' }
+            { path: 'storetransaction', loadChildren: './components/store-transaction/store-transaction.module#StoreTransactionModule' },
+            { path: 'fumigation-record', loadChildren: './components/fumigation-record/fumigation-record.module#FumigationRecordModule'},
             
         ]
     }

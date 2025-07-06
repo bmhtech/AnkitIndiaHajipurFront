@@ -1,7 +1,7 @@
 import { formatDate } from '@angular/common';
 import { Component, OnInit } from '@angular/core';
 import { FormArray, FormBuilder, FormControl, FormGroup } from '@angular/forms';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Observable } from 'rxjs';
 import { salestransport } from '../../../../../../../Models/SalesTransaction/salestransport';
 import { DropdownServiceService } from '../../../../../../../service/dropdown-service.service';
 import { Master } from '../../../../../../../service/master.service';
@@ -10,6 +10,7 @@ import { TransportjvpostingComponent } from '../../transportjvposting/transportj
 import { MatDialog, MatDialogConfig } from '@angular/material';
 import { SalestransportimagepopupComponent } from '../../salestransportimagepopup/salestransportimagepopup.component';
 import { DeletesalestransportremarkpopupComponent } from '../deletesalestransportremarkpopup/deletesalestransportremarkpopup.component';
+import { map, startWith } from 'rxjs/operators';
 
 @Component({
   selector: 'app-sales-transport',
@@ -27,6 +28,7 @@ export class SalesTransportComponent implements OnInit {
   businesslists:any=[];
   challanlist:any = [];
   invoiceType:any = [];
+  partyList:any=[];
   status = false;
   currentDate:any;
   BuUnit:any;
@@ -55,6 +57,11 @@ export class SalesTransportComponent implements OnInit {
   trans_codes:any = [];
   ShowTransporterName:boolean=false;
   bulksupplyshow:boolean=false;
+
+  transId:any;
+  filteredOptions: Observable<string[]>;
+  custId:any;
+  custFilteredOptions: Observable<string[]>;
 
   constructor(public fb:FormBuilder, public dialog: MatDialog,
     private Service: Master, private DropDownListService: DropdownServiceService,private excelService:ExcelService) 
@@ -128,6 +135,7 @@ export class SalesTransportComponent implements OnInit {
           catagory:[''],
           pur_inv_type:[''],
           transporter_name:[''],
+          customer:[''],
           });
         this.userForm2=fb.group(
           {
@@ -203,6 +211,7 @@ export class SalesTransportComponent implements OnInit {
     get catagory(){return this.userForm1.get("catagory") as FormControl};
     get pur_inv_type(){return this.userForm1.get("pur_inv_type") as FormControl};
     get transporter_name(){return this.userForm1.get("transporter_name") as FormControl};
+    get customer() { return this.userForm1.get("customer") as FormControl };
     
     get fromdate1(){return this.userForm2.get("fromdate") as FormControl};
     get todate1(){return this.userForm2.get("todate") as FormControl};
@@ -237,18 +246,24 @@ export class SalesTransportComponent implements OnInit {
       this.DropDownListService.itemTypeListFastAPI(localStorage.getItem("company_name")),
       this.DropDownListService.getTransJVCode("TRANS",this.currentDate),
       this.DropDownListService.getSalesTransactionReportList(this.currentDate),
-      this.DropDownListService.transporterNamesList(),
-      ).subscribe(([bunit,invoiceData,ChargeMasterData,ledgerData,itemTypeData,TransCode,reportlist,transporterData])=>
+      //this.DropDownListService.transporterNamesList(),
+      this.DropDownListService.getTransporterListFastbp_Id(),
+      this.DropDownListService.newfastcustomerList(localStorage.getItem("company_name")),
+      ).subscribe(([bunit,invoiceData,ChargeMasterData,ledgerData,itemTypeData,TransCode,reportlist,transporterData,customerdata])=>
       {
         this.ledgerNames = ledgerData;
-        this.trans_codes = transporterData;
-      // console.log("data:"+JSON.stringify(bunit))
-      this.chargesIdList  = ChargeMasterData;
+        this.trans_codes = [{ bp_Id: 'No', bp_name: 'ALL TRANSPORTER' }].concat(transporterData);
+        console.log("transport: "+JSON.stringify(transporterData));
+        //console.log("data:"+JSON.stringify(bunit))
+       this.chargesIdList  = ChargeMasterData;
        this.businesslists=bunit;
        this.BuUnit = 'CBU00001';
-       this.invoiceType = invoiceData;
+       this.invoiceType = [{ invtype_id: 'All', invtype_name: 'ALL INVOICE' }].concat(invoiceData);
        this.itemtypes  = itemTypeData;
        this.seq_no = TransCode.sequenceid;
+       //this.partyList=customerdata;
+       this.partyList=[{ cp_Id: 'No', cp_name: 'ALL CUSTOMER' }].concat(customerdata);
+       console.log("Party list: "+JSON.stringify(this.partyList));
        this.userForm.patchValue({id: 0,currentdate:this.currentDate,jvdate:this.currentDate});
        console.log(JSON.stringify(TransCode))
        this.transportList=reportlist;
@@ -256,7 +271,60 @@ export class SalesTransportComponent implements OnInit {
 
     this.SearchType="Normal";
 
+    // Search Text Field Starts
+    this.filteredOptions = this.userForm1.controls['transporter_name'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filter(value))
+    );
+
+    this.custFilteredOptions = this.userForm1.controls['customer'].valueChanges.pipe(
+      startWith(''),
+      map(value => this._filterCustomer(value))
+    );
+
   }
+
+  /* Search Text Field Starts */
+  private _filter(value: string): any[] {
+    const filterValue = value.toLocaleLowerCase();
+    //console.log("filterValue: "+filterValue)
+    return this.trans_codes.filter(option => option.bp_name.toLocaleLowerCase().includes(filterValue));
+  }
+
+  onTransSelectionChanged(event) {
+    // I want to get the full object and display the name
+    this.transId=event.option.id;
+    //alert(event.option.id)
+    return event;
+  }
+
+  private _filterCustomer(value: string): any[] {
+    const filterValue = value.toLocaleLowerCase();
+    //console.log("filterValue: "+filterValue)
+    return this.partyList.filter(option => option.cp_name.toLocaleLowerCase().includes(filterValue));
+  }
+
+  onCustSelectionChanged(event) {
+    // I want to get the full object and display the name
+    this.custId=event.option.id;
+    //alert(event.option.id)
+    return event;
+  }
+  /* Search Text Field Ends */
+
+  /* Clear TextField Search Starts */
+  ClearTransporterText(){
+    this.userForm1.get("transporter_name").setValue("");
+    //this.userForm1.get("transporter_name").patchValue({transporter_name: ''});
+    this.transId='No';
+  }
+
+  ClearCustomerText(){
+    this.userForm1.get("customer").setValue("");
+    //this.userForm1.get("customer").patchValue({customer: ''});
+    this.custId='No';
+  }
+  /* Clear TextField Search Ends */
 
   OnChangeSearchType(event)
   {
@@ -331,18 +399,26 @@ export class SalesTransportComponent implements OnInit {
     {
       if(this.userForm1.get("catagory").value == 'Sales')
       {
-        let trans_code=this.userForm1.get("transporter_name").value;
-        this.searchdate=this.userForm1.get("todate").value
+        //let trans_code = this.userForm1.get("transporter_name").value;
+        let trans_code = this.transId;  // For TextField Search
+        this.searchdate = this.userForm1.get("todate").value;
+        //let customer_code = this.userForm1.get("customer").value;
+        let customer_code = this.custId;
+
         if(trans_code==null || trans_code=="")
         {
           trans_code="No";
         }
+        if (customer_code == null || customer_code == "") {
+          customer_code = "No";
+        }
+
         this.DropDownListService.getSalesTransportReport(this.userForm1.get("business_unit").value,
                                                          this.userForm1.get("fromdate").value,
                                                          this.userForm1.get("todate").value,
                                                          this.userForm1.get("inv_type").value,
                                                          this.userForm1.get("trans_type").value,
-                                                         trans_code).subscribe(salesdata=>
+                                                         trans_code,customer_code).subscribe(salesdata=>
           {
            console.log("AVG :"+JSON.stringify(salesdata))
             this.challanlist = salesdata;
@@ -576,6 +652,11 @@ export class SalesTransportComponent implements OnInit {
     let balance=(netwt-newnet);
     console.log("newnet " + this.userForm.get("netwt").value + " / " + this.userForm.get("grosswtnew").value + " / " +this.userForm.get("tarewtnew").value )
     balance=balance/100;
+    
+    if(this.userForm.get("tds_rate").value){
+      alert("You Put TDS Rate of: " + this.userForm.get("tds_rate").value + "%, Click 'OK' and Continue...");
+    }
+
     let dedu_wt:number=0;
     if(this.userForm.get("deduction_basedon").value=="Excess Shortage")
     {
