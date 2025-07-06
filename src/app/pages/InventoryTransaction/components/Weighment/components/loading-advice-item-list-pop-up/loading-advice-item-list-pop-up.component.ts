@@ -18,6 +18,9 @@ export class LoadingAdviceItemListPopUpComponent implements OnInit {
   warehouses: any = [];
   stackList: any = [];
   item_sl_no = 1;
+  job_sl_no = 1;
+  jobwork:boolean=false;
+  totalweighr: number = 0;
 
   constructor(private fb: FormBuilder,
     private DropDownListService: DropdownServiceService,
@@ -39,18 +42,37 @@ export class LoadingAdviceItemListPopUpComponent implements OnInit {
           base_qty: '',
           advice_no: ''
         })]),
+         wm_loading_advice_Item_Dtls_for_jobwork: this.fb.array([this.fb.group({
+          slno: this.job_sl_no,
+          job_item: '',
+          job_packing: '',
+          mat_code:'',
+          job_hsn: '',
+          pack_qty: '',
+          pack_uom: '',
+          price_based_on: '',
+          item_qty: '',
+          item_uom: '',
+          mat_wt: '',
+          tolerance: '',
+          job_tolerance_qty: '',
+          advice_no: ''
+        })]),
       });
 
     this.adviceId = data["advice_id"];
+    this.jobwork=data.jobwork;
   }
 
   get Wm_loading_advice_itm_dtls() { { return this.userForm.get('Wm_loading_advice_itm_dtls') as FormArray; } }
+  get wm_loading_advice_Item_Dtls_for_jobwork() { { return this.userForm.get('wm_loading_advice_Item_Dtls_for_jobwork') as FormArray; } }
 
   ngOnInit() {
     this.status = false;
     this.Wm_loading_advice_itm_dtls.removeAt(0);
     this.DropDownListService.wareHCodeList().subscribe(data => { this.warehouses = data; });
-    this.DropDownListService.loadingItemRetriveList(this.adviceId).subscribe(data => {
+   
+    /*this.DropDownListService.loadingItemRetriveList(this.adviceId).subscribe(data => {
       this.status = true;
       this.item_sl_no = 0;
       let totalweighr: number = 0;
@@ -67,7 +89,54 @@ export class LoadingAdviceItemListPopUpComponent implements OnInit {
           this.status = true;
         });
       }
-    });
+    });*/
+
+    if(this.jobwork==true)
+    {
+      this.job_sl_no = 0;
+      while (this.wm_loading_advice_Item_Dtls_for_jobwork.length)
+      this.wm_loading_advice_Item_Dtls_for_jobwork.removeAt(0);
+
+      this.DropDownListService.loadadvicejobworkRetriveList(this.adviceId).subscribe(jobdata => {
+          this.status = true;
+          this.job_sl_no=0;
+          this.totalweighr = 0;
+          let m = 0;
+          //console.log("ITEM load :: " + JSON.stringify(data));
+          for (let data1 of jobdata) {
+              this.addJob();
+              //console.log("ITEM QTY :: " + data1["item_qty"]);
+              this.totalweighr += data1["item_qty"]
+              m = m + 1;
+              this.wm_loading_advice_Item_Dtls_for_jobwork.patchValue(jobdata);
+              //console.log(" Total ITEM QTY :: " + this.totalweighr);
+              this.status = true;
+            }
+             this.userForm.patchValue({ total_weight: Number(this.round(this.totalweighr, 2)) });
+          });
+        }
+      else{
+          this.DropDownListService.loadingItemRetriveList(this.adviceId).subscribe(data => {
+            this.status = true;
+            this.item_sl_no = 0;
+            this.totalweighr = 0;
+            let k = 0;
+            while (this.Wm_loading_advice_itm_dtls.length)
+            this.Wm_loading_advice_itm_dtls.removeAt(0);
+            //console.log("ITEM load :: " + JSON.stringify(data));
+            for (let data1 of data) {
+              this.DropDownListService.getBinDescByWarehouse(data1.warehouse).subscribe(stackList => {
+                this.stackList[k] = stackList;
+                this.add();
+                this.totalweighr += data1["mat_wt"]
+                k = k + 1;
+                this.Wm_loading_advice_itm_dtls.patchValue(data);
+                this.status = true;
+              });
+            }
+            this.userForm.patchValue({ total_weight: Number(this.round(this.totalweighr, 2)) });
+          });
+      }
   }
 
   round(num, decimalPlaces = 0) {
@@ -94,6 +163,26 @@ export class LoadingAdviceItemListPopUpComponent implements OnInit {
     }))
   }
 
+  addJob() {
+    this.job_sl_no = this.job_sl_no + 1;
+    this.wm_loading_advice_Item_Dtls_for_jobwork.push(this.fb.group({
+      slno: this.job_sl_no,
+      job_item_name: '',
+      job_packing_name: '',
+      mat_code:'',
+      job_hsn: '',
+      pack_qty: '',
+      pack_uom: '',
+      price_based_on: '',
+      item_qty: '',
+      item_uom: '',
+      mat_wt: '',
+      tolerance: '',
+      job_tolerance_qty: '',
+      advice_no: ''
+    }))
+  }
+  
   SendDataToDifferentComponenet() { }
 
 }
