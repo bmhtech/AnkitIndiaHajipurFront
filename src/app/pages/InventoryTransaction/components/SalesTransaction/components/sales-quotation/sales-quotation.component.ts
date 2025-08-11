@@ -653,6 +653,25 @@ import { constants } from 'zlib';
         while(this.sales_Quotation_Summary_dyn.length)
         this.sales_Quotation_Summary_dyn.removeAt(0);
         this.add3();
+        
+        let accessdata = JSON.stringify(JSON.parse(localStorage.getItem("useraccessname")));
+      
+        this.salesquotationsave=false;
+        this.salesquotationview=false;
+        this.salesquotationupdate=false;
+
+        if(accessdata.includes('sales_quotation.save'))
+        {
+          this.salesquotationsave = true;
+        }
+        if(accessdata.includes('sales_quotation.update'))
+        {
+          this.salesquotationupdate=true;
+        }
+        if(accessdata.includes('sales_quotation.view'))
+        {
+          this.salesquotationview=true;
+        }
       }
     }
 
