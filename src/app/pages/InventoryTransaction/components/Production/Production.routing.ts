@@ -13,12 +13,18 @@ const childRoutes: Routes = [
         component: ProductionComponent,
         children: [
             { path: '', redirectTo: 'process-master', pathMatch: 'full' },
-            { path: 'process-master', component: ProcessMasterComponent },
+            /*{ path: 'process-master', component: ProcessMasterComponent },
             { path: 'bom-master', component: BomMasterComponent },
             { path: 'production-planning', component: ProductionPlanningComponent },
             { path: 'production-transaction', component: ProductionTransactionComponent },
             { path: 'production-transaction-special', component: ProductionTransactionSpecialComponent },
-            { path: 'production-summary', component: ProductionSummaryComponent }
+            { path: 'production-summary', component: ProductionSummaryComponent }*/
+            { path: 'process-master', component: ProcessMasterComponent, data: { title: 'Process Master' } },
+            { path: 'bom-master', component: BomMasterComponent, data: { title: 'BOM Master' } },
+            { path: 'production-planning', component: ProductionPlanningComponent, data: { title: 'Production Planning' } },
+            { path: 'production-transaction', component: ProductionTransactionComponent, data: { title: 'Production Transaction' } },
+            { path: 'production-transaction-special', component: ProductionTransactionSpecialComponent, data: { title: 'Production Transaction Special' } },
+            { path: 'production-summary', component: ProductionSummaryComponent, data: { title: 'Production Summary' } }
 
             // { path: 'purchase-order', component: PurchaseOrderComponent },
             // { path: 'quality-check', component: QualityCheckComponent },

@@ -6,24 +6,24 @@ const appRoutes: Routes = [
 
   {
     path: 'login',
-    component: LoginComponent,
+    component: LoginComponent, data: { title: 'LogIn - Ankit India Hajipur' }
 }
  ,  {
   path: '',
-  component: LoginComponent,
+  component: LoginComponent, data: { title: 'LogIn - Ankit India Hajipur' }
 },
 {
   path: '**',
-  component: LoginComponent,
+  component: LoginComponent, data: { title: 'LogIn - Ankit India Hajipur' }
 },
 
   {
     path: '',
-    component: LoginComponent,
+    component: LoginComponent, data: { title: 'LogIn - Ankit India Hajipur' }
   },
   {
     path: '**',
-    component: LoginComponent,
+    component: LoginComponent, data: { title: 'LogIn - Ankit India Hajipur' }
   } 
 ];
 

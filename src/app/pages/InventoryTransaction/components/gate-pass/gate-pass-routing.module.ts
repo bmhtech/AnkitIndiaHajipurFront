@@ -13,11 +13,15 @@ const childRoutes: Routes = [
         component: GatePassComponent,
         children: [
             { path: '', redirectTo: 'gatepass_checklist', pathMatch: 'full' },
-            { path: 'gatepass_checklist', component: GatepassChecklistComponent },
+            /*{ path: 'gatepass_checklist', component: GatepassChecklistComponent },
             { path: 'gatepass-geteout', component: GatepassGateoutComponent },
             { path: 'gatepass-gateout-a', component: GatepassGateoutAComponent },
-            { path: 'gatepass-gatin', component: GatepassGetinComponent },
-          //  { path: 'visitor-master', component: VisitorMasterComponent }
+            { path: 'gatepass-gatin', component: GatepassGetinComponent },*/
+            { path: 'gatepass_checklist', component: GatepassChecklistComponent, data: { title: 'Gatepass Checklist' } },
+            { path: 'gatepass-geteout', component: GatepassGateoutComponent, data: { title: 'Gatepass Gateout' } },
+            { path: 'gatepass-gateout-a', component: GatepassGateoutAComponent, data: { title: 'Gatepass Gateout Auth' } },
+            { path: 'gatepass-gatin', component: GatepassGetinComponent, data: { title: 'Gatepass Getin' } },
+            //{ path: 'visitor-master', component: VisitorMasterComponent }
            
         ]
     }
