@@ -326,7 +326,7 @@
               <div class="col-lg-3 col-md-4 col-sm-6 col-12">
                 <div class="form-group">
                   <mat-label>TDS Rate</mat-label>
-                  <input  formControlName="tds_rate" type="number" class="form-control">
+                  <input  formControlName="tds_rate" type="number" class="form-control" (keyup)="balanceWt()">
                   <!-- <input  formControlName="tds_rate" type="number" class="form-control" readonly> -->
                 </div>
               </div>
@@ -456,7 +456,7 @@
             </div>
           </div>
 
-          <div class="col-lg-3 col-md-3 col-sm-6 col-12">
+          <div class="col-lg-3 col-md-3 col-sm-6 col-12" style="width:15%">
             <div class="form-group">
               <mat-label>Transport Type<span class="red">*</span></mat-label>
               <mat-select formControlName="trans_type" class="form-control">
@@ -467,7 +467,7 @@
             </div>
           </div>
 
-          <div class="col-lg-3 col-md-4 col-sm-6 col-12">
+          <!-- <div class="col-lg-3 col-md-4 col-sm-6 col-12">
             <div class="form-group">
               <mat-label>Transporter Name</mat-label>
               <mat-select formControlName="transporter_name" class="form-control">
@@ -475,9 +475,45 @@
                 <mat-option *ngFor="let transporterName of trans_codes" [value]="transporterName.bp_Id">{{transporterName.bp_name}}</mat-option>
               </mat-select>
             </div>
-          </div>
+          </div> -->
 
-          
+          <!-- Search Text Field Starts -->
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12" style="width:30%" *ngIf="!(stockShow)"> <!--  style="width:40%" -->
+            <div class="form-group">
+              <mat-label>Transporter Name</mat-label>
+              <input type="text" class="form-control" style="padding-left: 15px; padding-right: 30px;"
+              placeholder="Transporter Name ....."
+              matInput
+              [formControl]="userForm1.controls['transporter_name']"
+              [matAutocomplete]="auto">
+              <i class="fa fa-times" style="float: right; margin: -29px 8px 5px 5px; padding: 5px 5px 5px 5px;" (click)="ClearTransporterText()"></i>
+              <mat-autocomplete #auto="matAutocomplete" (optionSelected)="onTransSelectionChanged($event)">
+              <mat-option *ngFor="let option of filteredOptions  | async" [value]="option.bp_name"  [id]="option.bp_Id">
+              {{option.bp_name}}
+              </mat-option>
+              </mat-autocomplete>
+            </div>
+          </div>
+          <!-- Search Text Field Ends -->
+
+          <!-- Search Text Field Starts -->
+          <div class="col-lg-3 col-md-4 col-sm-6 col-12" style="width:30%" *ngIf="salesShow"> <!--  style="width:40%" -->
+            <div class="form-group">
+              <mat-label>Customer Name</mat-label>
+              <input type="text" class="form-control" style="padding-left: 15px;"
+              placeholder="Customer Name ....."
+              matInput
+              [formControl]="userForm1.controls['customer']"
+              [matAutocomplete]="auto1">
+              <i class="fa fa-times" style="float: right; margin: -29px 8px 5px 5px; padding: 5px 5px 5px 5px;" (click)="ClearCustomerText()"></i>
+              <mat-autocomplete #auto1="matAutocomplete" (optionSelected)="onCustSelectionChanged($event)">
+              <mat-option *ngFor="let option of custFilteredOptions | async" [value]="option.cp_name"  [id]="option.cp_Id">
+              {{option.cp_name}}
+              </mat-option>
+              </mat-autocomplete>
+            </div>
+          </div>
+          <!-- Search Text Field Ends -->
 
           <div class="col-lg-12" >
             <div class="form-group">

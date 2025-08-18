@@ -22,7 +22,7 @@ const childRoutes: Routes = [
         component: PurchaseComponent,
         children: [
             { path: '', redirectTo: 'IndentOrder', pathMatch: 'full' },
-            { path: 'IndentOrder', component: IndentOrderComponent },
+            /*{ path: 'IndentOrder', component: IndentOrderComponent },
             { path: 'purchase-enquiry', component: PurchaseEnquiryComponent },
             { path: 'purchase-quotation', component: PurchaseQuotationComponent },
             { path: 'purchase-order', component: PurchaseOrderComponent },
@@ -36,7 +36,22 @@ const childRoutes: Routes = [
             { path: 'debit-note', component: DebitNoteComponent },
             { path: 'PeripheralQualityCheck', component: PeripheralQualityCheckComponent },
             { path: 'payment-approval', component: PaymentApprovalComponent },
-            { path: 'purchase-bill-approval', component: PurchaseBillApprovalComponent },
+            { path: 'purchase-bill-approval', component: PurchaseBillApprovalComponent },*/
+            { path: 'IndentOrder', component: IndentOrderComponent, data: { title: 'Indent Order' }},
+            { path: 'purchase-enquiry', component: PurchaseEnquiryComponent, data: { title: 'Purchase Enquiry' }},
+            { path: 'purchase-quotation', component: PurchaseQuotationComponent, data: { title: 'Purchase Quotation' } },
+            { path: 'purchase-order', component: PurchaseOrderComponent, data: { title: 'Purchase Order' } },
+            { path: 'quality-check', component: QualityCheckComponent, data: { title: 'Quality Check' } },
+            { path: 'grn', component: GrnComponent, data: { title: 'GRN' } },
+            { path: 'l1-selection', component: L1SelectionComponent, data: { title: 'L1 Selection' } },
+            { path: 'purchase-bill', component: PurchaseBillComponent, data: { title: 'Purchase Bill' } },
+            { path: 'stack-maintain', component: StackMaintainComponent, data: { title: 'Stack Maintain' } },
+            { path: 'pur-return-approval-note', component: PurReturnApprovalNoteComponent, data: { title: 'Pur Return Approval Note' } },
+            { path: 'pur-return-note', component: PurReturnNoteComponent, data: { title: 'Pur Return Note' } },
+            { path: 'debit-note', component: DebitNoteComponent, data: { title: 'Debit Note' } },
+            { path: 'PeripheralQualityCheck', component: PeripheralQualityCheckComponent, data: { title: 'Peripheral Quality Check' } },
+            { path: 'payment-approval', component: PaymentApprovalComponent, data: { title: 'Payment Approval' } },
+            { path: 'purchase-bill-approval', component: PurchaseBillApprovalComponent, data: { title: 'Purchase Bill Approval' } },
            
         ]
     }

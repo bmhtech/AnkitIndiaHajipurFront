@@ -2732,8 +2732,8 @@ export class LoadingAdviceComponent implements OnInit {
       }
     });
   }
-
-  sendcheck() {
+ 
+  /*sendcheck() {  // old code without normal item qty check
     if (this.userForm.get("jobwork").value == true && this.userForm.get("advice_type").value == "Sale") {
 
       if (Number(this.userForm.get("id").value) > 0) {
@@ -2771,6 +2771,129 @@ export class LoadingAdviceComponent implements OnInit {
       this.submitsave = false;
     }
 
+  }*/
+
+  sendcheck() {
+    if (this.userForm.get("jobwork").value == true && this.userForm.get("advice_type").value == "Sale") {
+      if (Number(this.userForm.get("id").value) > 0) {
+        console.log(" :: jobwork qty check update :: ");
+        this.statusNoMsg = "";
+        this.submitsave = false;
+      }
+      else {
+        //if(this.userForm.get("jobwork").value)  {  // for JobWork
+          console.log(" :: jobwork qty check save :: ");
+          let totalqtyjobwork: number = 0;
+          for (let v = 0; v < this.wm_loading_advice_Item_Dtls_for_jobwork.length; v++) {
+            totalqtyjobwork += Number(this.wm_loading_advice_Item_Dtls_for_jobwork.at(v).get("item_qty").value);
+          }
+
+          this.DropDownListService.getLoadingRestWeightJobworkrectify(this.userForm.get("pur_cust_refdocno").value, totalqtyjobwork).subscribe(data => {
+            if (data["status"] == 'Yes') 
+            {
+              this.statusNoMsg = "";
+              this.submitsave = false;
+            }
+            else
+            {
+              //no 
+              this.statusNoMsg = "Please Contact Jitesh Sir for JobWork Item Allocation Update in PO.";
+              this.submitsave = true;
+            }
+          });
+        //}
+      }
+    }
+    else if(this.userForm.get("jobwork").value == false && this.userForm.get("advice_type").value == "Sale"){
+      let itemQty: any = [];
+      let alluom: any = [];
+      alluom = JSON.parse(localStorage.getItem("ALLUOM"));
+      
+      if (Number(this.userForm.get("id").value) > 0) {
+        console.log(" :: normal qty check UPDATE:: ");
+        for (let v = 0; v < this.wm_loading_advice_itm_dtls.length; v++) {
+        
+        //vineet normal update Starts
+        if (this.wm_loading_advice_itm_dtls.at(v).get("uom").value == "PCS") {
+          itemQty[v] = Math.round(this.capacity[v] * this.wm_loading_advice_itm_dtls.at(v).get("s_quantity").value);
+        }
+        else {
+          alluom.forEach(element => {
+            if (element.description == this.wm_loading_advice_itm_dtls.at(v).get("uom").value) {
+              itemQty[v] = Number(this.capacity[v] * this.wm_loading_advice_itm_dtls.at(v).get("s_quantity").value).toFixed(Number(element.decimalv));
+            }
+          });
+        }
+        console.log(" :: ITEM QTY UPDATE ARRAY :: "+itemQty);
+        //vineet normal update ends
+
+        this.DropDownListService.getLoadingRestWeightupdate(this.userForm.get("referance_id").value,
+          this.wm_loading_advice_itm_dtls.at(v).get("item_code").value, itemQty[v],
+          this.userForm.get("advice_id").value,
+          this.wm_loading_advice_itm_dtls.at(v).get("packing").value, this.wm_loading_advice_itm_dtls.at(v).get("alter_item_code").value,
+          this.wm_loading_advice_itm_dtls.at(v).get("alter_packing").value).subscribe(data => {
+            if (data["status"] == 'Yes') {
+              console.log("chk Value Yes : "+v+" ::Value::  "+ itemQty[v])
+              this.wm_loading_advice_itm_dtls.at(v).patchValue({ quantity: itemQty[v], mat_wt: itemQty[v], tolerance_qty: itemQty[v] });
+              this.calculateItemData(v);
+              this.submitsave = false;
+            }
+            if (data["status"] == 'No') {
+              console.log("chk Value No : " + itemQty[v])
+              alert("Packing Quantity Exceeded From Sales Order Quantity ")
+              this.wm_loading_advice_itm_dtls.at(v).patchValue({ quantity: '0.00', mat_wt: '0.00', tolerance_qty: '0.00', s_quantity: '0.00' });
+              this.submitsave = true;
+            }
+            this.status = true;
+          });
+        }
+        //this.submitsave = false;
+      }
+      else{
+        console.log(" :: normal qty check SAVE :: ");
+        for (let i = 0; i < this.wm_loading_advice_itm_dtls.length; i++) {
+
+          //vineet normal save Starts
+          if (this.wm_loading_advice_itm_dtls.at(i).get("uom").value == "PCS") {
+            itemQty[i] = Math.round(this.capacity[i] * this.wm_loading_advice_itm_dtls.at(i).get("s_quantity").value);
+          }
+          else {
+            alluom.forEach(element => {
+              if (element.description == this.wm_loading_advice_itm_dtls.at(i).get("uom").value) {
+                itemQty[i] = Number(this.capacity[i] * this.wm_loading_advice_itm_dtls.at(i).get("s_quantity").value).toFixed(Number(element.decimalv));
+              }
+            });
+          }
+          console.log(" :: ITEM QTY SAVE ARRAY :: "+itemQty);
+          //vineet normal save ends
+
+          this.DropDownListService.getLoadingRestWeight(this.userForm.get("referance_id").value,
+          this.wm_loading_advice_itm_dtls.at(i).get("item_code").value, itemQty[i]).subscribe(data => {
+            if (data["status"] == 'Yes') {
+              console.log("chk Value Yes New : " +i+" ::Value::  "+ itemQty[i])
+              this.wm_loading_advice_itm_dtls.at(i).patchValue({ quantity: itemQty[i], 
+                mat_wt: itemQty[i], 
+                tolerance_qty: itemQty[i] });
+              this.calculateItemData(i);
+              this.submitsave = false;
+            }
+            if (data["status"] == 'No') {
+              console.log("chk Value No New: " + itemQty[i])
+              alert("Packing Quantity Exceeded From Sales Order Quantity ")
+              this.wm_loading_advice_itm_dtls.at(i).patchValue({ quantity: '0.00', mat_wt: '0.00', tolerance_qty: '0.00', s_quantity: '0.00' });
+              this.submitsave = true;
+            }
+            this.status = true;
+          });
+        }
+        //this.submitsave = false;
+      }
+    }
+    else {
+      console.log(" :: else other check :: ");
+      this.statusNoMsg = "";
+      this.submitsave = false;
+    }
   }
 
   send() {

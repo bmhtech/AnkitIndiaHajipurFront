@@ -975,7 +975,7 @@
                     
                     <div *ngIf="salesQue.so_terminate !='1';else elseSoterminate ">
 
-                      <td *ngIf="salesQue.terminate =='0';else terminateupdate">
+                      <td *ngIf="(salesQue.terminate =='0' && salesQue.sale_orderused !='1');else terminateupdate">
                         <button class="btn btn-info" (click)="onUpdate(salesQue.id,salesQue.quotation_id, 'update')" *ngIf="salesquotationupdate">Update</button>
                       
                       </td>  

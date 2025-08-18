@@ -10,7 +10,7 @@
         <mat-dialog-content class="mat-typography">
           <fieldset>
             <legend>Loading Advice Item List</legend>
-            <div class="dyn_table_conent">
+            <div class="dyn_table_conent" *ngIf="jobwork == true;else elseBlock1">
               <div class="dyn_table_header">
                 <label class="label_col">
                   <h3 class="srln">Srl No</h3>
@@ -20,6 +20,9 @@
                 </label>
                 <label class="label_col">
                   <h3 class="i_nam">Packing Name</h3>
+                </label>
+                <label class="label_col">
+                  <h3>HSN Code</h3>
                 </label>
                 <label class="label_col">
                   <h3>Packing Qty</h3>
@@ -34,58 +37,110 @@
                   <h3>Item Uom</h3>
                 </label>
                 <label class="label_col">
-                  <h3>Mat.Wt</h3>
-                </label>
-                <label class="label_col">
-                  <h3 class="i_nam">Warehouse</h3>
-                </label>
-                <label class="label_col">
-                  <h3 class="i_nam">Stack/Rack</h3>
-                </label>
-                <label class="label_col">
-                  <h3>Presant Stack UOM</h3>
-                </label>
-                <label class="label_col">
                   <h3>Advice No</h3>
                 </label>
               </div>
-              <div class="dyn_table_data_cont" formArrayName="Wm_loading_advice_itm_dtls">
-                <div class="dyn_table" *ngFor="let item of Wm_loading_advice_itm_dtls.controls; let pointIndex=index"
+              <div class="dyn_table_data_cont" formArrayName="wm_loading_advice_Item_Dtls_for_jobwork">
+                <div class="dyn_table" *ngFor="let item of wm_loading_advice_Item_Dtls_for_jobwork.controls; let pointIndex=index"
                   [formGroupName]="pointIndex">
-                  <div class="label_col"><input class="form-control srln" formControlName="sl_no" type="number"
+                  <div class="label_col"><input class="form-control srln" formControlName="slno" type="number"
                       name="srl no" readonly /></div>
-                  <div class="label_col"><input class="form-control i_nam" formControlName="item_name" type="text"
+                  <div class="label_col"><input class="form-control i_nam" formControlName="job_item_name" type="text"
                       readonly /></div>
-                  <div class="label_col"><input type="text" class="form-control i_nam" formControlName="packing_name"
+                  <div class="label_col"><input type="text" class="form-control i_nam" formControlName="job_packing_name"
                       readonly /></div>
-                  <div class="label_col"><input class="form-control" formControlName="s_quantity" type="number"
+                  <div class="label_col"><input class="form-control" formControlName="job_hsn" type="text"
                       readonly /></div>
-                  <div class="label_col"><input type="text" class="form-control" formControlName="s_uom" readonly />
+                  <div class="label_col"><input class="form-control" formControlName="pack_qty" type="number"
+                      readonly /></div>
+                  <div class="label_col"><input type="text" class="form-control" formControlName="pack_uom" readonly />
                   </div>
-                  <div class="label_col"><input class="form-control" formControlName="quantity" type="text"
-                      name="quantity" readonly /></div>
-                  <div class="label_col"><input type="text" class="form-control" formControlName="uom" name="uom"
-                      readonly /></div>
-                  <div class="label_col"><input class="form-control" formControlName="mat_wt" type="number"
-                      name="mat-wt" readonly /></div>
-                  <div class="label_col"><mat-select class="form-control i_nam" formControlName="warehouse"
-                      [disabled]="true"><mat-option value="0">-Select-</mat-option><mat-option
-                        *ngFor="let warehouse of warehouses"
-                        [value]="warehouse.warehouse_code">{{warehouse.warehouse_name}}</mat-option></mat-select></div>
-                  <div class="label_col"><mat-select type="text" formControlName="stack_rack" class="form-control i_nam"
-                      [disabled]="true">
-                      <mat-option value="0">-Select-</mat-option>
-                      <mat-option *ngFor="let stack of stackList[pointIndex]"
-                        [value]="stack.bin_code">{{stack.bin_description}}</mat-option>
-                    </mat-select></div>
-                  <div class="label_col"><input class="form-control" formControlName="base_qty" type="number"
+                  <div class="label_col"><input class="form-control" formControlName="item_qty" type="text"
+                      name="item_qty" readonly /></div>
+                  <div class="label_col"><input type="text" class="form-control" formControlName="item_uom" name="item_uom"
                       readonly /></div>
                   <div class="label_col"><input type="text" formControlName="advice_no" class="form-control" readonly />
                   </div>
                 </div>
               </div>
             </div>
-
+            <ng-template #elseBlock1>
+              <div class="dyn_table_conent">
+                <div class="dyn_table_header">
+                  <label class="label_col">
+                    <h3 class="srln">Srl No</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Item Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Packing Name</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Packing Qty</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Packing Uom</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Item Qty</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Item Uom</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Mat.Wt</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Warehouse</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3 class="i_nam">Stack/Rack</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Presant Stack UOM</h3>
+                  </label>
+                  <label class="label_col">
+                    <h3>Advice No</h3>
+                  </label>
+                </div>
+                <div class="dyn_table_data_cont" formArrayName="Wm_loading_advice_itm_dtls">
+                  <div class="dyn_table" *ngFor="let item of Wm_loading_advice_itm_dtls.controls; let pointIndex=index"
+                    [formGroupName]="pointIndex">
+                    <div class="label_col"><input class="form-control srln" formControlName="sl_no" type="number"
+                        name="srl no" readonly /></div>
+                    <div class="label_col"><input class="form-control i_nam" formControlName="item_name" type="text"
+                        readonly /></div>
+                    <div class="label_col"><input type="text" class="form-control i_nam" formControlName="packing_name"
+                        readonly /></div>
+                    <div class="label_col"><input class="form-control" formControlName="s_quantity" type="number"
+                        readonly /></div>
+                    <div class="label_col"><input type="text" class="form-control" formControlName="s_uom" readonly />
+                    </div>
+                    <div class="label_col"><input class="form-control" formControlName="quantity" type="text"
+                        name="quantity" readonly /></div>
+                    <div class="label_col"><input type="text" class="form-control" formControlName="uom" name="uom"
+                        readonly /></div>
+                    <div class="label_col"><input class="form-control" formControlName="mat_wt" type="number"
+                        name="mat-wt" readonly /></div>
+                    <div class="label_col"><mat-select class="form-control i_nam" formControlName="warehouse"
+                        [disabled]="true"><mat-option value="0">-Select-</mat-option><mat-option
+                          *ngFor="let warehouse of warehouses"
+                          [value]="warehouse.warehouse_code">{{warehouse.warehouse_name}}</mat-option></mat-select></div>
+                    <div class="label_col"><mat-select type="text" formControlName="stack_rack" class="form-control i_nam"
+                        [disabled]="true">
+                        <mat-option value="0">-Select-</mat-option>
+                        <mat-option *ngFor="let stack of stackList[pointIndex]"
+                          [value]="stack.bin_code">{{stack.bin_description}}</mat-option>
+                      </mat-select></div>
+                    <div class="label_col"><input class="form-control" formControlName="base_qty" type="number"
+                        readonly /></div>
+                    <div class="label_col"><input type="text" formControlName="advice_no" class="form-control" readonly />
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </ng-template>
           </fieldset>
         </mat-dialog-content>
       </div>

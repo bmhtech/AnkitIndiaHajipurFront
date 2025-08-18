@@ -196,6 +196,7 @@ import { JW_Grn_ItemTagging } from '../Models/ItemModel/jw_grn_itemtagging';
 import { StoreIssueNote } from '../Models/StoreTransaction/StoreIssueNote';
 import { StoreCharges } from '../Models/OtherMaster/StoreCharges';
 import { StackMaintain } from '../Models/transaction/PurchaseTransaction/StackMaintain';
+import { WheatFumigation } from '../Models/WheatFumigationModel/WheatFumigation';
 
 
 @Injectable({
@@ -3077,4 +3078,20 @@ public deleteStackMaintain(StackMaintain, id): Observable<StackMaintain> {
 }
 /* Stack Maintain Ends */
 
+  /* WHEAT FUMIGATION STARTS */
+
+  public createWheatFumigation(wfr: WheatFumigation): Observable<WheatFumigation> {
+    return this.httpClient.post<WheatFumigation>(this.url + 'createWheatFumigation', wfr);
+  }
+
+  public updateWheatFumigation(wfr: WheatFumigation, id: number): Observable<WheatFumigation> {
+    return this.httpClient.put<WheatFumigation>(this.url + 'updateWheatFumigation/' + id, wfr);
+  }
+
+  public deleteWheatFumigation(id: number): Observable<any> {
+    return this.httpClient.put(this.url + 'deleteWheatFumigation/' + id, {});
+  }
+
+  /* WHEAT FUMIGATION ENDS */
+  
 }

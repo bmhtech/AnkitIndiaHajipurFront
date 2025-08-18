@@ -9,9 +9,10 @@ const childRoutes: Routes = [
       component: TransportComponent,
       children: [
           { path: '', redirectTo: 'sales-transport', pathMatch: 'full' },
-          { path: 'sales-transport', component: SalesTransportComponent },
-          { path: 'purchase-transport', component: PurchaseTransportComponent },
-          
+          /*{ path: 'sales-transport', component: SalesTransportComponent },
+          { path: 'purchase-transport', component: PurchaseTransportComponent },*/
+          { path: 'sales-transport', component: SalesTransportComponent, data: { title: 'Sales Transport' } },
+          { path: 'purchase-transport', component: PurchaseTransportComponent, data: { title: 'Purchase Transport' } },
       ]
   }
 ];

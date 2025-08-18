@@ -136,13 +136,38 @@ export class OtherWeighmentBillPrintComponent implements OnInit {
      
       this.trucknumber=data12.vehicle_no;
       this.ref_no=data12.ref_doc_no;
-      if(data12["wgment_for"] == "Unloading")
+      
+      /*if(data12["wgment_for"] == "Unloading")
       {
         this.staticdate=this.datecalculator(data12.gw_date);
       }
       if(data12["wgment_for"] == "Loading")
       {
         this.staticdate=this.datecalculator(data12.tw_date);
+      }*/
+
+      if(data12["wgment_for"] == "Unloading")
+      {
+        if(data12.weight1=='weight1' && (data12.weight2=='' || data12.weight2==null))
+        {
+          this.staticdate=this.datecalculator(data12.gw_date);
+        }
+        if(data12.weight1=='weight1' && data12.weight2=='weight2')
+        {
+          this.staticdate=this.datecalculator(data12.tw_date);
+        }
+      }
+      
+      if(data12["wgment_for"] == "Loading")
+      {
+         if(data12.weight1=='weight1' && (data12.weight2=='' || data12.weight2==null))
+        {
+          this.staticdate=this.datecalculator(data12.tw_date);
+        }
+        if(data12.weight1=='weight1' && data12.weight2=='weight2')
+        {
+          this.staticdate=this.datecalculator(data12.gw_date);
+        }
       }
      
       this.wgment_rs=data12.wgment_rs;

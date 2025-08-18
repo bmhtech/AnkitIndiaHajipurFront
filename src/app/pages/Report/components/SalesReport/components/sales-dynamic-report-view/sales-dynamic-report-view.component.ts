@@ -451,7 +451,8 @@ export class SalesDynamicReportViewComponent implements OnInit {
 
   exportAsXLSX4(): void {
     let element = document.getElementById('dynamictable2');
-    this.excelService.exportAsExcelFile(element, 'Loading Advice Report From ' + this.userForm4.get("loadingfromdate").value + 'to' + this.userForm4.get("loadingtodate").value);
+    //this.excelService.exportAsExcelFile(element, 'Loading Advice Report From ' + this.userForm4.get("loadingfromdate").value + 'to' + this.userForm4.get("loadingtodate").value);
+    this.excelService.tableToExcelwtFormat(element, 'Loading Advice Report From ' + this.userForm4.get("loadingfromdate").value + 'to' + this.userForm4.get("loadingtodate").value);
   }
 
 

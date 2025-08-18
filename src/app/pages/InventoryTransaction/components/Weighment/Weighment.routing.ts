@@ -13,12 +13,18 @@ const childRoutes: Routes = [
         component: WeighmentComponent,
         children: [
             { path: '', redirectTo: 'loadingAdvice', pathMatch: 'full' },
-            { path: 'loadingAdvice', component: LoadingAdviceComponent },
+            /*{ path: 'loadingAdvice', component: LoadingAdviceComponent },
             { path: 'unloadAdvice', component: UnloadAdviceComponent },
             { path: 'unloadWeightment', component: UnloadWeighmentComponent },
             { path: 'loadingWeightment', component: LoadingWeighmentComponent },
             { path: 'TagAdviceWithPo', component: TagAdviceWithPoComponent },
-            { path: 'OtherWeighment', component: OtherWeighmentComponent }
+            { path: 'OtherWeighment', component: OtherWeighmentComponent }*/
+            { path: 'loadingAdvice', component: LoadingAdviceComponent, data: { title: 'Loading Advice' } },
+            { path: 'unloadAdvice', component: UnloadAdviceComponent, data: { title: 'Unload Advice' } },
+            { path: 'unloadWeightment', component: UnloadWeighmentComponent, data: { title: 'Weighment' } },
+            { path: 'loadingWeightment', component: LoadingWeighmentComponent, data: { title: 'Loading Weighment' } },
+            { path: 'TagAdviceWithPo', component: TagAdviceWithPoComponent, data: { title: 'Tag Advice with PO' } },
+            { path: 'OtherWeighment', component: OtherWeighmentComponent, data: { title: 'Other Weighment' } }
            
         ]
     }

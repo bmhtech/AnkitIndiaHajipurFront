@@ -9,12 +9,14 @@ import { CompanyFinancialComponent } from './company-financial/company-financial
 export const childRoutes: Routes = [
     {
         path: 'login',
-        component: LoginComponent,
+        //component: LoginComponent,
+        component: LoginComponent,data: { title: 'LogIn - Ankit India Hajipur' }
     },
 
     {
         path: 'companyFinancial',
-        component: CompanyFinancialComponent,
+        //component: CompanyFinancialComponent,
+        component: CompanyFinancialComponent,data: { title: 'Company - Ankit India Hajipur' }
     },
 
     {
