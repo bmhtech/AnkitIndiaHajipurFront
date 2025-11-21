@@ -1246,7 +1246,7 @@ export class CreditNoteComponent implements OnInit {
     this.totalTaxAmt = 0;
     if (PriceBasedOn == "Packing") { this.amt = price * packingQty }
 
-    if (PriceBasedOn == "item") { this.amt = price * ItemQty }
+    if (PriceBasedOn == "Item") { this.amt = price * ItemQty }
 
     if (PriceBasedOn == "0") { this.amt = 0 }
 
@@ -1261,9 +1261,9 @@ export class CreditNoteComponent implements OnInit {
     let taxdata: any = [];
     let tax_id: any;
     taxdata = this.tax_list;
-    console.log("packingQty" + packingQty + "ItemQty " + ItemQty + "price" + price + "PriceBasedOn" + PriceBasedOn + "discount" + discount + "discountBasedOn" + discountBasedOn + "taxrate" + taxrate + "index" + index)
+    //console.log("packingQty" + packingQty + "ItemQty " + ItemQty + "price" + price + "PriceBasedOn" + PriceBasedOn + "discount" + discount + "discountBasedOn" + discountBasedOn + "taxrate" + taxrate + "index" + index)
     taxdata.forEach(element => {
-      console.log("taxname:" + element.tax_id + "//" + this.sales_credit_note_item_dtls.at(index).get("tax_code").value)
+      //console.log("taxname:" + element.tax_id + "//" + this.sales_credit_note_item_dtls.at(index).get("tax_code").value)
       if (element.tax_id == this.sales_credit_note_item_dtls.at(index).get("tax_code").value) {
         //console.log("statestatus:"+this.statestatus)
         if (this.statestatus == 0) {
@@ -1292,25 +1292,30 @@ export class CreditNoteComponent implements OnInit {
       }
 
     });
-    console.log(" u : " + this.sales_credit_note_item_dtls.at(0).get("amount").value)
+    //console.log(" u : " + this.sales_credit_note_item_dtls.at(0).get("amount").value)
     this.grandTotal = 0;
     for (let y = 0; y < this.sales_credit_note_item_dtls.length; y++) {
       this._total_amt = this.sales_credit_note_item_dtls.at(y).get("total_amt").value as FormControl;
 
       this.amt = this.sales_credit_note_item_dtls.at(y).get("amount").value as FormControl;
-      console.log(" v " + this.sales_credit_note_item_dtls.at(y).get("amount").value)
+      //console.log(" v " + this.sales_credit_note_item_dtls.at(y).get("amount").value)
       this.totalItem = Number(this.totalItem) + Number(this.amt);
-      console.log(" tot " + this.totalItem)
+      //console.log(" totalItem " + this.totalItem)
       this.discountAmt = this.sales_credit_note_item_dtls.at(y).get("discount_amt").value as FormControl;
+      //console.log(" discountAmt " + this.discountAmt)
       this.totalDiscount = Number(this.totalDiscount) + Number(this.discountAmt);
+      //console.log(" totalDiscount " + this.totalDiscount)
       this._taxAmt = this.sales_credit_note_item_dtls.at(y).get("tax_amt").value as FormControl;
+      //console.log(" _taxAmt " + this._taxAmt)
       this.totalTaxAmt = Number(this.totalTaxAmt) + Number(this._taxAmt);
+      //console.log(" totalTaxAmt: " + this.totalTaxAmt)
       this.grandTotal = Number(this.grandTotal) + Number(this._total_amt);
+      //console.log(" grandTotal " + this.grandTotal)
       this.userForm.patchValue({ grand_total: this.grandTotal.toFixed(2) });
 
       this.calculateFinalBillAmt(this.totalItem, this.totalDiscount, this.totalTaxAmt,
         this.appCharges, this.adj1, this.adj2, this.tcsAmt)
-      console.log("total item" + this.totalItem + "totalDiscount " + this.totalDiscount + " totalTaxAmt " + this.totalTaxAmt + " appCharges" + this.appCharges + " adj1" + this.adj1 + "  adj1" + this.adj1 + " tcsAmt" + this.tcsAmt)
+      //console.log("total item" + this.totalItem + "totalDiscount " + this.totalDiscount + " totalTaxAmt " + this.totalTaxAmt + " appCharges" + this.appCharges + " adj1" + this.adj1 + "  adj1" + this.adj1 + " tcsAmt" + this.tcsAmt)
     }
 
     /* this.DropDownListService.taxlistbycode(this.sales_credit_note_item_dtls.at(index).get("tax_code").value).subscribe(taxcode=>
@@ -1910,7 +1915,7 @@ export class CreditNoteComponent implements OnInit {
             this.item_sl_no = 0;
             while (this.sales_credit_note_item_dtls.length)
               this.sales_credit_note_item_dtls.removeAt(0);
-            console.log("salesReturn item dtls: " + JSON.stringify(data.return_approval_Item_Dtls))
+            //console.log("salesReturn item dtls: " + JSON.stringify(data.return_approval_Item_Dtls))
             for (let data1 of data.return_approval_Item_Dtls) {
               if (data1.checkbox == true) {
                 this.status = false;
@@ -1928,7 +1933,7 @@ export class CreditNoteComponent implements OnInit {
                   this.totalDiscount = Number(this.totalDiscount) + Number(data1.discountamt);
                   this.totalNetAmt = Number(this.totalNetAmt) + (data1.amount - data1.discountamt);
                   this.totalTaxAmt = Number(this.totalTaxAmt) + Number(data1.taxamt);
-                  // console.log("total item"+this.totalItem+"totalDiscount "+this.totalDiscount+" totalTaxAmt "+this.totalTaxAmt+" appCharges"+this.appCharges+" adj1"+this.adj1+"  adj1"+this.adj1+" tcsAmt"+this.tcsAmt)
+                  //console.log("total item"+this.totalItem+"totalDiscount "+this.totalDiscount+" totalTaxAmt "+this.totalTaxAmt+" appCharges"+this.appCharges+" adj1"+this.adj1+"  adj1"+this.adj1+" tcsAmt"+this.tcsAmt)
                   // this.calculateFinalBillAmt(this.totalItem, this.totalDiscount, this.totalTaxAmt,
                   //   this.appCharges, this.adj1, this.adj2, this.tcsAmt)
 
@@ -1940,7 +1945,8 @@ export class CreditNoteComponent implements OnInit {
                   this.TaxRate.push(data1["taxrate"]);
 
                   this.addItem();
-                  console.log("Amount" + data1.amount)
+                  //console.log(" ::Amount:: " + data1.amount+" ::taxrate:: " + data1.taxrate+" ::tax_amt:: " + data1.taxamt+" ::totalamt:: " + data1.totalamt)
+
                   this.sales_credit_note_item_dtls.at(k).patchValue({
                     item_code: data1.itemcode, hsn_code: data1.hsn_code,
                     packing: data1.packing, quantity: data1.quantity, uom: data1.uom, squantity: data1.squantity,
@@ -1955,7 +1961,7 @@ export class CreditNoteComponent implements OnInit {
                   timer(3000).subscribe
                     (x => {
                       const distinctArrayHsnCode: any = [] = this.HsnCode.filter((n, i) => this.HsnCode.indexOf(n) === i);
-                      console.log("distinctArrayHsnCode: " + distinctArrayHsnCode);
+                      //console.log("distinctArrayHsnCode: " + distinctArrayHsnCode);
                       this.addItemGrpHsn();
                       while (this.credit_item_groupwise_hsnsumm.length)
                         this.credit_item_groupwise_hsnsumm.removeAt(0);
@@ -1978,9 +1984,9 @@ export class CreditNoteComponent implements OnInit {
 
                   timer(3500).subscribe
                     (x => {
-                      console.log("ItemGrLength: " + this.ItemGr.length);
+                      //console.log("ItemGrLength: " + this.ItemGr.length);
                       const distinctArray: any = [] = this.ItemGr.filter((n, i) => this.ItemGr.indexOf(n) === i);
-                      console.log("distinctArray: " + distinctArray);
+                      //console.log("distinctArray: " + distinctArray);
                       //let j=0
                       this.addItemGrp();
                       while (this.credit_item_groupwise_summ.length)
@@ -1994,12 +2000,12 @@ export class CreditNoteComponent implements OnInit {
                           if (this.sales_credit_note_item_dtls.at(k).get("item_group").value == distinctArray[j]) {
                             Amt += Number(this.sales_credit_note_item_dtls.at(k).get("amount").value);
                             Discount += Number(this.sales_credit_note_item_dtls.at(k).get("discount_amt").value);
-                            console.log("Amt:" + Amt);
-                            console.log("Discount : " + Discount);
+                            //console.log("Amt:" + Amt);
+                            //console.log("Discount : " + Discount);
                           }
                         }
                         this.addItemGrp();
-                        console.log("Item  :" + distinctArray[j]); // 1, "string", false
+                        //console.log("Item  :" + distinctArray[j]); // 1, "string", false
                         this.credit_item_groupwise_summ.at(j).patchValue({ item_group: distinctArray[j], item_total: Amt, discount_amt: Discount });
 
                         forkJoin(
@@ -2016,9 +2022,9 @@ export class CreditNoteComponent implements OnInit {
                   timer(5000).subscribe
                     (x => {
                       this.StateName = this.userForm.get("state").value;
-                      // console.log("TaxCodeLength: "+this.TaxCode.length);
+                      //console.log("TaxCodeLength: "+this.TaxCode.length);
                       const distinctArrayTax: any = [] = this.TaxCode.filter((n, i) => this.TaxCode.indexOf(n) === i);
-                      // console.log("distinctArrayTax: "+distinctArrayTax);
+                      //console.log("distinctArrayTax: "+distinctArrayTax);
 
                       this.addItemGrpTax();
                       while (this.credit_item_groupwise_taxsumm.length)
@@ -2032,8 +2038,8 @@ export class CreditNoteComponent implements OnInit {
                           if (this.sales_credit_note_item_dtls.at(k).get("tax_code").value == distinctArrayTax[j]) {
                             TaxRate = this.sales_credit_note_item_dtls.at(k).get("tax_rate").value;
                             TaxAmt += this.sales_credit_note_item_dtls.at(k).get("tax_amt").value;
-                            //  console.log("TaxRate:"+TaxRate);   
-                            //  console.log("TaxAmt : "+TaxAmt);                    
+                            //console.log("TaxRate:"+TaxRate);   
+                            //console.log("TaxAmt : "+TaxAmt);                    
                           }
                         }
                         this.addItemGrpTax();
@@ -2081,7 +2087,7 @@ export class CreditNoteComponent implements OnInit {
                                     DiscountAmt += Number(this.sales_credit_note_item_dtls.at(k).get("discount_amt").value);
                                     // Taxable_Amnt = Number(Amount.toFixed(2))-Number(DiscountAmt.toFixed(2));
                                     Taxable_Amnt = Number(this.round((Number(Amount) - Number(DiscountAmt)), 2));
-                                    console.log("Taxable_Amnt : " + Taxable_Amnt)
+                                    //console.log("Taxable_Amnt : " + Taxable_Amnt)
                                     // console.log("TaxDistAmount : " +Amount+ "..."+ "DiscountAmt : "+DiscountAmt)          
                                   }
                                 }
@@ -2964,13 +2970,13 @@ export class CreditNoteComponent implements OnInit {
                     });
 
                     itemtoal = itemtoal + Number(data1["amount"]);
-                  //  console.log(" amt " + itemtoal +" / " + data1["amount"])
+                  console.log(" amt " + itemtoal +" / " + data1["amount"])
 
                     this.amt = itemtoal;
-                  //  console.log(" amt "+this.amt)
+                console.log(" amt "+this.amt)
 
                     this.totalItem = itemtoal;
-                  //  console.log(" totalItem "+this.totalItem)
+                  console.log(" totalItem "+this.totalItem)
 
                     this.discountAmt = data1["discountamt"];
                   //  console.log(" discountAmt "+this.discountAmt)
