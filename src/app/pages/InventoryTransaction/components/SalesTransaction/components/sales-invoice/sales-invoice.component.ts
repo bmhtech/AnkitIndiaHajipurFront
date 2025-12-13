@@ -123,6 +123,8 @@ export class SalesInvoiceComponent implements OnInit {
   stk_bunit:any;
   salesOrdShow:boolean=false;
   tax_list:any=[];
+  barcodeStatusShow:boolean=false;
+  barcodeRemarksShow:boolean=false;
 
   constructor(public fb: FormBuilder, public dialog: MatDialog,
     private Service: Master, private DropDownListService: DropdownServiceService) {
@@ -176,6 +178,8 @@ export class SalesInvoiceComponent implements OnInit {
         jobwork: [''],
         policyno: [''],
         asn_no:[''],
+        barcode_dispatch_status:[''],
+        barcode_remarks:[''],
         sales_Invoice_Trans_Dtls: this.fb.array([this.fb.group({
           slno: this.transporter_sl_no,
           transname: '',
@@ -593,6 +597,8 @@ export class SalesInvoiceComponent implements OnInit {
   get job_tot_amt() { return this.userForm.get("job_tot_amt") as FormControl }
   get jobwork() { return this.userForm.get("jobwork") as FormControl }
   get policyno() { return this.userForm.get("policyno") as FormControl }
+  get barcode_dispatch_status() { return this.userForm.get("barcode_dispatch_status") as FormControl }
+  get barcode_remarks() { return this.userForm.get("barcode_remarks") as FormControl }
 
   get sales_Invoice_Payment_Dtls() { return this.userForm.get('sales_Invoice_Payment_Dtls') as FormGroup; }
   get sales_Invoice_Shipment_Dtls() { return this.userForm.get('sales_Invoice_Shipment_Dtls') as FormGroup; }
@@ -3505,10 +3511,17 @@ export class SalesInvoiceComponent implements OnInit {
                   }
                   //this.sales_Invoice_Payment_Dtls.patchValue({ mode_of_payment: loadingtrans["mode_of_payment"], payment_term: loadingtrans["payment_term"], days: loadingtrans["days"] })
                   
-                  console.log("Ship Data SIDC:" + JSON.stringify(shipmentdata))
+                  //console.log("Ship Data SIDC:" + JSON.stringify(shipmentdata))
                   // COMEENTED FOR NORMAL PATCHING
                   //this.sales_Invoice_Shipment_Dtls.patchValue({ paytoaddr: shipmentdata.pay_addr, paytodtls: shipmentdata.pay_details, shipaddr: shipmentdata.ship_addr, shipdtls: shipmentdata.ship_details });
                   
+                  //On 121225 only for army like 'SUPPLY DEPOT ASC MISAMARI' bill barcode status show with remarks
+                  console.log("ship to name::",shipmentdata.ship_addr)
+                  if(shipmentdata.ship_addr.includes('SUPPLY DEPOT ASC'))
+                  {
+                    this.barcodeStatusShow=true
+                  }else{this.barcodeStatusShow=false;}
+
                   // PATCH TO BYPASS NULL VALUE IN INVOICE PAGE
                   this.sales_Invoice_Shipment_Dtls.patchValue({
                     paytoaddr: shipmentdata.pay_addr || '',
@@ -3588,21 +3601,21 @@ export class SalesInvoiceComponent implements OnInit {
             alert("Select Party and Invoice Type First!")
           }
           //ends here
-
-
-
         }
-
-
-
       }
-
     }
-
-
-
   }
   //ENDS HERE
+
+  //On 121225 only for army like 'SUPPLY DEPOT ASC MISAMARI' bill barcode status show with remarks
+  onChangeBarcodeStatus(barcode)
+  {
+    console.log("barcode value",barcode)
+     if(barcode === 'Pending')
+      {
+        this.barcodeRemarksShow=true
+      }else{this.barcodeRemarksShow=false;}
+  }
 
   TcsAmt1: any;
   calRoundOfFigure(finalBillamount, tcs) {
@@ -3823,6 +3836,7 @@ export class SalesInvoiceComponent implements OnInit {
   TaxTotal: any;
 
   send() {
+    console.log("ship name::",this.sales_Invoice_Shipment_Dtls.get("shipaddr").value)
     if (this.userForm.get("invoice_type").value == "" || this.userForm.get("invoice_type").value == null || this.userForm.get("invoice_type").value == 0) {
       alert("Please Select Invoice Type");
       this.status = true;
@@ -3857,6 +3871,14 @@ export class SalesInvoiceComponent implements OnInit {
     }
     else if (this.userForm.get("salesorderno").value == "" || this.userForm.get("salesorderno").value == null || this.userForm.get("salesorderno").value == 0) {
       alert("Please Enter Sales Order No");
+      this.status = true;
+    }
+    else if ((this.sales_Invoice_Shipment_Dtls.get("shipaddr").value.includes('SUPPLY DEPOT ASC')) && (this.userForm.get("barcode_dispatch_status").value == "" || this.userForm.get("barcode_dispatch_status").value == null || this.userForm.get("barcode_dispatch_status").value == 0 || this.userForm.get("barcode_dispatch_status").value == '0')) {
+      alert("This is Supply Depot, Please Select Barcode Dispatch Status");
+      this.status = true;
+    }
+    else if ((this.sales_Invoice_Shipment_Dtls.get("shipaddr").value.includes('SUPPLY DEPOT ASC')) && (this.userForm.get("barcode_dispatch_status").value == "Pending") && (this.userForm.get("barcode_remarks").value == "" || this.userForm.get("barcode_remarks").value == null || this.userForm.get("barcode_remarks").value == 0)) {
+      alert("This is Supply Depot, And You Select Barcode Dispatch Status 'Pending', So please Enter Remarks ");
       this.status = true;
     }
     else {
@@ -4471,7 +4493,8 @@ export class SalesInvoiceComponent implements OnInit {
         fin_year: SalesInvoiceData["fin_year"], username: SalesInvoiceData["username"], tcsamt: SalesInvoiceData["tcsamt"], tcsglac: SalesInvoiceData["tcsglac"],
         salesorderno: SalesInvoiceData["salesorderno"], salesorderdate: SalesInvoiceData["salesorderdate"], refchallanno: SalesInvoiceData["refchallanno"], refchallandate: SalesInvoiceData["refchallandate"],
         cust_refdocno: SalesInvoiceData["cust_refdocno"], cust_ref_doc_date: SalesInvoiceData["cust_ref_doc_date"], reference_id: SalesInvoiceData["reference_id"], jobwork: SalesInvoiceData["jobwork"],
-        policyno: SalesInvoiceData["policyno"],asn_no: SalesInvoiceData["asn_no"]
+        policyno: SalesInvoiceData["policyno"],asn_no: SalesInvoiceData["asn_no"],
+        barcode_dispatch_status:SalesInvoiceData["barcode_dispatch_status"],barcode_remarks:SalesInvoiceData["barcode_remarks"]
       });
       // if (this.userForm.get("state").value == 'BIHAR') {
       if (this.userForm.get("state").value == this.company_state) {
@@ -4480,6 +4503,16 @@ export class SalesInvoiceComponent implements OnInit {
       else {
         this.isOpenPolicy = true;
       }
+
+      if(ShipmentData.shipaddr.includes('SUPPLY DEPOT ASC'))
+      {
+        this.barcodeStatusShow=true
+      }else{this.barcodeStatusShow=false;}
+
+      if(SalesInvoiceData["barcode_dispatch_status"] === 'Pending')
+      {
+        this.barcodeRemarksShow=true
+      }else{this.barcodeRemarksShow=false;}
 
       // console.log("static s"+JSON.stringify(SalesInvoiceData))
       //  console.log( "hi "+this.userForm.get("invoice_type").value)

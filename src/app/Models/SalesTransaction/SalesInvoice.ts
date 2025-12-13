@@ -45,6 +45,8 @@ export class SalesInvoice
     job_tot_amt:any;
     jobwork:any;
     policyno:any;
+    barcode_dispatch_status:any;
+    barcode_remarks:any;
     
     sales_Invoice_Payment_Dtls:sales_Invoice_Payment_Dtls;
     sales_invoice_Broker_Dtls:sales_invoice_Broker_Dtls[];

@@ -182,6 +182,26 @@
               </div>
             </div>
 
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="barcodeStatusShow">
+              <div class="form-group">
+                <mat-label>Barcode Dispatch Status<span class="red">*</span></mat-label>
+                <mat-select class="form-control" (selectionChange)="onChangeBarcodeStatus($event.value)"
+                  formControlName="barcode_dispatch_status" type="text">
+                  <mat-option value="0">-Select Dispatch Status-</mat-option>
+                  <mat-option value="Pending">Pending</mat-option>
+                  <mat-option value="Complete">Complete</mat-option>
+                </mat-select>
+              </div>
+            </div>
+
+            <div class="col-lg-3 col-md-4 col-sm-6 col-12" *ngIf="barcodeRemarksShow">
+              <div class="form-group">
+                <mat-label>Barcode Remarks<span class="red">*</span></mat-label>
+                <textarea class="form-control" formControlName="barcode_remarks" type="text"
+                  style="height: 65px;"></textarea>
+              </div>
+            </div>
+
             <div class="col-lg-3 col-md-3 col-sm-6 col-12">
               <div class="form-group chk_tp_pad">
                 <mat-checkbox formControlName="jobwork" (change)="jobworkshow($event)">Job Work Service</mat-checkbox>
