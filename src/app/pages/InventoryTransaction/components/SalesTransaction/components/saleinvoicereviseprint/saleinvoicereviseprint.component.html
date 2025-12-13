@@ -253,12 +253,13 @@
                     <th style="text-align: center;" rowspan=2>Total<br />(₹)</th>
                   </tr>
                   <tr>
-                    <th style="text-align: center;" *ngIf ="partyGroup=='CG00019';else elseBlockD">in MT</th>
+                    <!-- <th style="text-align: center;" *ngIf ="partyGroup=='CG00019';else elseBlockD">in MT</th>
                     <ng-template #elseBlockD>
                       <th style="text-align: center;">in Qtls</th>
-                    </ng-template>
-                    <!-- <th style="text-align: center;">in Qtls</th> -->  <!-- Commeted for Army -->
-                    <th style="text-align: center;">in Bags</th>
+                    </ng-template> -->
+                    <th style="text-align: center;">Weight</th> <!-- Changed for multiple type of UoM -->
+                    <!-- <th style="text-align: center;">in Bags</th> -->  <!-- Commented for Army -->
+                    <th style="text-align: center;">Bags</th> <!-- Changed for multiple type of UoM -->
                   </tr>
                   <tr *ngFor="let Item of ItemAllData">
                     <td style="text-align:center">{{Item.slno}}</td>
@@ -272,10 +273,10 @@
                     <!-- <td style="text-align:right">{{Item.uom}}</td> -->
 
 
-                    <td style="text-align:right" *ngIf="Item.price_based_on =='Packing';else elseBlock1 ">{{Item.suom}}
+                    <td style="text-align:center" *ngIf="Item.price_based_on =='Packing';else elseBlock1 ">{{Item.suom}}
                     </td>
                     <ng-template #elseBlock1>
-                      <td style="text-align:right">{{Item.uom}}</td>
+                      <td style="text-align:center">{{Item.uom}}</td>
                     </ng-template>
 
                     <td style="text-align:right" *ngIf="itemdetailsvalueshow">{{ Item.amount | number:'1.2-2'}}</td>
